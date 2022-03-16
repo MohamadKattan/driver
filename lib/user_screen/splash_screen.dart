@@ -1,5 +1,5 @@
 
-import 'package:driver/repo/auth_sev.dart';
+import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
 
   @override
-  void initState() {
+  void initState()   {
     if(AuthSev().auth.currentUser?.uid!=null){
       DataBaseReal().getDriverInfoFromDataBase(context);
     }
@@ -31,7 +31,10 @@ class _SplashScreenState extends State<SplashScreen>
         lowerBound: 0.8,
         upperBound: 0.9);
     _animationController.forward();
-    _animationController.addStatusListener((status) {
+    _animationController.addStatusListener((status) async {
+      if(AuthSev().auth.currentUser?.uid!=null){
+        await DataBaseReal().getDriverInfoFromDataBase(context);
+      }
       if (status == AnimationStatus.completed) {
         final driverInfo = Provider.of<DriverInfoModelProvider>(context,listen: false).driverInfo;
         if(AuthSev().auth.currentUser?.uid==null||false){

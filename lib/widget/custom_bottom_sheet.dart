@@ -16,7 +16,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
 import 'package:firebase_database/firebase_database.dart';
 
-import '../repo/auth_sev.dart';
+import '../repo/auth_srv.dart';
 
 class CustomBottomSheet {
   final ImagePicker _picker = ImagePicker();

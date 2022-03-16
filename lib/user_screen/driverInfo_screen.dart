@@ -75,7 +75,7 @@ class DriverInfoScreen extends StatelessWidget {
                       )),
                   CustomTextField().customTextField(
                       controller: email,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: "Email",
                         hintStyle: TextStyle(color: Colors.black54, fontSize: 16),

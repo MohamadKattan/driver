@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
-import '../repo/auth_sev.dart';
+import '../repo/auth_srv.dart';
 import '../widget/custom_circuler.dart';
 
 GlobalKey globalKey = GlobalKey();
