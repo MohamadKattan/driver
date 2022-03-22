@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import '../repo/geoFire_srv.dart';
 import '../user_screen/payment_screen.dart';
 import '../user_screen/profile_screen.dart';
 import 'custom_divider.dart';
@@ -161,7 +162,10 @@ Widget customDrawer(BuildContext context) {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                  onTap: () => SystemNavigator.pop(),
+                  onTap: () {
+                    GeoFireSrv().makeDriverOffLine(context);
+                    SystemNavigator.pop();
+                  } ,
                   child: Row(
                     children: const [
                       Padding(

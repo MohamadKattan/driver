@@ -17,10 +17,10 @@ class Tools {
         fontSize: 16.0);
   }
 
-  Widget timerAuth(BuildContext context) {
+  Widget timerAuth(BuildContext context,int timer) {
     final CountDownController downController = CountDownController();
     return CircularCountDownTimer(
-      duration: 120,
+      duration: timer,
       initialDuration: 0,
       controller: downController,
       width: MediaQuery.of(context).size.width / 9,
@@ -40,7 +40,8 @@ class Tools {
       onStart: () {
         print('Countdown Started');
       },
-      onComplete: () {},
+      onComplete: () {
+      },
     );
   }
 }

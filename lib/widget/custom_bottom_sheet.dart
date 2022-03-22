@@ -1,6 +1,5 @@
 // this class for custom bottom sheet use in DriverInfoScreen
 
-// CUSTOM Bottom sheet in driverInfo screen
 import 'dart:io';
 import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
@@ -24,7 +23,6 @@ class CustomBottomSheet {
   late final XFile? image2;
   late final XFile? image3;
   late final XFile? image4;
-  // final List<XFile>? _images = [];
   User? currentUser = AuthSev().auth.currentUser;
   Widget customBottomSheet(
     BuildContext context,
@@ -32,7 +30,6 @@ class CustomBottomSheet {
     TextEditingController name,
     TextEditingController lastName,
     TextEditingController idNo,
-    TextEditingController email,
     TextEditingController carBrand,
     TextEditingController carColor,
     TextEditingController carModel,
@@ -335,7 +332,6 @@ class CustomBottomSheet {
                       name,
                       lastName,
                       idNo,
-                      email,
                       carBrand,
                       carColor,
                       carModel,
@@ -459,7 +455,6 @@ class CustomBottomSheet {
       TextEditingController name,
       TextEditingController lastName,
       TextEditingController idNo,
-      TextEditingController email,
       TextEditingController carBrand,
       TextEditingController carColor,
       TextEditingController carModel,
@@ -472,7 +467,7 @@ class CustomBottomSheet {
     await ref.putFile(File(driverImage.path));
     String url1 = await ref.getDownloadURL();
     setToStorage2(url1, driverLis, carImage, carLisImage, name, lastName, idNo,
-        email, carBrand, carModel, carColor, dropBottomValue, context);
+         carBrand, carModel, carColor, dropBottomValue, context);
   }
 
   void setToStorage2(
@@ -483,7 +478,6 @@ class CustomBottomSheet {
       TextEditingController name,
       TextEditingController lastName,
       TextEditingController idNo,
-      TextEditingController email,
       TextEditingController carBrand,
       TextEditingController carModel,
       TextEditingController carColor,
@@ -496,7 +490,7 @@ class CustomBottomSheet {
     await ref.putFile(File(driverLis.path));
     String url2 = await ref.getDownloadURL();
     setFromToStorage3(url1, url2, carLisImage, carImage, name, lastName, idNo,
-        email, carBrand, carModel, carColor, dropBottomValue, context);
+        carBrand, carModel, carColor, dropBottomValue, context);
   }
 
   void setFromToStorage3(
@@ -507,7 +501,6 @@ class CustomBottomSheet {
       TextEditingController name,
       TextEditingController lastName,
       TextEditingController idNo,
-      TextEditingController email,
       TextEditingController carBrand,
       TextEditingController carModel,
       TextEditingController carColor,
@@ -519,7 +512,7 @@ class CustomBottomSheet {
         .child(path.basename(carLisImage!.path));
     await ref.putFile(File(carLisImage.path));
     String url3 = await ref.getDownloadURL();
-    storgeFrom3To4(url1, url2, url3, carImage, name, lastName, idNo, email,
+    storgeFrom3To4(url1, url2, url3, carImage, name, lastName, idNo,
         carBrand, carModel, carColor, dropBottomValue, context);
   }
 
@@ -531,7 +524,6 @@ class CustomBottomSheet {
       TextEditingController name,
       TextEditingController lastName,
       TextEditingController idNo,
-      TextEditingController email,
       TextEditingController carBrand,
       TextEditingController carModel,
       TextEditingController carColor,
@@ -543,7 +535,7 @@ class CustomBottomSheet {
         .child(path.basename(carImage!.path));
     await ref.putFile(File(carImage.path));
     String url4 = await ref.getDownloadURL();
-    setToRealTimeDataBase(url1, url2, url3, url4, name, lastName, idNo, email,
+    setToRealTimeDataBase(url1, url2, url3, url4, name, lastName, idNo,
         carBrand, carModel, carColor, dropBottomValue, context);
   }
 
@@ -555,7 +547,6 @@ class CustomBottomSheet {
       TextEditingController name,
       TextEditingController lastName,
       TextEditingController idNo,
-      TextEditingController email,
       TextEditingController carBrand,
       TextEditingController carModel,
       TextEditingController carColor,
@@ -569,11 +560,9 @@ class CustomBottomSheet {
       await driverRef.update({
         "userId": currentUser!.uid,
         "status": "checkIn",
-        "phoneNumber": currentUser!.phoneNumber,
         "firstName": name.text,
         "lastName": lastName.text,
         "idNo": idNo.text.trim(),
-        "email": email.text.trim(),
         "personImage": url1.toString(),
         "driverLis": url2.toString(),
         "carLis": url3.toString(),

@@ -1,8 +1,7 @@
-import 'package:driver/my_provider/dropBottom_value_provider.dart';
 import 'package:driver/user_screen/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'my_provider/auth__inductor_provider.dart';
@@ -12,6 +11,7 @@ import 'my_provider/drawer_value_provider.dart';
 import 'my_provider/driverInfo_inductor.dart';
 import 'my_provider/driver_currentPosition_provider.dart';
 import 'my_provider/driver_model_provider.dart';
+import 'my_provider/dropBottom_value_provider.dart';
 import 'my_provider/get_image_provider.dart';
 import 'my_provider/icon_phone_value.dart';
 import 'my_provider/user_id_provider.dart';
@@ -46,9 +46,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DrawerValueChange()),
         ChangeNotifierProvider(create: (context) => ChangeColorBottomDrawer()),
         ChangeNotifierProvider(create: (context) => DriverCurrentPosition()),
-
       ],
       child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Garanti driver',
         home: SplashScreen(),
       ),

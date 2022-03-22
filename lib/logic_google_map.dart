@@ -52,7 +52,7 @@ class LogicGoogleMap {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
     // to fitch LatLng in google map
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);

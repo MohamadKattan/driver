@@ -16,37 +16,43 @@ class GeoFireSrv {
 
 // this method for make driver on line and display his currentPosition for in availableDrivers collection
   void makeDriverOnlineNow(BuildContext context) async {
-    final _position = Provider.of<DriverCurrentPosition>(context, listen: false)
-        .currentPosition;
-    // 1-first create new collection availableDrivers
+    final position = Provider.of<DriverCurrentPosition>(context,listen: false).currentPosition;
+
     Geofire.initialize(pathToReference);
     await Geofire.setLocation(
-        currentUseId!.uid, _position.latitude, _position.longitude);
-    print("this isssssss" + _position.latitude.toString());
-    print("this isssssss" + currentUseId!.uid.toString());
+        currentUseId!.uid, position.latitude, position.longitude);
 
     DatabaseReference rideRequestRef = FirebaseDatabase.instance
         .ref()
         .child("driver")
         .child(currentUseId!.uid)
         .child("newRide");
-
     rideRequestRef.onValue.listen((event) {});
   }
 
   //this method for updating driver currentPosition and listing as stream
-  void getLocationLiveUpdates(BuildContext context) {
-    var currentPosition =
-        Provider.of<DriverCurrentPosition>(context, listen: false)
-            .currentPosition;
+   getLocationLiveUpdates(BuildContext context, bool valueSwitchBottom) {
+
     homeScreenStreamSubscription =
         Geolocator.getPositionStream().listen((Position position) async {
-      currentPosition = position;
-      await Geofire.setLocation(
-          currentUseId!.uid, position.latitude, position.longitude);
+  if(valueSwitchBottom==true) {
+    await Geofire.setLocation(
+        currentUseId!.uid, position.latitude, position.longitude);
+  }
       //for camera update
       LatLng latLng = LatLng(position.latitude, position.longitude);
       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
     });
+  }
+
+  Future<void> makeDriverOffLine(BuildContext context) async {
+    DatabaseReference? rideRequestRef = FirebaseDatabase.instance
+        .ref()
+        .child("driver")
+        .child(currentUseId!.uid)
+        .child("newRide");
+    await Geofire.removeLocation(currentUseId!.uid);
+    rideRequestRef.onDisconnect();
+    await rideRequestRef.remove();
   }
 }
