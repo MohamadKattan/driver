@@ -14,6 +14,7 @@ import 'my_provider/driver_model_provider.dart';
 import 'my_provider/dropBottom_value_provider.dart';
 import 'my_provider/get_image_provider.dart';
 import 'my_provider/icon_phone_value.dart';
+import 'my_provider/ride_request_info.dart';
 import 'my_provider/user_id_provider.dart';
 
 void main() async {
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DrawerValueChange()),
         ChangeNotifierProvider(create: (context) => ChangeColorBottomDrawer()),
         ChangeNotifierProvider(create: (context) => DriverCurrentPosition()),
+        ChangeNotifierProvider(create: (context) => RideRequestInfoProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

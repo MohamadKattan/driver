@@ -1,18 +1,24 @@
 // this class for firebase push notifications
 
+import 'dart:io';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import '../model/rideDetails.dart';
+import '../my_provider/ride_request_info.dart';
+import '../tools/tools.dart';
+import '../widget/notification_dialog.dart';
 
- Future<void>onBackgroundMessage(RemoteMessage message)async{
-   await Firebase.initializeApp();
-   if (message.data.isNotEmpty && message.notification != null) {
-     ///Todo
-     print('Message also contained a notification: ${message.notification}');
-   }
-
- }
+Future<void> onBackgroundMessage(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  if (message.data.isNotEmpty && message.notification != null) {
+  }
+}
 
 class PushNotificationsSrv {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -20,66 +26,127 @@ class PushNotificationsSrv {
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
 
   // this method for permission after that start methods
-  void startSendNotifications() async {
+  void startSendNotifications(BuildContext context) async {
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+    if(Platform.isIOS){
+      NotificationSettings settings = await firebaseMessaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+    }
+    setForegroundNotifications(context);
+    setBackgroundNotifications(context);
+    setTerminateNotifications(context);
 
-    // NotificationSettings settings = await firebaseMessaging.requestPermission(
-    //   alert: true,
-    //   announcement: false,
-    //   badge: true,
-    //   carPlay: false,
-    //   criticalAlert: false,
-    //   provisional: false,
-    //   sound: true,
-    // );
-    setForegroundNotifications();
-    setBackgroundNotifications();
-    setTerminateNotifications();
   }
 
   // this method for got token driver and set to database
   Future<String?> getToken() async {
     String? token = await firebaseMessaging.getToken();
-    print("this is token::$token");
+    if (kDebugMode) {
+      print("this is token::$token");
+    }
     await driverRef.child(userId).child("token").set(token);
     firebaseMessaging.subscribeToTopic("allDrivers");
     firebaseMessaging.subscribeToTopic("allUsers");
     return token;
   }
 
-   setForegroundNotifications() {
+  setForegroundNotifications(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (message.data.isNotEmpty&&message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+      if (message.data.isNotEmpty && message.notification != null) {
+        //method in method for string ride id
+        retrieveRideRequestInfo(getRideRequestId(message),context);
       }
     });
   }
 
-   setBackgroundNotifications() {
+  setBackgroundNotifications(BuildContext context) {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (message.data.isNotEmpty&&message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+      if (message.data.isNotEmpty && message.notification != null) {
+        //method in method for string ride id
+        retrieveRideRequestInfo(getRideRequestId(message),context);
+        showDialog(context: context,barrierDismissible: false ,builder:(BuildContext context)=>customNotificationDialog(context));
       }
     });
   }
 
-   setTerminateNotifications()async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if(initialMessage != null){
-
+  setTerminateNotifications(BuildContext context) async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      //method in method for string ride id
+      retrieveRideRequestInfo(getRideRequestId(initialMessage),context);
     }
-   }
+  }
 
   // this method will use in home screen in instant for auto starting
-  getCurrentInfoDriverForNotification() {
+  getCurrentInfoDriverForNotification(BuildContext context) {
     // final userId = AuthSev().auth.currentUser?.uid;
     getToken();
-  startSendNotifications();
+    startSendNotifications(context);
+  }
+
+  // this method for retrieve rider id from data notification  when rider do request a taxi
+  String getRideRequestId(RemoteMessage message) {
+    String rideId = "";
+    if (Platform.isAndroid) {
+      rideId = message.data["ride_id"];
+      if (kDebugMode) {
+        print("this is notRideId$rideId");
+      }
+    } else {
+      rideId = message.data["ride_id"];
+      if (kDebugMode) {
+        print("this is notRideId$rideId");
+      }
+    }
+    return rideId;
+  }
+
+  //this method for retrieve rider info from Ride Request collection when rider do order
+  Future<void> retrieveRideRequestInfo(String rideId,BuildContext context) async {
+    late final DataSnapshot snapshot;
+    try {
+      final ref = FirebaseDatabase.instance.ref();
+      snapshot = await ref.child("Ride Request").child(rideId).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> map = Map<String, dynamic>.from(snapshot.value as Map);
+        double pickUpLinlatitude=double.parse(map["pickup"]["latitude"].toString());
+        double pickUpLontude=double.parse(map["pickup"]["longitude"].toString());
+        double dropOffLinlatitude=double.parse(map["dropoff"]["latitude"].toString());
+        double dropOffLontitude=double.parse(map["dropoff"]["longitude"].toString());
+        String userId = map["userId"];
+        String riderName = map["riderName"];
+        String riderPhone = map["riderPhone"];
+        String paymentMethod = map["paymentMethod"];
+        String vehicleTypeId = map["vehicleType_id"];
+        String pickupAddress = map["pickupAddress"];
+        String dropoffAddress = map["dropoffAddress"];
+
+        RideDetails rideDetails =RideDetails(
+            userId: userId,
+            riderName: riderName,
+            riderPhone: riderPhone,
+            paymentMethod: paymentMethod,
+            vehicleTypeId: vehicleTypeId,
+            pickupAddress: pickupAddress,
+            pickup: LatLng(pickUpLinlatitude, pickUpLontude ),
+            dropoffAddress: dropoffAddress,
+            dropoff: LatLng(dropOffLinlatitude,dropOffLontitude));
+        Provider.of<RideRequestInfoProvider>(context,listen: false).updateState(rideDetails);
+       showDialog(context: context,barrierDismissible: false ,builder:(BuildContext context)=>customNotificationDialog(context));
+        return;
+      } else {
+        Tools().toastMsg("snapshot.exists-error");
+      }
+    } catch (ex) {
+      Tools().toastMsg("Data retrieveRideRequestInfo");
+    }
   }
 }

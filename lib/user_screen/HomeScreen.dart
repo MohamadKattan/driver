@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       GeoFireSrv().getLocationLiveUpdates(context,valueSwitchBottom);
     });
     /// connect with Push Notifications service
-    PushNotificationsSrv().getCurrentInfoDriverForNotification();
+    PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     super.initState();
   }
 
