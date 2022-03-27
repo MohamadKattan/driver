@@ -21,17 +21,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool valueSwitchBottom = true;
+  late bool valueSwitchBottom=true;
   @override
   void initState() {
-    /// connect with Push geoFire service
-    LogicGoogleMap().locationPosition(context).whenComplete((){
-      GeoFireSrv().makeDriverOnlineNow(context);
-      GeoFireSrv().getLocationLiveUpdates(context,valueSwitchBottom);
-    });
+
+    super.initState();
     /// connect with Push Notifications service
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-    super.initState();
+    GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
   }
 
   @override
@@ -89,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 trafficEnabled: false,
                                 compassEnabled: true,
                                 buildingsEnabled: true,
-                                onMapCreated: (GoogleMapController controller) {
+                                onMapCreated: (GoogleMapController controller)async {
                                   LogicGoogleMap()
                                       .controllerGoogleMap
                                       .complete(controller);
@@ -161,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+
     );
   }
 
@@ -178,12 +176,15 @@ class _HomeScreenState extends State<HomeScreen> {
             onChanged: (val) {
               setState(() {
                 valueSwitchBottom = val;
+
               });
               if (valueSwitchBottom == true) {
-                  GeoFireSrv().makeDriverOnlineNow(context);
-                  GeoFireSrv().getLocationLiveUpdates(context,valueSwitchBottom);
+                // GeoFireSrv().makeDriverOnlineNow(context);
+                GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+                print(valueSwitchBottom);
               } else if (valueSwitchBottom == false) {
                 GeoFireSrv().makeDriverOffLine(context);
+                print(valueSwitchBottom);
               }
             },
           ),

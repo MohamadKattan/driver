@@ -52,6 +52,9 @@ dependencies:
   location: ^4.3.0
   firebase_messaging: ^11.2.11
   assets_audio_player: ^3.0.4+1
+  http: ^0.13.4
+  flutter_polyline_points: ^1.0.0
+  maps_toolkit: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +82,10 @@ flutter:
   assets:
      - images/
      - images/splash.png
+     - images/car_test.png
+     - images/car_ios.png
+     - sounds/
+     - sounds/new_order.mp3
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

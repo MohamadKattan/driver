@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'my_provider/auth__inductor_provider.dart';
 import 'my_provider/bottom_sheet_value.dart';
 import 'my_provider/change_color_bottom.dart';
+import 'my_provider/direction_details_provider.dart';
 import 'my_provider/drawer_value_provider.dart';
 import 'my_provider/driverInfo_inductor.dart';
 import 'my_provider/driver_currentPosition_provider.dart';
@@ -14,6 +15,7 @@ import 'my_provider/driver_model_provider.dart';
 import 'my_provider/dropBottom_value_provider.dart';
 import 'my_provider/get_image_provider.dart';
 import 'my_provider/icon_phone_value.dart';
+import 'my_provider/new_ride_indector.dart';
 import 'my_provider/ride_request_info.dart';
 import 'my_provider/user_id_provider.dart';
 
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ChangeColorBottomDrawer()),
         ChangeNotifierProvider(create: (context) => DriverCurrentPosition()),
         ChangeNotifierProvider(create: (context) => RideRequestInfoProvider()),
+        ChangeNotifierProvider(create: (context) => DirectionDetailsPro()),
+        ChangeNotifierProvider(create: (context) => NewRideScreenIndector()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -30,7 +30,7 @@ class DataBaseReal {
         Tools().toastMsg("snapshot.exists-error");
       }
     } catch (ex) {
-      Tools().toastMsg("Data!!!");
+      Tools().toastMsg("Data Driver info !!!");
     }
   }
 }

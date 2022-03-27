@@ -52,7 +52,7 @@ class LogicGoogleMap {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.bestForNavigation);
+        desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
     // to fitch LatLng in google map
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);
@@ -62,11 +62,6 @@ class LogicGoogleMap {
     CameraPosition(target: latLngPosition, zoom: 14);
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-
-    ///Not for chacking
-    // final address =
-    // await _apiMethods.searchCoordinatesAddress(position, context);
-    // print("My Address:::" + address);
 
     return currentPosition;
   }
