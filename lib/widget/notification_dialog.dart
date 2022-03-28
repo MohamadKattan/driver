@@ -159,12 +159,13 @@ void checkAvailableOfRide(
       rideId = value.snapshot.value.toString();
     } else {
       Tools().toastMsg("Ride not exist");
+      Provider.of<NewRideScreenIndector>(context,listen: false).updateState(false);
     }
     //id in newRide value = rider id from Ride Request collection
     if (rideId == rideInfoProvider.userId) {
       rideRequestRef.set("accepted");
       GeoFireSrv().displayLocationLiveUpdates();
-      Navigator.push(context, MaterialPageRoute(builder:(_)=>const NewRideScreen()));
+      Navigator.push(context, MaterialPageRoute(builder:(context)=>const NewRideScreen()));
     } else if (rideId == "canceled") {
       Tools().toastMsg("Ride has been canceled ");
     } else if (rideId == "timeOut") {

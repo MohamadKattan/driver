@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:driver/model/rideDetails.dart';
+import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +9,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart' as lol;
 import 'package:provider/provider.dart';
 import '../config.dart';
+import '../my_provider/color_arrived_button_provider.dart';
 import '../my_provider/direction_details_provider.dart';
 import '../my_provider/driver_currentPosition_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/new_ride_indector.dart';
 import '../my_provider/ride_request_info.dart';
+import '../my_provider/tilte_arrived_button_provider.dart';
 import '../repo/api_srv_dir.dart';
 import '../tools/maps_tooL_kit.dart';
+import '../widget/collect_money_dialog.dart';
 import '../widget/custom_circuler.dart';
 import '../widget/custom_divider.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -45,6 +50,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   late Position? myPosition;
   String status = "accepted";
   bool isRequestDirection = false;
+  late Timer timer;
+  int durationContour = 0;
 
   @override
   void initState() {
@@ -55,34 +62,37 @@ class _NewRideScreenState extends State<NewRideScreen> {
   @override
   Widget build(BuildContext context) {
     createDriverNearIcon();
-    final rideInfoProvider = Provider.of<RideRequestInfoProvider>(context).rideDetails;
-    final directionDetails = Provider.of<DirectionDetailsPro>(context).directionDetails;
+    final rideInfoProvider =
+        Provider.of<RideRequestInfoProvider>(context).rideDetails;
+    final initialPos =
+        Provider.of<DriverCurrentPosition>(context, listen: false)
+            .currentPosition;
+    final directionDetails =
+        Provider.of<DirectionDetailsPro>(context).directionDetails;
+    final buttonTitle = Provider.of<TitleArrived>(context).titleButton;
+    final buttonColor = Provider.of<ColorButtonArrived>(context).colorButton;
     final isInductor = Provider.of<NewRideScreenIndector>(context).isInductor;
     return SafeArea(
         child: Scaffold(
             body: Stack(
       children: [
         GoogleMap(
-          indoorViewEnabled: true,
-          rotateGesturesEnabled: true,
-          tiltGesturesEnabled: true,
           mapType: MapType.normal,
           initialCameraPosition: const NewRideScreen().kGooglePlex,
           myLocationButtonEnabled: true,
           myLocationEnabled: true,
-          zoomGesturesEnabled: true,
-          zoomControlsEnabled: true,
-          liteModeEnabled: false,
           trafficEnabled: false,
-          compassEnabled: true,
-          buildingsEnabled: true,
           markers: markersSet,
           polylines: polylineSet,
           circles: circlesSet,
           onMapCreated: (GoogleMapController controller) async {
             controllerGoogleMap.complete(controller);
             newRideControllerGoogleMap = controller;
-            await getPlaceDirection(context);
+            LatLng startPontLoc =
+                LatLng(initialPos.latitude, initialPos.longitude); //driver
+            LatLng secondPontLoc = LatLng(rideInfoProvider.pickup.latitude,
+                rideInfoProvider.pickup.longitude); //rider pickUp
+            await getPlaceDirection(context, startPontLoc, secondPontLoc);
             getRideLiveLocationUpdate();
           },
         ),
@@ -101,11 +111,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                     Padding(
+                    Padding(
                       padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
                       child: Text(
                         "Time : " + directionDetails.durationText,
-                        style: const TextStyle(color: Colors.black45, fontSize: 18.0),
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 18.0),
                       ),
                     ),
                     Row(
@@ -190,9 +201,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         height: MediaQuery.of(context).size.height * 2 / 100),
                     GestureDetector(
                       onTap: () {
-                        // assetsAudioPlayer.dispose();
-                        // assetsAudioPlayer.stop();
-                        // checkAvailableOfRide(context, rideInfoProvider);
+                        changeColorArrivedAndTileButton(
+                            context, rideInfoProvider);
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
@@ -202,11 +212,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 MediaQuery.of(context).size.height * 7 / 100,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(3.0),
-                                color: Colors.green.shade700),
-                            child: const Center(
+                                color: buttonColor),
+                            child: Center(
                                 child: Text(
-                              "Arrived",
-                              style: TextStyle(color: Colors.white),
+                              buttonTitle,
+                              style: const TextStyle(color: Colors.white),
                             ))),
                       ),
                     ),
@@ -221,19 +231,54 @@ class _NewRideScreenState extends State<NewRideScreen> {
     )));
   }
 
-  /*this them main logic for direction + marker+ polyline connect
-   with class api show loc driver to ride when driver accepted order*/
-  Future<void> getPlaceDirection(BuildContext context) async {
-    // from api geo driver current location
-    final initialPos =
+  // 1..this method for set driver info in new Ride request collection after driver accepted new rider order
+  void acceptedRideRequest() {
+    //1 from api geo driver current location
+    final dCurrentPosition =
         Provider.of<DriverCurrentPosition>(context, listen: false)
             .currentPosition;
+    //2 driverInfo from database driver collection
+    final driverInfo =
+        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
+    //3 riderInfo from database Ride request collection
+    final riderInfo =
+        Provider.of<RideRequestInfoProvider>(context, listen: false)
+            .rideDetails;
+    //4
+    Map driveLoc = {
+      "latitude": dCurrentPosition.latitude.toString(),
+      "longitude": dCurrentPosition.longitude.toString(),
+    };
+
+    DatabaseReference rideRequestRef = FirebaseDatabase.instance
+        .ref()
+        .child("Ride Request")
+        .child(riderInfo.userId);
+
+    rideRequestRef.child("status").set("accepted");
+    rideRequestRef.child("driverId").set(driverInfo.userId);
+    rideRequestRef
+        .child("driverName")
+        .set("${driverInfo.firstName} ${driverInfo.lastName}");
+    rideRequestRef.child("driverPhone").set(driverInfo.phoneNumber);
+    rideRequestRef
+        .child("carInfo")
+        .set("${driverInfo.carBrand} - ${driverInfo.carColor}");
+    rideRequestRef.child("driverLocation").set(driveLoc);
+  }
+
+  /*2..this them main logic for draw direction on marker+ polyline connect
+   with class api show loc driver to ride when driver accepted order*/
+  Future<void> getPlaceDirection(
+    BuildContext context,
+    LatLng startPontLoc,
+    LatLng secondPontLoc,
+  ) async {
+    // from api geo driver current location
+    final initialPos = startPontLoc;
 
     // rider current location from database Ride request collection
-    final finalPos =
-        Provider.of<RideRequestInfoProvider>(context, listen: false)
-            .rideDetails
-            .pickup;
+    final finalPos = secondPontLoc;
 
     final pickUpLatling = LatLng(initialPos.latitude, initialPos.longitude);
     print("thisfinalPos Driver $pickUpLatling");
@@ -338,43 +383,58 @@ class _NewRideScreenState extends State<NewRideScreen> {
     }
   }
 
-  // this method for set driver info in new Ride request collection after driver accepted new rider order
-  void acceptedRideRequest() {
-    //1 from api geo driver current location
-    final dCurrentPosition =
-        Provider.of<DriverCurrentPosition>(context, listen: false)
-            .currentPosition;
-    //2 driverInfo from database driver collection
-    final driverInfo =
-        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-    //3 riderInfo from database Ride request collection
-    final riderInfo =
-        Provider.of<RideRequestInfoProvider>(context, listen: false)
-            .rideDetails;
-    //4
-    Map driveLoc = {
-      "latitude": dCurrentPosition.latitude.toString(),
-      "longitude": dCurrentPosition.longitude.toString(),
-    };
+  //3..this method for live location when updating on map and set to realtime
+  void getRideLiveLocationUpdate() {
+    newRideScreenStreamSubscription =
+        Geolocator.getPositionStream().listen((Position position) async {
+          LatLng oldLat = const LatLng(0, 0);
+          myPosition = position;
+          LatLng mPosition = LatLng(position.latitude, position.longitude);
 
-    DatabaseReference rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("Ride Request")
-        .child(riderInfo.userId);
+          ///...
+          final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
+              oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
+          Marker anmiatedMarker = Marker(
+            markerId: const MarkerId("animating"),
+            infoWindow: const InfoWindow(title: "Current Location"),
+            position: mPosition,
+            icon: anmiatedMarkerIcon,
+            rotation: rot,
+          );
 
-    rideRequestRef.child("status").set("accepted");
-    rideRequestRef.child("driverId").set(driverInfo.userId);
-    rideRequestRef
-        .child("driverName")
-        .set("${driverInfo.firstName} ${driverInfo.lastName}");
-    rideRequestRef.child("driverPhone").set(driverInfo.phoneNumber);
-    rideRequestRef
-        .child("carInfo")
-        .set("${driverInfo.carBrand} - ${driverInfo.carColor}");
-    rideRequestRef.child("driverLocation").set(driveLoc);
+          ///...
+          setState(() {
+            CameraPosition cameraPosition =
+            CameraPosition(target: mPosition, zoom: 14);
+            newRideControllerGoogleMap
+                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+            markersSet.removeWhere((ele) => ele.markerId.value == "animating");
+            markersSet.add(anmiatedMarker);
+          });
+
+          ///...
+          oldLat = mPosition;
+          updateRideDetails();
+
+          ///...
+          final riderInfo =
+              Provider.of<RideRequestInfoProvider>(context, listen: false)
+                  .rideDetails;
+
+          Map driveLoc = {
+            "latitude": myPosition?.latitude.toString(),
+            "longitude": myPosition?.longitude.toString(),
+          };
+
+          DatabaseReference rideRequestRef = FirebaseDatabase.instance
+              .ref()
+              .child("Ride Request")
+              .child(riderInfo.userId);
+          rideRequestRef.child("driverLocation").set(driveLoc);
+        });
   }
 
-// this method for icon car
+// 4..this method for icon car
   void createDriverNearIcon() {
     ImageConfiguration imageConfiguration =
         createLocalImageConfiguration(context, size: const Size(1.0, 1.0));
@@ -386,57 +446,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
     });
   }
 
-//this method for live location when updating on map and set to realtime
-  void getRideLiveLocationUpdate() {
 
-    newRideScreenStreamSubscription =
-        Geolocator.getPositionStream().listen((Position position) async {
-      LatLng oldLat = const LatLng(0, 0);
-      myPosition = position;
-      LatLng mPosition = LatLng(position.latitude, position.longitude);
 
-      ///...
-       final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-           oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-      Marker anmiatedMarker = Marker(
-        markerId: const MarkerId("animating"),
-        infoWindow: const InfoWindow(title: "Current Location"),
-        position: mPosition,
-        icon: anmiatedMarkerIcon,
-        rotation: rot,
-      );
-      ///...
-      setState(() {
-        CameraPosition cameraPosition =
-            CameraPosition(target: mPosition, zoom: 14);
-        newRideControllerGoogleMap
-            .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-        markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-        markersSet.add(anmiatedMarker);
-      });
-      ///...
-      oldLat=mPosition;
-      updateRideDetails();
-
-     ///...
-      final riderInfo =
-          Provider.of<RideRequestInfoProvider>(context, listen: false)
-              .rideDetails;
-
-      Map driveLoc = {
-        "latitude": myPosition?.latitude.toString(),
-        "longitude": myPosition?.longitude.toString(),
-      };
-
-      DatabaseReference rideRequestRef = FirebaseDatabase.instance
-          .ref()
-          .child("Ride Request")
-          .child(riderInfo.userId);
-      rideRequestRef.child("driverLocation").set(driveLoc);
-    });
-  }
-
-/*this method for update rider info to driver first when driver go to rider
+/*5..this method for update rider info to driver first when driver go to rider
 * pickUp location after that when driver arrived info will changed to dropOff
 * location where rider want to go + time trip */
   void updateRideDetails() async {
@@ -454,9 +466,94 @@ class _NewRideScreenState extends State<NewRideScreen> {
         desertionLatLng = riderInfo.pickup;
       } else {
         desertionLatLng = riderInfo.dropoff;
-        await ApiSrvDir.obtainPlaceDirectionDetails(posLatLin,desertionLatLng,context);
+        await ApiSrvDir.obtainPlaceDirectionDetails(
+            posLatLin, desertionLatLng, context);
         isRequestDirection = false;
       }
     }
+  }
+
+  /*6.. this method for change Status & title-color arrived button from
+  * & driver loc to rider pickUp loc then from rider pickUp to rider drop
+  * then update status on fire base
+  */
+  void changeColorArrivedAndTileButton(
+      BuildContext context, RideDetails rideInfoProvider) async {
+    DatabaseReference rideRequestRef = FirebaseDatabase.instance
+        .ref()
+        .child("Ride Request")
+        .child(rideInfoProvider.userId);
+
+    if (status == "accepted") {
+        status = "arrived";
+      rideRequestRef.child("status").set(status);
+      Provider.of<TitleArrived>(context, listen: false).updateState("Start trip");
+      Provider.of<ColorButtonArrived>(context, listen: false).updateState(Colors.yellowAccent.shade700);
+      await getPlaceDirection(context, rideInfoProvider.pickup, rideInfoProvider.dropoff);
+
+    } else if (status == "arrived") {
+        status = "onride";
+      Provider.of<TitleArrived>(context, listen: false).updateState("End trip");
+      Provider.of<ColorButtonArrived>(context, listen: false).updateState(Colors.redAccent.shade700);
+      rideRequestRef.child("status").set(status);
+      initTimer();
+    } else if (status == "onride") {
+      endTrip(rideInfoProvider, rideRequestRef, context);
+    }
+  }
+
+  // this void for count time trip in second
+  void initTimer() {
+    const inTravel = Duration(seconds: 1);
+    timer = Timer.periodic(inTravel, (timer) {
+      durationContour = durationContour + 1;
+    });
+  }
+
+// this method when trip don for repack all Sitting to default and calc amont
+  void endTrip(RideDetails rideInfoProvider, DatabaseReference rideRequestRef,
+      BuildContext context) async {
+    timer.cancel();
+    Provider.of<NewRideScreenIndector>(context, listen: false).updateState(true);
+      status = "ended";
+    Provider.of<TitleArrived>(context, listen: false).updateState("Arrived");
+    Provider.of<ColorButtonArrived>(context, listen: false)
+        .updateState(Colors.greenAccent.shade700);
+    rideRequestRef.child("status").set(status);
+    final driverCurrentLoc =
+        LatLng(myPosition!.latitude, myPosition!.longitude);
+    final riderFirstPickUp = LatLng(
+        rideInfoProvider.pickup.latitude, rideInfoProvider.pickup.longitude);
+    final directionDetails = await ApiSrvDir.obtainPlaceDirectionDetails(
+        riderFirstPickUp, driverCurrentLoc, context);
+    Provider.of<NewRideScreenIndector>(context, listen: false).updateState(false);
+    int totalAmount = ApiSrvDir.calculateFares(directionDetails!, "Taxi");
+    rideRequestRef.child("total").set(totalAmount.toString());
+    newRideScreenStreamSubscription?.cancel();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => collectMoney(context, rideInfoProvider, totalAmount));
+    saveEarning(totalAmount);
+  }
+
+  // this method for save earning money in database
+  void saveEarning(int totalAmount) async {
+    final currentUserId = AuthSev().auth.currentUser?.uid;
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("driver")
+        .child(currentUserId!)
+        .child("earning");
+    await ref.once().then((value) {
+      if (value.snapshot.value != null) {
+        double oldEarn = double.parse(value.snapshot.value.toString());
+        double totalEarn = totalAmount + oldEarn;
+        ref.set(totalEarn.toStringAsFixed(2));
+      } else {
+        double totalEarn = totalAmount.toDouble();
+        ref.set(totalEarn.toStringAsFixed(2));
+      }
+    });
   }
 }
