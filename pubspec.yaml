@@ -55,6 +55,7 @@ dependencies:
   http: ^0.13.4
   flutter_polyline_points: ^1.0.0
   maps_toolkit: ^2.0.0
+  sliding_sheet: ^0.5.2
 
 dev_dependencies:
   flutter_test:

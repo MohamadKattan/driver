@@ -535,6 +535,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         barrierDismissible: false,
         builder: (_) => collectMoney(context, rideInfoProvider, totalAmount));
     saveEarning(totalAmount);
+    saveTripHistory(rideInfoProvider,totalAmount);
   }
 
   // this method for save earning money in database
@@ -556,4 +557,19 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
     });
   }
+  // this method for save history trip in driver collection after finished
+void saveTripHistory(RideDetails rideInfoProvider, int totalAmount){
+  final currentUserId = AuthSev().auth.currentUser?.uid;
+  DatabaseReference ref = FirebaseDatabase.instance
+      .ref()
+      .child("driver")
+      .child(currentUserId!)
+      .child("history");
+  ref.child(rideInfoProvider.userId).set({
+    "pickAddress":rideInfoProvider.pickupAddress,
+    "dropAddress":rideInfoProvider.dropoffAddress,
+    "total":totalAmount.toStringAsFixed(2),
+    "trip":"don"
+  });
+}
 }

@@ -16,9 +16,11 @@ import 'my_provider/driver_model_provider.dart';
 import 'my_provider/dropBottom_value_provider.dart';
 import 'my_provider/get_image_provider.dart';
 import 'my_provider/icon_phone_value.dart';
+import 'my_provider/indctor_profile_screen.dart';
 import 'my_provider/new_ride_indector.dart';
 import 'my_provider/ride_request_info.dart';
 import 'my_provider/tilte_arrived_button_provider.dart';
+import 'my_provider/trip_history_provider.dart';
 import 'my_provider/user_id_provider.dart';
 
 void main() async {
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => NewRideScreenIndector()),
         ChangeNotifierProvider(create: (context) => TitleArrived()),
         ChangeNotifierProvider(create: (context) => ColorButtonArrived()),
+        ChangeNotifierProvider(create: (context) => TripHistoryProvider()),
+        ChangeNotifierProvider(create: (context) => InductorProfileProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: TweenAnimationBuilder(
                   tween: Tween<double>(begin: 0.0, end: drawerValue),
-                  duration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 150),
                   builder: (_, double val, __) {
                     return Transform(
                         transform: Matrix4.identity()
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .updateColorBottom(false);
                             },
                             icon: const Icon(
-                              Icons.format_list_numbered_rtl_rounded,
+                              Icons.arrow_back_ios,
                               color: Colors.black54,
                               size: 25,
                             )),

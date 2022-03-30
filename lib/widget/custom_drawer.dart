@@ -2,6 +2,7 @@
 
 
 import 'package:driver/user_screen/book_screen.dart';
+import 'package:driver/user_screen/earn_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -15,42 +16,41 @@ import '../user_screen/profile_screen.dart';
 import 'custom_divider.dart';
 
 Widget customDrawer(BuildContext context) {
-  return GestureDetector(
-    onTap: () {
-      Provider.of<DrawerValueChange>(context, listen: false).updateValue(0);
-      Provider.of<ChangeColorBottomDrawer>(context, listen: false).updateColorBottom(false);
-    },
-    child: Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color(0xFFFFD54F),
-          Color(0xFFFFD55F),
-          Color(0xFFFFD56F),
-          Color(0xFFFFD57F),
-        ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
-      ),
+  return Container(
+    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height,
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(colors: [
+        Color(0xFFFFD54F),
+        Color(0xFFFFD55F),
+        Color(0xFFFFD56F),
+        Color(0xFFFFD57F),
+      ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+    ),
+    child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 20 / 100,
-            child: DrawerHeader(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 80),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    showImage(context),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    showUserName(context),
-                    showUserPhone(context),
-                  ],
+            height: MediaQuery.of(context).size.height * 25 / 100,
+            child: GestureDetector(
+              onTap: (){
+                Provider.of<DrawerValueChange>(context, listen: false).updateValue(0);
+                Provider.of<ChangeColorBottomDrawer>(context, listen: false).updateColorBottom(false);
+              },
+              child: DrawerHeader(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 80),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      showImage(context),
+                      showUserName(context),
+                      showUserPhone(context),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -64,11 +64,11 @@ Widget customDrawer(BuildContext context) {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ProfileScreen())),
+                      MaterialPageRoute(builder: (context) => const BookingScreen())),
                   child: Row(children: const [
                     Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.car_rental_sharp, color: Colors.black45,size: 30,),
+                      child: Icon(Icons.history, color: Colors.black45,size: 30,),
                     ),
                     SizedBox(width: 8.0),
                     Padding(
@@ -88,7 +88,33 @@ Widget customDrawer(BuildContext context) {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const BookingScreen())),
+                      MaterialPageRoute(builder: (context) => const EarningScreen())),
+                  child: Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(Icons.money, color: Colors.black45,size: 30),
+                      ),
+                      SizedBox(
+                        width: 8.0,
+                      ),
+                      Text(
+                        "My Earning",
+                        style: TextStyle(color: Colors.black45,fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              CustomDivider().customDivider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const ProfileScreen())),
                   child: Row(
                     children: const [
                       Padding(
