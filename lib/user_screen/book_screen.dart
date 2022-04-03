@@ -3,8 +3,6 @@ import 'package:driver/model/trip_history.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import '../my_provider/trip_history_provider.dart';
 import '../repo/auth_srv.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -58,7 +56,7 @@ class _BookingScreenState extends State<BookingScreen> {
             final tripList = <TripHistory>[];
             for(var taskMap in map.values){
               TripHistory tripHistory = TripHistory.fromMap(Map<String,dynamic>.from(taskMap));
-              Provider.of<TripHistoryProvider>(context,listen: false).updateState(tripHistory);
+              // Provider.of<TripHistoryProvider>(context,listen: false).updateState(tripHistory);
               tripList.add(tripHistory);
             }
             return ListView.builder(

@@ -5,18 +5,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
-import '../my_provider/driver_model_provider.dart';
 import '../my_provider/user_id_provider.dart';
 import '../tools/tools.dart';
-import '../user_screen/HomeScreen.dart';
-import '../user_screen/check_in_Screen.dart';
 import '../user_screen/splash_screen.dart';
 import 'dataBaseReal_sev.dart';
 
 // this class for Auth by firebase-phone method
 class AuthSev {
   final Tools _tools = Tools();
-  FirebaseAuth auth = FirebaseAuth.instance;
+ late FirebaseAuth auth = FirebaseAuth.instance;
   late UserCredential userCredential;
   late User? currentUser;
   final TextEditingController code = TextEditingController();
@@ -179,14 +176,12 @@ class AuthSev {
 
   Future<User?> createOrLoginWithEmail(
       TextEditingController email, String result, BuildContext context) async {
-    final driverInfo =
-        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
     try {
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(), password: "123456789!");
       await getCurrentUserId(context).whenComplete(() async {
         if (userCredential.user!.uid.isNotEmpty) {
-          currentUser = userCredential.user;
+          currentUser = userCredential.user!;
           await DataBaseReal()
               .getDriverInfoFromDataBase(context)
               .whenComplete(() {
@@ -207,7 +202,7 @@ class AuthSev {
               .createUserWithEmailAndPassword(
                   email: email.text.trim(), password: "123456789!");
           await getCurrentUserId(context);
-          currentUser = userCredential.user;
+          currentUser = userCredential.user!;
           if (currentUser!.uid.isNotEmpty) {
             driverRef.child(currentUser!.uid).set({
               "userId": currentUser!.uid,
@@ -219,6 +214,8 @@ class AuthSev {
               "idNo": "",
               "driverLis": "",
               "carLis": "",
+              "earning":"0.0",
+              "personImage":"",
             }).whenComplete(() {
               Provider.of<TrueFalse>(context, listen: false).updateState(false);
               Navigator.push(
@@ -228,24 +225,25 @@ class AuthSev {
             });
           }
         } on FirebaseAuthException catch (e) {
+          e.toString();
           _tools.toastMsg("Some Thing went Wrong");
         } catch (e) {
-          print(e);
+          e.toString();
         }
       }
     }
-    return userCredential.user;
+    return userCredential.user!;
   }
 
-  Future<User?> getCurrentUserId(BuildContext context) async {
+  Future<User> getCurrentUserId(BuildContext context) async {
     currentUser = auth.currentUser!;
-    if (currentUser != null) {
+    if (currentUser!.uid.isNotEmpty) {
       Provider.of<UserIdProvider>(context, listen: false)
           .getUserIdProvider(currentUser!);
     }
     if (kDebugMode) {
-      print("this is current user from AuthSrv:::${currentUser?.uid}");
+      print("this is current user from AuthSrv:::${currentUser!.uid}");
     }
-    return currentUser;
+    return currentUser!;
   }
 }

@@ -17,6 +17,7 @@ class DriverInfo {
   late String carModel;
   late String carType;
   late String earning;
+  // late String history;
   DriverInfo(
       this.userId,
       this.status,
@@ -33,7 +34,8 @@ class DriverInfo {
       this.carImage,
       this.carModel,
       this.carType,
-      this.earning
+      this.earning,
+      // this.history
       );
   DriverInfo.fromMap(Map<String, dynamic> map) {
     userId = map["userId"];
@@ -47,6 +49,7 @@ class DriverInfo {
     driverLis = map["driverLis"];
     carLis = map["carLis"];
     earning= map["earning"];
+    // history= map["history"];
     carBrand = map["carInfo"]["carBrand"];
     carColor = map["carInfo"]["carColor"];
     carModel = map["carInfo"]["carModel"];

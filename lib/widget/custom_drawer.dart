@@ -3,6 +3,7 @@
 
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -60,12 +61,15 @@ Widget customDrawer(BuildContext context) {
               const SizedBox(
                 height: 4.0,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const BookingScreen())),
-                  child: Row(children: const [
+              GestureDetector(
+                onTap: ()=>
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const BookingScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                      children: const [
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Icon(Icons.history, color: Colors.black45,size: 30,),
@@ -84,12 +88,13 @@ Widget customDrawer(BuildContext context) {
                 height: 8.0,
               ),
               CustomDivider().customDivider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const EarningScreen())),
+              GestureDetector(
+                onTap:()=> Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const EarningScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: const [
                       Padding(
                         padding: EdgeInsets.all(8.0),
@@ -110,12 +115,13 @@ Widget customDrawer(BuildContext context) {
                 height: 8.0,
               ),
               CustomDivider().customDivider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ProfileScreen())),
+              GestureDetector(
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const ProfileScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: const [
                       Padding(
                         padding: EdgeInsets.all(8.0),
@@ -136,11 +142,12 @@ Widget customDrawer(BuildContext context) {
                 height: 8.0,
               ),
               CustomDivider().customDivider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () => null,
+              GestureDetector(
+                onTap: ()=>null,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: const [
                       Padding(
                         padding: EdgeInsets.all(8.0),
@@ -161,12 +168,13 @@ Widget customDrawer(BuildContext context) {
                 height: 8.0,
               ),
               CustomDivider().customDivider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const PaymentScreen())),
+              GestureDetector(
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const PaymentScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: const [
                       Padding(
                         padding: EdgeInsets.all(8.0),
@@ -185,13 +193,13 @@ Widget customDrawer(BuildContext context) {
                 height: 8.0,
               ),
               CustomDivider().customDivider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    GeoFireSrv().makeDriverOffLine(context);
-                    SystemNavigator.pop();
-                  } ,
+              GestureDetector(
+                onTap: (){
+                  GeoFireSrv().makeDriverOffLine(context);
+                  SystemNavigator.pop();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: const [
                       Padding(

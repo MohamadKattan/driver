@@ -1,13 +1,19 @@
 // this widget for dialog collect money after finish trip
 
 import 'package:driver/model/rideDetails.dart';
+import 'package:driver/user_screen/splash_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:provider/provider.dart';
+import '../config.dart';
+import '../my_provider/driver_model_provider.dart';
+import '../my_provider/user_id_provider.dart';
 import '../repo/geoFire_srv.dart';
 import 'custom_divider.dart';
 
 Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int totalAmount){
+
   return Dialog(
     elevation: 1.0,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
@@ -48,7 +54,7 @@ Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int tota
                 GeoFireSrv().enableLocationLiveUpdates(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
-
+                restNewRide(context);
               },
               child: Center(
                 child: Container(
@@ -70,4 +76,14 @@ Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int tota
       ),
     ),
   );
+}
+// this method for change key newRide:searching
+void restNewRide(BuildContext context) {
+  final currentUseId = Provider.of<DriverInfoModelProvider>(context,listen: false).driverInfo.userId;
+  DatabaseReference rideRequestRef = FirebaseDatabase.instance
+      .ref()
+      .child("driver")
+      .child(currentUseId)
+      .child("newRide");
+  rideRequestRef.set("searching");
 }

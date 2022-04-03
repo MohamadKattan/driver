@@ -21,20 +21,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late bool valueSwitchBottom=true;
+  late bool valueSwitchBottom = true;
   @override
   void initState() {
-
     super.initState();
+
     /// connect with Push Notifications service
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-    GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+    //GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
   }
 
   @override
   Widget build(BuildContext context) {
     final drawerValue = Provider.of<DrawerValueChange>(context).value;
-    final changeColorBottom = Provider.of<ChangeColorBottomDrawer>(context).isTrue;
+    final changeColorBottom =
+        Provider.of<ChangeColorBottomDrawer>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -70,37 +71,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                           child: Stack(
                             children: [
-                              GoogleMap(
-                                padding: const EdgeInsets.only(top: 25.0),
-                                indoorViewEnabled: true,
-                                rotateGesturesEnabled: true,
-                                tiltGesturesEnabled: true,
-                                mapType: MapType.normal,
-                                initialCameraPosition:
-                                    LogicGoogleMap().kGooglePlex,
-                                myLocationButtonEnabled: true,
-                                myLocationEnabled: true,
-                                zoomGesturesEnabled: true,
-                                zoomControlsEnabled: true,
-                                liteModeEnabled: false,
-                                trafficEnabled: false,
-                                compassEnabled: true,
-                                buildingsEnabled: true,
-                                onMapCreated: (GoogleMapController controller)async {
-                                  LogicGoogleMap()
-                                      .controllerGoogleMap
-                                      .complete(controller);
-                                  newGoogleMapController = controller;
-                                  LogicGoogleMap().locationPosition(context);
-                                },
+                              SizedBox(height: MediaQuery.of(context).size.height,
+                                child: GoogleMap(
+                                  padding: const EdgeInsets.only(top: 25.0),
+                                  mapType: MapType.normal,
+                                  initialCameraPosition:LogicGoogleMap().kGooglePlex,
+                                  myLocationButtonEnabled: true,
+                                  myLocationEnabled: true,
+                                  liteModeEnabled: true,
+                                  onMapCreated:
+                                      (GoogleMapController controller) async {
+                                    LogicGoogleMap()
+                                        .controllerGoogleMap
+                                        .complete(controller);
+                                    newGoogleMapController = controller;
+                                    LogicGoogleMap().locationPosition(context).whenComplete((){
+                                      GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+                                    });
+                                  },
+                                ),
                               ),
                               //widget
                               valueSwitchBottom == false
                                   ? customContainerOffLineDriver(context)
                                   : const Text(""),
-
                               //widget
-
                               Positioned(
                                   left: 25.0,
                                   bottom: 10.0,
@@ -158,7 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-
     );
   }
 
@@ -176,7 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onChanged: (val) {
               setState(() {
                 valueSwitchBottom = val;
-
               });
               if (valueSwitchBottom == true) {
                 // GeoFireSrv().makeDriverOnlineNow(context);

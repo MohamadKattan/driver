@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 class Tools {
+
   void toastMsg(String msg) {
     Fluttertoast.showToast(
         msg: msg,

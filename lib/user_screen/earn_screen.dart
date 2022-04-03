@@ -1,12 +1,24 @@
-import 'package:flutter/cupertino.dart';
+
+import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
 
-class EarningScreen extends StatelessWidget {
+class EarningScreen extends StatefulWidget {
   const EarningScreen({Key? key}) : super(key: key);
 
+  @override
+  State<EarningScreen> createState() => _EarningScreenState();
+}
+
+class _EarningScreenState extends State<EarningScreen> {
+  @override
+  void initState() {
+    DataBaseReal().getDriverInfoFromDataBase(context);
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final driverEarn = Provider.of<DriverInfoModelProvider>(context).driverInfo.earning;

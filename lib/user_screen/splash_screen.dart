@@ -23,14 +23,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     if (AuthSev().auth.currentUser?.uid != null) {
-      DataBaseReal().getDriverInfoFromDataBase(context);
+       DataBaseReal().getDriverInfoFromDataBase(context);
     }
     TurnOnGBS().turnOnGBSifNot();
     _animationController = AnimationController(
         vsync: this,
         duration: const Duration(seconds: 4),
-        lowerBound: 0.8,
-        upperBound: 0.9);
+        lowerBound: 0.5,
+        upperBound: 0.7);
     _animationController.forward();
     _animationController.addStatusListener((status) async {
       if (AuthSev().auth.currentUser?.uid != null) {
@@ -40,22 +40,25 @@ class _SplashScreenState extends State<SplashScreen>
         final driverInfo =
             Provider.of<DriverInfoModelProvider>(context, listen: false)
                 .driverInfo;
-        print("this is driverInfo"+driverInfo.userId);
-        if (AuthSev().auth.currentUser?.uid == null || false) {
+        print("this is driverInfo" + driverInfo.userId);
+        if (AuthSev().auth.currentUser?.uid == null ) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const AuthScreen()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
-                driverInfo.status == "" ||
+        }
+        else if (AuthSev().auth.currentUser?.uid != null &&
+                           driverInfo.status == "" ||
             driverInfo.status.isEmpty) {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => const DriverInfoScreen()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
+        }
+        else if (AuthSev().auth.currentUser?.uid != null &&
             driverInfo.status == "checkIn") {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const CheckInScreen()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
+        }
+        else if (AuthSev().auth.currentUser?.uid != null &&
             driverInfo.status == "ok") {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));

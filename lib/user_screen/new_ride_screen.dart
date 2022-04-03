@@ -18,6 +18,8 @@ import '../my_provider/ride_request_info.dart';
 import '../my_provider/tilte_arrived_button_provider.dart';
 import '../repo/api_srv_dir.dart';
 import '../tools/maps_tooL_kit.dart';
+import '../tools/play_sounds.dart';
+import '../tools/url_lunched.dart';
 import '../widget/collect_money_dialog.dart';
 import '../widget/custom_circuler.dart';
 import '../widget/custom_divider.dart';
@@ -58,43 +60,48 @@ class _NewRideScreenState extends State<NewRideScreen> {
     acceptedRideRequest();
     super.initState();
   }
+  @override
+  void dispose() {
+   assetsAudioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     createDriverNearIcon();
-    final rideInfoProvider =
-        Provider.of<RideRequestInfoProvider>(context).rideDetails;
-    final initialPos =
-        Provider.of<DriverCurrentPosition>(context, listen: false)
-            .currentPosition;
-    final directionDetails =
-        Provider.of<DirectionDetailsPro>(context).directionDetails;
+    final rideInfoProvider = Provider.of<RideRequestInfoProvider>(context).rideDetails;
+    final initialPos = Provider.of<DriverCurrentPosition>(context, listen: false).currentPosition;
+    final directionDetails = Provider.of<DirectionDetailsPro>(context).directionDetails;
     final buttonTitle = Provider.of<TitleArrived>(context).titleButton;
     final buttonColor = Provider.of<ColorButtonArrived>(context).colorButton;
+
     final isInductor = Provider.of<NewRideScreenIndector>(context).isInductor;
     return SafeArea(
         child: Scaffold(
             body: Stack(
       children: [
-        GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: const NewRideScreen().kGooglePlex,
-          myLocationButtonEnabled: true,
-          myLocationEnabled: true,
-          trafficEnabled: false,
-          markers: markersSet,
-          polylines: polylineSet,
-          circles: circlesSet,
-          onMapCreated: (GoogleMapController controller) async {
-            controllerGoogleMap.complete(controller);
-            newRideControllerGoogleMap = controller;
-            LatLng startPontLoc =
-                LatLng(initialPos.latitude, initialPos.longitude); //driver
-            LatLng secondPontLoc = LatLng(rideInfoProvider.pickup.latitude,
-                rideInfoProvider.pickup.longitude); //rider pickUp
-            await getPlaceDirection(context, startPontLoc, secondPontLoc);
-            getRideLiveLocationUpdate();
-          },
+        SizedBox(height: MediaQuery.of(context).size.height,
+          child: GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: const NewRideScreen().kGooglePlex,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            trafficEnabled: false,
+            liteModeEnabled: false,
+            markers: markersSet,
+            polylines: polylineSet,
+            circles: circlesSet,
+            onMapCreated: (GoogleMapController controller) async {
+              controllerGoogleMap.complete(controller);
+              newRideControllerGoogleMap = controller;
+              LatLng startPontLoc =
+                  LatLng(initialPos.latitude, initialPos.longitude); //driver
+              LatLng secondPontLoc = LatLng(rideInfoProvider.pickup.latitude,
+                  rideInfoProvider.pickup.longitude); //rider pickUp
+              await getPlaceDirection(context, startPontLoc, secondPontLoc);
+              getRideLiveLocationUpdate();
+            },
+          ),
         ),
         Positioned(
             left: 0.0,
@@ -133,7 +140,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                ToUrlLunch().toCallLunch(phoneNumber:rideInfoProvider.riderPhone);
+                              },
                               icon: Icon(
                                 Icons.phone,
                                 color: Colors.greenAccent.shade700,
@@ -257,8 +266,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     rideRequestRef.child("status").set("accepted");
     rideRequestRef.child("driverId").set(driverInfo.userId);
-    rideRequestRef
-        .child("driverName")
+    rideRequestRef.child("driverName")
         .set("${driverInfo.firstName} ${driverInfo.lastName}");
     rideRequestRef.child("driverPhone").set(driverInfo.phoneNumber);
     rideRequestRef
@@ -376,8 +384,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       circlesSet.add(pickUpLocCircle);
       circlesSet.add(dropOffLocCircle);
     });
-    Provider.of<NewRideScreenIndector>(context, listen: false)
-        .updateState(false);
+    Provider.of<NewRideScreenIndector>(context, listen: false).updateState(false);
     if (kDebugMode) {
       print("this is details enCodingPoints:::::: ${details.enCodingPoints}");
     }
@@ -485,14 +492,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
         .child(rideInfoProvider.userId);
 
     if (status == "accepted") {
-        status = "arrived";
+        setState(() {
+          status = "arrived";
+        });
       rideRequestRef.child("status").set(status);
       Provider.of<TitleArrived>(context, listen: false).updateState("Start trip");
       Provider.of<ColorButtonArrived>(context, listen: false).updateState(Colors.yellowAccent.shade700);
       await getPlaceDirection(context, rideInfoProvider.pickup, rideInfoProvider.dropoff);
 
     } else if (status == "arrived") {
+      setState(() {
         status = "onride";
+      });
       Provider.of<TitleArrived>(context, listen: false).updateState("End trip");
       Provider.of<ColorButtonArrived>(context, listen: false).updateState(Colors.redAccent.shade700);
       rideRequestRef.child("status").set(status);
@@ -515,7 +526,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
       BuildContext context) async {
     timer.cancel();
     Provider.of<NewRideScreenIndector>(context, listen: false).updateState(true);
-      status = "ended";
+     setState(() {
+       status = "ended";
+     });
     Provider.of<TitleArrived>(context, listen: false).updateState("Arrived");
     Provider.of<ColorButtonArrived>(context, listen: false)
         .updateState(Colors.greenAccent.shade700);
@@ -547,7 +560,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         .child(currentUserId!)
         .child("earning");
     await ref.once().then((value) {
-      if (value.snapshot.value != null) {
+      if (value.snapshot.value != null || value.snapshot.value != "0.0") {
         double oldEarn = double.parse(value.snapshot.value.toString());
         double totalEarn = totalAmount + oldEarn;
         ref.set(totalEarn.toStringAsFixed(2));

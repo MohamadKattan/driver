@@ -39,10 +39,16 @@ class GeoFireSrv {
     Geofire.initialize(pathToReference);
     homeScreenStreamSubscription =
         Geolocator.getPositionStream().listen((Position position) async {
-      if (valueSwitchBottom == true) {
-        await Geofire.setLocation(
-            currentUseId!.uid, position.latitude, position.longitude);
-      }
+          if(position.latitude ==37.42796133580664
+              &&position.longitude==122.085749655962){
+            return;
+          }else{
+            if (valueSwitchBottom == true) {
+              await Geofire.setLocation(
+                  currentUseId!.uid, position.latitude, position.longitude);
+            }
+          }
+
       //for camera update
       LatLng latLng = LatLng(position.latitude, position.longitude);
       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));

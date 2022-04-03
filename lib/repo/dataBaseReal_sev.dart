@@ -1,17 +1,14 @@
 // this class will include method dataBase Real time
 
 import 'package:driver/model/driverInfo.dart';
-import 'package:driver/model/trip_history.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../my_provider/driver_model_provider.dart';
-import '../my_provider/ride_request_info.dart';
-import '../my_provider/trip_history_provider.dart';
+
 
 class DataBaseReal {
   final currentUser = AuthSev().auth.currentUser;

@@ -10,4 +10,10 @@ class ToUrlLunch {
         ? launch(url)
         : Tools().toastMsg('Could not launch $url');
   }
+  Future<void> toCallLunch({required String phoneNumber}) async {
+    // if (!await launch(url)) throw 'Could not launch $url';
+    await canLaunch("tel:$phoneNumber")
+        ? launch("tel:$phoneNumber")
+        : Tools().toastMsg('Could not launch $phoneNumber');
+  }
 }
