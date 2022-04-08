@@ -1,19 +1,17 @@
 // this widget for dialog collect money after finish trip
 
 import 'package:driver/model/rideDetails.dart';
-import 'package:driver/user_screen/splash_screen.dart';
+import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
-import '../my_provider/user_id_provider.dart';
 import '../repo/geoFire_srv.dart';
 import 'custom_divider.dart';
 
-Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int totalAmount){
-
+Widget collectMoney(
+    BuildContext context, RideDetails rideInfoProvider, int totalAmount) {
   return Dialog(
     elevation: 1.0,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
@@ -38,15 +36,19 @@ Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int tota
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("Payment method :${rideInfoProvider.paymentMethod} ",style: TextStyle(color: Colors.black87,fontSize: 16.0)),
+              child: Text("Payment method :${rideInfoProvider.paymentMethod} ",
+                  style:
+                      const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(" Total : \$$totalAmount " ,style: TextStyle(color: Colors.black87,fontSize: 16.0)),
+              child: Text(" Total : \$$totalAmount ",
+                  style:
+                      const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 3/ 100),
+            SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
             CustomDivider().customDivider(),
             SizedBox(height: MediaQuery.of(context).size.height * 3.5 / 100),
             GestureDetector(
@@ -54,6 +56,9 @@ Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int tota
                 GeoFireSrv().enableLocationLiveUpdates(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Navigator.pop(context);
+                // Navigator.push(context, MaterialPageRoute(builder: (_)=>
+                // const HomeScreen()));
                 restNewRide(context);
               },
               child: Center(
@@ -65,9 +70,9 @@ Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int tota
                       color: Colors.greenAccent.shade700),
                   child: const Center(
                       child: Text(
-                        "Ok",
-                        style: TextStyle(color: Colors.white),
-                      )),
+                    "Ok",
+                    style: TextStyle(color: Colors.white),
+                  )),
                 ),
               ),
             ),
@@ -77,9 +82,13 @@ Widget collectMoney(BuildContext context, RideDetails rideInfoProvider, int tota
     ),
   );
 }
+
 // this method for change key newRide:searching
 void restNewRide(BuildContext context) {
-  final currentUseId = Provider.of<DriverInfoModelProvider>(context,listen: false).driverInfo.userId;
+  final currentUseId =
+      Provider.of<DriverInfoModelProvider>(context, listen: false)
+          .driverInfo
+          .userId;
   DatabaseReference rideRequestRef = FirebaseDatabase.instance
       .ref()
       .child("driver")

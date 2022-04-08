@@ -15,12 +15,12 @@ class CircularInductorCostem{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children:  [
           Center(
-              child: Lottie.asset(
-                  'images/lf30_editor_lzxfkcgw.json',
-                  height: 250,
-                  width: 250)),
+            child: CircularProgressIndicator(
+              color: Colors.yellowAccent.shade700,
+            ),
+             ),
         ],
       ),
     );

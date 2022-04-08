@@ -1,5 +1,7 @@
 // this class for update live current location driver to retrieve rider request if driver close to rider
 
+import 'dart:async';
+
 import 'package:driver/config.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_currentPosition_provider.dart';
+import '../my_provider/driver_model_provider.dart';
 
 class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;

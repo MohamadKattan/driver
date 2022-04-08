@@ -6,15 +6,19 @@ import '../model/rideDetails.dart';
 
 class RideRequestInfoProvider extends ChangeNotifier {
   late RideDetails rideDetails = RideDetails(
-      userId: "",
-      riderName: "",
-      riderPhone: "",
-      paymentMethod: "",
-      vehicleTypeId: "",
-      pickupAddress: "",
-      pickup: const LatLng(0.0, 0.0),
-      dropoffAddress: "",
-      dropoff: const LatLng(0.0, 0.0));
+    userId: "",
+    riderName: "",
+    riderPhone: "",
+    paymentMethod: "",
+    vehicleTypeId: "",
+    pickupAddress: "",
+    pickup: const LatLng(0.0, 0.0),
+    dropoffAddress: "",
+    dropoff: const LatLng(0.0, 0.0),
+    km: "",
+    amount: "",
+  );
+
   void updateState(RideDetails rideInfo) {
     rideDetails = rideInfo;
     notifyListeners();

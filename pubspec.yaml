@@ -56,7 +56,7 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   maps_toolkit: ^2.0.0
   sliding_sheet: ^0.5.2
-  flutter_sound_lite: ^8.5.0
+  flutter_mapbox_navigation: ^0.0.26
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +86,9 @@ flutter:
      - images/splash.png
      - images/car_test.png
      - images/car_ios.png
+     - images/passenger_location.png
+     - images/desenation_icon.png
+     - images/car_icon.png
      - sounds/
      - sounds/new_order.mp3
      - sounds/1.mp3

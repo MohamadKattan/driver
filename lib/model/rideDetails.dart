@@ -12,6 +12,8 @@ class RideDetails {
   late String paymentMethod;
   late LatLng pickup;
   late LatLng dropoff;
+  late String km;
+  late String amount;
   RideDetails(
       {required this.userId,
       required this.riderName,
@@ -21,5 +23,8 @@ class RideDetails {
       required this.pickupAddress,
       required this.pickup,
       required this.dropoffAddress,
-      required this.dropoff});
+      required this.dropoff,
+      required this.km,
+      required this.amount,
+      });
 }

@@ -2,6 +2,7 @@ import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
+import 'package:driver/user_screen/turn_by_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
@@ -60,6 +61,7 @@ class _SplashScreenState extends State<SplashScreen>
         }
         else if (AuthSev().auth.currentUser?.uid != null &&
             driverInfo.status == "ok") {
+          /// todo did1
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
         } else {
