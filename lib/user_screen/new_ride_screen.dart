@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:driver/model/direction_details.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/user_screen/turn_by_nav.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +48,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   Set<Circle> circlesSet = {};
   final geolocator = Geolocator();
   final locationOptions =
-      const LocationSettings(accuracy: LocationAccuracy.bestForNavigation);
+  const LocationSettings(accuracy: LocationAccuracy.bestForNavigation);
   late BitmapDescriptor anmiatedMarkerIcon;
   late BitmapDescriptor pickUpIcon;
   late BitmapDescriptor dropOffIcon;
@@ -56,9 +58,20 @@ class _NewRideScreenState extends State<NewRideScreen> {
   late Timer timer;
   int durationContour = 0;
 
+  late MapBoxNavigation directions;
+  // late MapBoxOptions _options;
+  late MapBoxNavigationViewController _controller;
+  bool arrivedMapBox = false;
+  String instruction = "";
+  bool routeBuilt = false;
+  bool isNavigating = false;
+  bool isMultipleStop = false;
+  late WayPoint sourceWayPoint, distintionWayPoint, sourceWayPointDriver;
+
   @override
   void initState() {
     acceptedRideRequest();
+    inTailiz();
     super.initState();
   }
 
@@ -94,11 +107,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
             trafficEnabled: false,
-            liteModeEnabled: true,
+            liteModeEnabled: false,
             markers: markersSet,
             polylines: polylineSet,
             circles: circlesSet,
-            minMaxZoomPreference: const MinMaxZoomPreference(12.0, 17.0),
             onMapCreated: (GoogleMapController controller) async {
               controllerGoogleMap.complete(controller);
               newRideControllerGoogleMap = controller;
@@ -108,6 +120,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                   rideInfoProvider.pickup.longitude); //rider pickUp
               await getPlaceDirection(context, startPontLoc, secondPontLoc);
               getRideLiveLocationUpdate();
+              navigationDriverToPickUpRi(context);
             },
           ),
         ),
@@ -245,7 +258,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                     GestureDetector(
                       onTap: () {
                         changeColorArrivedAndTileButton(
-                            context, rideInfoProvider);
+                            context, rideInfoProvider, directionDetails);
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15.0),
@@ -274,6 +287,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     )));
   }
 
+//================================Start=========================================
   // 1..this method for set driver info in new Ride request collection after driver accepted new rider order
   void acceptedRideRequest() {
     //1 from api geo driver current location
@@ -324,10 +338,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final finalPos = secondPontLoc;
 
     final pickUpLatling = LatLng(initialPos.latitude, initialPos.longitude);
-    print("thisfinalPos Driver $pickUpLatling");
 
     final dropOfLatling = LatLng(finalPos.latitude, finalPos.longitude);
-    print("thisfinalPos rider $dropOfLatling");
 
     ///from api dir
     final details = await ApiSrvDir.obtainPlaceDirectionDetails(
@@ -423,13 +435,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
     });
 
     const _duration = Duration(seconds: 1);
-    int timeCount = 10;
-    final _timer = Timer.periodic(_duration, (timer) {
+    int timeCount = 7;
+    Timer.periodic(_duration, (timer) {
       timeCount = timeCount - 1;
       if (timeCount == 0) {
         timer.cancel();
-        timeCount = 10;
-
+        timeCount = 7;
         ///todo
         Provider.of<NewRideScreenIndector>(context, listen: false)
             .updateState(false);
@@ -558,8 +569,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   * & driver loc to rider pickUp loc then from rider pickUp to rider drop
   * then update status on fire base
   */
-  void changeColorArrivedAndTileButton(
-      BuildContext context, RideDetails rideInfoProvider) async {
+  void changeColorArrivedAndTileButton(BuildContext context,
+      RideDetails rideInfoProvider, DirectionDetails directionDetails) async {
     DatabaseReference rideRequestRef = FirebaseDatabase.instance
         .ref()
         .child("Ride Request")
@@ -669,4 +680,143 @@ class _NewRideScreenState extends State<NewRideScreen> {
       "trip": "don"
     });
   }
+  //================================End=========================================
+
+//=================================Start Navigation=============================
+
+  Future<void> inTailiz() async {
+    if (!mounted) return;
+    directions = MapBoxNavigation(onRouteEvent: _onRouteEvent);
+    // _options = MapBoxOptions(
+    //     zoom: 13.0,
+    //     tilt: 0.0,
+    //     bearing: 0.0,
+    //     enableRefresh: false,
+    //     alternatives: true,
+    //     voiceInstructionsEnabled: true,
+    //     bannerInstructionsEnabled: true,
+    //     allowsUTurnAtWayPoints: true,
+    //     mode: MapBoxNavigationMode.drivingWithTraffic,
+    //     units: VoiceUnits.imperial,
+    //     simulateRoute: true,
+    //     language: "en");
+  }
+
+  Future<void> _onRouteEvent(e) async {
+    switch (e.eventType) {
+      case MapBoxEvent.progress_change:
+        var progressEvent = e.data as RouteProgressEvent;
+        arrivedMapBox = progressEvent.arrived!;
+        if (progressEvent.currentStepInstruction != null) {
+          instruction = progressEvent.currentStepInstruction!;
+        }
+        break;
+      case MapBoxEvent.route_building:
+      case MapBoxEvent.route_built:
+        routeBuilt = true;
+        break;
+      case MapBoxEvent.route_build_failed:
+        routeBuilt = false;
+        break;
+      case MapBoxEvent.navigation_running:
+        isNavigating = true;
+        break;
+      case MapBoxEvent.on_arrival:
+        arrivedMapBox = true;
+        if (!isMultipleStop) {
+          await Future.delayed(const Duration(seconds: 3));
+          await _controller.finishNavigation();
+        } else {}
+        break;
+      case MapBoxEvent.navigation_finished:
+      case MapBoxEvent.navigation_cancelled:
+        routeBuilt = false;
+        isNavigating = false;
+        break;
+      default:
+        break;
+    }
+    //refresh UI
+    setState(() {});
+  }
+
+  // this method for Navigation between driver and pickUp rider
+  Future<void> navigationDriverToPickUpRi(BuildContext c) async {
+    setState(() {
+      isNavigating = true;
+    });
+    final rideInfo =
+        Provider.of<RideRequestInfoProvider>(c, listen: false).rideDetails;
+
+    final direction =
+        Provider.of<DirectionDetailsPro>(c, listen: false).directionDetails;
+    const _duration = Duration(seconds: 1);
+    int timeCount = 10;
+    int pop = 20;
+    Timer.periodic(_duration, (timer) async {
+      timeCount = timeCount - 1;
+      pop = pop-1;
+      if (timeCount == 0) {
+        timer.cancel();
+        timeCount = 10;
+        sourceWayPointDriver = WayPoint(
+            name: "Driver",
+            latitude: myPosition?.latitude,
+            longitude: myPosition?.longitude);
+        sourceWayPoint = WayPoint(
+            name: "Source",
+            latitude: rideInfo.pickup.latitude,
+            longitude: rideInfo.pickup.longitude);
+        var wayPoints = <WayPoint>[];
+        wayPoints.add(sourceWayPointDriver);
+        wayPoints.add(sourceWayPoint);
+        await directions.startNavigation(
+            wayPoints: wayPoints,
+            options:
+            MapBoxOptions(
+                mode: MapBoxNavigationMode.drivingWithTraffic,
+                simulateRoute: false,
+                language: "en",
+                zoom: 13.0,
+                units: VoiceUnits.metric)
+        );
+
+        if (direction.distanceVale / 1000 <= 0.500) {
+          if(isNavigating){
+            _controller.finishNavigation();
+          }else{
+            return;
+          }
+        }
+      }
+    });
+  }
+
+  // this method for Navigation between pickUp to drop of rider
+Future<void>navigationPickToDrop(BuildContext context)async{
+  final rideInfo =
+      Provider.of<RideRequestInfoProvider>(context, listen: false).rideDetails;
+  sourceWayPoint = WayPoint(
+      name: "Distintion",
+      latitude: rideInfo.pickup.latitude,
+      longitude: rideInfo.pickup.longitude);
+  distintionWayPoint = WayPoint(
+      name: "Distintion",
+      latitude: rideInfo.dropoff.latitude,
+      longitude: rideInfo.dropoff.longitude);
+  var wayPoints = <WayPoint>[];
+  wayPoints.add(sourceWayPoint);
+  wayPoints.add(distintionWayPoint);
+
+  await directions.startNavigation(
+      wayPoints: wayPoints,
+      options: MapBoxOptions(
+          mode: MapBoxNavigationMode.drivingWithTraffic,
+          simulateRoute: false,
+          language: "en",
+          zoom: 16.0,
+          units: VoiceUnits.metric));
+}
+
+//==================================End Navigation==============================
 }

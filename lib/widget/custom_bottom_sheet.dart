@@ -99,9 +99,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                  imageQuality: 70,
+                                  maxHeight: 140.0,
+                                  maxWidth: 140.0);
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updatePersonImage(image1!);
@@ -112,9 +112,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                 source: ImageSource.gallery,
-                                imageQuality: 30,
-                                maxWidth: 120,
-                                maxHeight: 120,
+                                imageQuality: 70,
+                                maxWidth: 140,
+                                maxHeight: 140,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -159,9 +159,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                  imageQuality: 70,
+                                  maxHeight: 140.0,
+                                  maxWidth: 140.0);
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageDriverLis(image2!);
@@ -172,9 +172,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                  imageQuality: 70,
+                                  maxHeight: 140.0,
+                                  maxWidth: 140.0);
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageDriverLis(image2!);
@@ -218,9 +218,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                  imageQuality: 70,
+                                  maxHeight: 140.0,
+                                  maxWidth: 140.0);
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageCarLis(image3!);
@@ -277,9 +277,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                  imageQuality: 70,
+                                  maxHeight: 140.0,
+                                  maxWidth: 140.0);
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImagePlatLis(image4!);
@@ -290,9 +290,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                  imageQuality: 70,
+                                  maxHeight: 140.0,
+                                  maxWidth: 140.0);
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImagePlatLis(image4!);

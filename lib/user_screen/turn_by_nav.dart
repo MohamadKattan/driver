@@ -216,7 +216,6 @@ class _TurnByNavState extends State<TurnByNav> {
                         onPressed: isNavigating
                             ? () {
                                 Navigator.pop(context);
-                                print("--------------------------");
                                 _controller.finishNavigation();
 
                                 ///todo

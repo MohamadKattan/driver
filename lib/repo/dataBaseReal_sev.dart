@@ -28,10 +28,10 @@ class DataBaseReal {
         print("DriverInfo is ${driverInfo.status}");
         return;
       } else {
-        Tools().toastMsg("snapshot.exists-error");
+        // Tools().toastMsg("snapshot.exists-error");
       }
     } catch (ex) {
-      Tools().toastMsg("Data Driver info !!!");
+      // Tools().toastMsg("Data Driver info !!!");
     }
   }
 
