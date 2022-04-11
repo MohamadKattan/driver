@@ -52,11 +52,11 @@ class ApiSrvDir {
     double timeTravleFare = (directionDetails.durationVale / 60) * 0.20;
     double distanceTravleFare = (directionDetails.distanceVale / 1000) * 0.60;
     double fareAmont = timeTravleFare + distanceTravleFare;
-    final culculFinal = carTypePro == "Taxi"
+    final culculFinal = carTypePro == "Taxi-4 seats"
         ? fareAmont * 13 + 0.70 * 13.00
-        : carTypePro == "MediumCommercial"
+        : carTypePro == "Medium commercial-6-10 seats"
             ? fareAmont * 13 + 1.5 * 13.00
-            : carTypePro == "Big Commercial"
+            : carTypePro == "Big commercial-11-19 seats"
                 ? fareAmont * 13 + 2 * 13.00
                 : 0;
 

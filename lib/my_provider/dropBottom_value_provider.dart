@@ -8,7 +8,6 @@ class DropBottomValue extends ChangeNotifier{
 
   void updateValue(String value){
     valDrop=value;
-
     notifyListeners();
   }
 }

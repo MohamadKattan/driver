@@ -31,7 +31,7 @@ class NewRideScreen extends StatefulWidget {
 
   final CameraPosition kGooglePlex = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 11.0,
+    zoom: 14.0,
   );
 
   @override
@@ -101,13 +101,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
       children: [
         SizedBox(
           height: MediaQuery.of(context).size.height,
+          width:double.infinity ,
           child: GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition: const NewRideScreen().kGooglePlex,
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
-            trafficEnabled: false,
-            liteModeEnabled: false,
             markers: markersSet,
             polylines: polylineSet,
             circles: circlesSet,
@@ -129,11 +128,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
             right: 0.0,
             bottom: 0.0,
             child: Container(
-              height: MediaQuery.of(context).size.height * 40 / 100,
+              height: MediaQuery.of(context).size.height * 31 / 100,
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+              decoration:  BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(18.0),
                       topRight: Radius.circular(18.0))),
               child: SingleChildScrollView(
@@ -169,32 +168,28 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 color: Colors.black, fontSize: 20.0),
                           ),
                         ),
-                        Column(
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  ToUrlLunch().toCallLunch(
-                                      phoneNumber: rideInfoProvider.riderPhone);
-                                },
-                                icon: Icon(
-                                  Icons.phone,
-                                  color: Colors.greenAccent.shade700,
-                                  size: 20.0,
-                                )),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
+                        IconButton(
+                            onPressed: () {
+                              ToUrlLunch().toCallLunch(
+                                  phoneNumber: rideInfoProvider.riderPhone);
+                            },
+                            icon: Icon(
+                              Icons.phone,
+                              color: Colors.greenAccent.shade700,
+                              size: 20.0,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) {
                                     return const TurnByNav();
                                   }));
-                                },
-                                icon: Icon(
-                                  Icons.map,
-                                  color: Colors.blue.shade700,
-                                  size: 20.0,
-                                )),
-                          ],
-                        ),
+                            },
+                            icon: Icon(
+                              Icons.map,
+                              color: Colors.blue.shade700,
+                              size: 20.0,
+                            )),
                       ],
                     ),
                     Row(
@@ -492,7 +487,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         markerId: const MarkerId("animating"),
         infoWindow: const InfoWindow(title: "Current Location"),
         position: mPosition,
-        // icon: anmiatedMarkerIcon,
+        icon: anmiatedMarkerIcon,
         rotation: rot,
       );
 
@@ -532,7 +527,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   void createDriverNearIcon() {
     ImageConfiguration imageConfiguration =
         createLocalImageConfiguration(context, size: const Size(0.6, 0.6));
-    BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_icon.png")
+    BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_test.png")
         .then((value) {
       setState(() {
         anmiatedMarkerIcon = value;
@@ -634,7 +629,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     /// todo
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(false);
-    int totalAmount = ApiSrvDir.calculateFares(directionDetails!, "Taxi");
+    int totalAmount = ApiSrvDir.calculateFares(directionDetails!, rideInfoProvider.vehicleTypeId);
     rideRequestRef.child("total").set(totalAmount.toString());
     newRideScreenStreamSubscription?.cancel();
     showDialog(

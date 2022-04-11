@@ -1,9 +1,6 @@
 // this class for custom drawer
-
-
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +11,7 @@ import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
 import '../user_screen/payment_screen.dart';
 import '../user_screen/profile_screen.dart';
+import '../user_screen/rating_screen.dart';
 import 'custom_divider.dart';
 
 Widget customDrawer(BuildContext context) {
@@ -143,7 +141,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: ()=>null,
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder:(_)=>const RatingScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -151,13 +152,13 @@ Widget customDrawer(BuildContext context) {
                     children: const [
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.mail, color: Colors.black45,size: 30,),
+                        child: Icon(Icons.star, color: Colors.black45,size: 30,),
                       ),
                       SizedBox(
                         width: 8.0,
                       ),
                       Text(
-                        "Previous payment",
+                        "My Rating",
                         style: TextStyle(color: Colors.black45,fontSize: 16.0),
                       ),
                     ],
@@ -178,11 +179,11 @@ Widget customDrawer(BuildContext context) {
                     children: const [
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.language, color: Colors.black45,size: 30,),
+                        child: Icon(Icons.payment, color: Colors.black45,size: 30,),
                       ),
                       SizedBox(width: 8.0),
                       Text(
-                        "Language",
+                        "Payment screen",
                         style: TextStyle(color: Colors.black45,fontSize: 16.0),
                       ),
                     ],

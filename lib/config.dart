@@ -16,7 +16,7 @@ StreamSubscription<Position>?newRideScreenStreamSubscription;
 StreamSubscription<Position>?newStreamSubscription;
 
 User? currentUser = AuthSev().auth.currentUser;
-
+double myRating = 0.0;
 bool isLite = false;
 int rideRequestTimeOut = 30;
 
