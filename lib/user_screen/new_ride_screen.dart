@@ -2,9 +2,7 @@ import 'dart:async';
 import 'package:driver/model/direction_details.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
-import 'package:driver/user_screen/turn_by_nav.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:geolocator/geolocator.dart';
@@ -31,7 +29,9 @@ class NewRideScreen extends StatefulWidget {
 
   final CameraPosition kGooglePlex = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.0,
+    zoom: 17,
+    tilt: 45,
+    bearing: 45,
   );
 
   @override
@@ -47,8 +47,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
   final geolocator = Geolocator();
-  final locationOptions =
-  const LocationSettings(accuracy: LocationAccuracy.bestForNavigation);
+  // final locationOptions =
+  // const LocationSettings(accuracy: LocationAccuracy.bestForNavigation);
   late BitmapDescriptor anmiatedMarkerIcon;
   late BitmapDescriptor pickUpIcon;
   late BitmapDescriptor dropOffIcon;
@@ -61,6 +61,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   late MapBoxNavigation directions;
   // late MapBoxOptions _options;
   late MapBoxNavigationViewController _controller;
+  double? _distanceRemaining;
+  double? _durationRemaining;
   bool arrivedMapBox = false;
   String instruction = "";
   bool routeBuilt = false;
@@ -73,11 +75,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
     acceptedRideRequest();
     inTailiz();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -101,7 +98,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       children: [
         SizedBox(
           height: MediaQuery.of(context).size.height,
-          width:double.infinity ,
+          width: MediaQuery.of(context).size.width,
           child: GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition: const NewRideScreen().kGooglePlex,
@@ -119,7 +116,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
                   rideInfoProvider.pickup.longitude); //rider pickUp
               await getPlaceDirection(context, startPontLoc, secondPontLoc);
               getRideLiveLocationUpdate();
-              navigationDriverToPickUpRi(context);
             },
           ),
         ),
@@ -128,10 +124,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
             right: 0.0,
             bottom: 0.0,
             child: Container(
-              height: MediaQuery.of(context).size.height * 31 / 100,
+              height: MediaQuery.of(context).size.height * 30 / 100,
               width: MediaQuery.of(context).size.width,
-              decoration:  BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(18.0),
                       topRight: Radius.circular(18.0))),
@@ -178,18 +174,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
                               color: Colors.greenAccent.shade700,
                               size: 20.0,
                             )),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (_) {
-                                    return const TurnByNav();
-                                  }));
-                            },
-                            icon: Icon(
-                              Icons.map,
-                              color: Colors.blue.shade700,
-                              size: 20.0,
-                            )),
+                        // IconButton(
+                        //     onPressed: () {
+                        //       Navigator.push(context,
+                        //           MaterialPageRoute(builder: (_) {
+                        //         return const TurnByNav();
+                        //       }));
+                        //     },
+                        //     icon: Icon(
+                        //       Icons.map,
+                        //       color: Colors.blue.shade700,
+                        //       size: 20.0,
+                        //     )),
                       ],
                     ),
                     Row(
@@ -244,32 +240,98 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                   overflow: TextOverflow.ellipsis))
                         ]),
                     const SizedBox(
-                      height: 3.0,
+                      height: 2.0,
                     ),
                     CustomDivider().customDivider(),
                     const SizedBox(
-                      height: 3.0,
+                      height: 2.0,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        changeColorArrivedAndTileButton(
-                            context, rideInfoProvider, directionDetails);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * 60 / 100,
-                            height:
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        status =="onride"?
+                        GestureDetector(
+                          onTap: () {
+                            navigationPickToDrop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 15 / 100,
+                                height:
+                                    MediaQuery.of(context).size.height * 7 / 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    color: Colors.blueAccent.shade700),
+                                child: Column(
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Center(
+                                          child: Text(
+                                        "To trip",
+                                        style: TextStyle(color: Colors.white,fontSize: 14.0),
+                                      )),
+                                    ),
+                                    Center(child: Icon(Icons.map,size:16.0,color:Colors.white))
+                                  ],
+                                )),
+                          ),
+                        ):const Text(""),
+                        GestureDetector(
+                          onTap: () {
+                            changeColorArrivedAndTileButton(
+                                context, rideInfoProvider, directionDetails);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 40 / 100,
+                                height:
                                 MediaQuery.of(context).size.height * 7 / 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(3.0),
-                                color: buttonColor),
-                            child: Center(
-                                child: Text(
-                              buttonTitle,
-                              style: const TextStyle(color: Colors.white),
-                            ))),
-                      ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    color: buttonColor),
+                                child: Center(
+                                    child: Text(
+                                      buttonTitle,
+                                      style: const TextStyle(color: Colors.white),
+                                    ))),
+                          ),
+                        ),
+                        status == "accepted"?
+                        GestureDetector(
+                          onTap: () {
+                            navigationDriverToPickUpRi(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 15 / 100,
+                                height:
+                                MediaQuery.of(context).size.height * 7 / 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    color: Colors.purpleAccent.shade700),
+                                child: Column(
+                                  children: const [
+                                     Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(4.0),
+                                          child: Text(
+                                            "To Rider",
+                                            style: TextStyle(color: Colors.white,fontSize:12.0),
+                                          ),
+                                        )),
+                                    Center(
+                                        child: Icon(Icons.map,color:Colors.white,size: 14.0,))
+                                  ],
+                                )),
+                          ),
+                        )
+                            :const Text("")
+                      ],
                     ),
                   ],
                 ),
@@ -396,12 +458,16 @@ class _NewRideScreenState extends State<NewRideScreen> {
     Marker markerPickUpLocation = Marker(
         icon: pickUpIcon,
         position: LatLng(pickUpLatling.latitude, pickUpLatling.longitude),
-        markerId: const MarkerId("pickUpId"));
+        markerId: const MarkerId("pickUpId"),
+      infoWindow: const InfoWindow(title: "Rider : ",snippet: "PickUp location")
+    );
 
     Marker markerDropOfLocation = Marker(
         icon: dropOffIcon,
         position: LatLng(dropOfLatling.latitude, dropOfLatling.longitude),
-        markerId: const MarkerId("dropOfId"));
+        markerId: const MarkerId("dropOfId"),
+        infoWindow: const InfoWindow(title: "Target : ",snippet: "Rider dropOff location" )
+    );
 
     setState(() {
       markersSet.add(markerPickUpLocation);
@@ -430,26 +496,23 @@ class _NewRideScreenState extends State<NewRideScreen> {
     });
 
     const _duration = Duration(seconds: 1);
-    int timeCount = 7;
+    int timeCount = 5;
     Timer.periodic(_duration, (timer) {
       timeCount = timeCount - 1;
       if (timeCount == 0) {
         timer.cancel();
-        timeCount = 7;
-        ///todo
+        timeCount = 5;
+
         Provider.of<NewRideScreenIndector>(context, listen: false)
             .updateState(false);
       }
     });
-    if (kDebugMode) {
-      print("this is details enCodingPoints:::::: ${details.enCodingPoints}");
-    }
   }
 
 // contact to method getPlaceDirection
   void createPickUpRideIcon() {
     ImageConfiguration imageConfiguration =
-        createLocalImageConfiguration(context, size: const Size(0.6, 0.6));
+        createLocalImageConfiguration(context, size: const Size(3, 3));
     BitmapDescriptor.fromAssetImage(
             imageConfiguration, "images/passenger_location.png")
         .then((value) {
@@ -462,7 +525,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 // contact to method getPlaceDirection
   void createDropOffIcon() {
     ImageConfiguration imageConfiguration =
-        createLocalImageConfiguration(context, size: const Size(0.6, 0.6));
+        createLocalImageConfiguration(context, size: const Size(1.0, 1.0));
     BitmapDescriptor.fromAssetImage(
             imageConfiguration, "images/desenation_icon.png")
         .then((value) {
@@ -494,7 +557,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
       ///...
       setState(() {
         CameraPosition cameraPosition =
-            CameraPosition(target: mPosition, zoom: 14);
+            CameraPosition(
+                target: mPosition,
+                zoom: 16.50,
+              tilt: 45.0,
+              bearing: 45.0
+            );
         newRideControllerGoogleMap
             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
         markersSet.removeWhere((ele) => ele.markerId.value == "animating");
@@ -527,7 +595,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   void createDriverNearIcon() {
     ImageConfiguration imageConfiguration =
         createLocalImageConfiguration(context, size: const Size(0.6, 0.6));
-    BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_test.png")
+    BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_ios.png")
         .then((value) {
       setState(() {
         anmiatedMarkerIcon = value;
@@ -609,7 +677,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
       BuildContext context) async {
     timer.cancel();
 
-    ///todo
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(true);
     setState(() {
@@ -626,18 +693,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final directionDetails = await ApiSrvDir.obtainPlaceDirectionDetails(
         riderFirstPickUp, driverCurrentLoc, context);
 
-    /// todo
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(false);
-    int totalAmount = ApiSrvDir.calculateFares(directionDetails!, rideInfoProvider.vehicleTypeId);
+    int totalAmount = ApiSrvDir.calculateFares(
+        directionDetails!, rideInfoProvider.vehicleTypeId);
     rideRequestRef.child("total").set(totalAmount.toString());
     newRideScreenStreamSubscription?.cancel();
+    saveEarning(totalAmount);
+    saveTripHistory(rideInfoProvider, totalAmount);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) => collectMoney(context, rideInfoProvider, totalAmount));
-    saveEarning(totalAmount);
-    saveTripHistory(rideInfoProvider, totalAmount);
   }
 
   // this method for save earning money in database
@@ -682,22 +749,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
   Future<void> inTailiz() async {
     if (!mounted) return;
     directions = MapBoxNavigation(onRouteEvent: _onRouteEvent);
-    // _options = MapBoxOptions(
-    //     zoom: 13.0,
-    //     tilt: 0.0,
-    //     bearing: 0.0,
-    //     enableRefresh: false,
-    //     alternatives: true,
-    //     voiceInstructionsEnabled: true,
-    //     bannerInstructionsEnabled: true,
-    //     allowsUTurnAtWayPoints: true,
-    //     mode: MapBoxNavigationMode.drivingWithTraffic,
-    //     units: VoiceUnits.imperial,
-    //     simulateRoute: true,
-    //     language: "en");
   }
 
   Future<void> _onRouteEvent(e) async {
+    _distanceRemaining = await directions.distanceRemaining;
+    _durationRemaining = await directions.durationRemaining;
     switch (e.eventType) {
       case MapBoxEvent.progress_change:
         var progressEvent = e.data as RouteProgressEvent;
@@ -721,7 +777,14 @@ class _NewRideScreenState extends State<NewRideScreen> {
         if (!isMultipleStop) {
           await Future.delayed(const Duration(seconds: 3));
           await _controller.finishNavigation();
-        } else {}
+        } else {
+          MapBoxEvent.navigation_finished;
+          MapBoxEvent.navigation_cancelled;
+          isNavigating = false;
+          routeBuilt = false;
+          await _controller.finishNavigation();
+          Navigator.pop(context);
+        }
         break;
       case MapBoxEvent.navigation_finished:
       case MapBoxEvent.navigation_cancelled:
@@ -737,20 +800,15 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
   // this method for Navigation between driver and pickUp rider
   Future<void> navigationDriverToPickUpRi(BuildContext c) async {
-    setState(() {
-      isNavigating = true;
-    });
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(c, listen: false).rideDetails;
 
-    final direction =
-        Provider.of<DirectionDetailsPro>(c, listen: false).directionDetails;
     const _duration = Duration(seconds: 1);
     int timeCount = 10;
     int pop = 20;
     Timer.periodic(_duration, (timer) async {
       timeCount = timeCount - 1;
-      pop = pop-1;
+      pop = pop - 1;
       if (timeCount == 0) {
         timer.cancel();
         timeCount = 10;
@@ -767,51 +825,53 @@ class _NewRideScreenState extends State<NewRideScreen> {
         wayPoints.add(sourceWayPoint);
         await directions.startNavigation(
             wayPoints: wayPoints,
-            options:
-            MapBoxOptions(
+            options: MapBoxOptions(
                 mode: MapBoxNavigationMode.drivingWithTraffic,
                 simulateRoute: false,
                 language: "en",
                 zoom: 13.0,
-                units: VoiceUnits.metric)
-        );
+                units: VoiceUnits.metric));
 
-        if (direction.distanceVale / 1000 <= 0.500) {
-          if(isNavigating){
-            _controller.finishNavigation();
-          }else{
-            return;
-          }
+        if ((_durationRemaining! / 60) ==1 || (_distanceRemaining! * 0.000621371)/1000==0.500) {
+            MapBoxEvent.on_arrival;
+            arrivedMapBox = true;
+            MapBoxEvent.navigation_finished;
+            MapBoxEvent.navigation_cancelled;
+            isNavigating = false;
+            routeBuilt = false;
+            Navigator.pop(context);
         }
       }
     });
   }
 
   // this method for Navigation between pickUp to drop of rider
-Future<void>navigationPickToDrop(BuildContext context)async{
-  final rideInfo =
-      Provider.of<RideRequestInfoProvider>(context, listen: false).rideDetails;
-  sourceWayPoint = WayPoint(
-      name: "Distintion",
-      latitude: rideInfo.pickup.latitude,
-      longitude: rideInfo.pickup.longitude);
-  distintionWayPoint = WayPoint(
-      name: "Distintion",
-      latitude: rideInfo.dropoff.latitude,
-      longitude: rideInfo.dropoff.longitude);
-  var wayPoints = <WayPoint>[];
-  wayPoints.add(sourceWayPoint);
-  wayPoints.add(distintionWayPoint);
+  Future<void> navigationPickToDrop(BuildContext context) async {
+    final rideInfo =
+        Provider.of<RideRequestInfoProvider>(context, listen: false)
+            .rideDetails;
+    sourceWayPoint = WayPoint(
+        name: "Distintion",
+        latitude: rideInfo.pickup.latitude,
+        longitude: rideInfo.pickup.longitude);
+    distintionWayPoint = WayPoint(
+        name: "Distintion",
+        latitude: rideInfo.dropoff.latitude,
+        longitude: rideInfo.dropoff.longitude);
+    var wayPoints = <WayPoint>[];
+    wayPoints.add(sourceWayPoint);
+    wayPoints.add(distintionWayPoint);
 
-  await directions.startNavigation(
-      wayPoints: wayPoints,
-      options: MapBoxOptions(
-          mode: MapBoxNavigationMode.drivingWithTraffic,
-          simulateRoute: false,
-          language: "en",
-          zoom: 16.0,
-          units: VoiceUnits.metric));
-}
+    await directions.startNavigation(
+        wayPoints: wayPoints,
+        options: MapBoxOptions(
+            mode: MapBoxNavigationMode.drivingWithTraffic,
+            simulateRoute: false,
+            language: "en",
+            zoom: 16.0,
+            units: VoiceUnits.metric));
+
+  }
 
 //==================================End Navigation==============================
 }

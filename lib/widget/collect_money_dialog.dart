@@ -57,9 +57,10 @@ Widget collectMoney(
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
-                // Navigator.push(context, MaterialPageRoute(builder: (_)=>
-                // const HomeScreen()));
                 restNewRide(context);
+                // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(_){
+                //   return const HomeScreen();
+                // }), (route) => false);
               },
               child: Center(
                 child: Container(
