@@ -595,7 +595,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   void createDriverNearIcon() {
     ImageConfiguration imageConfiguration =
         createLocalImageConfiguration(context, size: const Size(0.6, 0.6));
-    BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_ios.png")
+    BitmapDescriptor.fromAssetImage(imageConfiguration, "images/navigation blue map.png")
         .then((value) {
       setState(() {
         anmiatedMarkerIcon = value;

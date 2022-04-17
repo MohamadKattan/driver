@@ -24,6 +24,6 @@ class TurnOnGBS {
     }
 
     _locationData = await location.getLocation();
-    location.enableBackgroundMode(enable: true);
+    location.enableBackgroundMode(enable: false);
   }
 }

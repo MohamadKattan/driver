@@ -6,6 +6,7 @@ import 'package:driver/user_screen/turn_by_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import '../notificatons/push_notifications_srv.dart';
 import '../tools/turn_GBS.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';

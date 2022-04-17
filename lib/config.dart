@@ -1,6 +1,5 @@
 
 import 'dart:async';
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,4 +18,5 @@ User? currentUser = AuthSev().auth.currentUser;
 double myRating = 0.0;
 bool isLite = false;
 int rideRequestTimeOut = 30;
+
 

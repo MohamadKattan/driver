@@ -58,6 +58,9 @@ dependencies:
   sliding_sheet: ^0.5.2
   flutter_mapbox_navigation: ^0.0.26
   smooth_star_rating_null_safety: ^1.0.4+2
+  flutter_local_notifications: ^9.4.0
+
+
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +93,7 @@ flutter:
      - images/passenger_location.png
      - images/desenation_icon.png
      - images/car_icon.png
+     - images/navigation blue map.png
      - sounds/
      - sounds/new_order.mp3
      - sounds/1.mp3

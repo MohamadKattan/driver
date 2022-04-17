@@ -2,6 +2,10 @@
 import 'dart:math';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:driver/repo/geoFire_srv.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,7 +14,9 @@ import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
+import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
+import '../tools/background_serv.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 
@@ -23,13 +29,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool valueSwitchBottom = true;
+
   @override
   void initState() {
     super.initState();
-
     /// connect with Push Notifications service
+    initializationLocal(context);
+    requestPermissions();
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-    //GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+
   }
 
   @override
@@ -51,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : const Text(""),
               customDrawer(context),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Provider.of<DrawerValueChange>(context, listen: false)
                       .updateValue(0);
                   Provider.of<ChangeColorBottomDrawer>(context, listen: false)
@@ -135,13 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         radius: 25,
                         backgroundColor: Colors.white,
                         child: IconButton(
-                            onPressed: () {
+                            onPressed: ()async {
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(0);
                               Provider.of<ChangeColorBottomDrawer>(context,
                                       listen: false)
                                   .updateColorBottom(false);
+                              closeDailog();
                             },
                             icon: const Icon(
                               Icons.arrow_back_ios,

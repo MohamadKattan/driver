@@ -30,7 +30,6 @@ void main() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   }
-
   runApp(const MyApp());
 }
 
