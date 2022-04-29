@@ -23,6 +23,10 @@ class _EarningScreenState extends State<EarningScreen> {
   Widget build(BuildContext context) {
     final driverEarn = Provider.of<DriverInfoModelProvider>(context).driverInfo.earning;
     return SafeArea(child: Scaffold(
+      appBar: AppBar(
+        backgroundColor:const Color(0xFFFFD54F),
+        title: const Text("My earning",style: TextStyle(color: Colors.white)),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

@@ -179,19 +179,19 @@ class DriverInfoScreen extends StatelessWidget {
   checkIfTextFieldNotNull(
       double bottomSheetValue, String dropBottomValue, BuildContext context) {
     if (name.text.isEmpty) {
-      Tools().toastMsg("Name driver is required");
+      Tools().toastMsg("Name driver is required",Colors.redAccent.shade700);
     } else if (lastName.text.isEmpty) {
-      Tools().toastMsg("last name driver is required");
+      Tools().toastMsg("last name driver is required",Colors.redAccent.shade700);
     } else if (idNo.text.isEmpty) {
-      Tools().toastMsg("Id Card number is required");
+      Tools().toastMsg("Id Card number is required",Colors.redAccent.shade700);
     } else if (carBrand.text.isEmpty) {
-      Tools().toastMsg("Car brand  is required");
+      Tools().toastMsg("Car brand  is required",Colors.redAccent.shade700);
     } else if (carModel.text.isEmpty) {
-      Tools().toastMsg("Car model  is required");
+      Tools().toastMsg("Car model  is required",Colors.redAccent.shade700);
     } else if (carColor.text.isEmpty) {
-      Tools().toastMsg("Car color  is required");
+      Tools().toastMsg("Car color  is required",Colors.redAccent.shade700);
     } else if (dropBottomValue == "Select a car class") {
-      Tools().toastMsg("car class  is required");
+      Tools().toastMsg("car class  is required",Colors.redAccent.shade700);
     } else {
       Provider.of<BottomSheetValue>(context, listen: false).updateValue(0.0);
     }

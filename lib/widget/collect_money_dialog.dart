@@ -2,10 +2,12 @@
 
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
+import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
 import 'custom_divider.dart';
@@ -19,7 +21,7 @@ Widget collectMoney(
     child: Container(
       height: MediaQuery.of(context).size.height * 50 / 100,
       width: double.infinity,
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration:  BoxDecoration(borderRadius: BorderRadius.circular(6.0),color: Colors.white),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,15 +54,12 @@ Widget collectMoney(
             CustomDivider().customDivider(),
             SizedBox(height: MediaQuery.of(context).size.height * 3.5 / 100),
             GestureDetector(
-              onTap: () {
+              onTap: ()async {
                 GeoFireSrv().enableLocationLiveUpdates(context);
+                await  restNewRide(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
-                restNewRide(context);
-                // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(_){
-                //   return const HomeScreen();
-                // }), (route) => false);
               },
               child: Center(
                 child: Container(
@@ -85,7 +84,7 @@ Widget collectMoney(
 }
 
 // this method for change key newRide:searching
-void restNewRide(BuildContext context) {
+Future<void> restNewRide(BuildContext context) async{
   final currentUseId =
       Provider.of<DriverInfoModelProvider>(context, listen: false)
           .driverInfo

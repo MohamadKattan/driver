@@ -226,7 +226,7 @@ class AuthSev {
           }
         } on FirebaseAuthException catch (e) {
           e.toString();
-          _tools.toastMsg("Some Thing went Wrong");
+          _tools.toastMsg("Some Thing went Wrong",Colors.redAccent.shade700);
         } catch (e) {
           e.toString();
         }

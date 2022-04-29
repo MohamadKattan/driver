@@ -2,12 +2,11 @@
 import 'dart:math';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:driver/repo/geoFire_srv.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:driver/tools/tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
@@ -16,7 +15,7 @@ import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
-import '../tools/background_serv.dart';
+import '../payment/couut_plan_days.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 
@@ -37,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
     initializationLocal(context);
     requestPermissions();
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-
+    tostDriverAvailable();
+    // FlutterBackgroundService().invoke("setAsForeground");
+     PlanDays().countDayPlansInForeground();
   }
 
   @override
@@ -123,6 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: const Color(0xFFFFD54F),
                         child: IconButton(
                             onPressed: () {
+                              PlanDays().getExPlanFromReal();
+                              // PlanDays().countDayPlansInForeground();
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(1);
@@ -144,13 +147,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.white,
                         child: IconButton(
                             onPressed: ()async {
+                              FlutterBackgroundService().invoke("setAsBackground");
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(0);
                               Provider.of<ChangeColorBottomDrawer>(context,
                                       listen: false)
                                   .updateColorBottom(false);
-                              closeDailog();
                             },
                             icon: const Icon(
                               Icons.arrow_back_ios,
@@ -183,11 +186,11 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               if (valueSwitchBottom == true) {
                 // GeoFireSrv().makeDriverOnlineNow(context);
+                tostDriverAvailable();
                 GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
-                print(valueSwitchBottom);
               } else if (valueSwitchBottom == false) {
                 GeoFireSrv().makeDriverOffLine(context);
-                print(valueSwitchBottom);
+                tostDriverAvailable();
               }
             },
           ),
@@ -215,7 +218,9 @@ class _HomeScreenState extends State<HomeScreen> {
         isTimerTextShown: true,
         autoStart: true,
         onStart: () {
-          print('Countdown Started');
+          if (kDebugMode) {
+            print('Countdown Started');
+          }
         },
         onComplete: () async {
           if (valueSwitchBottom == false) {
@@ -223,5 +228,13 @@ class _HomeScreenState extends State<HomeScreen> {
             SystemNavigator.pop();
           }
         });
+  }
+// this method for show tost driver if he Available or not
+  void tostDriverAvailable() {
+    if(valueSwitchBottom == true){
+      Tools().toastMsg("You are Available for new order ", Colors.green.shade700);
+    }else{
+      Tools().toastMsg("You aren't Available for new order ", Colors.redAccent.shade700);
+    }
   }
 }

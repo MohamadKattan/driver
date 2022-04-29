@@ -1,15 +1,18 @@
 // this class for custom drawer
+import 'package:driver/config.dart';
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
+import 'package:driver/user_screen/plan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
-import '../user_screen/payment_screen.dart';
+import '../user_screen/contact_us.dart';
 import '../user_screen/profile_screen.dart';
 import '../user_screen/rating_screen.dart';
 import 'custom_divider.dart';
@@ -48,6 +51,11 @@ Widget customDrawer(BuildContext context) {
                       showImage(context),
                       showUserName(context),
                       showUserPhone(context),
+                      Row(
+                        children:  [
+                          Text("Your plan : $exPlan")
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -171,7 +179,7 @@ Widget customDrawer(BuildContext context) {
               CustomDivider().customDivider(),
               GestureDetector(
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const PaymentScreen())),
+                    MaterialPageRoute(builder: (context) =>const PlanScreen())),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -195,8 +203,36 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
+                onTap: ()=>
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const ContactUs())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.email, color: Colors.black45,size: 30,),
+                        ),
+                        SizedBox(width: 8.0),
+                        Padding(
+                            padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                            child: Text(
+                              "Connect us",
+                              style: TextStyle(color: Colors.black45,fontSize: 16.0),
+                            ))
+                      ]),
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              CustomDivider().customDivider(),
+              GestureDetector(
                 onTap: (){
                   GeoFireSrv().makeDriverOffLine(context);
+                  FlutterBackgroundService().invoke("setAsBackground");
                   SystemNavigator.pop();
                 },
                 child: Padding(

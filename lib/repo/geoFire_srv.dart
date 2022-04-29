@@ -17,27 +17,7 @@ class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;
   String pathToReference = "availableDrivers";
 
-// this method for make driver on line and display his currentPosition for in availableDrivers collection
-//   void makeDriverOnlineNow(BuildContext context) async {
-//     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
-//         .currentPosition;
-//
-//     Geofire.initialize(pathToReference);
-//     await Geofire.setLocation(
-//         currentUseId!.uid, position.latitude, position.longitude);
-//     DatabaseReference rideRequestRef = FirebaseDatabase.instance
-//         .ref()
-//         .child("driver")
-//         .child(currentUseId!.uid)
-//         .child("newRide");
-//     //first set new value when driver switch bottom online and waiting for a new order rider
-//     rideRequestRef.set("searching");
-//
-//     //second listing
-//     rideRequestRef.onValue.listen((event) {});
-//   }
 
-  //this method for updating driver currentPosition and listing as stream
   getLocationLiveUpdates(BuildContext context, bool valueSwitchBottom) {
     Geofire.initialize(pathToReference);
     homeScreenStreamSubscription =

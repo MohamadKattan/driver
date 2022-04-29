@@ -310,13 +310,13 @@ class CustomBottomSheet {
             GestureDetector(
               onTap: () {
                 if (driverImage == null) {
-                  Tools().toastMsg("Driver Image is required");
+                  Tools().toastMsg("Driver Image is required",Colors.redAccent.shade700);
                 } else if (driverLis == null) {
-                  Tools().toastMsg("Driver license is required");
+                  Tools().toastMsg("Driver license is required",Colors.redAccent.shade700);
                 } else if (carLisImage == null) {
-                  Tools().toastMsg("Car license is required");
+                  Tools().toastMsg("Car license is required",Colors.redAccent.shade700);
                 } else if (carImage == null) {
-                  Tools().toastMsg("Car Image is required");
+                  Tools().toastMsg("Car Image is required",Colors.redAccent.shade700);
                 } else {
                   Provider.of<BottomSheetValue>(context, listen: false)
                       .updateValue(-600.0);

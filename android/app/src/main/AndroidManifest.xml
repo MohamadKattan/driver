@@ -38,6 +38,7 @@
     </queries>
 
     <application
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="Garanti Driver">
@@ -53,7 +54,10 @@
             android:launchMode="singleTop"
             android:requestLegacyExternalStorage="true"
             android:theme="@style/LaunchTheme"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            >
 
             <!--
                  Specifies an Android theme to apply to this Activity as soon as

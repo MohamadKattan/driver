@@ -1,6 +1,7 @@
 // this class for urlLunched method
 
 import 'package:driver/tools/tools.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ToUrlLunch {
@@ -8,12 +9,22 @@ class ToUrlLunch {
     // if (!await launch(url)) throw 'Could not launch $url';
     await canLaunch(url)
         ? launch(url)
-        : Tools().toastMsg('Could not launch $url');
+        : Tools().toastMsg('Could not launch $url', Colors.redAccent.shade700);
   }
+
   Future<void> toCallLunch({required String phoneNumber}) async {
     // if (!await launch(url)) throw 'Could not launch $url';
     await canLaunch("tel:$phoneNumber")
         ? launch("tel:$phoneNumber")
-        : Tools().toastMsg('Could not launch $phoneNumber');
+        : Tools().toastMsg(
+            'Could not launch $phoneNumber', Colors.redAccent.shade700);
+  }
+
+  Future<void> toUrlEmail() async {
+    // if (!await launch(url)) throw 'Could not launch $url';
+    await canLaunch("mailto:granti@ouiquit.com")
+        ? launch("mailto:granti@ouiquit.com")
+        : Tools()
+            .toastMsg('Could not launch gmail now ', Colors.redAccent.shade700);
   }
 }

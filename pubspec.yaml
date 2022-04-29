@@ -59,6 +59,11 @@ dependencies:
   flutter_mapbox_navigation: ^0.0.26
   smooth_star_rating_null_safety: ^1.0.4+2
   flutter_local_notifications: ^9.4.0
+  webview_flutter: ^3.0.2
+  audioplayers: ^0.20.1
+  awesome_card: ^1.1.7
+  flutter_background_service: ^2.0.0
+  device_info_plus: ^3.2.3
 
 
 
@@ -90,13 +95,17 @@ flutter:
      - images/splash.png
      - images/car_test.png
      - images/car_ios.png
-     - images/passenger_location.png
-     - images/desenation_icon.png
      - images/car_icon.png
-     - images/navigation blue map.png
+     - images/100destination_icon.png
+     - images/100navigation.png
+     - images/100passengerlocationicon.png
+     - images/100flagblackwhite.png
+     - images/100currentlocationicon.png
+     - images/map1.jpg
      - sounds/
      - sounds/new_order.mp3
      - sounds/1.mp3
+     - sounds/end_trip_ar.wav
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -7,13 +7,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Tools {
 
-  void toastMsg(String msg) {
+  void toastMsg(String msg,Color colors,) {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: colors,
         textColor: Colors.white,
         fontSize: 16.0);
   }

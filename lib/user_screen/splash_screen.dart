@@ -2,11 +2,10 @@ import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
-import 'package:driver/user_screen/turn_by_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
-import '../notificatons/push_notifications_srv.dart';
+import '../payment/couut_plan_days.dart';
 import '../tools/turn_GBS.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';
@@ -26,12 +25,13 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     if (AuthSev().auth.currentUser?.uid != null) {
        DataBaseReal().getDriverInfoFromDataBase(context);
+       PlanDays().getBackGroundBoolValue();
     }
     TurnOnGBS().turnOnGBSifNot();
     _animationController = AnimationController(
         vsync: this,
-        duration: const Duration(seconds: 4),
-        lowerBound: 0.5,
+        duration: const Duration(seconds: 2),
+        lowerBound: 0.6,
         upperBound: 0.7);
     _animationController.forward();
     _animationController.addStatusListener((status) async {

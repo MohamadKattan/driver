@@ -43,6 +43,7 @@ class PushNotificationsSrv {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final userId = AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+
 ///todo delete
   // this method for got token driver and set to database
 
@@ -160,10 +161,13 @@ class PushNotificationsSrv {
             builder: (BuildContext context) => NotificationDialog(context));
         return;
       } else {
-        Tools().toastMsg("push.exists");
+        driverRef.child(userId).child("newRide").set("searching");
+        Tools().toastMsg("Not.exists",Colors.redAccent.shade700);
       }
     } catch (ex) {
-      Tools().toastMsg("push.Loading...");
+      Tools().toastMsg("push.Loading...",Colors.redAccent.shade700);
+      driverRef.child(userId).child("newRide").set("searching");
+      Tools().toastMsg("Not.exists",Colors.redAccent.shade700);
     }
   }
 

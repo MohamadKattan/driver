@@ -1,6 +1,6 @@
 // this widget dialog notification show to driver for accept or cancel order
 import 'dart:async';
-import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -8,13 +8,12 @@ import 'package:provider/provider.dart';
 import '../config.dart';
 import '../model/rideDetails.dart';
 import '../my_provider/driver_model_provider.dart';
-import '../my_provider/new_ride_indector.dart';
 import '../my_provider/ride_request_info.dart';
 import '../repo/geoFire_srv.dart';
-import '../tools/play_sounds.dart';
 import '../tools/tools.dart';
 import '../user_screen/new_ride_screen.dart';
 import '../widget/custom_divider.dart';
+
 
 class NotificationDialog extends StatefulWidget {
   const NotificationDialog(BuildContext context, {Key? key}) : super(key: key);
@@ -24,23 +23,26 @@ class NotificationDialog extends StatefulWidget {
 }
 
 class _NotificationDialogState extends State<NotificationDialog> {
-  final player = PlaySoundTool();
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
+  bool buttonAccepted = false;
+  AudioPlayer audioPlayer = AudioPlayer();
+  late AudioCache audioCache;
+  String path = "new_order.mp3";
 
   @override
   void initState() {
-    AssetsAudioPlayer.newPlayer()
-        .open(Audio("sounds/new_order.mp3"), autoStart: true);
+    // assetsAudioPlayer.open(Audio("sounds/new_order.mp3"));
+    // assetsAudioPlayer.play();
+    audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
+    playSound();
     super.initState();
   }
-
   @override
   void dispose() {
-    _assetsAudioPlayer.dispose();
+    audioPlayer.release();
+    audioPlayer.dispose();
+    audioCache.clearAll();
     super.dispose();
   }
-
-  bool buttonAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       child: Container(
         height: MediaQuery.of(context).size.height * 65 / 100,
         width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0),color: Colors.white),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,8 +144,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      _assetsAudioPlayer.stop();
+                    onTap: () async {
+                     // await assetsAudioPlayer.stop();
+                      stopSound();
                       driverCancelOrder(context);
                       Navigator.pop(context);
                     },
@@ -161,9 +164,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                    // await  assetsAudioPlayer.stop();
+                    stopSound();
                       checkAvailableOfRide(context, rideInfoProvider);
-                      _assetsAudioPlayer.stop();
                     },
                     child: Container(
                         width: MediaQuery.of(context).size.width * 30 / 100,
@@ -206,7 +210,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       if (value.snapshot.value != null) {
         newRideState = value.snapshot.value.toString();
       } else {
-        Tools().toastMsg("Ride not exist");
+        Tools().toastMsg("Ride not exist",Colors.redAccent.shade700);
         rideRequestRef.set("searching");
         Navigator.pop(context);
       }
@@ -214,22 +218,22 @@ class _NotificationDialogState extends State<NotificationDialog> {
       if (newRideState == rideInfoProvider.userId) {
         GeoFireSrv().displayLocationLiveUpdates();
         await rideRequestRef.set("accepted").whenComplete(() {
-          Provider.of<NewRideScreenIndector>(context, listen: false)
-              .updateState(true);
+          // Provider.of<NewRideScreenIndector>(context, listen: false)
+          //     .updateState(true);
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const NewRideScreen()));
         });
       } else if (newRideState == "canceled") {
-        Tools().toastMsg("Ride has been canceled ");
+        Tools().toastMsg("Ride has been canceled",Colors.redAccent.shade700);
         rideRequestRef.set("searching");
         Navigator.pop(context);
       } else if (newRideState == "timeOut") {
         rideRequestRef.set("searching");
-        Tools().toastMsg("Ride timeOut");
+        Tools().toastMsg("Ride timeOut",Colors.redAccent.shade700);
         Navigator.pop(context);
       } else {
         rideRequestRef.set("searching");
-        Tools().toastMsg("Ride not exist");
+        Tools().toastMsg("Ride not exist",Colors.redAccent.shade700);
         Navigator.pop(context);
       }
     });
@@ -255,8 +259,16 @@ class _NotificationDialogState extends State<NotificationDialog> {
       if (rideRequestTimeOut == 0) {
         rideRequestRef.set("searching");
         timer.cancel();
-        rideRequestTimeOut = 30;
+        rideRequestTimeOut = 120;
       }
     });
   }
+
+ Future <void> playSound()async {
+   await audioCache.play(path);
+ }
+  Future <void> stopSound()async {
+    await audioPlayer.stop();
+  }
 }
+

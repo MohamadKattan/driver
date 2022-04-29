@@ -192,13 +192,13 @@ class AuthScreen extends StatelessWidget {
                                 ),
                               );
                             }  else if(email.text.isEmpty){
-                              Tools().toastMsg("Email address is required");
+                              Tools().toastMsg("Email address is required",Colors.redAccent.shade700);
                             }
                             else if(!email.text.contains("@")){
-                              Tools().toastMsg("check your email address info");
+                              Tools().toastMsg("check your email address info",Colors.redAccent.shade700);
                             }
                             else if(!email.text.contains(".com")){
-                              Tools().toastMsg("check your email address info");
+                              Tools().toastMsg("check your email address info",Colors.redAccent.shade700);
                             }
                             else {
                               Provider.of<TrueFalse>(context, listen: false)
