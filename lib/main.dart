@@ -74,36 +74,16 @@ Future<void> initializeService() async {
 
 bool onIosBackground(ServiceInstance service) {
   WidgetsFlutterBinding.ensureInitialized();
-  print('FLUTTER BACKGROUND FETCH');
 
   return true;
 }
 
 void onStart(ServiceInstance service)async {
   await Firebase.initializeApp();
-  await PlanDays().setIfBackgroundOrForeground(true);
-  DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   String userId =AuthSev().auth.currentUser!.uid;
-  // await driverRef.child(userId).child("exPlan").once().then((value){
-  //   final snap = value.snapshot.value;
-  //   if(snap !=null){
-  //     final plan = snap.toString();
-  //     exPlan = int.parse(plan);
-  //   }
-  // });
-  await driverRef.child(userId).once().then((value){
-    if(value.snapshot.exists&&value.snapshot.value!=null){
-      final snap = value.snapshot.value;
-      Map<String,dynamic>map = Map<String,dynamic>.from(snap as Map);
-      if(map["exPlan"] !=null){
-        exPlan = map["exPlan"];
-      }
-      if(map["backbool"] !=null){
-        isBackground = map["backbool"];
-        print("BBBBBBBB$isBackground");
-      }
-    }
-  });
+  DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+
+
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
@@ -117,55 +97,81 @@ void onStart(ServiceInstance service)async {
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
+  if(userId.isNotEmpty){
+    await PlanDays().setIfBackgroundOrForeground(true);
+    await driverRef.child(userId).child("exPlan").once().then((value){
+      if(value.snapshot.exists&&value.snapshot.value!=null){
+        final snap = value.snapshot.value;
+        if(snap!=null){
+          exPlan=int.parse(snap.toString());
+        }
+      }
+    });
+  }
 
-  // bring to foreground
   Timer.periodic(const Duration(seconds: 1), (timer) async {
     if(exPlan<0){
       timer.cancel();
-      Tools().toastMsg("Your Plan finished",Colors.redAccent.shade700);
-      if (kDebugMode) {
-        print("plan finished");
-      }
+      Tools().toastMsg("Your Plan finished back",Colors.redAccent.shade700);
+      driverRef.child(userId).child("status").once().then((value){
+        if(value.snapshot.exists&&value.snapshot.value!=null){
+          final snap = value.snapshot.value;
+          String _status = snap.toString();
+          if(_status=="checkIn"){
+            return;
+          }
+          driverRef.child(userId).child("status").set("payTime");
+        }
+      });
     }else{
       exPlan = exPlan -1;
-      await  PlanDays().setExPlanToRealTime(exPlan);
+        await driverRef.child(userId).child("exPlan").set(exPlan);
+      print("back$exPlan");
       if(exPlan == 0){
         Tools().toastMsg("Your Plan finished charge your plan",Colors.redAccent.shade700);
       }
       if(exPlan<0){
         timer.cancel();
         Tools().toastMsg("Your Plan finished",Colors.redAccent.shade700);
-        print("plan finished");
+        driverRef.child(userId).child("status").once().then((value){
+          if(value.snapshot.exists&&value.snapshot.value!=null){
+            final snap = value.snapshot.value;
+            String _status = snap.toString();
+            if(_status=="checkIn"){
+              return;
+            }
+            driverRef.child(userId).child("status").set("payTime");
+          }
+        });
       }
-      print("plan$exPlan");
     }
     if (service is AndroidServiceInstance) {
       service.setForegroundNotificationInfo(
         title: "Garanti driver",
-        content: "days of your plan  $exPlan",
+        content: "days of your plan : $exPlan",
       );
-    // test using external plugin
-    final deviceInfo = DeviceInfoPlugin();
-    String? device;
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-      device = androidInfo.model;
-    }
+      // test using external plugin
+      final deviceInfo = DeviceInfoPlugin();
+      String? device;
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        device = androidInfo.model;
+      }
 
-    if (Platform.isIOS) {
-      final iosInfo = await deviceInfo.iosInfo;
-      device = iosInfo.model;
-    }
+      if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        device = iosInfo.model;
+      }
 
-    service.invoke(
-      'update',
-      {
-        "current_date": DateTime.now().toIso8601String(),
-        "device": device,
-        "exPlan":exPlan,
-      },
-    );
-  }});
+      service.invoke(
+        'update',
+        {
+          "current_date": DateTime.now().toIso8601String(),
+          "device": device,
+          "exPlan":exPlan,
+        },
+      );
+    }});
 
 }
 

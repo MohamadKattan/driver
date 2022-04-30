@@ -13,9 +13,11 @@ import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
+import '../my_provider/driver_model_provider.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../payment/couut_plan_days.dart';
+import '../repo/api_srv_geolocater.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 
@@ -37,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
     requestPermissions();
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     tostDriverAvailable();
-    // FlutterBackgroundService().invoke("setAsForeground");
      PlanDays().countDayPlansInForeground();
   }
 
@@ -97,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     newGoogleMapController = controller;
                                     LogicGoogleMap().locationPosition(context).whenComplete((){
                                       GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+                                      getCountryName();
                                     });
                                   },
                                 ),
@@ -235,6 +237,15 @@ class _HomeScreenState extends State<HomeScreen> {
       Tools().toastMsg("You are Available for new order ", Colors.green.shade700);
     }else{
       Tools().toastMsg("You aren't Available for new order ", Colors.redAccent.shade700);
+    }
+  }
+  void getCountryName(){
+    final _country =
+        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo.country;
+    if(_country == ""){
+      ApiSrvGeolocater().searchCoordinatesAddress(context);
+    }else{
+      return;
     }
   }
 }

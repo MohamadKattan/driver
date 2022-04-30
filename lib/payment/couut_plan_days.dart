@@ -13,7 +13,19 @@ class PlanDays {
 
 // this method for set value plan to real time
   Future<void> setExPlanToRealTime(int exPlan) async {
-    await driverRef.child(userId).child("exPlan").set(exPlan);
+    await driverRef.child(userId).child("exPlan").once().then((value) async {
+      if(value.snapshot.exists&&value.snapshot.value!=null){
+        final snap = value.snapshot.value.toString();
+        // final newSnap = snap.toString();
+        int oldExPlan = int.parse(snap);
+        if(oldExPlan>0){
+          int updateExPlan = oldExPlan + exPlan;
+          await driverRef.child(userId).child("exPlan").set(updateExPlan);
+        }else{
+          await driverRef.child(userId).child("exPlan").set(exPlan);
+        }
+      }
+    });
   }
 
 // this method for get value plan from real time
@@ -32,6 +44,11 @@ class PlanDays {
     await driverRef.child(userId).child("backbool").set(isTrue);
   }
 
+  // this method will set value payed if payment don
+  Future<void> setDriverPayed() async {
+    await driverRef.child(userId).child("status").set("payed");
+  }
+
   // this method for background bool value working or not
   void getBackGroundBoolValue()async{
     await driverRef.child(userId).once().then((value) {
@@ -40,7 +57,6 @@ class PlanDays {
         Map<String,dynamic>map=Map<String,dynamic>.from(snap as Map);
         if(map["backbool"]!=null){
           isBackground = map["backbool"];
-          print("zzzzzzzz$isBackground");
         }
       }
     });
@@ -56,17 +72,37 @@ class PlanDays {
         if (exPlan < 0) {
           timer.cancel();
           Tools().toastMsg("Your Plan finished ForGROUND ", Colors.redAccent.shade700);
+          driverRef.child(userId).child("status").once().then((value){
+            if(value.snapshot.exists&&value.snapshot.value!=null){
+              final snap = value.snapshot.value;
+              String _status = snap.toString();
+              if(_status=="checkIn"){
+                return;
+              }
+              driverRef.child(userId).child("status").set("payTime");
+            }
+          });
         }
         else {
           exPlan = exPlan - 1;
-          await PlanDays().setExPlanToRealTime(exPlan);
-          print("plan FORgROUND$exPlan");
+          print("forgrend$exPlan");
+          await driverRef.child(userId).child("exPlan").set(exPlan);
           if(exPlan==0){
-            Tools().toastMsg("Your Plan finished charge your plan ForGROUND", Colors.redAccent.shade700);
+            Tools().toastMsg("Your Plan finished charge your plan ", Colors.redAccent.shade700);
           }
           if(exPlan<0){
             timer.cancel();
-            Tools().toastMsg("Your Plan finished ForGROUND ", Colors.redAccent.shade700);
+            Tools().toastMsg("Your Plan finished ", Colors.redAccent.shade700);
+            driverRef.child(userId).child("status").once().then((value){
+              if(value.snapshot.exists&&value.snapshot.value!=null){
+                final snap = value.snapshot.value;
+                String _status = snap.toString();
+                if(_status=="checkIn"){
+                  return;
+                }
+                driverRef.child(userId).child("status").set("payTime");
+              }
+            });
           }
         }
       });

@@ -1,21 +1,15 @@
-// this class for payment getWay
-//10738 Test Test 0c13d406-873b-403b-9c09-a5766840d98c
 
 import 'dart:async';
-
 import 'package:driver/model/card_payment.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert' as convert;
 import '../my_provider/payment_indector_provider.dart';
 import '../repo/auth_srv.dart';
 import '../tools/tools.dart';
-import '../user_screen/HomeScreen.dart';
 import 'couut_plan_days.dart';
 
 class CheckOutPayment {
@@ -71,12 +65,15 @@ class CheckOutPayment {
       Tools().toastMsg("transaction successful", Colors.green.shade700);
       await PlanDays().setExPlanToRealTime(planExpirt);
       await PlanDays().setIfBackgroundOrForeground(false);
-      Navigator.push(context,MaterialPageRoute(builder: (_)=>const SplashScreen()));
+      await PlanDays().setDriverPayed();
+      Provider.of<PaymentIndector>(context,listen: false).updateState(false);
+      Navigator.push(context,MaterialPageRoute(builder:(_)=>const SplashScreen()));
       return true;
     } else {
       Provider.of<PaymentIndector>(context,listen: false).updateState(false);
       Tools().toastMsg("transaction noy successful !!", Colors.redAccent.shade700);
       Tools().toastMsg("Try again and check your card info", Colors.redAccent.shade700);
+      Navigator.push(context,MaterialPageRoute(builder: (_)=>const SplashScreen()));
       throw Exception("Payment error");
     }
   }
