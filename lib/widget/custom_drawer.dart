@@ -18,6 +18,7 @@ import '../user_screen/rating_screen.dart';
 import 'custom_divider.dart';
 
 Widget customDrawer(BuildContext context) {
+  final planProvider = Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo.exPlan;
   return Container(
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.height,
@@ -42,22 +43,23 @@ Widget customDrawer(BuildContext context) {
                 Provider.of<ChangeColorBottomDrawer>(context, listen: false).updateColorBottom(false);
               },
               child: DrawerHeader(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 80),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      showImage(context),
-                      showUserName(context),
-                      showUserPhone(context),
-                      Row(
-                        children:  [
-                          Text("Your plan : $exPlan")
-                        ],
-                      )
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    showImage(context),
+                    showUserName(context),
+                    showUserPhone(context),
+                    const SizedBox(height: 3.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:   [
+                         Text(planProvider<=0?"Your plan finished : ":"Your plan : ",style: const TextStyle(color: Colors.black45,fontSize: 16.0)),
+                        Text(planProvider.toString() + " day",style: TextStyle(fontSize: 20.0,color: exPlan<6?Colors.red.shade700:Colors.greenAccent.shade700))
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),

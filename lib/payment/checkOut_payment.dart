@@ -4,6 +4,7 @@ import 'package:driver/model/card_payment.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert' as convert;
@@ -66,6 +67,7 @@ class CheckOutPayment {
       await PlanDays().setExPlanToRealTime(planExpirt);
       await PlanDays().setIfBackgroundOrForeground(false);
       await PlanDays().setDriverPayed();
+      FlutterBackgroundService().invoke("setAsBackground");
       Provider.of<PaymentIndector>(context,listen: false).updateState(false);
       Navigator.push(context,MaterialPageRoute(builder:(_)=>const SplashScreen()));
       return true;

@@ -30,23 +30,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool valueSwitchBottom = true;
-
   @override
   void initState() {
-    super.initState();
-    /// connect with Push Notifications service
     initializationLocal(context);
     requestPermissions();
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     tostDriverAvailable();
+    FlutterBackgroundService().invoke("setAsBackground");
      PlanDays().countDayPlansInForeground();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final drawerValue = Provider.of<DrawerValueChange>(context).value;
-    final changeColorBottom =
-        Provider.of<ChangeColorBottomDrawer>(context).isTrue;
+    final changeColorBottom = Provider.of<ChangeColorBottomDrawer>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -96,10 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .controllerGoogleMap
                                         .complete(controller);
                                     newGoogleMapController = controller;
-                                    LogicGoogleMap().locationPosition(context).whenComplete((){
-                                      GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
-                                      getCountryName();
-                                    });
+                                  await  LogicGoogleMap().locationPosition(context);
+                                    GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+                                    getCountryName();
                                   },
                                 ),
                               ),
@@ -165,6 +162,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: const Color(0xFFFFD54F),
+            onPressed: () async{
+              await  LogicGoogleMap().locationPosition(context);
+              GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+              getCountryName();
+            },
+            child: const Icon(Icons.my_location,color:Colors.black45,size: 25,),
           ),
         ),
       ),

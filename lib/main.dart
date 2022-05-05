@@ -8,7 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'config.dart';
@@ -44,7 +46,10 @@ void main() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   }
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 Future<void> initializeService() async {
@@ -83,20 +88,31 @@ void onStart(ServiceInstance service)async {
   String userId =AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
 
-
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
     });
 
-    service.on('setAsBackground').listen((event) {
+    service.on('setAsBackground').listen((event)async{
       service.setAsBackgroundService();
+      driverRef.child(userId).child("newRide").onDisconnect().remove();
     });
   }
-
+ await  driverRef.child(userId).child("newRide").once().then((value) async {
+    final snap = value.snapshot.value;
+    if(snap==null){
+      String pathToReference = "availableDrivers";
+      Geofire.initialize(pathToReference);
+      await Geofire.setLocation(userId,37.42796133580664,122.085749655962);
+      homeScreenStreamSubscription?.pause();
+      Geofire.stopListener();
+      Geofire.removeLocation(userId);
+    }
+  });
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
+
   if(userId.isNotEmpty){
     await PlanDays().setIfBackgroundOrForeground(true);
     await driverRef.child(userId).child("exPlan").once().then((value){
@@ -109,9 +125,8 @@ void onStart(ServiceInstance service)async {
     });
   }
 
-  Timer.periodic(const Duration(seconds: 1), (timer) async {
+  Timer.periodic(const Duration(hours: 1), (timer) async {
     if(exPlan<0){
-      timer.cancel();
       Tools().toastMsg("Your Plan finished back",Colors.redAccent.shade700);
       driverRef.child(userId).child("status").once().then((value){
         if(value.snapshot.exists&&value.snapshot.value!=null){
@@ -125,13 +140,13 @@ void onStart(ServiceInstance service)async {
       });
     }else{
       exPlan = exPlan -1;
-        await driverRef.child(userId).child("exPlan").set(exPlan);
       print("back$exPlan");
+        await driverRef.child(userId).child("exPlan").set(exPlan);
+
       if(exPlan == 0){
         Tools().toastMsg("Your Plan finished charge your plan",Colors.redAccent.shade700);
       }
       if(exPlan<0){
-        timer.cancel();
         Tools().toastMsg("Your Plan finished",Colors.redAccent.shade700);
         driverRef.child(userId).child("status").once().then((value){
           if(value.snapshot.exists&&value.snapshot.value!=null){
@@ -168,7 +183,6 @@ void onStart(ServiceInstance service)async {
         {
           "current_date": DateTime.now().toIso8601String(),
           "device": device,
-          "exPlan":exPlan,
         },
       );
     }});

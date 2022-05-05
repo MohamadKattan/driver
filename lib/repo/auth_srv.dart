@@ -56,6 +56,7 @@ class AuthSev {
               "status": "",
               "firstName": "",
               "country":"",
+              "exPlan":0,
               "lastName": "",
               "idNo": "",
               "driverLis": "",

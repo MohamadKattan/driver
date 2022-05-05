@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
 import '../model/rideDetails.dart';
+import '../my_provider/driver_currentPosition_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/ride_request_info.dart';
 import '../repo/geoFire_srv.dart';
@@ -27,11 +29,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
   AudioPlayer audioPlayer = AudioPlayer();
   late AudioCache audioCache;
   String path = "new_order.mp3";
+  bool isHideButton = false;
 
   @override
   void initState() {
-    // assetsAudioPlayer.open(Audio("sounds/new_order.mp3"));
-    // assetsAudioPlayer.play();
     audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
     playSound();
     super.initState();
@@ -145,7 +146,6 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                     // await assetsAudioPlayer.stop();
                       stopSound();
                       driverCancelOrder(context);
                       Navigator.pop(context);
@@ -163,11 +163,14 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       )),
                     ),
                   ),
+                  isHideButton==false?
                   GestureDetector(
                     onTap: () async {
-                    // await  assetsAudioPlayer.stop();
                     stopSound();
                       checkAvailableOfRide(context, rideInfoProvider);
+                      setState(() {
+                        isHideButton=true;
+                      });
                     },
                     child: Container(
                         width: MediaQuery.of(context).size.width * 30 / 100,
@@ -180,7 +183,18 @@ class _NotificationDialogState extends State<NotificationDialog> {
                           "Accept",
                           style: TextStyle(color: Colors.white),
                         ))),
-                  ),
+                  )
+                      :Container(
+                          width: MediaQuery.of(context).size.width * 30 / 100,
+                          height: MediaQuery.of(context).size.height * 7 / 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.0),
+                              color: Colors.green.shade700),
+                          child: const Center(
+                              child: Text(
+                                "Accept",
+                                style: TextStyle(color: Colors.white),
+                              )))
                 ],
               ),
             ],
@@ -216,10 +230,11 @@ class _NotificationDialogState extends State<NotificationDialog> {
       }
       //id in newRide value = rider id from Ride Request collection
       if (newRideState == rideInfoProvider.userId) {
-        GeoFireSrv().displayLocationLiveUpdates();
+        homeScreenStreamSubscription?.pause();
+        Geofire.stopListener();
+        Geofire.removeLocation(currentUseId);
+       await GeoFireSrv().displayLocationLiveUpdates();
         await rideRequestRef.set("accepted").whenComplete(() {
-          // Provider.of<NewRideScreenIndector>(context, listen: false)
-          //     .updateState(true);
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const NewRideScreen()));
         });
@@ -237,10 +252,15 @@ class _NotificationDialogState extends State<NotificationDialog> {
         Navigator.pop(context);
       }
     });
+    setState(() {
+       isHideButton = false;
+    });
   }
 
   // this method if driver press cancel button
   Future<void> driverCancelOrder(BuildContext context) async {
+    final position = Provider.of<DriverCurrentPosition>(context, listen: false)
+        .currentPosition;
     final currentUseId =
         Provider.of<DriverInfoModelProvider>(context, listen: false)
             .driverInfo
@@ -250,15 +270,22 @@ class _NotificationDialogState extends State<NotificationDialog> {
         .child("driver")
         .child(currentUseId)
         .child("newRide");
-    rideRequestRef.onDisconnect();
+
+  rideRequestRef.onDisconnect();
     rideRequestRef.remove();
+    homeScreenStreamSubscription?.pause();
+    Geofire.stopListener();
+    Geofire.removeLocation(currentUseId);
 
     const duration = Duration(seconds: 1);
-    final _timer = Timer.periodic(duration, (timer) {
+    Timer.periodic(duration, (timer) async {
       rideRequestTimeOut = rideRequestTimeOut - 1;
       if (rideRequestTimeOut == 0) {
-        rideRequestRef.set("searching");
         timer.cancel();
+        homeScreenStreamSubscription?.resume();
+        await Geofire.setLocation(
+            currentUseId, position.latitude, position.longitude);
+        rideRequestRef.set("searching");
         rideRequestTimeOut = 120;
       }
     });

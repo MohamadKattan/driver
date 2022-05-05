@@ -16,7 +16,6 @@ class PlanDays {
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if(value.snapshot.exists&&value.snapshot.value!=null){
         final snap = value.snapshot.value.toString();
-        // final newSnap = snap.toString();
         int oldExPlan = int.parse(snap);
         if(oldExPlan>0){
           int updateExPlan = oldExPlan + exPlan;
@@ -68,9 +67,8 @@ class PlanDays {
     if(isBackground == false){
       print("mmmmmm$isBackground");
       await getExPlanFromReal();
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
+      Timer.periodic(const Duration(hours: 1), (timer) async {
         if (exPlan < 0) {
-          timer.cancel();
           Tools().toastMsg("Your Plan finished ForGROUND ", Colors.redAccent.shade700);
           driverRef.child(userId).child("status").once().then((value){
             if(value.snapshot.exists&&value.snapshot.value!=null){
@@ -91,7 +89,6 @@ class PlanDays {
             Tools().toastMsg("Your Plan finished charge your plan ", Colors.redAccent.shade700);
           }
           if(exPlan<0){
-            timer.cancel();
             Tools().toastMsg("Your Plan finished ", Colors.redAccent.shade700);
             driverRef.child(userId).child("status").once().then((value){
               if(value.snapshot.exists&&value.snapshot.value!=null){

@@ -65,7 +65,7 @@ class GeoFireSrv {
   }
 
   // this method for display driver from live location when he accepted on order
-  void displayLocationLiveUpdates() {
+ Future <void>  displayLocationLiveUpdates() async {
     homeScreenStreamSubscription?.pause();
     Geofire.stopListener();
     Geofire.removeLocation(currentUseId!.uid);
