@@ -207,7 +207,7 @@ class _PlanScreenState extends State<PlanScreen> {
     }
 
     Navigator.push(context,
-        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan1,planexpirt: 30,)));
+        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan1,planexpirt: 43200,)));
   }
 
   checkAmount2(String carType, BuildContext context,String countryName ) {
@@ -225,7 +225,7 @@ class _PlanScreenState extends State<PlanScreen> {
       }
     }
     Navigator.push(context,
-        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan2,planexpirt: 90)));
+        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan2,planexpirt: 129600)));
   }
 
   checkAmount3(String carType, BuildContext context,String countryName) {
@@ -243,6 +243,6 @@ class _PlanScreenState extends State<PlanScreen> {
       }
     }
     Navigator.push(context,
-        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan3,planexpirt: 180)));
+        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan3,planexpirt: 259200)));
   }
 }

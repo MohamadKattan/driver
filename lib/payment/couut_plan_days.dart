@@ -67,7 +67,7 @@ class PlanDays {
     if(isBackground == false){
       print("mmmmmm$isBackground");
       await getExPlanFromReal();
-      Timer.periodic(const Duration(hours: 1), (timer) async {
+      Timer.periodic(const Duration(minutes: 1), (timer) async {
         if (exPlan < 0) {
           Tools().toastMsg("Your Plan finished ForGROUND ", Colors.redAccent.shade700);
           driverRef.child(userId).child("status").once().then((value){

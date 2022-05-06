@@ -1,4 +1,6 @@
 // this class for custom drawer
+import 'dart:math';
+
 import 'package:driver/config.dart';
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
@@ -18,7 +20,9 @@ import '../user_screen/rating_screen.dart';
 import 'custom_divider.dart';
 
 Widget customDrawer(BuildContext context) {
-  final planProvider = Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo.exPlan;
+  final planProvider = Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
+  double day = planProvider/60/24;
+  int newDay = day.round();
   return Container(
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.height,
@@ -56,7 +60,7 @@ Widget customDrawer(BuildContext context) {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:   [
                          Text(planProvider<=0?"Your plan finished : ":"Your plan : ",style: const TextStyle(color: Colors.black45,fontSize: 16.0)),
-                        Text(planProvider.toString() + " day",style: TextStyle(fontSize: 20.0,color: exPlan<6?Colors.red.shade700:Colors.greenAccent.shade700))
+                        Text("$newDay Day",style:  TextStyle(fontSize: 20.0,color:planProvider<=7200?Colors.redAccent.shade700:Colors.greenAccent.shade700))
                       ],
                     )
                   ],
@@ -262,6 +266,7 @@ Widget customDrawer(BuildContext context) {
   );
 }
 
+
 Widget showImage(BuildContext context) {
   final userInfoRealTime =
   Provider.of<DriverInfoModelProvider>(context,listen: false).driverInfo;
@@ -310,3 +315,4 @@ Widget showUserPhone(BuildContext context) {
       ? Text(userInfoRealTime.phoneNumber)
       : const Text("");
 }
+

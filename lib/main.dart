@@ -125,7 +125,7 @@ void onStart(ServiceInstance service)async {
     });
   }
 
-  Timer.periodic(const Duration(hours: 1), (timer) async {
+  Timer.periodic(const Duration(minutes: 1), (timer) async {
     if(exPlan<0){
       Tools().toastMsg("Your Plan finished back",Colors.redAccent.shade700);
       driverRef.child(userId).child("status").once().then((value){
