@@ -19,6 +19,7 @@ import '../my_provider/new_ride_indector.dart';
 import '../my_provider/ride_request_info.dart';
 import '../my_provider/tilte_arrived_button_provider.dart';
 import '../repo/api_srv_dir.dart';
+import '../tools/curanny_type.dart';
 import '../tools/maps_tooL_kit.dart';
 import '../widget/call_rider_phone_whatApp.dart';
 import '../widget/collect_money_dialog.dart';
@@ -90,7 +91,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
         Provider.of<DirectionDetailsPro>(context).directionDetails;
     final buttonTitle = Provider.of<TitleArrived>(context).titleButton;
     final buttonColor = Provider.of<ColorButtonArrived>(context).colorButton;
-    // final isInductor = Provider.of<NewRideScreenIndector>(context).isInductor;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -156,7 +156,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 color: Colors.black45, fontSize: 18.0),
                           ),
                           Text(
-                            "Fare : \$ " + rideInfoProvider.amount,
+                            "Fare : ${currencyTypeCheck(context)} : " + rideInfoProvider.amount,
                             style: TextStyle(
                                 color: Colors.redAccent.shade700,
                                 fontSize: 20.0),
@@ -733,8 +733,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(false);
-    int totalAmount = ApiSrvDir.calculateFares(
-        directionDetails!, rideInfoProvider.vehicleTypeId);
+    int totalAmount = ApiSrvDir.calculateFares1(
+        directionDetails!, rideInfoProvider.vehicleTypeId,context);
     rideRequestRef.child("total").set(totalAmount.toString());
     newRideScreenStreamSubscription?.cancel();
     saveEarning(totalAmount);

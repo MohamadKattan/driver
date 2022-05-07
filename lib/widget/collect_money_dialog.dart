@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
+import '../tools/curanny_type.dart';
 import 'custom_divider.dart';
 
 Widget collectMoney(
@@ -46,7 +47,7 @@ Widget collectMoney(
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(" Total : \$$totalAmount ",
+              child: Text(" Total : ${currencyTypeCheck(context)} $totalAmount ",
                   style:
                       const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),

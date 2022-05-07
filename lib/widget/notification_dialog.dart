@@ -1,6 +1,7 @@
 // this widget dialog notification show to driver for accept or cancel order
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:driver/tools/curanny_type.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
@@ -132,7 +133,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   Text("Km : ${rideInfoProvider.km}",
                       style: const TextStyle(
                           color: Colors.black45, fontSize: 16.0)),
-                  Text("Fare : \$${rideInfoProvider.amount}",
+                  Text("Fare : ${currencyTypeCheck(context)} : ${rideInfoProvider.amount}",
                       style: const TextStyle(
                           color: Colors.black45, fontSize: 16.0))
                 ],
