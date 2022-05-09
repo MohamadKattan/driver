@@ -37,9 +37,9 @@ class ApiSrvDir {
           res["routes"][0]["legs"][0]["distance"]["text"];
       directionDetails.distanceVale =
           res["routes"][0]["legs"][0]["distance"]["value"];
+
       Provider.of<DirectionDetailsPro>(context, listen: false)
           .updateDirectionDetails(directionDetails);
-
       return directionDetails;
     }
 

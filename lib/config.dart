@@ -19,6 +19,7 @@ int rideRequestTimeOut = 120;
 String riderName = "";
 final AssetsAudioPlayer assetsAudioPlayer =AssetsAudioPlayer();
  int exPlan = 0;
+ int tripcount = 5;
  bool isBackground=false;
 
 

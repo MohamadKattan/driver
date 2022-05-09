@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:driver/model/direction_details.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -74,6 +73,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     acceptedRideRequest();
     inTailiz();
     isInductor = true;
+    timer1();
     super.initState();
   }
 
@@ -82,10 +82,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
     createPickUpRideIcon();
     createDropOffIcon();
     createDriverNearIcon();
-    final rideInfoProvider =
-        Provider.of<RideRequestInfoProvider>(context).rideDetails;
-    final initialPos =
-        Provider.of<DriverCurrentPosition>(context, listen: false)
+    final rideInfoProvider=Provider.of<RideRequestInfoProvider>(context).rideDetails;
+    final initialPos=Provider.of<DriverCurrentPosition>(context, listen: false)
             .currentPosition;
     final directionDetails =
         Provider.of<DirectionDetailsPro>(context).directionDetails;
@@ -189,18 +187,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 color: Colors.greenAccent.shade700,
                                 size: 20.0,
                               )),
-                          // IconButton(
-                          //     onPressed: () {
-                          //       Navigator.push(context,
-                          //           MaterialPageRoute(builder: (_) {
-                          //         return const TurnByNav();
-                          //       }));
-                          //     },
-                          //     icon: Icon(
-                          //       Icons.map,
-                          //       color: Colors.blue.shade700,
-                          //       size: 20.0,
-                          //     )),
                         ],
                       ),
                       Row(
@@ -309,7 +295,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                           GestureDetector(
                             onTap: () {
                               changeColorArrivedAndTileButton(
-                                  context, rideInfoProvider, directionDetails);
+                                  context, rideInfoProvider);
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(top: 15.0),
@@ -322,11 +308,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                       100,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(3.0),
-                                      color: buttonColor),
+                                      color:Colors.greenAccent.shade700),
                                   child: Center(
                                       child: Text(
                                     buttonTitle,
-                                    style: const TextStyle(color: Colors.white),
+                                    style:  TextStyle(color: buttonColor),
                                   ))),
                             ),
                           ),
@@ -646,8 +632,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 * location where rider want to go + time trip */
   void updateRideDetails() async {
     final posLatLin = LatLng(myPosition!.latitude, myPosition!.longitude);
-    final riderInfo =
-        Provider.of<RideRequestInfoProvider>(context, listen: false)
+    final riderInfo=Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
     LatLng desertionLatLng;
     if (isRequestDirection == false) {
@@ -659,7 +644,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         desertionLatLng = riderInfo.pickup;
       } else {
         desertionLatLng = riderInfo.dropoff;
-        await ApiSrvDir.obtainPlaceDirectionDetails(
+       await ApiSrvDir.obtainPlaceDirectionDetails(
             posLatLin, desertionLatLng, context);
         isRequestDirection = false;
       }
@@ -670,8 +655,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
   * & driver loc to rider pickUp loc then from rider pickUp to rider drop
   * then update status on fire base
   */
-  void changeColorArrivedAndTileButton(BuildContext context,
-      RideDetails rideInfoProvider, DirectionDetails directionDetails) async {
+  Future<void> changeColorArrivedAndTileButton(BuildContext context,
+      RideDetails rideInfoProvider) async {
+
     DatabaseReference rideRequestRef = FirebaseDatabase.instance
         .ref()
         .child("Ride Request")
@@ -686,11 +672,22 @@ class _NewRideScreenState extends State<NewRideScreen> {
           .updateState("Start trip");
       Provider.of<ColorButtonArrived>(context, listen: false)
           .updateState(Colors.yellowAccent.shade700);
+      timer2();
       await getPlaceDirection(
           context, rideInfoProvider.pickup, rideInfoProvider.dropoff);
     } else if (status == "arrived") {
       setState(() {
         status = "onride";
+      });
+      var count =  Provider.of<DirectionDetailsPro>(context,listen: false)
+          .directionDetails.durationVale;
+      Timer.periodic(const Duration(milliseconds: 1400), (timer) {
+        count=count - 1;
+        print("aaaaa$count");
+        if(count==0){
+          assetsAudioPlayer.open(Audio("end_trip_ar.wav"));
+          timer.cancel();
+        }
       });
       Provider.of<TitleArrived>(context, listen: false).updateState("End trip");
       Provider.of<ColorButtonArrived>(context, listen: false)
@@ -722,7 +719,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     });
     Provider.of<TitleArrived>(context, listen: false).updateState("Arrived");
     Provider.of<ColorButtonArrived>(context, listen: false)
-        .updateState(Colors.greenAccent.shade700);
+        .updateState(Colors.white);
     rideRequestRef.child("status").set(status);
     final driverCurrentLoc =
         LatLng(myPosition!.latitude, myPosition!.longitude);
@@ -835,25 +832,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   // this method for Navigation between driver and pickUp rider
-  Future<void> navigationDriverToPickUpRi(BuildContext c) async {
+  navigationDriverToPickUpRi(BuildContext c) async {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(c, listen: false).rideDetails;
 
-    final directionDetails =
-        Provider.of<DirectionDetailsPro>(context, listen: false)
-            .directionDetails;
-
-    const _duration = Duration(seconds: 2);
-    int count = directionDetails.durationVale;
-    Timer.periodic(_duration, (timer) {
-      count = count - 1;
-      if (count == 0) {
-        timer.cancel();
-        count = directionDetails.durationVale;
-        tost();
-        assetsAudioPlayer.open(Audio("sounds/end_trip_ar.wav"));
-      }
-    });
     sourceWayPointDriver = WayPoint(
         name: "Driver",
         latitude: myPosition?.latitude,
@@ -868,32 +850,17 @@ class _NewRideScreenState extends State<NewRideScreen> {
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-            mode: MapBoxNavigationMode.drivingWithTraffic,
+            mode: MapBoxNavigationMode.driving,
             simulateRoute: false,
-            language: "en",
             zoom: 13.0,
-            units: VoiceUnits.metric));
+        ));
   }
 
   // this method for Navigation between pickUp to drop of rider
-  Future<void> navigationPickToDrop(BuildContext context) async {
+   navigationPickToDrop(BuildContext context) async {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
-    final directionDetails =
-        Provider.of<DirectionDetailsPro>(context, listen: false)
-            .directionDetails;
-    const _duration = Duration(seconds: 2);
-    int count = directionDetails.durationVale;
-    Timer.periodic(_duration, (timer) {
-      count = count - 1;
-      if (count == 0) {
-        timer.cancel();
-        count = directionDetails.durationVale;
-        tost();
-        assetsAudioPlayer.open(Audio("sounds/end_trip_ar.wav"));
-      }
-    });
 
     sourceWayPoint = WayPoint(
         name: "Distintion",
@@ -912,12 +879,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
         options: MapBoxOptions(
             mode: MapBoxNavigationMode.drivingWithTraffic,
             simulateRoute: false,
-            language: "en",
             zoom: 16.0,
-            units: VoiceUnits.metric));
+            ));
   }
 
-// this method for tost Navigation
+// this method for tost
   void tost() {
     Fluttertoast.showToast(
         msg: "you arrived to rider click back button",
@@ -930,4 +896,34 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
 //==================================End Navigation==============================
+timer1() {
+    const duration =Duration(minutes: 1);
+    int timerCount1 = 3;
+    print("timerCount ++$timerCount1");
+    Timer.periodic(duration, (timer) {
+      timerCount1=timerCount1-1;
+      if(timerCount1==0){
+        print("timerCount$timerCount1");
+        assetsAudioPlayer.open(Audio("sounds/notify_passenger_accessing_ar.wav"));
+        timer.cancel();
+        timerCount1=3;
+      }
+    });
+}
+
+timer2() {
+    const duration =Duration(seconds: 1);
+    int _timerCount2 = 5;
+    print("timerCount2 ++$_timerCount2");
+    Timer.periodic(duration, (timer) {
+      _timerCount2=_timerCount2-1;
+      if(_timerCount2==0){
+        print("timerCount2$_timerCount2");
+        assetsAudioPlayer.open(Audio("sounds/start_trip_ar.wav"));
+        timer.cancel();
+        _timerCount2=5;
+      }
+    });
+  }
+
 }

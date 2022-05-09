@@ -12,7 +12,7 @@ class DirectionDetailsPro extends ChangeNotifier {
       durationVale: 0,
       enCodingPoints: "");
 
-  void updateDirectionDetails(DirectionDetails details) {
+  Future<void> updateDirectionDetails(DirectionDetails details) async {
     directionDetails = details;
     notifyListeners();
   }

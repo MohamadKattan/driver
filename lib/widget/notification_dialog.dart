@@ -134,8 +134,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       style: const TextStyle(
                           color: Colors.black45, fontSize: 16.0)),
                   Text("Fare : ${currencyTypeCheck(context)} : ${rideInfoProvider.amount}",
-                      style: const TextStyle(
-                          color: Colors.black45, fontSize: 16.0))
+                      style:  TextStyle(
+                          color: Colors.redAccent.shade700, fontSize: 20.0))
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 2 / 100),

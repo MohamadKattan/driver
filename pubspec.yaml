@@ -106,6 +106,8 @@ flutter:
      - sounds/new_order.mp3
      - sounds/1.mp3
      - sounds/end_trip_ar.wav
+     - sounds/notify_passenger_accessing_ar.wav
+     - sounds/start_trip_ar.wav
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

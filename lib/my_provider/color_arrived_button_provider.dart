@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class ColorButtonArrived extends ChangeNotifier{
-  Color colorButton = Colors.greenAccent.shade700;
+  Color colorButton = Colors.white;
 
   void updateState(Color state){
     colorButton = state;
