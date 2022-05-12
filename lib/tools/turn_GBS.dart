@@ -6,12 +6,12 @@ class TurnOnGBS {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
-  Future<void> turnOnGBSifNot() async {
+  Future<LocationData?> turnOnGBSifNot() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        return;
+        return null;
       }
     }
 
@@ -19,11 +19,12 @@ class TurnOnGBS {
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        return;
+        return null;
       }
     }
 
     _locationData = await location.getLocation();
-    location.enableBackgroundMode(enable: false);
+    location.enableBackgroundMode(enable: true);
+    return _locationData;
   }
 }

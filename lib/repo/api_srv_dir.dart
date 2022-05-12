@@ -119,7 +119,7 @@ class ApiSrvDir {
       culculFinal=fareAmont  * 3.67 + 5.30 * 3.67;
     }
     else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Turkey") {
-      culculFinal=100;
+      culculFinal=120;
     } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Morocco") {
       culculFinal=fareAmont + 0.20 * 10 + 2 * 10.00;
     } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Sudan") {

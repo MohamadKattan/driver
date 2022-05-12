@@ -15,11 +15,22 @@ import '../my_provider/driver_model_provider.dart';
 
 class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;
-  String pathToReference = "availableDrivers";
 
-
+  String pathToReference1 = "availableDrivers";
   getLocationLiveUpdates(BuildContext context, bool valueSwitchBottom) {
-    Geofire.initialize(pathToReference);
+   //  final carType = Provider.of<DriverInfoModelProvider>(context, listen: false)
+   //      .driverInfo.carType;
+   // late String pathGeofire;
+   //  if(carType=="Taxi-4 seats"){
+   //    pathGeofire="availableDrivers";
+   //  }else if(carType=="Medium commercial-6-10 seats"){
+   //       pathGeofire="availableDrivers2";
+   //  }
+   //  else if(carType=="Big commercial-11-19 seats"){
+   //    pathGeofire="availableDrivers3";
+   //  }
+   //  String pathToReference = pathGeofire;
+    Geofire.initialize(pathToReference1);
     homeScreenStreamSubscription =
         Geolocator.getPositionStream().listen((Position position) async {
           if(position.latitude ==37.42796133580664

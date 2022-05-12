@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:driver/payment/couut_plan_days.dart';
 import 'package:driver/repo/auth_srv.dart';
@@ -37,7 +36,6 @@ import 'my_provider/user_id_provider.dart';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,27 +81,49 @@ bool onIosBackground(ServiceInstance service) {
   return true;
 }
 
-void onStart(ServiceInstance service)async {
+void onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
-  String userId =AuthSev().auth.currentUser!.uid;
+  String userId = AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+  // String pathToReference = "";
+  // String path = "";
+  //
+  // await driverRef
+  //     .child(userId)
+  //     .child("carInfo")
+  //     .child("carType")
+  //     .once()
+  //     .then((value) {
+  //   if (value.snapshot.value != null) {
+  //     pathToReference = value.snapshot.value.toString();
+  //     if (pathToReference == "Taxi-4 seats") {
+  //       path = "availableDrivers";
+  //     } else if (pathToReference == "Medium commercial-6-10 seats") {
+  //       path = "availableDrivers2";
+  //     } else if (pathToReference == "Big commercial-11-19 seats") {
+  //       path = "availableDrivers3";
+  //     }
+  //   }
+  // });
+
+
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
     });
 
-    service.on('setAsBackground').listen((event)async{
+    service.on('setAsBackground').listen((event) async {
       service.setAsBackgroundService();
       driverRef.child(userId).child("newRide").onDisconnect().remove();
     });
   }
- await  driverRef.child(userId).child("newRide").once().then((value) async {
+  await driverRef.child(userId).child("newRide").once().then((value) async {
     final snap = value.snapshot.value;
-    if(snap==null){
-      String pathToReference = "availableDrivers";
-      Geofire.initialize(pathToReference);
-      await Geofire.setLocation(userId,37.42796133580664,122.085749655962);
+    if (snap == null) {
+      String pathToReference1 = "availableDrivers";
+      Geofire.initialize(pathToReference1);
+      await Geofire.setLocation(userId, 37.42796133580664, 122.085749655962);
       homeScreenStreamSubscription?.pause();
       Geofire.stopListener();
       Geofire.removeLocation(userId);
@@ -113,46 +133,47 @@ void onStart(ServiceInstance service)async {
     service.stopSelf();
   });
 
-  if(userId.isNotEmpty){
+  if (userId.isNotEmpty) {
     await PlanDays().setIfBackgroundOrForeground(true);
-    await driverRef.child(userId).child("exPlan").once().then((value){
-      if(value.snapshot.exists&&value.snapshot.value!=null){
+    await driverRef.child(userId).child("exPlan").once().then((value) {
+      if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value;
-        if(snap!=null){
-          exPlan=int.parse(snap.toString());
+        if (snap != null) {
+          exPlan = int.parse(snap.toString());
         }
       }
     });
   }
 
   Timer.periodic(const Duration(minutes: 1), (timer) async {
-    if(exPlan<0){
-      Tools().toastMsg("Your Plan finished back",Colors.redAccent.shade700);
-      driverRef.child(userId).child("status").once().then((value){
-        if(value.snapshot.exists&&value.snapshot.value!=null){
+    if (exPlan < 0) {
+      Tools().toastMsg("Your Plan finished back", Colors.redAccent.shade700);
+      driverRef.child(userId).child("status").once().then((value) {
+        if (value.snapshot.exists && value.snapshot.value != null) {
           final snap = value.snapshot.value;
           String _status = snap.toString();
-          if(_status=="checkIn"){
+          if (_status == "checkIn") {
             return;
           }
           driverRef.child(userId).child("status").set("payTime");
         }
       });
-    }else{
-      exPlan = exPlan -1;
+    } else {
+      exPlan = exPlan - 1;
       print("back$exPlan");
-        await driverRef.child(userId).child("exPlan").set(exPlan);
+      await driverRef.child(userId).child("exPlan").set(exPlan);
 
-      if(exPlan == 0){
-        Tools().toastMsg("Your Plan finished charge your plan",Colors.redAccent.shade700);
+      if (exPlan == 0) {
+        Tools().toastMsg(
+            "Your Plan finished charge your plan", Colors.redAccent.shade700);
       }
-      if(exPlan<0){
-        Tools().toastMsg("Your Plan finished",Colors.redAccent.shade700);
-        driverRef.child(userId).child("status").once().then((value){
-          if(value.snapshot.exists&&value.snapshot.value!=null){
+      if (exPlan < 0) {
+        Tools().toastMsg("Your Plan finished", Colors.redAccent.shade700);
+        driverRef.child(userId).child("status").once().then((value) {
+          if (value.snapshot.exists && value.snapshot.value != null) {
             final snap = value.snapshot.value;
             String _status = snap.toString();
-            if(_status=="checkIn"){
+            if (_status == "checkIn") {
               return;
             }
             driverRef.child(userId).child("status").set("payTime");
@@ -185,8 +206,8 @@ void onStart(ServiceInstance service)async {
           "device": device,
         },
       );
-    }});
-
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {

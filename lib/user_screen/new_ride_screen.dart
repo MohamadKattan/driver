@@ -683,7 +683,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
           .directionDetails.durationVale;
       Timer.periodic(const Duration(milliseconds: 1400), (timer) {
         count=count - 1;
-        print("aaaaa$count");
         if(count==0){
           assetsAudioPlayer.open(Audio("end_trip_ar.wav"));
           timer.cancel();

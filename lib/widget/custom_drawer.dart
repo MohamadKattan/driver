@@ -22,7 +22,7 @@ import 'custom_divider.dart';
 Widget customDrawer(BuildContext context) {
   final planProvider = Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
   double day = planProvider/60/24;
-  int newDay = day.round();
+  int newDay = day.floor();
   return Container(
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.height,
@@ -237,8 +237,8 @@ Widget customDrawer(BuildContext context) {
               CustomDivider().customDivider(),
               GestureDetector(
                 onTap: (){
-                  GeoFireSrv().makeDriverOffLine(context);
-                  FlutterBackgroundService().invoke("setAsBackground");
+                  // GeoFireSrv().makeDriverOffLine(context);
+                  // FlutterBackgroundService().invoke("setAsBackground");
                   SystemNavigator.pop();
                 },
                 child: Padding(
