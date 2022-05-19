@@ -264,19 +264,18 @@ class _NotificationDialogState extends State<NotificationDialog> {
         .currentPosition;
     final currentUseId =
         Provider.of<DriverInfoModelProvider>(context, listen: false)
-            .driverInfo
-            .userId;
+            .driverInfo;
     DatabaseReference rideRequestRef = FirebaseDatabase.instance
         .ref()
         .child("driver")
-        .child(currentUseId)
+        .child(currentUseId.userId)
         .child("newRide");
 
   rideRequestRef.onDisconnect();
     rideRequestRef.remove();
     homeScreenStreamSubscription?.pause();
     Geofire.stopListener();
-    Geofire.removeLocation(currentUseId);
+    Geofire.removeLocation(currentUseId.userId);
 
     const duration = Duration(seconds: 1);
     Timer.periodic(duration, (timer) async {
@@ -285,7 +284,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         timer.cancel();
         homeScreenStreamSubscription?.resume();
         await Geofire.setLocation(
-            currentUseId, position.latitude, position.longitude);
+            currentUseId.userId ,position.latitude, position.longitude);
         rideRequestRef.set("searching");
         rideRequestTimeOut = 120;
       }

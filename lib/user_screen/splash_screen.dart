@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../payment/couut_plan_days.dart';
+import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';
@@ -22,9 +26,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-
+  bool result = false;
   @override
   void initState() {
+    checkInternet();
     if (AuthSev().auth.currentUser?.uid != null) {
       DataBaseReal().getDriverInfoFromDataBase(context);
       PlanDays().getBackGroundBoolValue();
@@ -41,36 +46,41 @@ class _SplashScreenState extends State<SplashScreen>
         await DataBaseReal().getDriverInfoFromDataBase(context);
       }
       if (status == AnimationStatus.completed) {
-        final driverInfo =
-            Provider.of<DriverInfoModelProvider>(context, listen: false)
-                .driverInfo;
-        if (kDebugMode) {
-          print("this is driverInfo" + driverInfo.userId);
-          print("this is driverInfo" + driverInfo.status);
-        }
-        if (AuthSev().auth.currentUser?.uid == null) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AuthScreen()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
-                driverInfo.status == "" ||
-            driverInfo.status.isEmpty) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const DriverInfoScreen()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
-            driverInfo.status == "checkIn") {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const CheckInScreen()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
-            driverInfo.status == "payTime") {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const IfYouWantPay()));
-        } else if (AuthSev().auth.currentUser?.uid != null &&
-            driverInfo.status == "payed") {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        } else {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AuthScreen()));
+        if(result==false){
+         Tools().toastMsg("No Internet!!", Colors.redAccent);
+         Tools().toastMsg("Check your internet net work!!", Colors.redAccent);
+        }else{
+          final driverInfo =
+              Provider.of<DriverInfoModelProvider>(context, listen: false)
+                  .driverInfo;
+          if (kDebugMode) {
+            print("this is driverInfo" + driverInfo.userId);
+            print("this is driverInfo" + driverInfo.status);
+          }
+          if (AuthSev().auth.currentUser?.uid == null) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AuthScreen()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.status == "" ||
+              driverInfo.status.isEmpty) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const DriverInfoScreen()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.status == "checkIn") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const CheckInScreen()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.status == "payTime") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const IfYouWantPay()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.status == "payed") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
+          } else {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AuthScreen()));
+          }
         }
       }
     });
@@ -96,6 +106,9 @@ class _SplashScreenState extends State<SplashScreen>
         ),
       ),
     );
+  }
+  Future<void>  checkInternet()async {
+    result=await InternetConnectionChecker().hasConnection;
   }
 
   @override

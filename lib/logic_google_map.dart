@@ -56,7 +56,7 @@ class LogicGoogleMap {
     Provider.of<DriverCurrentPosition>(context,listen: false).updateSate(currentPosition);
     // update on google map
     CameraPosition cameraPosition =
-    CameraPosition(target: latLngPosition, zoom: 14);
+    CameraPosition(target: latLngPosition, zoom: 16.50,tilt: 80.0,bearing: 35.0);
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 

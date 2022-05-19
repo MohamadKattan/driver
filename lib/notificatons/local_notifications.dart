@@ -78,8 +78,6 @@ Future<void> initializationLocal(BuildContext context) async {
     await ref.once().then((value) {
       if (value.snapshot.value != null) {
         final snap = value.snapshot.value;
-        // Map<String, dynamic> map = Map<String, dynamic>.from(snap as Map);
-        // String _id = map["newRide"];
         String id = snap.toString();
        const _duration= Duration(seconds: 1);
         int count = 1;

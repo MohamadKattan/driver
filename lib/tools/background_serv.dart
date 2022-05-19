@@ -1,7 +1,7 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
- const channel = MethodChannel("driver/channel");
+ const channel = MethodChannel("com.garanti.driver/channel");
 
  openDailog()async{
   try{

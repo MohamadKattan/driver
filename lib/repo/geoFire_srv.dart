@@ -11,37 +11,23 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_currentPosition_provider.dart';
-import '../my_provider/driver_model_provider.dart';
 
 class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;
 
-  String pathToReference1 = "availableDrivers";
-  getLocationLiveUpdates(BuildContext context, bool valueSwitchBottom) {
-   //  final carType = Provider.of<DriverInfoModelProvider>(context, listen: false)
-   //      .driverInfo.carType;
-   // late String pathGeofire;
-   //  if(carType=="Taxi-4 seats"){
-   //    pathGeofire="availableDrivers";
-   //  }else if(carType=="Medium commercial-6-10 seats"){
-   //       pathGeofire="availableDrivers2";
-   //  }
-   //  else if(carType=="Big commercial-11-19 seats"){
-   //    pathGeofire="availableDrivers3";
-   //  }
-   //  String pathToReference = pathGeofire;
-    Geofire.initialize(pathToReference1);
+  getLocationLiveUpdates(bool valueSwitchBottom) async {
+    Geofire.initialize("availableDrivers");
     homeScreenStreamSubscription =
         Geolocator.getPositionStream().listen((Position position) async {
-          if(position.latitude ==37.42796133580664
-              &&position.longitude==122.085749655962){
-            return;
-          }else{
-            if (valueSwitchBottom == true) {
-              await Geofire.setLocation(
-                  currentUseId!.uid, position.latitude, position.longitude);
-            }
-          }
+      if (position.latitude == 37.42796133580664 &&
+          position.longitude == 122.085749655962) {
+        return;
+      } else {
+        if (valueSwitchBottom == true) {
+          await Geofire.setLocation(
+              currentUseId!.uid, position.latitude, position.longitude);
+        }
+      }
 
       //for camera update
       LatLng latLng = LatLng(position.latitude, position.longitude);
@@ -53,14 +39,25 @@ class GeoFireSrv {
         .child(currentUseId!.uid)
         .child("newRide");
     //first set new value when driver switch bottom online and waiting for a new order rider
-    rideRequestRef.set("searching");
+    await rideRequestRef.once().then((value) {
+      if (value.snapshot.value != null) {
+        final snap = value.snapshot.value.toString();
+        if (snap == "timeOut" || snap == "canceled") {
+          rideRequestRef.set("searching");
+        } else if (snap != "timeOut" || snap != "canceled") {
+          return;
+        }
+      } else if (value.snapshot.value == null) {
+        rideRequestRef.set("searching");
+      }
+    });
 
     //second listing
     rideRequestRef.onValue.listen((event) {});
   }
 
 // this method for delete driver from live location if switch offLine bottom
-  Future<void> makeDriverOffLine(BuildContext context) async {
+  Future<void> makeDriverOffLine() async {
     homeScreenStreamSubscription?.pause();
     Geofire.stopListener();
     Geofire.removeLocation(currentUseId!.uid);
@@ -76,7 +73,7 @@ class GeoFireSrv {
   }
 
   // this method for display driver from live location when he accepted on order
- Future <void>  displayLocationLiveUpdates() async {
+  Future<void> displayLocationLiveUpdates() async {
     homeScreenStreamSubscription?.pause();
     Geofire.stopListener();
     Geofire.removeLocation(currentUseId!.uid);

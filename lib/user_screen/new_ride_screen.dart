@@ -56,6 +56,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
   String status = "accepted";
   bool isRequestDirection = false;
   late Timer timer;
+  late Timer timerStop1;
+  late Timer timerStop2;
+  late Timer timerStop3;
   int durationContour = 0;
   bool isInductor = false;
 
@@ -447,7 +450,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       ///property PolylinePoints
       Polyline polyline = Polyline(
           polylineId: const PolylineId("polylineId"),
-          color: Colors.green.shade700,
+          color: Colors.greenAccent.shade700,
           width: 6,
           geodesic: true,
           startCap: Cap.roundCap,
@@ -461,25 +464,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     ///for fit line on map PolylinePoints
     // LatLngBounds latLngBounds;
-    // if (pickUpLatling.latitude > dropOfLatling.latitude &&
-    //     pickUpLatling.longitude > dropOfLatling.longitude) {
+    //
     //   latLngBounds =
     //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
-    // } else if (pickUpLatling.longitude > dropOfLatling.longitude) {
-    //   latLngBounds = LatLngBounds(
-    //       southwest: LatLng(pickUpLatling.latitude, dropOfLatling.longitude),
-    //       northeast: LatLng(dropOfLatling.latitude, pickUpLatling.longitude));
-    // } else if (pickUpLatling.latitude > dropOfLatling.latitude) {
-    //   latLngBounds = LatLngBounds(
-    //       southwest: LatLng(dropOfLatling.latitude, pickUpLatling.longitude),
-    //       northeast: LatLng(pickUpLatling.latitude, dropOfLatling.longitude));
-    // }
-    // else {
-    //   latLngBounds =
-    //       LatLngBounds(southwest: latLngBounds, northeast: pickUpLatling);
-    // }
-    // newRideControllerGoogleMap
-    //     .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+    //
+    // newGoogleMapController
+    //     ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
 
     ///Marker
     Marker markerPickUpLocation = Marker(
@@ -585,7 +575,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       ///...
       setState(() {
         CameraPosition cameraPosition = CameraPosition(
-            target: mPosition, zoom: 16.50, tilt: 30.0, bearing: 80.0);
+            target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
         newRideControllerGoogleMap
             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
         markersSet.removeWhere((ele) => ele.markerId.value == "animating");
@@ -667,6 +657,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       setState(() {
         status = "arrived";
       });
+      timerStop1.cancel();
       rideRequestRef.child("status").set(status);
       Provider.of<TitleArrived>(context, listen: false)
           .updateState("Start trip");
@@ -679,13 +670,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
       setState(() {
         status = "onride";
       });
+      timerStop2.cancel();
       var count =  Provider.of<DirectionDetailsPro>(context,listen: false)
           .directionDetails.durationVale;
-      Timer.periodic(const Duration(milliseconds: 1400), (timer) {
+  timerStop3= Timer.periodic(const Duration(milliseconds: 1400), (timer) {
         count=count - 1;
         if(count==0){
           assetsAudioPlayer.open(Audio("end_trip_ar.wav"));
           timer.cancel();
+          timerStop3.cancel();
+        }else if(status=="ended"){
+          timer.cancel();
+          timerStop3.cancel();
         }
       });
       Provider.of<TitleArrived>(context, listen: false).updateState("End trip");
@@ -710,7 +706,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   void endTrip(RideDetails rideInfoProvider, DatabaseReference rideRequestRef,
       BuildContext context) async {
     timer.cancel();
-
+    timerStop3.cancel();
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(true);
     setState(() {
@@ -899,12 +895,17 @@ timer1() {
     const duration =Duration(minutes: 1);
     int timerCount1 = 3;
     print("timerCount ++$timerCount1");
-    Timer.periodic(duration, (timer) {
+ timerStop1 = Timer.periodic(duration, (timer) {
       timerCount1=timerCount1-1;
       if(timerCount1==0){
         print("timerCount$timerCount1");
         assetsAudioPlayer.open(Audio("sounds/notify_passenger_accessing_ar.wav"));
         timer.cancel();
+        timerStop1.cancel();
+        timerCount1=3;
+      }else if(status=="arrived"){
+        timer.cancel();
+        timerStop1.cancel();
         timerCount1=3;
       }
     });
@@ -914,12 +915,16 @@ timer2() {
     const duration =Duration(seconds: 1);
     int _timerCount2 = 5;
     print("timerCount2 ++$_timerCount2");
-    Timer.periodic(duration, (timer) {
+  timerStop2= Timer.periodic(duration, (timer) {
       _timerCount2=_timerCount2-1;
       if(_timerCount2==0){
         print("timerCount2$_timerCount2");
         assetsAudioPlayer.open(Audio("sounds/start_trip_ar.wav"));
         timer.cancel();
+        _timerCount2=5;
+      }else if(status == "onride"){
+        timer.cancel();
+        timerStop2.cancel();
         _timerCount2=5;
       }
     });

@@ -1,4 +1,4 @@
-
+import 'dart:async';
 import 'dart:math';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:driver/repo/geoFire_srv.dart';
@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:system_alert_window/system_alert_window.dart' as sys;
 import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
@@ -16,6 +17,7 @@ import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
+import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../widget/custom_container_ofLine.dart';
@@ -30,6 +32,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool valueSwitchBottom = true;
+  String _platformVersion = 'Unknown';
+  sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
   @override
   void initState() {
     initializationLocal(context);
@@ -37,14 +41,35 @@ class _HomeScreenState extends State<HomeScreen> {
     PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     tostDriverAvailable();
     FlutterBackgroundService().invoke("setAsBackground");
-     PlanDays().countDayPlansInForeground();
+    PlanDays().countDayPlansInForeground();
+    //todo
+    _initPlatformState();
+    requestPermissionsSystem();
+    checkOnclick();
     super.initState();
+  }
+  // this method connect with dailog overlay init Platform
+  Future<void> _initPlatformState() async {
+    await sys.SystemAlertWindow.enableLogs(true);
+    String? platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await sys.SystemAlertWindow.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion!;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final drawerValue = Provider.of<DrawerValueChange>(context).value;
-    final changeColorBottom = Provider.of<ChangeColorBottomDrawer>(context).isTrue;
+    final changeColorBottom =
+        Provider.of<ChangeColorBottomDrawer>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -80,11 +105,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                           child: Stack(
                             children: [
-                              SizedBox(height: MediaQuery.of(context).size.height,
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height,
                                 child: GoogleMap(
                                   padding: const EdgeInsets.only(top: 25.0),
                                   mapType: MapType.normal,
-                                  initialCameraPosition:LogicGoogleMap().kGooglePlex,
+                                  initialCameraPosition:
+                                      LogicGoogleMap().kGooglePlex,
                                   myLocationButtonEnabled: true,
                                   myLocationEnabled: true,
                                   liteModeEnabled: true,
@@ -94,9 +121,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .controllerGoogleMap
                                         .complete(controller);
                                     newGoogleMapController = controller;
-                                  await  LogicGoogleMap().locationPosition(context);
-                                    GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+                                    await LogicGoogleMap()
+                                        .locationPosition(context);
+                                    GeoFireSrv().getLocationLiveUpdates(
+                                        valueSwitchBottom);
                                     getCountryName();
+                                    driverRef.child(userId).child("isLocal").set("local");
                                   },
                                 ),
                               ),
@@ -145,8 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         radius: 25,
                         backgroundColor: Colors.white,
                         child: IconButton(
-                            onPressed: ()async {
-                              FlutterBackgroundService().invoke("setAsBackground");
+                            onPressed: () async {
+                              FlutterBackgroundService()
+                                  .invoke("setAsBackground");
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(0);
@@ -165,12 +196,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
-            onPressed: () async{
-              await  LogicGoogleMap().locationPosition(context);
-              GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+            onPressed: () async {
+              await LogicGoogleMap().locationPosition(context);
+              GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
               getCountryName();
             },
-            child: const Icon(Icons.my_location,color:Colors.black45,size: 25,),
+            child: const Icon(
+              Icons.my_location,
+              color: Colors.black45,
+              size: 25,
+            ),
           ),
         ),
       ),
@@ -195,9 +230,9 @@ class _HomeScreenState extends State<HomeScreen> {
               if (valueSwitchBottom == true) {
                 // GeoFireSrv().makeDriverOnlineNow(context);
                 tostDriverAvailable();
-                GeoFireSrv().getLocationLiveUpdates(context, valueSwitchBottom);
+                GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
               } else if (valueSwitchBottom == false) {
-                GeoFireSrv().makeDriverOffLine(context);
+                GeoFireSrv().makeDriverOffLine();
                 tostDriverAvailable();
               }
             },
@@ -232,26 +267,48 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         onComplete: () async {
           if (valueSwitchBottom == false) {
-            await GeoFireSrv().makeDriverOffLine(context);
+            await GeoFireSrv().makeDriverOffLine();
             SystemNavigator.pop();
           }
         });
   }
+
 // this method for show tost driver if he Available or not
   void tostDriverAvailable() {
-    if(valueSwitchBottom == true){
-      Tools().toastMsg("You are Available for new order ", Colors.green.shade700);
-    }else{
-      Tools().toastMsg("You aren't Available for new order ", Colors.redAccent.shade700);
+    if (valueSwitchBottom == true) {
+      Tools()
+          .toastMsg("You are Available for new order ", Colors.green.shade700);
+    } else {
+      Tools().toastMsg(
+          "You aren't Available for new order ", Colors.redAccent.shade700);
     }
   }
-  void getCountryName(){
+
+  void getCountryName() {
     final _country =
-        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo.country;
-    if(_country == ""){
+        Provider.of<DriverInfoModelProvider>(context, listen: false)
+            .driverInfo
+            .country;
+    if (_country == "") {
       ApiSrvGeolocater().searchCoordinatesAddress(context);
-    }else{
+    } else {
       return;
     }
+  }
+// this method if local or not
+  getIfLocal() async {
+    await  driverRef.once().then((value) {
+      if (value.snapshot.value != null) {
+        final snap = value.snapshot.value;
+        Map<String, dynamic> map = Map<String, dynamic>.from(snap as Map);
+        if (map["isLocal"] != null) {
+          setState(() {
+            localIs = map["isLocal"];
+            print("localIs1$localIs");
+          });
+        }
+        print("localIs1$localIs");
+      }
+    });
   }
 }

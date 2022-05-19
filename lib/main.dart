@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:driver/payment/couut_plan_days.dart';
 import 'package:driver/repo/auth_srv.dart';
-import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'config.dart';
@@ -37,6 +35,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeService();
@@ -50,25 +49,18 @@ void main() async {
   });
 }
 
+
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
   await service.configure(
     androidConfiguration: AndroidConfiguration(
-      // this will executed when app is in foreground or background in separated isolate
       onStart: onStart,
-
-      // auto start service
       autoStart: true,
       isForegroundMode: true,
     ),
     iosConfiguration: IosConfiguration(
-      // auto start service
       autoStart: true,
-
-      // this will executed when app is in foreground in separated isolate
       onForeground: onStart,
-
-      // you have to enable background fetch capability on xcode project
       onBackground: onIosBackground,
     ),
   );
@@ -85,28 +77,6 @@ void onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
   String userId = AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
-  // String pathToReference = "";
-  // String path = "";
-  //
-  // await driverRef
-  //     .child(userId)
-  //     .child("carInfo")
-  //     .child("carType")
-  //     .once()
-  //     .then((value) {
-  //   if (value.snapshot.value != null) {
-  //     pathToReference = value.snapshot.value.toString();
-  //     if (pathToReference == "Taxi-4 seats") {
-  //       path = "availableDrivers";
-  //     } else if (pathToReference == "Medium commercial-6-10 seats") {
-  //       path = "availableDrivers2";
-  //     } else if (pathToReference == "Big commercial-11-19 seats") {
-  //       path = "availableDrivers3";
-  //     }
-  //   }
-  // });
-
-
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
@@ -115,23 +85,25 @@ void onStart(ServiceInstance service) async {
 
     service.on('setAsBackground').listen((event) async {
       service.setAsBackgroundService();
-      driverRef.child(userId).child("newRide").onDisconnect().remove();
+      driverRef.child(userId).child("isLocal").onDisconnect().remove();
+      /// stop for now under test
+      // driverRef.child(userId).child("newRide").onDisconnect().remove();
     });
   }
-  await driverRef.child(userId).child("newRide").once().then((value) async {
-    final snap = value.snapshot.value;
-    if (snap == null) {
-      String pathToReference1 = "availableDrivers";
-      Geofire.initialize(pathToReference1);
-      await Geofire.setLocation(userId, 37.42796133580664, 122.085749655962);
-      homeScreenStreamSubscription?.pause();
-      Geofire.stopListener();
-      Geofire.removeLocation(userId);
-    }
-  });
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
+/// stop for now under test
+  // await driverRef.child(userId).child("newRide").once().then((value) async {
+  //   final snap = value.snapshot.value;
+  //   if (snap == null) {
+  //     Geofire.initialize("availableDrivers");
+  //     await Geofire.setLocation(userId,37.42796133580664, 122.085749655962);
+  //     homeScreenStreamSubscription?.pause();
+  //     Geofire.stopListener();
+  //     Geofire.removeLocation(userId);
+  //   }
+  // });
 
   if (userId.isNotEmpty) {
     await PlanDays().setIfBackgroundOrForeground(true);
@@ -145,46 +117,44 @@ void onStart(ServiceInstance service) async {
     });
   }
 
-  Timer.periodic(const Duration(minutes: 1), (timer) async {
+
+  Timer.periodic(const Duration(seconds: 50), (timer) async {
     if (exPlan < 0) {
-      Tools().toastMsg("Your Plan finished back", Colors.redAccent.shade700);
       driverRef.child(userId).child("status").once().then((value) {
         if (value.snapshot.exists && value.snapshot.value != null) {
           final snap = value.snapshot.value;
           String _status = snap.toString();
           if (_status == "checkIn") {
+            timer.cancel();
             return;
           }
           driverRef.child(userId).child("status").set("payTime");
+          timer.cancel();
         }
       });
     } else {
       exPlan = exPlan - 1;
-      print("back$exPlan");
       await driverRef.child(userId).child("exPlan").set(exPlan);
 
-      if (exPlan == 0) {
-        Tools().toastMsg(
-            "Your Plan finished charge your plan", Colors.redAccent.shade700);
-      }
       if (exPlan < 0) {
-        Tools().toastMsg("Your Plan finished", Colors.redAccent.shade700);
         driverRef.child(userId).child("status").once().then((value) {
           if (value.snapshot.exists && value.snapshot.value != null) {
             final snap = value.snapshot.value;
             String _status = snap.toString();
             if (_status == "checkIn") {
+              timer.cancel();
               return;
             }
             driverRef.child(userId).child("status").set("payTime");
+            timer.cancel();
           }
         });
-      }
+         }
     }
     if (service is AndroidServiceInstance) {
       service.setForegroundNotificationInfo(
-        title: "Garanti driver",
-        content: "days of your plan : $exPlan",
+        title: "Garanti Taxi : ",
+        content: "Location working in background",
       );
       // test using external plugin
       final deviceInfo = DeviceInfoPlugin();

@@ -1,6 +1,8 @@
 // this class for firebase push notifications
 import 'dart:async';
 import 'dart:io';
+import 'package:driver/config.dart';
+import 'package:driver/notificatons/system_alert_window.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,11 +16,11 @@ import '../my_provider/ride_request_info.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
 import 'local_notifications.dart';
+import 'package:system_alert_window/system_alert_window.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
 DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
-
 Future<String?> getToken() async {
   String? token = await firebaseMessaging.getToken();
   if (kDebugMode) {
@@ -34,8 +36,16 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
   await getToken();
   if (message.data.isNotEmpty && message.notification != null) {
-    // openDailog();
-    showNotification();
+    await driverRef.child(userId).child("isLocal").once().then((value) {
+      if (value.snapshot.value != null) {
+        final snap = value.snapshot.value;
+        localIs = snap.toString();
+        if (localIs == "local") {
+          showNotification();
+        }
+        showOverlayWindow();
+      }
+    });
   }
 }
 
@@ -43,17 +53,6 @@ class PushNotificationsSrv {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final userId = AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
-
-///todo delete
-  // this method for got token driver and set to database
-
-  // Future<String?> getToken() async {
-  //   String? token = await firebaseMessaging.getToken();
-  //   await driverRef.child(userId).child("token").set(token);
-  //   firebaseMessaging.subscribeToTopic("allDrivers");
-  //   firebaseMessaging.subscribeToTopic("allUsers");
-  //   return token;
-  // }
 
   // THIS method for ios permission
   Future<AppleNotificationSetting> iosPermission() async {
@@ -71,20 +70,22 @@ class PushNotificationsSrv {
     return settings.alert;
   }
 
+  // this method for push notification if app foreground
   setForegroundNotifications(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.data.isNotEmpty && message.notification != null) {
         //method in method for string ride id
-        retrieveRideRequestInfo(getRideRequestId(message),context);
+        retrieveRideRequestInfo(getRideRequestId(message), context);
       }
     });
   }
 
+  // this method for push notification if app BackGround
   setBackgroundNotifications(BuildContext context) {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       if (message.data.isNotEmpty && message.notification != null) {
         //method in method for string ride id
-        retrieveRideRequestInfo(getRideRequestId(message),context);
+        retrieveRideRequestInfo(getRideRequestId(message), context);
         await FirebaseMessaging.instance
             .setForegroundNotificationPresentationOptions(
           alert: true,
@@ -93,6 +94,22 @@ class PushNotificationsSrv {
         );
       }
     });
+  }
+
+  // this method for push notification if app torment
+  setTerminateNotifications(BuildContext context) async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      //method in method for string ride id
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      retrieveRideRequestInfo(getRideRequestId(initialMessage), context);
+    }
   }
 
   String getRideRequestId(RemoteMessage message) {
@@ -162,12 +179,12 @@ class PushNotificationsSrv {
         return;
       } else {
         driverRef.child(userId).child("newRide").set("searching");
-        Tools().toastMsg("Not.exists",Colors.redAccent.shade700);
+        Tools().toastMsg("Not.exists", Colors.redAccent.shade700);
       }
     } catch (ex) {
-      Tools().toastMsg("push.Loading...",Colors.redAccent.shade700);
+      Tools().toastMsg("push.Loading...", Colors.redAccent.shade700);
       driverRef.child(userId).child("newRide").set("searching");
-      Tools().toastMsg("Not.exists",Colors.redAccent.shade700);
+      Tools().toastMsg("Not.exists", Colors.redAccent.shade700);
     }
   }
 
@@ -179,6 +196,7 @@ class PushNotificationsSrv {
     }
     setForegroundNotifications(context);
     setBackgroundNotifications(context);
+    setTerminateNotifications(context);
   }
 
   // this method will use in home screen in instant for auto starting
@@ -186,22 +204,4 @@ class PushNotificationsSrv {
     getToken();
     startSendNotifications(context);
   }
-
-///todo delete
-  // setTerminateNotifications(BuildContext context) async {
-  //   RemoteMessage? initialMessage =
-  //       await FirebaseMessaging.instance.getInitialMessage();
-  //   if (initialMessage != null) {
-  //     //method in method for string ride id
-  //     retrieveRideRequestInfo(getRideRequestId(initialMessage), context);
-  //     await FirebaseMessaging.instance
-  //         .setForegroundNotificationPresentationOptions(
-  //       alert: true,
-  //       badge: true,
-  //       sound: true,
-  //     );
-  //   }
-  // }
-
-  // this method for retrieve rider id from data notification  when rider do request a ta
 }
