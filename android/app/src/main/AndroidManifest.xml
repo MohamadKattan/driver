@@ -81,6 +81,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".MainActivity"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter android:priority="999" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <!--
  Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
@@ -92,5 +100,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBt7etvZRY_OrzFcCsawNb22jqSzE2mRDg" />
     </application>
+
 
 </manifest>

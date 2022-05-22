@@ -85,7 +85,7 @@ void onStart(ServiceInstance service) async {
 
     service.on('setAsBackground').listen((event) async {
       service.setAsBackgroundService();
-      driverRef.child(userId).child("isLocal").onDisconnect().remove();
+      driverRef.child(userId).child("isLocal").set("local");
       /// stop for now under test
       // driverRef.child(userId).child("newRide").onDisconnect().remove();
     });
@@ -179,7 +179,6 @@ void onStart(ServiceInstance service) async {
     }
   });
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

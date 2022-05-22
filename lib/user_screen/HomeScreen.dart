@@ -1,15 +1,11 @@
-import 'dart:async';
+
 import 'dart:math';
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:system_alert_window/system_alert_window.dart' as sys;
 import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
@@ -17,11 +13,12 @@ import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
-import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
+import '../tools/background_serv.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,37 +29,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool valueSwitchBottom = true;
-  String _platformVersion = 'Unknown';
-  sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
+  // String _platformVersion = 'Unknown';
+  // sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
   @override
-  void initState() {
-    initializationLocal(context);
-    requestPermissions();
-    PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-    tostDriverAvailable();
+  void initState(){
+    onBackgroundMessage(context);
     FlutterBackgroundService().invoke("setAsBackground");
+    ///local
+    initializationLocal(context);
+    ///local
+    requestPermissions();
+    tostDriverAvailable();
     PlanDays().countDayPlansInForeground();
-    //todo
-    _initPlatformState();
-    requestPermissionsSystem();
-    checkOnclick();
+    PushNotificationsSrv().gotNotificationInBackground(context);
+    // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
+    ///system dailog alert 3 methodes
+    // initPlatformState();
+    // requestPermissionsSystem();
+    // checkOnclick();
     super.initState();
-  }
-  // this method connect with dailog overlay init Platform
-  Future<void> _initPlatformState() async {
-    await sys.SystemAlertWindow.enableLogs(true);
-    String? platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await sys.SystemAlertWindow.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion!;
-    });
   }
 
   @override
@@ -78,10 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           body: Stack(
             children: [
-              //widget
-              valueSwitchBottom == false
-                  ? timerOffLineDriver()
-                  : const Text(""),
               customDrawer(context),
               GestureDetector(
                 onTap: () async {
@@ -125,8 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .locationPosition(context);
                                     GeoFireSrv().getLocationLiveUpdates(
                                         valueSwitchBottom);
+                                    driverRef.child(userId).child("isLocal").set("notLocal");
                                     getCountryName();
-                                    driverRef.child(userId).child("isLocal").set("local");
                                   },
                                 ),
                               ),
@@ -154,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: IconButton(
                             onPressed: () {
                               PlanDays().getExPlanFromReal();
-                              // PlanDays().countDayPlansInForeground();
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(1);
@@ -176,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.white,
                         child: IconButton(
                             onPressed: () async {
+                              playNot();
                               FlutterBackgroundService()
                                   .invoke("setAsBackground");
                               Provider.of<DrawerValueChange>(context,
@@ -240,39 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-  Widget timerOffLineDriver() {
-    final CountDownController downController = CountDownController();
-    return CircularCountDownTimer(
-        duration: 300,
-        initialDuration: 0,
-        controller: downController,
-        width: MediaQuery.of(context).size.width / 9,
-        height: MediaQuery.of(context).size.height / 9,
-        ringColor: Colors.white,
-        fillColor: Colors.black12,
-        backgroundColor: const Color(0xFFFFD54F),
-        strokeWidth: 8.0,
-        strokeCap: StrokeCap.round,
-        textStyle: const TextStyle(
-            fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.bold),
-        textFormat: CountdownTextFormat.S,
-        isReverse: true,
-        isReverseAnimation: true,
-        isTimerTextShown: true,
-        autoStart: true,
-        onStart: () {
-          if (kDebugMode) {
-            print('Countdown Started');
-          }
-        },
-        onComplete: () async {
-          if (valueSwitchBottom == false) {
-            await GeoFireSrv().makeDriverOffLine();
-            SystemNavigator.pop();
-          }
-        });
-  }
-
 // this method for show tost driver if he Available or not
   void tostDriverAvailable() {
     if (valueSwitchBottom == true) {
@@ -294,21 +242,5 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       return;
     }
-  }
-// this method if local or not
-  getIfLocal() async {
-    await  driverRef.once().then((value) {
-      if (value.snapshot.value != null) {
-        final snap = value.snapshot.value;
-        Map<String, dynamic> map = Map<String, dynamic>.from(snap as Map);
-        if (map["isLocal"] != null) {
-          setState(() {
-            localIs = map["isLocal"];
-            print("localIs1$localIs");
-          });
-        }
-        print("localIs1$localIs");
-      }
-    });
   }
 }

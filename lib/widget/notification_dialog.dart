@@ -1,6 +1,7 @@
 // this widget dialog notification show to driver for accept or cancel order
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:driver/tools/background_serv.dart';
 import 'package:driver/tools/curanny_type.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -34,17 +35,19 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   @override
   void initState() {
-    audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
-    playSound();
+    ///stop for ios just
+    // audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
+    // _playSound();
     super.initState();
   }
-  @override
-  void dispose() {
-    audioPlayer.release();
-    audioPlayer.dispose();
-    audioCache.clearAll();
-    super.dispose();
-  }
+  /// with ios just
+  // @override
+  // void dispose() {
+  //   audioPlayer.release();
+  //   audioPlayer.dispose();
+  //   audioCache.clearAll();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +151,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   GestureDetector(
                     onTap: () async {
                       stopSound();
+                      // _stopSound();
                       driverCancelOrder(context);
                       Navigator.pop(context);
                     },
@@ -167,7 +171,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   isHideButton==false?
                   GestureDetector(
                     onTap: () async {
-                    stopSound();
+                      stopSound();
+                    // _stopSound();
                       checkAvailableOfRide(context, rideInfoProvider);
                       setState(() {
                         isHideButton=true;
@@ -291,10 +296,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
     });
   }
 
- Future <void> playSound()async {
+ Future <void> _playSound()async {
    await audioCache.play(path);
  }
-  Future <void> stopSound()async {
+  Future <void> _stopSound()async {
     await audioPlayer.stop();
   }
 }

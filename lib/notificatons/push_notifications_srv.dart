@@ -1,9 +1,9 @@
 // this class for firebase push notifications
 import 'dart:async';
 import 'dart:io';
-import 'package:driver/config.dart';
-import 'package:driver/notificatons/system_alert_window.dart';
 import 'package:driver/repo/auth_srv.dart';
+import 'package:driver/repo/geoFire_srv.dart';
+import 'package:driver/tools/background_serv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,11 +16,11 @@ import '../my_provider/ride_request_info.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
 import 'local_notifications.dart';
-import 'package:system_alert_window/system_alert_window.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
 DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+
 Future<String?> getToken() async {
   String? token = await firebaseMessaging.getToken();
   if (kDebugMode) {
@@ -32,85 +32,110 @@ Future<String?> getToken() async {
   return token;
 }
 
-Future<void> onBackgroundMessage(RemoteMessage message) async {
+Future<void> onBackgroundMessage(BuildContext context) async {
+  RemoteMessage? message =await FirebaseMessaging.instance.getInitialMessage();
   await Firebase.initializeApp();
   await getToken();
-  if (message.data.isNotEmpty && message.notification != null) {
+  if (message!.data.isNotEmpty && message.notification != null) {
     await driverRef.child(userId).child("isLocal").once().then((value) {
       if (value.snapshot.value != null) {
         final snap = value.snapshot.value;
-        localIs = snap.toString();
+       String localIs = snap.toString();
         if (localIs == "local") {
+          openDailog();
           showNotification();
         }
-        showOverlayWindow();
+      }else{
+        return;
       }
     });
   }
 }
 
 class PushNotificationsSrv {
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-  final userId = AuthSev().auth.currentUser!.uid;
-  DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+  late StreamSubscription<DatabaseEvent> subscription;
 
   // THIS method for ios permission
-  Future<AppleNotificationSetting> iosPermission() async {
-    NotificationSettings settings;
-
-    settings = await firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    return settings.alert;
-  }
-
+  ///for ios code
+  // Future<AppleNotificationSetting> iosPermission() async {
+  //   NotificationSettings settings;
+  //
+  //   settings = await firebaseMessaging.requestPermission(
+  //     alert: true,
+  //     announcement: false,
+  //     badge: true,
+  //     carPlay: false,
+  //     criticalAlert: false,
+  //     provisional: false,
+  //     sound: true,
+  //   );
+  //   return settings.alert;
+  // }
   // this method for push notification if app foreground
-  setForegroundNotifications(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.data.isNotEmpty && message.notification != null) {
-        //method in method for string ride id
-        retrieveRideRequestInfo(getRideRequestId(message), context);
-      }
-    });
-  }
+  ///Stoped for now
+  // setForegroundNotifications(BuildContext context) {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     if (message.data.isNotEmpty && message.notification != null) {
+  //       //method in method for string ride id
+  //       retrieveRideRequestInfo(getRideRequestId(message), context);
+  //     }
+  //   });
+  // }
 
   // this method for push notification if app BackGround
-  setBackgroundNotifications(BuildContext context) {
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      if (message.data.isNotEmpty && message.notification != null) {
-        //method in method for string ride id
-        retrieveRideRequestInfo(getRideRequestId(message), context);
-        await FirebaseMessaging.instance
-            .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-      }
-    });
-  }
+  ///Stoped for now
+  // setBackgroundNotifications(BuildContext context) {
+  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+  //     if (message.data.isNotEmpty && message.notification != null) {
+  //       //method in method for string ride id
+  //       retrieveRideRequestInfo(getRideRequestId(message), context);
+  //       await FirebaseMessaging.instance
+  //           .setForegroundNotificationPresentationOptions(
+  //         alert: true,
+  //         badge: true,
+  //         sound: true,
+  //       );
+  //     }
+  //   });
+  // }
 
   // this method for push notification if app torment
-  setTerminateNotifications(BuildContext context) async {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      //method in method for string ride id
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-      retrieveRideRequestInfo(getRideRequestId(initialMessage), context);
-    }
-  }
+  ///StopForNow
+  // setTerminateNotifications(BuildContext context) async {
+  //   RemoteMessage? initialMessage =
+  //       await FirebaseMessaging.instance.getInitialMessage();
+  //   if (initialMessage != null) {
+  //     //method in method for string ride id
+  //     await FirebaseMessaging.instance
+  //         .setForegroundNotificationPresentationOptions(
+  //       alert: true,
+  //       badge: true,
+  //       sound: true,
+  //     );
+  //     // retrieveRideRequestInfo(getRideRequestId(initialMessage), context);
+  //   }
+  // }
+  ///
+  // this method for permission after that start methods
+  ///Stoped for now
+  // void startSendNotifications(BuildContext context) async {
+  //   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+  //   if (Platform.isIOS) {
+  //     iosPermission();
+  //   }
+  //   setForegroundNotifications(context);
+  //   setBackgroundNotifications(context);
+  //   setTerminateNotifications(context);
+  // }
+
+  // this method will use in home screen in instant for auto starting
+  ///Stoped for now
+  // getCurrentInfoDriverForNotification(BuildContext context) {
+  //   getToken();
+  //   startSendNotifications(context);
+  // }
+
+  // this method for got Notification in back ground
 
   String getRideRequestId(RemoteMessage message) {
     String rideId = "";
@@ -137,15 +162,15 @@ class PushNotificationsSrv {
       snapshot = await ref.child("Ride Request").child(rideId).get();
       if (snapshot.exists) {
         Map<String, dynamic> map =
-            Map<String, dynamic>.from(snapshot.value as Map);
+        Map<String, dynamic>.from(snapshot.value as Map);
         double pickUpLinlatitude =
-            double.parse(map["pickup"]["latitude"].toString());
+        double.parse(map["pickup"]["latitude"].toString());
         double pickUpLontude =
-            double.parse(map["pickup"]["longitude"].toString());
+        double.parse(map["pickup"]["longitude"].toString());
         double dropOffLinlatitude =
-            double.parse(map["dropoff"]["latitude"].toString());
+        double.parse(map["dropoff"]["latitude"].toString());
         double dropOffLontitude =
-            double.parse(map["dropoff"]["longitude"].toString());
+        double.parse(map["dropoff"]["longitude"].toString());
         String userId = map["userId"];
         String riderName = map["riderName"];
         String riderPhone = map["riderPhone"];
@@ -180,28 +205,46 @@ class PushNotificationsSrv {
       } else {
         driverRef.child(userId).child("newRide").set("searching");
         Tools().toastMsg("Not.exists", Colors.redAccent.shade700);
+        stopSound();
       }
     } catch (ex) {
       Tools().toastMsg("push.Loading...", Colors.redAccent.shade700);
       driverRef.child(userId).child("newRide").set("searching");
       Tools().toastMsg("Not.exists", Colors.redAccent.shade700);
+      stopSound();
     }
   }
 
-  // this method for permission after that start methods
-  void startSendNotifications(BuildContext context) async {
-    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-    if (Platform.isIOS) {
-      iosPermission();
-    }
-    setForegroundNotifications(context);
-    setBackgroundNotifications(context);
-    setTerminateNotifications(context);
+ Future <void> gotNotificationInBackground(BuildContext context)async {
+   subscription = driverRef.child(userId).child("newRide").onValue
+        .listen((event) {
+          if(event.snapshot.value!=null){
+            String _riderId = event.snapshot.value.toString();
+            if(_riderId=="searching"){
+              return;
+            }else if(_riderId=="canceled"){
+              return;
+            }else if(_riderId=="timeOut"){
+              int _count = 20;
+              Timer.periodic(const Duration(seconds: 1), (timer) {
+                _count = _count-1;
+                if(_count==0){
+                  timer.cancel();
+                  _count=20;
+                  GeoFireSrv().enableLocationLiveUpdates(context);
+                  driverRef.child(userId).child("newRide").set("searching");
+                }
+              });
+            }else if(_riderId=="accepted"){
+            return;
+            }else{
+              openDailog();
+              playSound();
+              retrieveRideRequestInfo(_riderId,context);
+
+            }
+          }
+    });
   }
 
-  // this method will use in home screen in instant for auto starting
-  getCurrentInfoDriverForNotification(BuildContext context) {
-    getToken();
-    startSendNotifications(context);
-  }
 }

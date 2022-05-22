@@ -3,12 +3,8 @@ import 'dart:async';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'notificatons/local_notifications.dart';
 
 String mapKey = "AIzaSyBt7etvZRY_OrzFcCsawNb22jqSzE2mRDg";
 String mapBox = "pk.eyJ1IjoibW9oYW1hZDg4IiwiYSI6ImNsMWl5NGdwdjBvcnUzY24zOWs0ejUyczYifQ.yvLkipuTn_XHHBz-lCAUAA";
@@ -25,7 +21,7 @@ final AssetsAudioPlayer assetsAudioPlayer =AssetsAudioPlayer();
  int exPlan = 0;
  int tripcount = 5;
  bool isBackground=false;
- String localIs = "";
+
 
 
 

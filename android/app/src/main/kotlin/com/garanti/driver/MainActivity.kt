@@ -1,31 +1,90 @@
-package com.garanti.driver
 
+package com.garanti.driver
+import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
-import android.provider.Settings
+import android.content.pm.PackageManager
+import android.media.RingtoneManager
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugins.GeneratedPluginRegistrant
+
 
 class MainActivity: FlutterActivity() {
-    private val channel = "com.garanti.driver/channel"
+    private val METHOD_CHANNEL = "com.garanti.driver/channel"
+    private  var methodChannel:MethodChannel?=null
+    private val METHOD_CHANNEL2 = "com.garanti.driverSound/channel"
+    private  var methodChannel2:MethodChannel?=null
+    private val METHOD_CHANNEL3 = "com.garanti.driverNot/channel"
+    private  var methodChannel3:MethodChannel?=null
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger,channel)
-                .setMethodCallHandler { call, result ->
-                    if(call.method=="openDailog"){
-                        Intent(this,MyServiceDailog ::class.java).also {intent ->
-                            startService(intent)
+       super.configureFlutterEngine(flutterEngine)
+        launchMediaPlayerDailog(this,flutterEngine.dartExecutor.binaryMessenger)
+        playSound(this,flutterEngine.dartExecutor.binaryMessenger)
+        playNot(this,flutterEngine.dartExecutor.binaryMessenger)
+    }
+    private fun launchMediaPlayerDailog(context: Context,messenger: BinaryMessenger){
+         methodChannel = MethodChannel(messenger,METHOD_CHANNEL)
+        methodChannel!!.setMethodCallHandler { call, result ->
+            when (call.method) {
+                        "openDailog" -> {
+                            val packageManager: PackageManager = context.packageManager
+                            val intent = packageManager.getLaunchIntentForPackage("com.garanti.driver")
+                                intent!!.setPackage(null)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                            context.startActivity(intent)
                         }
-                    }else if(call.method=="closeDailog"){
-                        Intent(this,MyServiceDailog ::class.java).also {intent ->
-                            stopService(intent)
+                        else -> {
+                            result.notImplemented()
                         }
-                    }else{
-                        result.notImplemented()
+                    }
+
+        }
+    }
+
+    private fun playSound(context: Context,messenger: BinaryMessenger){
+        methodChannel2 = MethodChannel(messenger,METHOD_CHANNEL2)
+        methodChannel2!!.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "playSound" -> {
+
+                            Intent(this,MyServiceDailog ::class.java).also {intent ->
+                                startService(intent)
+                            }
+                }
+                "stopSound" -> {
+                    Intent(this,MyServiceDailog ::class.java).also {intent ->
+                        stopService(intent)
                     }
                 }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+
+        }
+    }
+
+    private  fun  playNot(context: Context,messenger: BinaryMessenger){
+        methodChannel3 = MethodChannel(messenger,METHOD_CHANNEL3)
+        methodChannel3!!.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "playNot" -> {
+                    try {
+                        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                        val r = RingtoneManager.getRingtone(applicationContext, notification)
+                        r.play()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+
+        }
     }
 }
+

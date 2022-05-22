@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
  const channel = MethodChannel("com.garanti.driver/channel");
+const channelSound = MethodChannel("com.garanti.driverSound/channel");
+const channelNot = MethodChannel("com.garanti.driverNot/channel");
 
  openDailog()async{
   try{
@@ -11,9 +13,25 @@ import 'package:flutter/services.dart';
   }
 }
 
-closeDailog()async{
+playSound()async{
   try{
-    await channel.invokeMethod("closeDailog");
+    await channelSound.invokeMethod("playSound");
+  }on PlatformException catch(ex){
+    debugPrint( ex.message);
+  }
+}
+
+stopSound()async{
+  try{
+    await channelSound.invokeMethod("stopSound");
+  }on PlatformException catch(ex){
+    debugPrint( ex.message);
+  }
+}
+
+playNot()async{
+  try{
+    await channelNot.invokeMethod("playNot");
   }on PlatformException catch(ex){
     debugPrint( ex.message);
   }
