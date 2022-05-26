@@ -1,9 +1,10 @@
 // this widget for call us
 
 import 'package:flutter/material.dart';
-import '../model/rideDetails.dart';
 import '../tools/url_lunched.dart';
 import 'custom_divider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 Widget callUs(
     BuildContext context) {
@@ -24,9 +25,9 @@ Widget callUs(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Call your rider",
-                style: TextStyle(
+               Text(
+                AppLocalizations.of(context)!.uss,
+                style:const TextStyle(
                     color: Colors.black87,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
@@ -41,12 +42,12 @@ Widget callUs(
 
                   },
                   child: Row(
-                    children: const [
-                      Icon(Icons.phone,size: 24.0,color: Colors.greenAccent,),
-                      SizedBox(width: 6.0),
-                      Text(" Normal call : 000000000",
+                    children:  [
+                     const Icon(Icons.phone,size: 24.0,color: Colors.greenAccent,),
+                     const SizedBox(width: 6.0),
+                      Text(AppLocalizations.of(context)!.normalCall + "00000000000",
                           style:
-                          TextStyle(color: Colors.black87, fontSize: 16.0)),
+                         const TextStyle(color: Colors.black87, fontSize: 16.0)),
                     ],
                   ),
                 ),

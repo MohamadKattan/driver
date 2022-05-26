@@ -12,6 +12,8 @@ import '../my_provider/payment_indector_provider.dart';
 import '../repo/auth_srv.dart';
 import '../tools/tools.dart';
 import 'couut_plan_days.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class CheckOutPayment {
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
@@ -46,15 +48,14 @@ class CheckOutPayment {
       return data["token"];
     } else {
       Provider.of<PaymentIndector>(context,listen: false).updateState(false);
-      Tools().toastMsg("transaction noy successful !!", Colors.redAccent.shade700);
-      Tools().toastMsg("Try again and check your card info", Colors.redAccent.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.notSuccessfully, Colors.redAccent.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.anotherCard, Colors.redAccent.shade700);
       throw Exception("Card error");
     }
   }
 
   Future<bool> makePayment(CardPayment card, int amount, String s, BuildContext context, int planExpirt) async {
     var _token = await _getToken(card,context);
-    print("ttttttt$_token");
     Map<String, dynamic> body = {
       "source": {"type": "token", "token": _token},
       "amount": amount,
@@ -63,7 +64,7 @@ class CheckOutPayment {
     http.Response res = await http.post(Uri.parse(paymentUrl),
         headers: _headerPayment, body: convert.jsonEncode(body));
     if (res.statusCode == 201) {
-      Tools().toastMsg("transaction successful", Colors.green.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.successful, Colors.green.shade700);
       await PlanDays().setExPlanToRealTime(planExpirt);
       await PlanDays().setIfBackgroundOrForeground(false);
       await PlanDays().setDriverPayed();
@@ -73,8 +74,8 @@ class CheckOutPayment {
       return true;
     } else {
       Provider.of<PaymentIndector>(context,listen: false).updateState(false);
-      Tools().toastMsg("transaction noy successful !!", Colors.redAccent.shade700);
-      Tools().toastMsg("Try again and check your card info", Colors.redAccent.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.notSuccessfully, Colors.redAccent.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.anotherCard, Colors.redAccent.shade700);
       Navigator.push(context,MaterialPageRoute(builder: (_)=>const SplashScreen()));
       throw Exception("Payment error");
     }

@@ -9,8 +9,9 @@ import '../my_provider/dropBottom_value_provider.dart';
 import '../widget/custom_TextField.dart';
 import '../widget/custom_circuler.dart';
 import '../widget/custom_dropBottom.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class DriverInfoScreen extends StatelessWidget {
+class DriverInfoScreen extends StatefulWidget {
   const DriverInfoScreen({Key? key}) : super(key: key);
   static final TextEditingController name = TextEditingController();
   static final TextEditingController lastName = TextEditingController();
@@ -20,6 +21,13 @@ class DriverInfoScreen extends StatelessWidget {
   static final TextEditingController carPlat = TextEditingController();
   static final TextEditingController idNo = TextEditingController();
 
+
+  @override
+  State<DriverInfoScreen> createState() => _DriverInfoScreenState();
+}
+
+class _DriverInfoScreenState extends State<DriverInfoScreen> {
+    late String newVal="Select a car class";
   @override
   Widget build(BuildContext context) {
     final dropBottomValue = Provider.of<DropBottomValue>(context).valDrop;
@@ -46,81 +54,81 @@ class DriverInfoScreen extends StatelessWidget {
                                 height: 150,
                                 width: 150)),
                       ),
-                      const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text("Driver Info",
-                              style: TextStyle(
+                       Padding(
+                          padding:const EdgeInsets.all(15.0),
+                          child: Text(AppLocalizations.of(context)!.driverInfo,
+                              style:const TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFFFD54F)))),
                       CustomTextField().customTextField(
-                          controller: name,
+                          controller: DriverInfoScreen.name,
                           keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
-                            hintText: "Your Name",
+                          decoration:  InputDecoration(
+                            hintText:AppLocalizations.of(context)!.yourName,
                             hintStyle:
-                                TextStyle(color: Colors.black54, fontSize: 16),
+                             const   TextStyle(color: Colors.black54, fontSize: 16),
+                            contentPadding:const EdgeInsets.all(8.0),
+                          )),
+                      CustomTextField().customTextField(
+                          controller: DriverInfoScreen.lastName,
+                          keyboardType: TextInputType.name,
+                          decoration:  InputDecoration(
+                            hintText:AppLocalizations.of(context)!.lastName,
+                            hintStyle:
+                              const  TextStyle(color: Colors.black54, fontSize: 16),
                             contentPadding: EdgeInsets.all(8.0),
                           )),
                       CustomTextField().customTextField(
-                          controller: lastName,
-                          keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
-                            hintText: "Last Name",
-                            hintStyle:
-                                TextStyle(color: Colors.black54, fontSize: 16),
-                            contentPadding: EdgeInsets.all(8.0),
-                          )),
-                      CustomTextField().customTextField(
-                          controller: idNo,
+                          controller: DriverInfoScreen.idNo,
                           keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            hintText: "Id Number",
+                          decoration:  InputDecoration(
+                            hintText:AppLocalizations.of(context)!.idNumber,
                             hintStyle:
-                                TextStyle(color: Colors.black54, fontSize: 16),
-                            contentPadding: EdgeInsets.all(8.0),
+                              const  TextStyle(color: Colors.black54, fontSize: 16),
+                            contentPadding:const EdgeInsets.all(8.0),
                           )),
-                      const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Text("Car Details",
-                            style: TextStyle(
+                       Padding(
+                        padding:const EdgeInsets.all(15.0),
+                        child: Text(AppLocalizations.of(context)!.carDetails,
+                            style:const TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFFFFD54F))),
                       ),
                       CustomTextField().customTextField(
-                        controller: carBrand,
+                        controller: DriverInfoScreen.carBrand,
                         keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          hintText: "Car Brand",
+                        decoration:  InputDecoration(
+                          hintText:AppLocalizations.of(context)!.carBrand,
                           hintStyle:
-                              TextStyle(color: Colors.black54, fontSize: 16),
-                          contentPadding: EdgeInsets.all(8.0),
+                            const  TextStyle(color: Colors.black54, fontSize: 16),
+                          contentPadding:const EdgeInsets.all(8.0),
                         ),
                       ),
                       CustomTextField().customTextField(
-                        controller: carModel,
+                        controller: DriverInfoScreen.carModel,
                         keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                          hintText: "Car Model",
+                        decoration:  InputDecoration(
+                          hintText:AppLocalizations.of(context)!.carModel,
                           hintStyle:
-                              TextStyle(color: Colors.black54, fontSize: 16),
-                          contentPadding: EdgeInsets.all(8.0),
+                             const TextStyle(color: Colors.black54, fontSize: 16),
+                          contentPadding:const EdgeInsets.all(8.0),
                         ),
                       ),
                       CustomTextField().customTextField(
-                        controller: carColor,
+                        controller: DriverInfoScreen.carColor,
                         keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                            hintText: "Car Color",
+                        decoration:  InputDecoration(
+                            hintText:AppLocalizations.of(context)!.carColor,
                             hintStyle:
-                                TextStyle(color: Colors.black54, fontSize: 16),
-                            contentPadding: EdgeInsets.all(8.0)),
+                              const  TextStyle(color: Colors.black54, fontSize: 16),
+                            contentPadding:const EdgeInsets.all(8.0)),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: CustomDropBottom()
-                            .dropBottomCustom(context, dropBottomValue),
+                        child:
+                            dropBottomCustom(context, dropBottomValue),
                       ),
                       const SizedBox(
                         height: 15.0,
@@ -137,10 +145,10 @@ class DriverInfoScreen extends StatelessWidget {
                               color: const Color(0xFFFFD54F),
                               borderRadius: BorderRadius.circular(4.0),
                             ),
-                            child: const Center(
-                                child: Text(
-                              "Next",
-                              style: TextStyle(
+                            child:  Center(
+                                child: Text(AppLocalizations.of(context)!.next
+                              ,
+                              style:const TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.bold),
                             )),
                           ),
@@ -156,12 +164,12 @@ class DriverInfoScreen extends StatelessWidget {
                     child: CustomBottomSheet().customBottomSheet(
                         context,
                         bottomSheetValue,
-                        name,
-                        lastName,
-                        idNo,
-                        carBrand,
-                        carColor,
-                        carModel,
+                        DriverInfoScreen.name,
+                        DriverInfoScreen.lastName,
+                        DriverInfoScreen.idNo,
+                        DriverInfoScreen.carBrand,
+                        DriverInfoScreen.carColor,
+                        DriverInfoScreen.carModel,
                         dropBottomValue),
                     duration: const Duration(milliseconds: 600)),
                 indector == true
@@ -178,22 +186,89 @@ class DriverInfoScreen extends StatelessWidget {
 // this method for check if not null TextField to change bottomSheetValue for pick images
   checkIfTextFieldNotNull(
       double bottomSheetValue, String dropBottomValue, BuildContext context) {
-    if (name.text.isEmpty) {
-      Tools().toastMsg("Name driver is required",Colors.redAccent.shade700);
-    } else if (lastName.text.isEmpty) {
-      Tools().toastMsg("last name driver is required",Colors.redAccent.shade700);
-    } else if (idNo.text.isEmpty) {
-      Tools().toastMsg("Id Card number is required",Colors.redAccent.shade700);
-    } else if (carBrand.text.isEmpty) {
-      Tools().toastMsg("Car brand  is required",Colors.redAccent.shade700);
-    } else if (carModel.text.isEmpty) {
-      Tools().toastMsg("Car model  is required",Colors.redAccent.shade700);
-    } else if (carColor.text.isEmpty) {
-      Tools().toastMsg("Car color  is required",Colors.redAccent.shade700);
+    if (DriverInfoScreen.name.text.isEmpty) {
+      Tools().toastMsg(AppLocalizations.of(context)!.nameDriver,Colors.redAccent.shade700);
+    } else if (DriverInfoScreen.lastName.text.isEmpty) {
+      Tools().toastMsg(AppLocalizations.of(context)!.lastDriver,Colors.redAccent.shade700);
+    } else if (DriverInfoScreen.idNo.text.isEmpty) {
+      Tools().toastMsg(AppLocalizations.of(context)!.idCarRequired,Colors.redAccent.shade700);
+    } else if (DriverInfoScreen.carBrand.text.isEmpty) {
+      Tools().toastMsg(AppLocalizations.of(context)!.brandRequired,Colors.redAccent.shade700);
+    } else if (DriverInfoScreen.carModel.text.isEmpty) {
+      Tools().toastMsg(AppLocalizations.of(context)!.brandRequired,Colors.redAccent.shade700);
+    } else if (DriverInfoScreen.carColor.text.isEmpty) {
+      Tools().toastMsg(AppLocalizations.of(context)!.colorRequired,Colors.redAccent.shade700);
     } else if (dropBottomValue == "Select a car class") {
-      Tools().toastMsg("car class  is required",Colors.redAccent.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.classRequired,Colors.redAccent.shade700);
     } else {
       Provider.of<BottomSheetValue>(context, listen: false).updateValue(0.0);
     }
+  }
+
+  Widget dropBottomCustom(BuildContext context, String dropBottomProvider) {
+    String? _value = "Select a car class";
+    String? value1 = AppLocalizations.of(context)!.selectCar;
+    return Padding(
+      padding: const EdgeInsets.only(right: 4.0, left: 4.0),
+      child: Container(
+        padding: const EdgeInsets.all(4.0),
+        height: MediaQuery.of(context).size.height * 6 / 100,
+        width: MediaQuery.of(context).size.width * 100,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4.0),
+            border: Border.all(color: const Color(0xFFFFD54F), width: 2)),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+              value:newVal=="Select a car class"?value1:newVal,
+              isExpanded: true,
+              dropdownColor: Colors.white,
+              iconSize: 40.0,
+              items: <String>[
+                AppLocalizations.of(context)!.selectCar,
+                AppLocalizations.of(context)!.taxi,
+                AppLocalizations.of(context)!.veto,
+                AppLocalizations.of(context)!.van,
+                'Free Emergency Ambulance',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (val) {
+                if (val == "Taxi-4 seats" ||
+                    val == "Taksi-4 koltuk" ||
+                    val == "تاكسي - 4 مقاعد" && _value != null) {
+                 setState(() {
+                   _value = "Taxi-4 seats";
+                   Provider.of<DropBottomValue>(context, listen: false)
+                       .updateValue("Taxi-4 seats");
+                  newVal= AppLocalizations.of(context)!.taxi;
+                 });
+                } else if (val == "Medium commercial-6-10 seats" ||
+                    val == "Orta boy ticari-6-10 koltuk" ||
+                    val == "متوسط تجاري - ٦-١٠ مقاعد" && _value != null) {
+                 setState(() {
+                   _value = "Medium commercial-6-10 seats";
+                   Provider.of<DropBottomValue>(context, listen: false)
+                       .updateValue("Medium commercial-6-10 seats");
+                   newVal=AppLocalizations.of(context)!.veto;
+                 });
+                } else if (val == "Big commercial-11-19 seats" ||
+                    val == "Büyük ticari 11-19 koltuk" ||
+                    val == "تجاري كبير - ١١-١٩ مقعدا" && _value != null) {
+                 setState(() {
+                   _value = "Big commercial-11-19 seats";
+                   Provider.of<DropBottomValue>(context, listen: false)
+                       .updateValue("Big commercial-11-19 seats");
+                  newVal= AppLocalizations.of(context)!.van;
+                 });
+                } else {
+                  return;
+                }
+              }),
+        ),
+      ),
+    );
   }
 }

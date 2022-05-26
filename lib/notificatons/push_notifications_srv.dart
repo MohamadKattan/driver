@@ -20,7 +20,6 @@ import 'local_notifications.dart';
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
 DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
-
 Future<String?> getToken() async {
   String? token = await firebaseMessaging.getToken();
   if (kDebugMode) {
@@ -32,20 +31,18 @@ Future<String?> getToken() async {
   return token;
 }
 
-Future<void> onBackgroundMessage(BuildContext context) async {
-  RemoteMessage? message =await FirebaseMessaging.instance.getInitialMessage();
+Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
-  await getToken();
-  if (message!.data.isNotEmpty && message.notification != null) {
-    await driverRef.child(userId).child("isLocal").once().then((value) {
+  getToken();
+  if (message.data.isNotEmpty && message.notification != null) {
+    await driverRef.child(userId).child("service").once().then((value) {
       if (value.snapshot.value != null) {
         final snap = value.snapshot.value;
-       String localIs = snap.toString();
-        if (localIs == "local") {
-          openDailog();
+        String serviceWork = snap.toString();
+        if (serviceWork == "working") {
           showNotification();
         }
-      }else{
+      } else {
         return;
       }
     });
@@ -162,15 +159,15 @@ class PushNotificationsSrv {
       snapshot = await ref.child("Ride Request").child(rideId).get();
       if (snapshot.exists) {
         Map<String, dynamic> map =
-        Map<String, dynamic>.from(snapshot.value as Map);
+            Map<String, dynamic>.from(snapshot.value as Map);
         double pickUpLinlatitude =
-        double.parse(map["pickup"]["latitude"].toString());
+            double.parse(map["pickup"]["latitude"].toString());
         double pickUpLontude =
-        double.parse(map["pickup"]["longitude"].toString());
+            double.parse(map["pickup"]["longitude"].toString());
         double dropOffLinlatitude =
-        double.parse(map["dropoff"]["latitude"].toString());
+            double.parse(map["dropoff"]["latitude"].toString());
         double dropOffLontitude =
-        double.parse(map["dropoff"]["longitude"].toString());
+            double.parse(map["dropoff"]["longitude"].toString());
         String userId = map["userId"];
         String riderName = map["riderName"];
         String riderPhone = map["riderPhone"];
@@ -215,36 +212,35 @@ class PushNotificationsSrv {
     }
   }
 
- Future <void> gotNotificationInBackground(BuildContext context)async {
-   subscription = driverRef.child(userId).child("newRide").onValue
-        .listen((event) {
-          if(event.snapshot.value!=null){
-            String _riderId = event.snapshot.value.toString();
-            if(_riderId=="searching"){
-              return;
-            }else if(_riderId=="canceled"){
-              return;
-            }else if(_riderId=="timeOut"){
-              int _count = 20;
-              Timer.periodic(const Duration(seconds: 1), (timer) {
-                _count = _count-1;
-                if(_count==0){
-                  timer.cancel();
-                  _count=20;
-                  GeoFireSrv().enableLocationLiveUpdates(context);
-                  driverRef.child(userId).child("newRide").set("searching");
-                }
-              });
-            }else if(_riderId=="accepted"){
-            return;
-            }else{
-              openDailog();
-              playSound();
-              retrieveRideRequestInfo(_riderId,context);
-
+  Future<void> gotNotificationInBackground(BuildContext context) async {
+    subscription =
+        driverRef.child(userId).child("newRide").onValue.listen((event) {
+      if (event.snapshot.value != null) {
+        String _riderId = event.snapshot.value.toString();
+        if (_riderId == "searching") {
+          return;
+        } else if (_riderId == "canceled") {
+          driverRef.child(userId).child("newRide").set("searching");
+        } else if (_riderId == "timeOut") {
+          int _count = 20;
+          Timer.periodic(const Duration(seconds: 1), (timer) {
+            _count = _count - 1;
+            if (_count == 0) {
+              timer.cancel();
+              _count = 20;
+              GeoFireSrv().enableLocationLiveUpdates(context);
+              driverRef.child(userId).child("newRide").set("searching");
             }
-          }
+          });
+        } else if (_riderId == "accepted") {
+          return;
+        } else {
+          openDailog();
+          playSound();
+          openDailogOld();
+          retrieveRideRequestInfo(_riderId, context);
+        }
+      }
     });
   }
-
 }

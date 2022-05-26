@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import '../model/card_payment.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/payment_indector_provider.dart';
-import '../my_provider/placeAdrees_name.dart';
 import '../widget/custom_circuler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class CardPaymentScreen extends StatefulWidget {
@@ -73,7 +73,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       horizontal: 20,
                     ),
                     child: TextFormField(
-                      decoration: const InputDecoration(hintText:"Card number 16 number"),
+                      decoration:  InputDecoration(hintText:AppLocalizations.of(context)!.card16),
                       maxLength: 16,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
@@ -104,7 +104,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       horizontal: 20,
                     ),
                     child: TextFormField(
-                      decoration: const InputDecoration(hintText:"Mouthe Expiry on your card"),
+                      decoration:  InputDecoration(hintText:AppLocalizations.of(context)!.mexpiry),
                       maxLength: 2,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
@@ -119,7 +119,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       horizontal: 20,
                     ),
                     child: TextFormField(
-                      decoration: const InputDecoration(hintText:"Year Expiry 2 number"),
+                      decoration:  InputDecoration(hintText:AppLocalizations.of(context)!.yexpiry),
                       maxLength: 2,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
@@ -136,11 +136,10 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                         style: ElevatedButton.styleFrom(
                           primary:  Colors.green[700]
                         ),
-                          child: const Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Text(
-                                "pay",
-                                style: TextStyle(
+                          child:  Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Text(AppLocalizations.of(context)!.pay,
+                                style: const TextStyle(
                                     fontSize: 14, color:Colors.white),
                               )),
                           onPressed: () async {
@@ -163,14 +162,13 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
 
                           }),
                       ElevatedButton(
-                          style:ElevatedButton.styleFrom(
-                            onPrimary:Colors.redAccent.shade700,
+                          style: ElevatedButton.styleFrom(
+                              primary:  Colors.red[700]
                           ),
-                          child: const Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Text(
-                                "cancel",
-                                style: TextStyle(
+                          child:  Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Text(AppLocalizations.of(context)!.cancel,
+                                style: const TextStyle(
                                     fontSize: 14, color: Colors.white),
                               )),
                           onPressed: () async {

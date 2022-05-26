@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EarningScreen extends StatefulWidget {
   const EarningScreen({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class _EarningScreenState extends State<EarningScreen> {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
         backgroundColor:const Color(0xFFFFD54F),
-        title: const Text("My earning",style: TextStyle(color: Colors.white)),
+        title:  Text(AppLocalizations.of(context)!.myEarning,style: const TextStyle(color: Colors.white)),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -37,9 +38,9 @@ class _EarningScreenState extends State<EarningScreen> {
               Lottie.asset('images/51765-cash.json',fit: BoxFit.fill,
                   height: MediaQuery.of(context).size.height*60/100,
                   width: MediaQuery.of(context).size.width*60/100,),
-              const Text(
-                "Your Total earning",
-                style: TextStyle(
+               Text(
+                AppLocalizations.of(context)!.totalEarning,
+                style:const TextStyle(
                     color: Colors.black87,
                     fontSize: 35.0,
                     fontWeight: FontWeight.bold),

@@ -17,6 +17,7 @@ import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../user_screen/new_ride_screen.dart';
 import '../widget/custom_divider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class NotificationDialog extends StatefulWidget {
@@ -70,9 +71,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
               Center(
                   child: Lottie.asset('images/lf30_editor_mtfshyfg.json',
                       height: 160, width: 160)),
-              const Text(
-                "New ride request",
-                style: TextStyle(
+               Text(AppLocalizations.of(context)!.rideRequest,
+                style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
@@ -93,7 +93,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               height: 20,
                               width: 20)),
                     ),
-                    Text("From : ",
+                    Text(AppLocalizations.of(context)!.from + " ",
                         style: TextStyle(
                             color: Colors.greenAccent.shade700, fontSize: 14)),
                     Expanded(
@@ -117,7 +117,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               height: 20,
                               width: 20)),
                     ),
-                    Text("To : ",
+                    Text(AppLocalizations.of(context)!.too + " ",
                         style: TextStyle(
                             color: Colors.redAccent.shade700, fontSize: 14)),
                     Expanded(
@@ -136,7 +136,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   Text("Km : ${rideInfoProvider.km}",
                       style: const TextStyle(
                           color: Colors.black45, fontSize: 16.0)),
-                  Text("Fare : ${currencyTypeCheck(context)} : ${rideInfoProvider.amount}",
+                  Text( AppLocalizations.of(context)!.fare + currencyTypeCheck(context) +" : "+ rideInfoProvider.amount,
                       style:  TextStyle(
                           color: Colors.redAccent.shade700, fontSize: 20.0))
                 ],
@@ -161,10 +161,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2.0),
                           color: Colors.redAccent.shade700),
-                      child: const Center(
+                      child:  Center(
                           child: Text(
-                        "Cancel",
-                        style: TextStyle(color: Colors.white),
+                            AppLocalizations.of(context)!.cancel,
+                        style: const TextStyle(color: Colors.white),
                       )),
                     ),
                   ),
@@ -184,10 +184,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2.0),
                             color: Colors.green.shade700),
-                        child: const Center(
-                            child: Text(
-                          "Accept",
-                          style: TextStyle(color: Colors.white),
+                        child:  Center(
+                            child: Text(AppLocalizations.of(context)!.ok,
+                          style:const TextStyle(color: Colors.white),
                         ))),
                   )
                       :Container(
@@ -196,10 +195,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(2.0),
                               color: Colors.green.shade700),
-                          child: const Center(
+                          child:  Center(
                               child: Text(
-                                "Accept",
-                                style: TextStyle(color: Colors.white),
+                                AppLocalizations.of(context)!.ok,
+                                style:const TextStyle(color: Colors.white),
                               )))
                 ],
               ),
@@ -230,7 +229,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       if (value.snapshot.value != null) {
         newRideState = value.snapshot.value.toString();
       } else {
-        Tools().toastMsg("Ride not exist",Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,Colors.redAccent.shade700);
         rideRequestRef.set("searching");
         Navigator.pop(context);
       }
@@ -245,16 +244,16 @@ class _NotificationDialogState extends State<NotificationDialog> {
               MaterialPageRoute(builder: (_) => const NewRideScreen()));
         });
       } else if (newRideState == "canceled") {
-        Tools().toastMsg("Ride has been canceled",Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,Colors.redAccent.shade700);
         rideRequestRef.set("searching");
         Navigator.pop(context);
       } else if (newRideState == "timeOut") {
         rideRequestRef.set("searching");
-        Tools().toastMsg("Ride timeOut",Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.timeOut,Colors.redAccent.shade700);
         Navigator.pop(context);
       } else {
         rideRequestRef.set("searching");
-        Tools().toastMsg("Ride not exist",Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,Colors.redAccent.shade700);
         Navigator.pop(context);
       }
     });
@@ -265,23 +264,22 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   // this method if driver press cancel button
   Future<void> driverCancelOrder(BuildContext context) async {
+    DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
         .currentPosition;
     final currentUseId =
         Provider.of<DriverInfoModelProvider>(context, listen: false)
             .driverInfo;
-    DatabaseReference rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("driver")
-        .child(currentUseId.userId)
-        .child("newRide");
 
-  rideRequestRef.onDisconnect();
-    rideRequestRef.remove();
+  final newRef =   _ref.child(currentUseId.userId).child("newRide");
+    newRef.onDisconnect();
+    newRef.remove();
+
     homeScreenStreamSubscription?.pause();
     Geofire.stopListener();
     Geofire.removeLocation(currentUseId.userId);
 
+  _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
     const duration = Duration(seconds: 1);
     Timer.periodic(duration, (timer) async {
       rideRequestTimeOut = rideRequestTimeOut - 1;
@@ -290,7 +288,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
         homeScreenStreamSubscription?.resume();
         await Geofire.setLocation(
             currentUseId.userId ,position.latitude, position.longitude);
-        rideRequestRef.set("searching");
+        _ref.child(currentUseId.userId).child("newRide").set("searching");
+        _ref.child(currentUseId.userId).child("offLine").set("Available");
         rideRequestTimeOut = 120;
       }
     });

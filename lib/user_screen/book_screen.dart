@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../repo/auth_srv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
@@ -31,14 +32,14 @@ class _BookingScreenState extends State<BookingScreen> {
         actions: [IconButton(onPressed: ()=>clearHistory(), icon:const Icon(Icons.delete),)],
         backgroundColor: const Color(0xFFFFD54F),
         automaticallyImplyLeading: false,
-        title: const Text("My Booking",
-            style: TextStyle(color: Colors.white, fontSize: 16.0)),
+        title:  Text(AppLocalizations.of(context)!.booking,
+            style: const TextStyle(color: Colors.white, fontSize: 16.0)),
       ),
       body:StreamBuilder(
         stream:ref.onValue,
         builder: (BuildContext context, snapshot) {
           if(snapshot.hasError){
-            return const Center(child: Text("Some thing went wrong"));
+            return  Center(child: Text(AppLocalizations.of(context)!.wrong));
           }
           else if (snapshot.connectionState == ConnectionState.none){
             return noHistoryYet(context);
@@ -103,7 +104,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
                  Padding(
                    padding: const EdgeInsets.all(8.0),
-                   child: Text("To",style: TextStyle(color: Colors.greenAccent.shade700),),
+                   child: Text(AppLocalizations.of(context)!.to,style: TextStyle(color: Colors.greenAccent.shade700),),
                  ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -142,9 +143,8 @@ class _BookingScreenState extends State<BookingScreen> {
             Lottie.asset('images/lf30_editor_piexm8l1.json',fit: BoxFit.fill,
               height: MediaQuery.of(context).size.height*60/100,
               width: MediaQuery.of(context).size.width*60/100,),
-            const Text(
-              "History is empty",
-              style: TextStyle(
+             Text(AppLocalizations.of(context)!.historyempty,
+              style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 35.0,
                   fontWeight: FontWeight.bold),

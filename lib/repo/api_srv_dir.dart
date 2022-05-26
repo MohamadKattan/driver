@@ -137,6 +137,8 @@ class ApiSrvDir {
     } else if (carTypePro == "Big commercial-11-19 seats" &&
         contryName == "United Arab Emirates") {
       culculFinal= fareAmont  * 3.67 + 6.30 * 3.67;
+    }else{
+      culculFinal = 0.0;
     }
     return culculFinal.truncate();
   }

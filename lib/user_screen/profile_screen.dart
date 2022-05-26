@@ -7,6 +7,8 @@ import '../model/driverInfo.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/indctor_profile_screen.dart';
 import '../widget/custom_circuler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -93,10 +95,10 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         height: MediaQuery.of(context).size.height * 10 / 100,
                         width: MediaQuery.of(context).size.width * 80 / 100,
-                        child: const Center(
+                        child:  Center(
                           child: Text(
-                            "Update",
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.update,
+                            style:const TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

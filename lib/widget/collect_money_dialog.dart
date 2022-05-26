@@ -1,17 +1,15 @@
 // this widget for dialog collect money after finish trip
 
 import 'package:driver/model/rideDetails.dart';
-import 'package:driver/user_screen/HomeScreen.dart';
-import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/curanny_type.dart';
 import 'custom_divider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget collectMoney(
     BuildContext context, RideDetails rideInfoProvider, int totalAmount) {
@@ -31,9 +29,8 @@ Widget collectMoney(
             Center(
                 child: Lottie.asset('images/51765-cash.json',
                     height: 90, width: 90)),
-            const Text(
-              "Total amount this trip",
-              style: TextStyle(
+             Text(AppLocalizations.of(context)!.amountTrip,
+              style:const TextStyle(
                   color: Colors.black87,
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold),
@@ -41,13 +38,13 @@ Widget collectMoney(
             SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("Payment method :${rideInfoProvider.paymentMethod} ",
+              child: Text(AppLocalizations.of(context)!.paymentMethod + rideInfoProvider.paymentMethod,
                   style:
                       const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(" Total : ${currencyTypeCheck(context)} $totalAmount ",
+              child: Text(" ${currencyTypeCheck(context)} $totalAmount ",
                   style:
                       const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),
@@ -69,10 +66,9 @@ Widget collectMoney(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.0),
                       color: Colors.greenAccent.shade700),
-                  child: const Center(
-                      child: Text(
-                    "Ok",
-                    style: TextStyle(color: Colors.white),
+                  child:  Center(
+                      child: Text(AppLocalizations.of(context)!.ok,
+                    style:const TextStyle(color: Colors.white),
                   )),
                 ),
               ),

@@ -14,8 +14,8 @@ import '../my_provider/get_image_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
 import 'package:firebase_database/firebase_database.dart';
-
 import '../repo/auth_srv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBottomSheet {
   final ImagePicker _picker = ImagePicker();
@@ -67,8 +67,8 @@ class CustomBottomSheet {
                   size: 35.0,
                   color: Colors.black45,
                 )),
-            const Center(
-                child: Text("Pick some images to approve your details")),
+             Center(
+                child: Text(AppLocalizations.of(context)!.approveImages)),
             const SizedBox(height: 15.0),
             Container(
               height: MediaQuery.of(context).size.height * 10 / 100,
@@ -87,9 +87,9 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text("Personnel image"),
+                   Padding(
+                    padding:const EdgeInsets.only(left: 8.0),
+                    child: Text(AppLocalizations.of(context)!.personnelImage),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -147,9 +147,9 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text("Driver license"),
+                   Padding(
+                    padding:const EdgeInsets.only(left: 8.0),
+                    child: Text(AppLocalizations.of(context)!.driverLicense),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -206,9 +206,9 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text("Car license"),
+                   Padding(
+                    padding:const EdgeInsets.only(left: 8.0),
+                    child: Text(AppLocalizations.of(context)!.carLicense),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -265,9 +265,9 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text("Car image"),
+                   Padding(
+                    padding:const EdgeInsets.only(left: 8.0),
+                    child: Text(AppLocalizations.of(context)!.carImage),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -310,13 +310,13 @@ class CustomBottomSheet {
             GestureDetector(
               onTap: () {
                 if (driverImage == null) {
-                  Tools().toastMsg("Driver Image is required",Colors.redAccent.shade700);
+                  Tools().toastMsg(AppLocalizations.of(context)!.imageDrequired,Colors.redAccent.shade700);
                 } else if (driverLis == null) {
-                  Tools().toastMsg("Driver license is required",Colors.redAccent.shade700);
+                  Tools().toastMsg(AppLocalizations.of(context)!.licenseDrequired,Colors.redAccent.shade700);
                 } else if (carLisImage == null) {
-                  Tools().toastMsg("Car license is required",Colors.redAccent.shade700);
+                  Tools().toastMsg(AppLocalizations.of(context)!.licenseCrequired,Colors.redAccent.shade700);
                 } else if (carImage == null) {
-                  Tools().toastMsg("Car Image is required",Colors.redAccent.shade700);
+                  Tools().toastMsg(AppLocalizations.of(context)!.imageCrequired,Colors.redAccent.shade700);
                 } else {
                   Provider.of<BottomSheetValue>(context, listen: false)
                       .updateValue(-600.0);
@@ -346,7 +346,7 @@ class CustomBottomSheet {
                   color: const Color(0xFFFFD54F),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                child: const Center(child: Text("Confirm")),
+                child:  Center(child: Text(AppLocalizations.of(context)!.confirm)),
               ),
             ),
           ],

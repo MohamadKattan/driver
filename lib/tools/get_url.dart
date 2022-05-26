@@ -11,15 +11,11 @@ class GetUrl {
         var jsonResponse =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
         var itemCount = jsonResponse;
-        print("hello url ");
         return itemCount;
       } else {
-        // response.statusCode=="failed";
-        print('failed400');
         return "failed";
       }
     } catch (ex) {
-      print('failed400');
       return "failed";
     }
   }

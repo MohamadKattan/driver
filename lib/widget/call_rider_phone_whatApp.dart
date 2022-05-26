@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../model/rideDetails.dart';
 import '../tools/url_lunched.dart';
 import 'custom_divider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget callRider(
     BuildContext context, RideDetails rideInfoProvider) {
@@ -24,9 +25,8 @@ Widget callRider(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Call your rider",
-                style: TextStyle(
+               Text(AppLocalizations.of(context)!.callRider,
+                style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
@@ -44,7 +44,7 @@ Widget callRider(
                     children: [
                       const Icon(Icons.phone,size: 24.0,color: Colors.greenAccent,),
                       const SizedBox(width: 6.0),
-                      Text(" Normal call : ${rideInfoProvider.riderPhone} ",
+                      Text(AppLocalizations.of(context)!.normalCall + rideInfoProvider.riderPhone ,
                           style:
                           const TextStyle(color: Colors.black87, fontSize: 16.0)),
                     ],
@@ -71,32 +71,6 @@ Widget callRider(
               ),
               CustomDivider().customDivider(),
               SizedBox(height: MediaQuery.of(context).size.height * 3.5 / 100),
-              // GestureDetector(
-              //   onTap: () {
-              //     GeoFireSrv().enableLocationLiveUpdates(context);
-              //     Navigator.pop(context);
-              //     Navigator.pop(context);
-              //     Navigator.pop(context);
-              //     restNewRide(context);
-              //     // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(_){
-              //     //   return const HomeScreen();
-              //     // }), (route) => false);
-              //   },
-              //   child: Center(
-              //     child: Container(
-              //       width: MediaQuery.of(context).size.width * 30 / 100,
-              //       height: MediaQuery.of(context).size.height * 8 / 100,
-              //       decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(4.0),
-              //           color: Colors.greenAccent.shade700),
-              //       child: const Center(
-              //           child: Text(
-              //             "Ok",
-              //             style: TextStyle(color: Colors.white),
-              //           )),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

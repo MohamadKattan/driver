@@ -39,7 +39,6 @@ class Tools {
       isTimerTextShown: true,
       autoStart: true,
       onStart: () {
-        print('Countdown Started');
       },
       onComplete: () {
       },

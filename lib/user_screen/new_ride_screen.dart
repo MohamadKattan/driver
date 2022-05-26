@@ -25,6 +25,7 @@ import '../widget/collect_money_dialog.dart';
 import '../widget/custom_circuler.dart';
 import '../widget/custom_divider.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewRideScreen extends StatefulWidget {
   const NewRideScreen({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     acceptedRideRequest();
     inTailiz();
     isInductor = true;
-    timer1();
+    timer1(context);
     super.initState();
   }
 
@@ -85,8 +86,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
     createPickUpRideIcon();
     createDropOffIcon();
     createDriverNearIcon();
-    final rideInfoProvider=Provider.of<RideRequestInfoProvider>(context).rideDetails;
-    final initialPos=Provider.of<DriverCurrentPosition>(context, listen: false)
+    final rideInfoProvider =
+        Provider.of<RideRequestInfoProvider>(context).rideDetails;
+    final initialPos =
+        Provider.of<DriverCurrentPosition>(context, listen: false)
             .currentPosition;
     final directionDetails =
         Provider.of<DirectionDetailsPro>(context).directionDetails;
@@ -122,6 +125,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 //rider pickUp
                 await getPlaceDirection(context, startPontLoc, secondPontLoc);
                 getRideLiveLocationUpdate();
+                Provider.of<TitleArrived>(context, listen: false)
+                    .updateState(AppLocalizations.of(context)!.arrived);
               },
             ),
           ),
@@ -147,17 +152,22 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "km: " + directionDetails.distanceText,
+                            AppLocalizations.of(context)!.km +
+                                directionDetails.distanceText,
                             style: const TextStyle(
                                 color: Colors.black45, fontSize: 18.0),
                           ),
                           Text(
-                            "Time : " + directionDetails.durationText,
+                            AppLocalizations.of(context)!.time +
+                                directionDetails.durationText,
                             style: const TextStyle(
                                 color: Colors.black45, fontSize: 18.0),
                           ),
                           Text(
-                            "Fare : ${currencyTypeCheck(context)} : " + rideInfoProvider.amount,
+                            AppLocalizations.of(context)!.fare +
+                                currencyTypeCheck(context) +
+                                ":" +
+                                rideInfoProvider.amount,
                             style: TextStyle(
                                 color: Colors.redAccent.shade700,
                                 fontSize: 20.0),
@@ -170,7 +180,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12.0),
                             child: Text(
-                              "Rider name : ${rideInfoProvider.riderName}",
+                              AppLocalizations.of(context)!.riderName +" "+
+                                  rideInfoProvider.riderName,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 20.0),
                             ),
@@ -206,7 +217,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                   color: Colors.redAccent.shade700,
                                   size: 20.0,
                                 )),
-                            Text("From : ",
+                            Text(AppLocalizations.of(context)!.from,
                                 style: TextStyle(
                                     color: Colors.greenAccent.shade700,
                                     fontSize: 14)),
@@ -233,7 +244,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                   color: Colors.redAccent.shade700,
                                   size: 20.0,
                                 )),
-                            Text("To : ",
+                            Text(AppLocalizations.of(context)!.too,
                                 style: TextStyle(
                                     color: Colors.redAccent.shade700,
                                     fontSize: 14)),
@@ -264,29 +275,31 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                     child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                15 /
+                                                20 /
                                                 100,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                7 /
+                                                7.5 /
                                                 100,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(3.0),
                                             color: Colors.blueAccent.shade700),
                                         child: Column(
-                                          children: const [
+                                          children: [
                                             Padding(
-                                              padding: EdgeInsets.all(4.0),
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
                                               child: Center(
                                                   child: Text(
-                                                "To trip",
-                                                style: TextStyle(
+                                                AppLocalizations.of(context)!
+                                                    .toTrip,
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14.0),
                                               )),
                                             ),
-                                            Center(
+                                            const Center(
                                                 child: Icon(Icons.map,
                                                     size: 16.0,
                                                     color: Colors.white))
@@ -311,11 +324,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                       100,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(3.0),
-                                      color:Colors.greenAccent.shade700),
+                                      color: Colors.greenAccent.shade700),
                                   child: Center(
                                       child: Text(
                                     buttonTitle,
-                                    style:  TextStyle(color: buttonColor),
+                                    style: TextStyle(color: buttonColor),
                                   ))),
                             ),
                           ),
@@ -329,11 +342,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                     child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                15 /
+                                                20 /
                                                 100,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                7 /
+                                                7.5 /
                                                 100,
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -341,18 +354,20 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                             color:
                                                 Colors.purpleAccent.shade700),
                                         child: Column(
-                                          children: const [
+                                          children: [
                                             Center(
                                                 child: Padding(
-                                              padding: EdgeInsets.all(4.0),
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
                                               child: Text(
-                                                "To Rider",
-                                                style: TextStyle(
+                                                AppLocalizations.of(context)!
+                                                    .rider,
+                                                style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12.0),
                                               ),
                                             )),
-                                            Center(
+                                            const Center(
                                                 child: Icon(
                                               Icons.map,
                                               color: Colors.white,
@@ -622,7 +637,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
 * location where rider want to go + time trip */
   void updateRideDetails() async {
     final posLatLin = LatLng(myPosition!.latitude, myPosition!.longitude);
-    final riderInfo=Provider.of<RideRequestInfoProvider>(context, listen: false)
+    final riderInfo =
+        Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
     LatLng desertionLatLng;
     if (isRequestDirection == false) {
@@ -634,7 +650,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         desertionLatLng = riderInfo.pickup;
       } else {
         desertionLatLng = riderInfo.dropoff;
-       await ApiSrvDir.obtainPlaceDirectionDetails(
+        await ApiSrvDir.obtainPlaceDirectionDetails(
             posLatLin, desertionLatLng, context);
         isRequestDirection = false;
       }
@@ -645,9 +661,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   * & driver loc to rider pickUp loc then from rider pickUp to rider drop
   * then update status on fire base
   */
-  Future<void> changeColorArrivedAndTileButton(BuildContext context,
-      RideDetails rideInfoProvider) async {
-
+  Future<void> changeColorArrivedAndTileButton(
+      BuildContext context, RideDetails rideInfoProvider) async {
     DatabaseReference rideRequestRef = FirebaseDatabase.instance
         .ref()
         .child("Ride Request")
@@ -660,7 +675,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       timerStop1.cancel();
       rideRequestRef.child("status").set(status);
       Provider.of<TitleArrived>(context, listen: false)
-          .updateState("Start trip");
+          .updateState(AppLocalizations.of(context)!.startTrip);
       Provider.of<ColorButtonArrived>(context, listen: false)
           .updateState(Colors.yellowAccent.shade700);
       timer2();
@@ -671,20 +686,30 @@ class _NewRideScreenState extends State<NewRideScreen> {
         status = "onride";
       });
       timerStop2.cancel();
-      var count =  Provider.of<DirectionDetailsPro>(context,listen: false)
-          .directionDetails.durationVale;
-  timerStop3= Timer.periodic(const Duration(milliseconds: 1400), (timer) {
-        count=count - 1;
-        if(count==0){
-          assetsAudioPlayer.open(Audio("end_trip_ar.wav"));
+      var count = Provider.of<DirectionDetailsPro>(context, listen: false)
+          .directionDetails
+          .durationVale;
+      timerStop3 = Timer.periodic(const Duration(milliseconds: 1400), (timer) {
+        count = count - 1;
+        if (count == 0) {
+          if(AppLocalizations.of(context)!.day == "Gun"){
+            assetsAudioPlayer.open(Audio("sounds/end_trip_tr.mp3"));
+          }
+          else if(AppLocalizations.of(context)!.day == "يوم"){
+            assetsAudioPlayer.open(Audio("sounds/end_trip_ar.wav"));
+          }
+          else{
+            assetsAudioPlayer.open(Audio("sounds/end_trip_en.wav"));
+          }
           timer.cancel();
           timerStop3.cancel();
-        }else if(status=="ended"){
+        } else if (status == "ended") {
           timer.cancel();
           timerStop3.cancel();
         }
       });
-      Provider.of<TitleArrived>(context, listen: false).updateState("End trip");
+      Provider.of<TitleArrived>(context, listen: false)
+          .updateState(AppLocalizations.of(context)!.endTrip);
       Provider.of<ColorButtonArrived>(context, listen: false)
           .updateState(Colors.redAccent.shade700);
       rideRequestRef.child("status").set(status);
@@ -712,7 +737,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
     setState(() {
       status = "ended";
     });
-    Provider.of<TitleArrived>(context, listen: false).updateState("Arrived");
+    Provider.of<TitleArrived>(context, listen: false)
+        .updateState(AppLocalizations.of(context)!.arrived);
     Provider.of<ColorButtonArrived>(context, listen: false)
         .updateState(Colors.white);
     rideRequestRef.child("status").set(status);
@@ -726,7 +752,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(false);
     int totalAmount = ApiSrvDir.calculateFares1(
-        directionDetails!, rideInfoProvider.vehicleTypeId,context);
+        directionDetails!, rideInfoProvider.vehicleTypeId, context);
     rideRequestRef.child("total").set(totalAmount.toString());
     newRideScreenStreamSubscription?.cancel();
     saveEarning(totalAmount);
@@ -845,14 +871,14 @@ class _NewRideScreenState extends State<NewRideScreen> {
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-            mode: MapBoxNavigationMode.driving,
-            simulateRoute: false,
-            zoom: 13.0,
+          mode: MapBoxNavigationMode.driving,
+          simulateRoute: false,
+          zoom: 13.0,
         ));
   }
 
   // this method for Navigation between pickUp to drop of rider
-   navigationPickToDrop(BuildContext context) async {
+  navigationPickToDrop(BuildContext context) async {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
@@ -872,10 +898,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-            mode: MapBoxNavigationMode.drivingWithTraffic,
-            simulateRoute: false,
-            zoom: 16.0,
-            ));
+          mode: MapBoxNavigationMode.drivingWithTraffic,
+          simulateRoute: false,
+          zoom: 16.0,
+        ));
   }
 
 // this method for tost
@@ -891,43 +917,53 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
 //==================================End Navigation==============================
-timer1() {
-    const duration =Duration(minutes: 1);
+  timer1(BuildContext context) {
+    const duration = Duration(minutes: 1);
     int timerCount1 = 3;
-    print("timerCount ++$timerCount1");
- timerStop1 = Timer.periodic(duration, (timer) {
-      timerCount1=timerCount1-1;
-      if(timerCount1==0){
-        print("timerCount$timerCount1");
-        assetsAudioPlayer.open(Audio("sounds/notify_passenger_accessing_ar.wav"));
+    timerStop1 = Timer.periodic(duration, (timer) {
+      timerCount1 = timerCount1 - 1;
+      if (timerCount1 == 0) {
+        if (AppLocalizations.of(context)!.day == "Gun") {
+          assetsAudioPlayer
+              .open(Audio("sounds/notify_passenger_accessing_tr.mp3"));
+        } else if (AppLocalizations.of(context)!.day == "يوم") {
+          assetsAudioPlayer
+              .open(Audio("sounds/notify_passenger_accessing_ar.wav"));
+        } else {
+          assetsAudioPlayer
+              .open(Audio("sounds/notify_passenger_accessing_en.mpeg"));
+        }
         timer.cancel();
         timerStop1.cancel();
-        timerCount1=3;
-      }else if(status=="arrived"){
+        timerCount1 = 3;
+      } else if (status == "arrived") {
         timer.cancel();
         timerStop1.cancel();
-        timerCount1=3;
-      }
-    });
-}
-
-timer2() {
-    const duration =Duration(seconds: 1);
-    int _timerCount2 = 5;
-    print("timerCount2 ++$_timerCount2");
-  timerStop2= Timer.periodic(duration, (timer) {
-      _timerCount2=_timerCount2-1;
-      if(_timerCount2==0){
-        print("timerCount2$_timerCount2");
-        assetsAudioPlayer.open(Audio("sounds/start_trip_ar.wav"));
-        timer.cancel();
-        _timerCount2=5;
-      }else if(status == "onride"){
-        timer.cancel();
-        timerStop2.cancel();
-        _timerCount2=5;
+        timerCount1 = 3;
       }
     });
   }
 
+  timer2() {
+    const duration = Duration(seconds: 1);
+    int _timerCount2 = 5;
+    timerStop2 = Timer.periodic(duration, (timer) {
+      _timerCount2 = _timerCount2 - 1;
+      if (_timerCount2 == 0) {
+        if (AppLocalizations.of(context)!.day == "Gun") {
+          assetsAudioPlayer.open(Audio("sounds/start_trip_tr.mp3"));
+        } else if (AppLocalizations.of(context)!.day == "يوم") {
+          assetsAudioPlayer.open(Audio("sounds/start_trip_ar.wav"));
+        } else {
+          assetsAudioPlayer.open(Audio("sounds/start_trip_en.wav"));
+        }
+        timer.cancel();
+        _timerCount2 = 5;
+      } else if (status == "onride") {
+        timer.cancel();
+        timerStop2.cancel();
+        _timerCount2 = 5;
+      }
+    });
+  }
 }

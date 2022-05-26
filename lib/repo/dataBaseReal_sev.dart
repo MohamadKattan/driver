@@ -7,6 +7,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 
 class DataBaseReal {
@@ -24,13 +26,12 @@ class DataBaseReal {
         DriverInfo driverInfo = DriverInfo.fromMap(map);
         Provider.of<DriverInfoModelProvider>(context, listen: false)
             .updateDriverInfo(driverInfo);
-        print("DriverInfo is ${driverInfo.status}");
         return;
       } else {
-        Tools().toastMsg("Welcome",Colors.green.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.welcome,Colors.green.shade700);
       }
     } catch (ex) {
-      Tools().toastMsg("Welcome Driver",Colors.green.shade700);
+      Tools().toastMsg(AppLocalizations.of(context)!.welcome,Colors.green.shade700);
     }
   }
 

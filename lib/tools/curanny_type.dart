@@ -33,6 +33,8 @@ import '../my_provider/driver_model_provider.dart';
    _currencyType=="\$";
  }else if(driverInfo.country=="United Arab Emirates"){
    _currencyType=="AED";
+ }else{
+   _currencyType=="\$";
  }
 return _currencyType;
 }

@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +13,7 @@ import '../tools/turn_GBS.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';
 import 'if_you_wanttopay.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -30,14 +29,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     checkInternet();
-    if (AuthSev().auth.currentUser?.uid != null) {
+    if (AuthSev().auth.currentUser?.uid != null){
       DataBaseReal().getDriverInfoFromDataBase(context);
       PlanDays().getBackGroundBoolValue();
     }
     TurnOnGBS().turnOnGBSifNot();
     _animationController = AnimationController(
         vsync: this,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(milliseconds: 500),
         lowerBound: 0.6,
         upperBound: 0.7);
     _animationController.forward();
@@ -47,16 +46,12 @@ class _SplashScreenState extends State<SplashScreen>
       }
       if (status == AnimationStatus.completed) {
         if(result==false){
-         Tools().toastMsg("No Internet!!", Colors.redAccent);
-         Tools().toastMsg("Check your internet net work!!", Colors.redAccent);
+         Tools().toastMsg(AppLocalizations.of(context)!.noNet, Colors.redAccent);
+         Tools().toastMsg(AppLocalizations.of(context)!.checkNet, Colors.redAccent);
         }else{
           final driverInfo =
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .driverInfo;
-          if (kDebugMode) {
-            print("this is driverInfo" + driverInfo.userId);
-            print("this is driverInfo" + driverInfo.status);
-          }
           if (AuthSev().auth.currentUser?.uid == null) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AuthScreen()));

@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
 import '../my_provider/icon_phone_value.dart';
 import '../tools/url_lunched.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckInScreen extends StatelessWidget {
   const CheckInScreen({Key? key}) : super(key: key);
@@ -35,10 +35,10 @@ class CheckInScreen extends StatelessWidget {
                                 height: 350,
                                 width: 350)),
                       ),
-                       const Center(
+                        Center(
                         child: Text(
-                          "We are checking information",
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.checking,
+                          style:const TextStyle(
                               fontSize: 30.0,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -46,20 +46,20 @@ class CheckInScreen extends StatelessWidget {
                               fontStyle: FontStyle.italic),
                         ),
                       ),
-                      const Center(
+                       Center(
                         child: Text(
-                          "we appreciate your waiting ",
-                          style: TextStyle(
+                            AppLocalizations.of(context)!.appreciate,
+                          style:const TextStyle(
                               fontSize: 28.0,
                               fontWeight: FontWeight.bold,
                               color: Colors.black54,
                               fontStyle: FontStyle.italic),
                         ),
                       ),
-                      const Center(
+                       Center(
                         child: Text(
-                          "We will send to you a Notification ",
-                          style: TextStyle(
+                            AppLocalizations.of(context)!.sendnot,
+                          style:const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                               color: Colors.black54,
@@ -71,13 +71,13 @@ class CheckInScreen extends StatelessWidget {
                               listen: false)
                               .updateValue(65.0),
                         child: Column(
-                          children: const [
+                          children:  [
                             Center(
                               child: Padding(
-                                padding: EdgeInsets.only(top: 25.0),
+                                padding:const EdgeInsets.only(top: 25.0),
                                 child: Text(
-                                  "More Info!",
-                                  style: TextStyle(
+                                  AppLocalizations.of(context)!.moreinfo,
+                                  style:const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.green,
@@ -87,8 +87,8 @@ class CheckInScreen extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                "Click",
-                                style: TextStyle(
+                                  AppLocalizations.of(context)!.click,
+                                style:const TextStyle(
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black54,

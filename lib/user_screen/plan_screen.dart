@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import 'card_payment_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlanScreen extends StatefulWidget {
   const PlanScreen({Key? key}) : super(key: key);
@@ -32,14 +33,14 @@ class _PlanScreenState extends State<PlanScreen> {
                     : Navigator.push(context,MaterialPageRoute(builder: (_)=>const SplashScreen()));
               }, icon: const Icon(Icons.arrow_back_ios)),
               backgroundColor: const Color(0xFFFFD54F),
-              title: const Text("Payment screen",
-                  style: TextStyle(color: Colors.white)),
+              title:  Text(AppLocalizations.of(context)!.paymentScreen,
+                  style:const TextStyle(color: Colors.white)),
             ),
             body: SingleChildScrollView(child: Column(
               children:   [
                 const SizedBox(height:8.0),
-                const Text("We have for you 3 plan choose as you like ",
-                  style: TextStyle(color: Colors.black45,fontSize: 16.0)),
+                 Text(AppLocalizations.of(context)!.planChoose,
+                  style:const TextStyle(color: Colors.black45,fontSize: 16.0)),
                 const SizedBox(height:8.0),
                 GestureDetector(
                   onTap: (){
@@ -67,12 +68,12 @@ class _PlanScreenState extends State<PlanScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Plan 1",style:
+                            child: Text(AppLocalizations.of(context)!.plan1,style:
                             TextStyle(color:Colors.blueAccent.shade700,
                                 fontSize:20.0,fontWeight: FontWeight.bold)),
                           ),
-                          const Text("This plan working for 30 day",
-                            style: TextStyle(
+                           Text(AppLocalizations.of(context)!.working30day,
+                            style:const TextStyle(
                               fontSize: 16.0,
                               color: Colors.black45
                             )),
@@ -80,7 +81,7 @@ class _PlanScreenState extends State<PlanScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children:  [
-                            const Text("Cost : ",style: TextStyle(color: Colors.black45,fontSize:20.0)),
+                             Text(AppLocalizations.of(context)!.cost,style:const TextStyle(color: Colors.black45,fontSize:20.0)),
                               info.country =="Turkey"?
                               Text(info.carType=="Taxi-4 seats"?" TL 180":"TL 300",style: TextStyle(color: Colors.blueAccent.shade700,fontSize: 20.0,fontWeight: FontWeight.bold))
                                   :Text(info.carType=="Taxi-4 seats"?" \$10":"\$20",style: TextStyle(color: Colors.blueAccent.shade700,fontSize: 20.0,fontWeight: FontWeight.bold)
@@ -116,12 +117,12 @@ class _PlanScreenState extends State<PlanScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Plan 2",style:
+                            child: Text(AppLocalizations.of(context)!.plan2,style:
                             TextStyle(color:Colors.greenAccent.shade700,
                                 fontSize:20.0,fontWeight: FontWeight.bold)),
                           ),
-                          const Text("This plan working for 90 day",
-                              style: TextStyle(
+                           Text(AppLocalizations.of(context)!.working90day,
+                              style:const TextStyle(
                                   fontSize: 16.0,
                                   color: Colors.black45
                               )),
@@ -129,7 +130,7 @@ class _PlanScreenState extends State<PlanScreen> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                             children:  [
-                              const Text("Cost : ",style: TextStyle(color: Colors.black45,fontSize:20.0)),
+                               Text(AppLocalizations.of(context)!.cost,style:const TextStyle(color: Colors.black45,fontSize:20.0)),
                               info.country =="Turkey"?
                               Text(info.carType=="Taxi-4 seats"?" TL 470":"TL 800",style: TextStyle(color: Colors.greenAccent.shade700,fontSize: 20.0,fontWeight: FontWeight.bold))
                                   : Text(info.carType=="Taxi-4 seats"?" \$ 30":"\$ 55",style: TextStyle(color: Colors.greenAccent.shade700,fontSize: 20.0,fontWeight: FontWeight.bold))
@@ -163,12 +164,12 @@ class _PlanScreenState extends State<PlanScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Plan 3",style:
+                            child: Text(AppLocalizations.of(context)!.plan3,style:
                             TextStyle(color:Colors.purple.shade700,
                                 fontSize:20.0,fontWeight: FontWeight.bold)),
                           ),
-                          const Text("This plan working for 6 month",
-                              style: TextStyle(
+                           Text(AppLocalizations.of(context)!.working180day,
+                              style:const TextStyle(
                                   fontSize: 16.0,
                                   color: Colors.black45
                               )),
@@ -176,7 +177,7 @@ class _PlanScreenState extends State<PlanScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children:  [
-                              const Text("Cost : ",style: TextStyle(color: Colors.black45,fontSize:20.0)),
+                               Text(AppLocalizations.of(context)!.cost,style:const TextStyle(color: Colors.black45,fontSize:20.0)),
                               info.country =="Turkey"?
                               Text(info.carType=="Taxi-4 seats"?" TL 800":"TL 1350",style: TextStyle(color: Colors.purple.shade700,fontSize: 20.0,fontWeight: FontWeight.bold))
                                   : Text(info.carType=="Taxi-4 seats"?" \$ 55":"\$ 95",style: TextStyle(color: Colors.purple.shade700,fontSize: 20.0,fontWeight: FontWeight.bold))

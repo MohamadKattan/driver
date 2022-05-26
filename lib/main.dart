@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:driver/payment/couut_plan_days.dart';
 import 'package:driver/repo/auth_srv.dart';
+import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'config.dart';
@@ -34,7 +37,8 @@ import 'my_provider/user_id_provider.dart';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +52,6 @@ void main() async {
     runApp(const MyApp());
   });
 }
-
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -83,17 +86,18 @@ void onStart(ServiceInstance service) async {
       service.setAsForegroundService();
     });
 
-    service.on('setAsBackground').listen((event) async {
+    service.on('setAsBackground').listen((event) {
       service.setAsBackgroundService();
-      driverRef.child(userId).child("isLocal").set("local");
-      /// stop for now under test
-      // driverRef.child(userId).child("newRide").onDisconnect().remove();
     });
   }
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
-/// stop for now under test
+  driverRef.child(userId).child("service").set("working");
+
+  /// stop for now under test
+  // driverRef.child(userId).child("newRide").onDisconnect().remove();
+
   // await driverRef.child(userId).child("newRide").once().then((value) async {
   //   final snap = value.snapshot.value;
   //   if (snap == null) {
@@ -117,39 +121,51 @@ void onStart(ServiceInstance service) async {
     });
   }
 
-
   Timer.periodic(const Duration(seconds: 50), (timer) async {
-    if (exPlan < 0) {
+    if (exPlan == 0) {
       driverRef.child(userId).child("status").once().then((value) {
         if (value.snapshot.exists && value.snapshot.value != null) {
           final snap = value.snapshot.value;
           String _status = snap.toString();
-          if (_status == "checkIn") {
+          if (_status == "checkIn" || _status == "") {
             timer.cancel();
             return;
           }
           driverRef.child(userId).child("status").set("payTime");
           timer.cancel();
+          GeoFireSrv().makeDriverOffLine();
         }
       });
-    } else {
+    }
+    else if(exPlan>0){
       exPlan = exPlan - 1;
       await driverRef.child(userId).child("exPlan").set(exPlan);
-
-      if (exPlan < 0) {
+      await driverRef.child(userId).child("service").once().then((value) {
+        if (value.snapshot.value != null) {
+          final snap = value.snapshot.value;
+          String serviceWork = snap.toString();
+          if (serviceWork == "working") {
+            gotLocationInTermented(userId,driverRef);
+          }
+        } else {
+          return;
+        }
+      });
+      if (exPlan <= 0) {
         driverRef.child(userId).child("status").once().then((value) {
           if (value.snapshot.exists && value.snapshot.value != null) {
             final snap = value.snapshot.value;
             String _status = snap.toString();
-            if (_status == "checkIn") {
+            if (_status == "checkIn" || _status == "") {
               timer.cancel();
               return;
             }
             driverRef.child(userId).child("status").set("payTime");
             timer.cancel();
+            GeoFireSrv().makeDriverOffLine();
           }
         });
-         }
+      }
     }
     if (service is AndroidServiceInstance) {
       service.setForegroundNotificationInfo(
@@ -179,6 +195,51 @@ void onStart(ServiceInstance service) async {
     }
   });
 }
+//this method for got driver live location if app torment
+Future<void> gotLocationInTermented(String userId, DatabaseReference driverRef) async {
+ late String _notAvailable;
+ late String _newRideStatus;
+ await driverRef.child(userId).child("offLine").once().then((value){
+    if(value.snapshot.value!=null){
+      _notAvailable = value.snapshot.value.toString();
+    }
+  });
+  await driverRef.child(userId).child("newRide").once().then((value){
+    if(value.snapshot.value!=null){
+      _newRideStatus = value.snapshot.value.toString();
+    }
+  });
+  if(_notAvailable=="notAvailable"||_newRideStatus=="accepted"){
+    return;
+  }else{
+    var geolocator = Geolocator();
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    Geofire.initialize("availableDrivers");
+    await Geofire.setLocation(userId, position.latitude, position.longitude);
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -211,6 +272,17 @@ class MyApp extends StatelessWidget {
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Garanti driver',
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale('en', ''), // English, no country code
+          Locale('ar', ''), // Arabic, no country code
+          Locale('tr', ''), // Turkish, no country code
+        ],
         home: SplashScreen(),
       ),
     );

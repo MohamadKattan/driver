@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import '../config.dart';
 import '../tools/tools.dart';
 
+
+
+
 class PlanDays {
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   String userId = AuthSev().auth.currentUser!.uid;
@@ -65,11 +68,10 @@ class PlanDays {
  Future <void> countDayPlansInForeground()async {
 
     if(isBackground == false){
-      print("mmmmmm$isBackground");
       await getExPlanFromReal();
       Timer.periodic(const Duration(minutes: 1), (timer) async {
         if (exPlan < 0) {
-          Tools().toastMsg("Your Plan finished ForGROUND ", Colors.redAccent.shade700);
+          Tools().toastMsg("", Colors.redAccent.shade700);
           driverRef.child(userId).child("status").once().then((value){
             if(value.snapshot.exists&&value.snapshot.value!=null){
               final snap = value.snapshot.value;
@@ -80,16 +82,16 @@ class PlanDays {
               driverRef.child(userId).child("status").set("payTime");
             }
           });
+          timer.cancel();
         }
         else {
           exPlan = exPlan - 1;
-          print("forgrend$exPlan");
           await driverRef.child(userId).child("exPlan").set(exPlan);
           if(exPlan==0){
-            Tools().toastMsg("Your Plan finished charge your plan ", Colors.redAccent.shade700);
+            Tools().toastMsg("", Colors.redAccent.shade700);
           }
           if(exPlan<0){
-            Tools().toastMsg("Your Plan finished ", Colors.redAccent.shade700);
+            Tools().toastMsg("", Colors.redAccent.shade700);
             driverRef.child(userId).child("status").once().then((value){
               if(value.snapshot.exists&&value.snapshot.value!=null){
                 final snap = value.snapshot.value;
@@ -100,6 +102,7 @@ class PlanDays {
                 driverRef.child(userId).child("status").set("payTime");
               }
             });
+            timer.cancel();
           }
         }
       });

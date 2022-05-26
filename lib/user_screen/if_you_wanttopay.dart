@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IfYouWantPay extends StatelessWidget {
   const IfYouWantPay({Key? key}) : super(key: key);
@@ -19,9 +20,9 @@ class IfYouWantPay extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children:  [
                 const SizedBox(height: 20.0),
-                const Padding(
-                  padding:  EdgeInsets.all(8.0),
-                  child:  Text("Your plan already finished",style: TextStyle(color: Colors.black45,fontSize:20.0)),
+                 Padding(
+                  padding:const  EdgeInsets.all(8.0),
+                  child:  Text(AppLocalizations.of(context)!.planFinished,style: TextStyle(color: Colors.black45,fontSize:20.0)),
                 ),
                 Center(
                     child: Lottie.asset(
@@ -30,7 +31,7 @@ class IfYouWantPay extends StatelessWidget {
                         width: 300)),
                  Padding(
                    padding: const EdgeInsets.all(8.0),
-                   child: Text("Charge now",style: TextStyle(color: Colors.greenAccent.shade700,fontSize:24.0)),
+                   child: Text(AppLocalizations.of(context)!.chargeNow,style: TextStyle(color: Colors.greenAccent.shade700,fontSize:24.0)),
                  ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -47,7 +48,7 @@ class IfYouWantPay extends StatelessWidget {
                       color: Colors.green.shade700,
                       borderRadius: BorderRadius.circular(6.0)
                     ),
-                    child: const Center(child: Text("To Payment",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
+                    child:  Center(child: Text(AppLocalizations.of(context)!.toPayment,style:const TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
                   )),
                 ),
                 Padding(
@@ -61,7 +62,7 @@ class IfYouWantPay extends StatelessWidget {
                         color: Colors.redAccent.shade700,
                         borderRadius: BorderRadius.circular(6.0)
                     ),
-                    child:const Center(child:  Text("Not now exit ",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
+                    child: Center(child:  Text(AppLocalizations.of(context)!.notNow,style: const TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
                   )),
                 )
               ],

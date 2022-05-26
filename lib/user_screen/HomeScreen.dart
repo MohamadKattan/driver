@@ -2,6 +2,7 @@
 import 'dart:math';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,10 +16,9 @@ import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
-import '../tools/background_serv.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,15 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
   // sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
   @override
   void initState(){
-    onBackgroundMessage(context);
+    getToken();
     FlutterBackgroundService().invoke("setAsBackground");
-    ///local
     initializationLocal(context);
-    ///local
     requestPermissions();
-    tostDriverAvailable();
     PlanDays().countDayPlansInForeground();
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     PushNotificationsSrv().gotNotificationInBackground(context);
+    ///local for ios
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     ///system dailog alert 3 methodes
     // initPlatformState();
@@ -55,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final drawerValue = Provider.of<DrawerValueChange>(context).value;
     final changeColorBottom =
         Provider.of<ChangeColorBottomDrawer>(context).isTrue;
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -106,8 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .locationPosition(context);
                                     GeoFireSrv().getLocationLiveUpdates(
                                         valueSwitchBottom);
-                                    driverRef.child(userId).child("isLocal").set("notLocal");
+                                    driverRef.child(userId).child("service").set("not");
                                     getCountryName();
+                                    tostDriverAvailable();
                                   },
                                 ),
                               ),
@@ -117,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : const Text(""),
                               //widget
                               Positioned(
-                                  left: 25.0,
+
+                                  right:AppLocalizations.of(context)!.day == "يوم"? 25.0:null,
+                                  left:AppLocalizations.of(context)!.day == "يوم"? null:25.0,
                                   bottom: 10.0,
                                   child: customSwitchBottom())
                             ],
@@ -127,52 +130,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               changeColorBottom == false
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 30.0, left: 15.0),
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: const Color(0xFFFFD54F),
-                        child: IconButton(
-                            onPressed: () {
-                              PlanDays().getExPlanFromReal();
-                              Provider.of<DrawerValueChange>(context,
-                                      listen: false)
-                                  .updateValue(1);
-                              Provider.of<ChangeColorBottomDrawer>(context,
-                                      listen: false)
-                                  .updateColorBottom(true);
-                            },
-                            icon: const Icon(
-                              Icons.format_list_numbered_rtl_rounded,
-                              color: Colors.black54,
-                              size: 25,
-                            )),
+                  ? Positioned(
+                left: AppLocalizations.of(context)!.day == "يوم"?0.0:null,
+                    child: Padding(
+                        padding: const EdgeInsets.only(top: 30.0, left: 15.0),
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundColor: const Color(0xFFFFD54F),
+                          child: IconButton(
+                              onPressed: () {
+                                PlanDays().getExPlanFromReal();
+                                Provider.of<DrawerValueChange>(context,
+                                        listen: false)
+                                    .updateValue(1);
+                                Provider.of<ChangeColorBottomDrawer>(context,
+                                        listen: false)
+                                    .updateColorBottom(true);
+                              },
+                              icon: const Icon(
+                                Icons.format_list_numbered_rtl_rounded,
+                                color: Colors.black54,
+                                size: 25,
+                              )),
+                        ),
                       ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 30.0, left: 15.0),
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                            onPressed: () async {
-                              playNot();
-                              FlutterBackgroundService()
-                                  .invoke("setAsBackground");
-                              Provider.of<DrawerValueChange>(context,
-                                      listen: false)
-                                  .updateValue(0);
-                              Provider.of<ChangeColorBottomDrawer>(context,
-                                      listen: false)
-                                  .updateColorBottom(false);
-                            },
-                            icon: const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.black54,
-                              size: 25,
-                            )),
+                  )
+                  : Positioned(
+                left: AppLocalizations.of(context)!.day == "يوم"?0.0:null,
+                    child: Padding(
+                        padding: const EdgeInsets.only(top: 30.0, left: 15.0),
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                              onPressed: () async {
+                                FlutterBackgroundService()
+                                    .invoke("setAsBackground");
+                                Provider.of<DrawerValueChange>(context,
+                                        listen: false)
+                                    .updateValue(0);
+                                Provider.of<ChangeColorBottomDrawer>(context,
+                                        listen: false)
+                                    .updateColorBottom(false);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.black54,
+                                size: 25,
+                              )),
+                        ),
                       ),
-                    ),
+                  ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -225,10 +233,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void tostDriverAvailable() {
     if (valueSwitchBottom == true) {
       Tools()
-          .toastMsg("You are Available for new order ", Colors.green.shade700);
+          .toastMsg(AppLocalizations.of(context)!.avilbel, Colors.green.shade700);
     } else {
       Tools().toastMsg(
-          "You aren't Available for new order ", Colors.redAccent.shade700);
+          AppLocalizations.of(context)!.notAvilbel, Colors.redAccent.shade700);
     }
   }
 

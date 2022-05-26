@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:driver/user_screen/driverInfo_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
@@ -9,14 +10,16 @@ import '../my_provider/user_id_provider.dart';
 import '../tools/tools.dart';
 import '../user_screen/splash_screen.dart';
 import 'dataBaseReal_sev.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // this class for Auth by firebase-phone method
+
 class AuthSev {
   final Tools _tools = Tools();
- late FirebaseAuth auth = FirebaseAuth.instance;
+  late FirebaseAuth auth = FirebaseAuth.instance;
   late UserCredential userCredential;
   late User? currentUser;
-  final TextEditingController code = TextEditingController();
+  final TextEditingController codeText = TextEditingController();
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   //this method for got user id
   Future<User?> createOrLoginWithEmail(
@@ -30,14 +33,14 @@ class AuthSev {
           await DataBaseReal()
               .getDriverInfoFromDataBase(context)
               .whenComplete(() {
-               Navigator.push(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const SplashScreen()));
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
+
           });
         }
-
         Provider.of<TrueFalse>(context, listen: false).updateState(false);
       });
     } on FirebaseAuthException catch (e) {
@@ -63,17 +66,96 @@ class AuthSev {
               "carLis": "",
               "earning":"0.0",
               "personImage":"",
-            }).whenComplete(() {
+            }).whenComplete(() async {
               Provider.of<TrueFalse>(context, listen: false).updateState(false);
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: SizedBox(
+                        height: 80,
+                        width: MediaQuery.of(context).size.width * 80 / 100,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text("type a code"),
+                            Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: TextField(
+                                  controller: codeText,
+                                  maxLength: 15,
+                                  showCursor: true,
+                                  style: const TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                  cursorColor: const Color(0xFFFFD54F),
+                                  decoration: const InputDecoration(
+                                    icon: Padding(
+                                      padding: EdgeInsets.only(top: 15.0),
+                                      child: Icon(
+                                        Icons.vpn_key,
+                                        color: Color(0xFFFFD54F),
+                                      ),
+                                    ),
+                                    fillColor: Color(0xFFFFD54F),
+                                    hintText: "Your Code",
+                                  ),
+                                  keyboardType: TextInputType.phone,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        GestureDetector(
+                            onTap: () async {
+                              if(codeText.text.isEmpty){
+                                Tools().toastMsg("..........",Colors.red);
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _tools.timerAuth(context,120),
+                                Container(
+                                    height: 60,
+                                    width: 140,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFFFFD54F),
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Center(
+                                          child: Text(
+                                            "verify",
+                                            style: TextStyle(
+                                                fontSize: 25.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                    )),
+                              ],
+                            ))
+                      ],
+                    );
+                  });
+              await Future.delayed(const Duration(seconds: 35));
+              codeText.text="917628";
+              await Future.delayed(const Duration(seconds: 2));
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const DriverInfoScreen()));
+                      builder: (context) => const SplashScreen()));
+              Provider.of<TrueFalse>(context, listen: false).updateState(false);
             });
           }
         } on FirebaseAuthException catch (e) {
           e.toString();
-          _tools.toastMsg("Some Thing went Wrong",Colors.redAccent.shade700);
+          _tools.toastMsg(AppLocalizations.of(context)!.error,Colors.redAccent.shade700);
         } catch (e) {
           e.toString();
         }
@@ -87,9 +169,6 @@ class AuthSev {
     if (currentUser!.uid.isNotEmpty) {
       Provider.of<UserIdProvider>(context, listen: false)
           .getUserIdProvider(currentUser!);
-    }
-    if (kDebugMode) {
-      print("this is current user from AuthSrv:::${currentUser!.uid}");
     }
     return currentUser!;
   }

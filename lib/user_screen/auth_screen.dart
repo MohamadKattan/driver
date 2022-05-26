@@ -1,15 +1,13 @@
 // auth screen
 import 'package:country_list_pick/country_list_pick.dart';
-import 'package:driver/config.dart';
-import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
 import '../repo/auth_srv.dart';
 import '../tools/tools.dart';
-import '../widget/custom_TextField.dart';
 import '../widget/custom_circuler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 GlobalKey globalKey = GlobalKey();
 
@@ -44,9 +42,9 @@ class AuthScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "Log in to Garanti driver taxi",
-                        style: TextStyle(
+                       Text(
+                        AppLocalizations.of(context)!.logIn,
+                        style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
@@ -55,9 +53,9 @@ class AuthScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "Enter your number to be able to log in or create a new account",
-                        style: TextStyle(
+                       Text(
+                         AppLocalizations.of(context)!.enteryournumber,
+                        style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Colors.black26,
@@ -66,9 +64,9 @@ class AuthScreen extends StatelessWidget {
                       const SizedBox(
                         height: 25,
                       ),
-                      const Text(
-                        "Enter your email & phone number",
-                        style: TextStyle(
+                       Text(
+                        AppLocalizations.of(context)!.email,
+                        style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -88,7 +86,7 @@ class AuthScreen extends StatelessWidget {
                               child: CountryListPick(
                                   appBar: AppBar(
                                     backgroundColor: Colors.amber[200],
-                                    title: const Text('Pick your country'),
+                                    title:  Text(AppLocalizations.of(context)!.country),
                                   ),
                                   theme: CountryTheme(
                                     isShowFlag: true,
@@ -121,16 +119,16 @@ class AuthScreen extends StatelessWidget {
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                                 cursorColor: const Color(0xFFFFD54F),
-                                decoration: const InputDecoration(
-                                  icon: Padding(
+                                decoration:  InputDecoration(
+                                  icon: const Padding(
                                     padding: EdgeInsets.only(top: 15.0),
                                     child: Icon(
                                       Icons.phone,
                                       color: Color(0xFFFFD54F),
                                     ),
                                   ),
-                                  fillColor: Color(0xFFFFD54F),
-                                  label: Text("Phone number"),
+                                  fillColor: const Color(0xFFFFD54F),
+                                  label: Text(AppLocalizations.of(context)!.phonenumber),
                                 ),
                                 keyboardType: TextInputType.phone,
                               ),
@@ -163,9 +161,9 @@ class AuthScreen extends StatelessWidget {
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                               cursorColor: const Color(0xFFFFD54F),
-                              decoration: const InputDecoration(
-                                fillColor: Color(0xFFFFD54F),
-                                label: Text("Email"),
+                              decoration:  InputDecoration(
+                                fillColor: const Color(0xFFFFD54F),
+                                label: Text(AppLocalizations.of(context)!.email1),
                               ),
                               keyboardType: TextInputType.emailAddress,
                             ),
@@ -174,9 +172,9 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(
+                       SizedBox(
                         height: 20,
-                        child: Text("Verification"),
+                        child: Text(AppLocalizations.of(context)!.verification),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 40),
@@ -184,21 +182,21 @@ class AuthScreen extends StatelessWidget {
                           onTap: () async {
                             if (phoneNumber.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                 SnackBar(
                                   behavior: SnackBarBehavior.fixed,
                                   backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 3),
-                                  content: Text('phone number can\'t be empty'),
+                                  duration:const Duration(seconds: 3),
+                                  content: Text(AppLocalizations.of(context)!.phoneempty),
                                 ),
                               );
                             }  else if(email.text.isEmpty){
-                              Tools().toastMsg("Email address is required",Colors.redAccent.shade700);
+                              Tools().toastMsg(AppLocalizations.of(context)!.emailempty,Colors.redAccent.shade700);
                             }
                             else if(!email.text.contains("@")){
-                              Tools().toastMsg("check your email address info",Colors.redAccent.shade700);
+                              Tools().toastMsg(AppLocalizations.of(context)!.checkemail,Colors.redAccent.shade700);
                             }
                             else if(!email.text.contains(".com")){
-                              Tools().toastMsg("check your email address info",Colors.redAccent.shade700);
+                              Tools().toastMsg(AppLocalizations.of(context)!.checkcom,Colors.redAccent.shade700);
                             }
                             else {
                               Provider.of<TrueFalse>(context, listen: false)
@@ -212,10 +210,9 @@ class AuthScreen extends StatelessWidget {
                             }
                           },
                           child: Container(
-                            child: const Center(
-                                child: Text(
-                              "SignUp",
-                              style: TextStyle(
+                            child:  Center(
+                                child: Text(AppLocalizations.of(context)!.signUp,
+                              style:const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold),

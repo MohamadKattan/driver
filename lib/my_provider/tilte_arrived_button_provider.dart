@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 
 class TitleArrived extends ChangeNotifier {
-  String titleButton = "Arrived";
+  String titleButton = "";
 
   void updateState(String state){
     titleButton = state;

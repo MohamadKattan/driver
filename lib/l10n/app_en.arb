@@ -1,0 +1,462 @@
+{
+    "logIn": "Log in to Garanti driver taxi",
+    "@logIn": {
+      "description": "Log in to Garanti driver taxi"
+    },
+     "enteryournumber": "Enter your number to be able to log in or create a new account",
+      "@enteryournumber": {
+        "description": "user number phone"
+    },
+    "email": "Enter your email & phone number",
+       "@email": {
+         "description": "user number phone & email"
+    },
+    "country": "Pick your country",
+        "@country": {
+          "description": "user country"
+    },
+   "phonenumber": "Phone number",
+         "@phonenumber": {
+           "description": "Phone number in text failed"
+   },
+   "email1": "Email",
+           "@email1": {
+             "description": "email in text failed"
+   },
+   "verification": "Verification",
+           "@verification": {
+             "description": "Verification in Auth screen"
+   },
+   "phoneempty": "phone number can not be empty",
+           "@phoneempty": {
+             "description": "phone number can not be empty"
+   },
+   "emailempty": "Email address is required",
+           "@emailempty": {
+             "description": "Email address is required"
+   },
+  "checkemail": "check your email address info @",
+           "@checkemail": {
+             "description": "check your email address info"
+  },
+  "checkcom": "check your email address info .com",
+           "@checkcom": {
+             "description": "check your email address info .com"
+  },
+  "signUp": "SignUp",
+           "@signUp": {
+             "description": "SignUp"
+  },
+ "booking": "My Booking",
+           "@booking": {
+             "description": "My Booking"
+  },
+  "wrong": "Some thing went wrong",
+            "@wrong": {
+              "description": "Some thing went wrong"
+   },
+   "to": "TO",
+             "@to": {
+               "description": "TO"
+    },
+ "historyempty": "History is empty",
+        "@historyempty": {
+            "description": "TO"
+   },
+  "card16": "Card number 16 number",
+         "@card16": {
+             "description": "Card number 16 number"
+  },
+   "mexpiry": " Card Expiry month",
+          "@mexpiry": {
+              "description": "Mouthe Expiry on your card"
+   },
+  "yexpiry": "Card Expiry year ",
+          "@yexpiry": {
+              "description": "card Expiry Year "
+   },
+
+  "pay": "Pay",
+          "@pay": {
+              "description": "Pay"
+   },
+ "cancel": "Cancel",
+           "@cancel": {
+               "description": "Cancel"
+    },
+ "checking": "We are checking information",
+            "@checking": {
+                "description": "We are checking information"
+     },
+ "appreciate": "we appreciate your waiting",
+            "@appreciate": {
+                "description": "we appreciate your waiting"
+     },
+ "sendnot": "We will send to you a Notification",
+            "@sendnot": {
+                "description": "We will send to you a Notification"
+     },
+ "moreinfo": "More Info!",
+            "@moreinfo": {
+                "description": "More Info!"
+     },
+"click": "Click",
+            "@click": {
+                "description": "Click"
+     },
+"contactus": "Contact us",
+            "@contactus": {
+                "description": "Contact us"
+     },
+"anyquestion": "For any info or any question connect us",
+            "@anyquestion": {
+                "description": "For any info or any question connect us"
+     },
+"or": "Or",
+            "@or": {
+                "description": "Or"
+     },
+  "driverInfo": "Driver Info",
+              "@driverInfo": {
+                  "description": "Driver Info"
+       },
+ "yourName": "Your Name",
+              "@yourName": {
+                  "description": "Your Name"
+       },
+ "lastName": "Last Name",
+              "@lastName": {
+                  "description": "Last Name"
+       },
+ "idNumber": "Id Number",
+              "@idNumber": {
+                  "description": "Id Number"
+       },
+"carDetails": "Car Details",
+              "@carDetails": {
+                  "description": "Car Details"
+       },
+  "carBrand": "Car Brand",
+                "@carBrand": {
+                    "description": "Car Brand"
+         },
+  "carModel": "Car Model",
+                 "@carModel": {
+                     "description": "Car Model"
+          },
+  "carColor": "Car Color",
+                  "@carColor": {
+                      "description": "Car Color"
+           },
+ "next": "Next",
+                   "@next": {
+                       "description": "Next"
+            },
+ "nameDriver": "driver name is required",
+                   "@nameDriver": {
+                       "description": "Name driver is required"
+            },
+ "lastDriver": "last name driver is required",
+                   "@lastDriver": {
+                       "description": "last name driver is required"
+            },
+"idCarRequired": "Id Card number is required",
+                   "@idCarRequired": {
+                       "description": "Id Card number is required"
+            },
+ "brandRequired": "Car brand  is required",
+                    "@brandRequired": {
+                        "description": "Car brand  is required"
+             },
+  "modelRequired": "Car model  is required",
+                     "@modelRequired": {
+                         "description": "Car model  is required"
+              },
+ "colorRequired": "Car color  is required",
+                      "@colorRequired": {
+                          "description": "Car color  is required"
+               },
+ "classRequired": "car class is required",
+                       "@classRequired": {
+                           "description": "car class  is required"
+                },
+ "myEarning": "My earning",
+                        "@myEarning": {
+                            "description": "My earning"
+                 },
+
+ "totalEarning": "Your Total earning",
+                        "@totalEarning": {
+                            "description": "Your Total earning"
+                 },
+"planFinished": "Your plan already finished",
+                        "@planFinished": {
+                            "description": "Your plan already finished"
+                 },
+"chargeNow": "Charge now",
+                        "@chargeNow": {
+                            "description": "Charge now"
+                 },
+ "toPayment": "To Payment",
+                         "@toPayment": {
+                             "description": "To Payment"
+                  },
+  "notNow": "Not now exit",
+                          "@notNow": {
+                              "description": "Not now exit"
+                   },
+    "km": "km: ",
+         "@km": {
+            "description": "km: "
+    },
+   "time": "Time : ",
+          "@time": {
+             "description": "Time : "
+     },
+ "fare": "Fare : ",
+          "@fare": {
+             "description": "Fare "
+     },
+"riderName": "Rider name : ",
+          "@riderName": {
+             "description": "Rider name : "
+     },
+ "from": "From : ",
+           "@from": {
+              "description": "From : "
+      },
+ "too": "To : ",
+            "@too": {
+               "description": "To : "
+       },
+ "toTrip": "To trip",
+             "@toTrip": {
+                "description": "To trip"
+        },
+  "rider": "To Rider",
+              "@rider": {
+                 "description": "To Rider"
+         },
+  "paymentScreen": "Payment screen",
+               "@paymentScreen": {
+                  "description": "Payment screen"
+          },
+ "planChoose": "We have for you 3 plan choose as you like ",
+               "@planChoose": {
+                  "description": "We have for you 3 plan choose as you like "
+          },
+  "plan1": "Plan 1",
+                "@plan1": {
+                   "description": "Plan 1"
+           },
+  "working30day": "This plan working for 30 day",
+                 "@working30day": {
+                    "description": "This plan working for 30 day"
+            },
+  "cost": "Cost : ",
+                  "@cost": {
+                     "description": "Cost : "
+             },
+ "plan2": "Plan 2",
+                "@plan2": {
+                   "description": "Plan 2"
+           },
+ "working90day": "This plan working for 90 day",
+                  "@working90day": {
+                     "description": "This plan working for 90 day"
+             },
+  "plan3": "Plan 3",
+                 "@plan3": {
+                    "description": "Plan 3"
+            },
+  "working180day": "This plan working for 180 day",
+                   "@working180day": {
+                      "description": "This plan working for 180 day"
+              },
+ "update": "Update profile",
+                    "@update": {
+                       "description": "Update"
+               },
+  "myRating": "My rating",
+                     "@myRating": {
+                        "description": "My rating"
+                },
+ "noRating": "No rating yet...",
+                      "@noRating": {
+                         "description": "No rating yet..."
+                 },
+    "noNet": "No Internet!!",
+         "@noNet": {
+              "description": "No Internet!!"
+    },
+
+   "checkNet": "Check your internet net work!!",
+         "@checkNet": {
+              "description": "Check your internet net work!!"
+    },
+
+    "notExists": "Not.exists!!",
+             "@notExists": {
+                  "description": "Not.exists!!"
+        },
+    "successful": "Payment completed successfully",
+               "@successful": {
+                    "description": "transaction payment successful"
+          },
+   "notSuccessfully": "Payment not completed successfully",
+                 "@notSuccessfully": {
+                      "description": "transaction payment not successful"
+            },
+    "anotherCard": "Try again and check your card info",
+                    "@anotherCard": {
+                         "description": "transaction payment not successful"
+               },
+    "error": "Error",
+                      "@error": {
+                           "description": "Error"
+                 },
+    "welcome": "Welcome",
+                        "@welcome": {
+                             "description": "Welcome"
+                   },
+  "callRider": "Call your rider",
+                          "@callRider": {
+                               "description": "Call your rider"
+                     },
+ "normalCall": "Normal call : ",
+       "@normalCall": {
+          "description": "Normal call : "
+    },
+  "uss": "Call us",
+        "@uss": {
+           "description": "Call us"
+     },
+   "amountTrip": "Total amount this trip",
+         "@amountTrip": {
+            "description": "Total amount this trip"
+      },
+  "paymentMethod": "Payment method :",
+          "@paymentMethod": {
+             "description": "Payment method "
+       },
+
+    "ok": "ok",
+             "@ok": {
+                "description": "Ok"
+          },
+     "approveImages": "Pick some images to approve your details",
+               "@approveImages": {
+                  "description": "Pick some images to approve your details"
+            },
+    "personnelImage": "Personnel image",
+                 "@personnelImage": {
+                    "description": "Personnel image"
+              },
+  "driverLicense": "Driver license",
+                  "@driverLicense": {
+                     "description": "Driver license"
+               },
+   "carLicense": "Car license",
+                   "@carLicense": {
+                      "description": "Car licens"
+                },
+    "carImage": "Car image",
+                     "@CarImage": {
+                        "description": "Car image"
+                  },
+   "imageDrequired": "Driver Image is required",
+                       "@imageDrequired": {
+                          "description": "Driver Image is required"
+                    },
+  "licenseDrequired": "Driver license is required",
+                        "@licenseDrequired": {
+                           "description": "Driver license is required"
+                     },
+  "licenseCrequired": "Car license is required",
+                         "@licenseCrequired": {
+                            "description": "Car license is required"
+                      },
+    "imageCrequired": "Car Image is required",
+                           "@imageCrequired": {
+                              "description": "Car Image is required"
+                        },
+   "confirm": "Confirm",
+                             "@confirm": {
+                                "description": "Confirm"
+                          },
+   "offLine": "Off",
+               "@offLine": {
+                 "description": "Off"
+         },
+   "finished": "Your plan finished : ",
+                "@finished": {
+                  "description": "Your plan finished : "
+          },
+
+   "yPlan": "Your plan : ",
+                 "@yPlan": {
+                   "description": "Your plan : "
+           },
+    "day": "Day",
+                  "@day": {
+                    "description": "Day"
+            },
+  "exit": "Exit",
+                   "@exit": {
+                     "description": "Exit"
+             },
+   "rideRequest": "New ride request",
+                    "@rideRequest": {
+                      "description": "New ride request"
+              },
+    "beenCanceled": "Ride has been canceled",
+                       "@beenCanceled": {
+                         "description": "Ride has been canceled"
+                 },
+   "timeOut": "Time out",
+                         "@timeOut": {
+                           "description": "Time out"
+                   },
+
+
+  "arrived": "Arrived",
+  "@arrived": {
+    "description": "Arrived"
+  },
+
+  "startTrip": "Start trip",
+  "@startTrip": {
+    "description": "Start trip"
+  },
+  "endTrip": "End trip",
+  "@endTrip": {
+    "description": "End trip"
+  },
+  "avilbel": "You are Available for new order ",
+  "@avilbel": {
+    "description": "You are Available for new order "
+  },
+  "notAvilbel": "You aren't Available for new order",
+  "@notAvilbel": {
+    "description": "You aren't Available for new order"
+  },
+
+  "selectCar": "Select a car class",
+  "@selectCar": {
+    "description": "Select a car class"
+  },
+
+  "taxi": "Taxi-4 seats",
+  "@taxi": {
+    "description": "Taxi-4 seats"
+  },
+  "veto": "Medium commercial-6-10 seats",
+  "@veto": {
+    "description": "Medium commercial-6-10 seats"
+  },
+  "van": "Big commercial-11-19 seats",
+  "@van": {
+    "description": "Big commercial-11-19 seats"
+  }
+
+}

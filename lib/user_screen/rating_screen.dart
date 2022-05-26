@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 import '../repo/auth_srv.dart';
 import '../widget/custom_divider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RatingScreen extends StatefulWidget {
   const RatingScreen({Key? key}) : super(key: key);
@@ -28,8 +29,8 @@ class _RatingScreenState extends State<RatingScreen> {
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: const Color(0xFFFFD54F),
-              title: const Text("My rating",
-                  style: TextStyle(color: Colors.white, fontSize: 16.0)),
+              title:  Text(AppLocalizations.of(context)!.myRating,
+                  style:const TextStyle(color: Colors.white, fontSize: 16.0)),
             ),
             body:myRating==0.0?noRatingYet(context):dailog(myRating,context),
             ));
@@ -50,12 +51,12 @@ class _RatingScreenState extends State<RatingScreen> {
               height: MediaQuery.of(context).size.height * 60 / 100,
               width: MediaQuery.of(context).size.width * 60 / 100,
             ),
-            const Text(
-              "No rating yet...",
-              style: TextStyle(
+             Text(
+              AppLocalizations.of(context)!.noRating,
+              style:const TextStyle(
                   color: Colors.black87,
                   fontSize: 35.0,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold),textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -75,13 +76,15 @@ class _RatingScreenState extends State<RatingScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height*30/100),
-              const Text(
-                "My rating",
-                style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.bold),
+               Center(
+                 child: Text(
+                  AppLocalizations.of(context)!.myRating,
+                  style:const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 45.0,
+                      fontWeight: FontWeight.bold),
               ),
+               ),
               SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
               SmoothStarRating(
                 allowHalfRating: true,

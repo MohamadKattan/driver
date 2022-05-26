@@ -24,7 +24,6 @@ class ApiSrvGeolocater{
       driverRef.child(userId).child("country").set(placeAddress);
       //for update
       Provider.of<PlaceName>(context, listen: false).updateState(placeAddress);
-      print(":::::::"+placeAddress.toString());
     }
     return placeAddress;
   }

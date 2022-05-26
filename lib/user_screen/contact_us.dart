@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../tools/url_lunched.dart';
 import '../widget/call_us_phone_whatApp.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ContactUs extends StatelessWidget {
   const ContactUs({Key? key}) : super(key: key);
@@ -13,20 +14,20 @@ class ContactUs extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor:const Color(0xFFFFD54F),
-          title: const Text("Contact us",style: TextStyle(color: Colors.white)),
+          title:  Text( AppLocalizations.of(context)!.contactus,style:const TextStyle(color: Colors.white)),
         ),
         body: Column(
           children: [
             const SizedBox(height:40.0),
-            const Text("Garanti driver",
+            const Text("Garanti taxi driver",
                 style: TextStyle(
                   color: Colors.black45,
                   fontSize: 45,
                 )),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text("For any info or any question connect us",
-                  style: TextStyle(fontSize: 16.0, color: Colors.black45)),
+             Padding(
+              padding:const EdgeInsets.all(8.0),
+              child: Text( AppLocalizations.of(context)!.anyquestion,
+                  style:const TextStyle(fontSize: 16.0, color: Colors.black45),textAlign: TextAlign.center),
             ),
             const SizedBox(height: 20.0),
             GestureDetector(
@@ -43,7 +44,7 @@ class ContactUs extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text("Or",
+              child: Text(AppLocalizations.of(context)!.or,
                   style: TextStyle(
                       color: Colors.redAccent.shade700, fontSize: 20.0,fontWeight: FontWeight.bold)),
             ),

@@ -1,24 +1,19 @@
 // this class for custom drawer
-import 'dart:math';
-
-import 'package:driver/config.dart';
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
-import '../repo/geoFire_srv.dart';
 import '../user_screen/contact_us.dart';
 import '../user_screen/profile_screen.dart';
 import '../user_screen/rating_screen.dart';
 import 'custom_divider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Widget customDrawer(BuildContext context) {
   final planProvider = Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
   double day = planProvider/60/24;
@@ -59,8 +54,8 @@ Widget customDrawer(BuildContext context) {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:   [
-                         Text(planProvider<=0?"Your plan finished : ":"Your plan : ",style: const TextStyle(color: Colors.black45,fontSize: 16.0)),
-                        Text("$newDay Day",style:  TextStyle(fontSize: 20.0,color:planProvider<=7200?Colors.redAccent.shade700:Colors.greenAccent.shade700))
+                         Text(planProvider<=0?AppLocalizations.of(context)!.planFinished:AppLocalizations.of(context)!.yPlan,style: const TextStyle(color: Colors.black45,fontSize: 16.0)),
+                        Text(newDay.toString() +AppLocalizations.of(context)!.day,style:  TextStyle(fontSize: 20.0,color:planProvider<=7200?Colors.redAccent.shade700:Colors.greenAccent.shade700))
                       ],
                     )
                   ],
@@ -81,17 +76,17 @@ Widget customDrawer(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                      children: const [
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.history, color: Colors.black45,size: 30,),
+                      children:  [
+                     Padding(
+                      padding: EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                      child:const Icon(Icons.history, color: Colors.black45,size: 35,),
                     ),
-                    SizedBox(width: 8.0),
+                   const  SizedBox(width: 8.0),
                     Padding(
-                        padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        padding:const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: Text(
-                          "My Bookings",
-                          style: TextStyle(color: Colors.black45,fontSize: 16.0),
+                          AppLocalizations.of(context)!.booking,
+                          style:const TextStyle(color: Colors.black45,fontSize: 20.0),
                         ))
                   ]),
                 ),
@@ -107,17 +102,17 @@ Widget customDrawer(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.money, color: Colors.black45,size: 30),
+                    children:  [
+                       Padding(
+                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                        child:const Icon(Icons.money, color: Colors.black45,size: 35),
                       ),
-                      SizedBox(
+                    const  SizedBox(
                         width: 8.0,
                       ),
                       Text(
-                        "My Earning",
-                        style: TextStyle(color: Colors.black45,fontSize: 16),
+                        AppLocalizations.of(context)!.myEarning,
+                        style:const TextStyle(color: Colors.black45,fontSize: 20),
                       ),
                     ],
                   ),
@@ -134,17 +129,17 @@ Widget customDrawer(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.person, color: Colors.black45,size: 30),
+                    children:  [
+                       Padding(
+                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                        child:const Icon(Icons.person, color: Colors.black45,size: 35),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8.0,
                       ),
                       Text(
-                        "My profile",
-                        style: TextStyle(color: Colors.black45,fontSize: 16),
+                        AppLocalizations.of(context)!.update,
+                        style: const TextStyle(color: Colors.black45,fontSize: 20),
                       ),
                     ],
                   ),
@@ -163,17 +158,16 @@ Widget customDrawer(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.star, color: Colors.black45,size: 30,),
+                    children:  [
+                       Padding(
+                        padding: EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                        child:const Icon(Icons.star, color: Colors.black45,size: 35,),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8.0,
                       ),
-                      Text(
-                        "My Rating",
-                        style: TextStyle(color: Colors.black45,fontSize: 16.0),
+                      Text(AppLocalizations.of(context)!.myRating,
+                        style:const TextStyle(color: Colors.black45,fontSize: 20.0),
                       ),
                     ],
                   ),
@@ -190,15 +184,15 @@ Widget customDrawer(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children: const [
+                    children:  [
                       Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.payment, color: Colors.black45,size: 30,),
+                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                        child:const Icon(Icons.payment, color: Colors.black45,size: 35,),
                       ),
-                      SizedBox(width: 8.0),
+                     const SizedBox(width: 8.0),
                       Text(
-                        "Payment screen",
-                        style: TextStyle(color: Colors.black45,fontSize: 16.0),
+                          AppLocalizations.of(context)!.paymentScreen,
+                        style:const TextStyle(color: Colors.black45,fontSize: 20.0),
                       ),
                     ],
                   ),
@@ -216,17 +210,17 @@ Widget customDrawer(BuildContext context) {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      children: const [
+                      children:  [
                         Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.email, color: Colors.black45,size: 30,),
+                          padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                          child:const Icon(Icons.email, color: Colors.black45,size: 35,),
                         ),
-                        SizedBox(width: 8.0),
+                    const    SizedBox(width: 8.0),
                         Padding(
-                            padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                            padding:const EdgeInsets.only(top: 8.0, bottom: 8.0),
                             child: Text(
-                              "Connect us",
-                              style: TextStyle(color: Colors.black45,fontSize: 16.0),
+                                AppLocalizations.of(context)!.uss,
+                              style:const TextStyle(color: Colors.black45,fontSize: 20.0),
                             ))
                       ]),
                 ),
@@ -244,15 +238,15 @@ Widget customDrawer(BuildContext context) {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    children: const [
+                    children:  [
                       Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.exit_to_app, color: Colors.black45,size: 30.0,),
+                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
+                        child:const Icon(Icons.exit_to_app, color: Colors.black45,size: 35.0,),
                       ),
-                      SizedBox(
+                    const  SizedBox(
                         width: 8.0,
                       ),
-                      Text("Exit",style: TextStyle(color: Colors.black45,fontSize: 16.0),),
+                      Text(AppLocalizations.of(context)!.exit,style:const TextStyle(color: Colors.black45,fontSize: 20.0),),
                     ],
                   ),
                 ),
@@ -314,5 +308,15 @@ Widget showUserPhone(BuildContext context) {
   return userInfoRealTime.phoneNumber.isNotEmpty
       ? Text(userInfoRealTime.phoneNumber)
       : const Text("");
+}
+
+double valueIconPadding(BuildContext context){
+ late double val;
+  if(AppLocalizations.of(context)!.day == "يوم"){
+    val=65.0;
+  }else{
+    val=8.0;
+  }
+  return val.toDouble();
 }
 
