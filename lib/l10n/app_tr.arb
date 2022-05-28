@@ -110,5 +110,6 @@
   "selectCar": "Bir araba sınıfı seçin",
   "taxi": "Taksi-4 koltuk",
   "veto": "Orta boy ticari-6-10 koltuk",
-  "van": "Büyük ticari 11-19 koltuk"
+  "van": "Büyük ticari 11-19 koltuk",
+  "withCard": "Kart ile daha fazla müşteri"
 }

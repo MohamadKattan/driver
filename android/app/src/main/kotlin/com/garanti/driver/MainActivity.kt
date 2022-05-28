@@ -3,6 +3,7 @@ package com.garanti.driver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.PowerManager
 import android.util.Log
 import androidx.annotation.NonNull
@@ -38,7 +39,7 @@ class MainActivity: FlutterActivity() {
                             val packageManager: PackageManager = context.packageManager
                             val intent = packageManager.getLaunchIntentForPackage("com.garanti.driver")
                                 intent!!.setPackage(null)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED or Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT or Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                             context.startActivity(intent)
                         }
                         else -> {
@@ -56,13 +57,20 @@ class MainActivity: FlutterActivity() {
                 "openDailogOld" -> {
                     val pm = context.getSystemService(POWER_SERVICE) as PowerManager
                     val isScreenOn = pm.isInteractive
-                    Log.e("screen on........", "" + isScreenOn)
-                    if (isScreenOn == false) {
-                        val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, "myApp:MyLock")
-                        wl.acquire(10000)
-                        val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:mycpuMyCpuLock")
-                        wl_cpu.acquire(10000)
+                    if (!isScreenOn) {
+                        if( Build.VERSION.SDK_INT <= 24 ){
+                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:MyLock")
+                            wl.acquire(10000)
+                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:mycpuMyCpuLock")
+                            wl_cpu.acquire(10000)
+                        }else{
+                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:MyLock")
+                            wl.acquire(10000)
+                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:mycpuMyCpuLock")
+                            wl_cpu.acquire(10000)
+                        }
                     }
+
             }
                 else -> {
                     result.notImplemented()

@@ -10,7 +10,7 @@ class CustomTextField{
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         controller:controller ,
-        maxLength: 15,
+        maxLength: 11,
         showCursor: true,
         cursorColor: const Color(0xFFFFD54F),
         style: const TextStyle(

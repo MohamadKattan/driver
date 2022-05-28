@@ -37,31 +37,33 @@ class GeoFireSrv {
         .ref()
         .child("driver")
         .child(currentUseId!.uid).child("newRide");
+        rideRequestRef.set("searching");
     //first set new value when driver switch bottom online and waiting for a new order rider
-    await rideRequestRef.once().then((value) {
-      if (value.snapshot.value != null) {
-        final snap = value.snapshot.value.toString();
-        if (snap == "timeOut" || snap == "canceled") {
-          rideRequestRef.set("searching").whenComplete((){
-            DatabaseReference _rideRequestRef = FirebaseDatabase.instance
-                .ref()
-                .child("driver")
-                .child(currentUseId!.uid).child("offLine");
-            _rideRequestRef.set("Available");
-          });
-        } else if (snap != "timeOut" || snap != "canceled") {
-          return;
-        }
-      } else if (value.snapshot.value == null) {
-        rideRequestRef.set("searching").whenComplete((){
-          DatabaseReference _rideRequestRef = FirebaseDatabase.instance
-              .ref()
-              .child("driver")
-              .child(currentUseId!.uid).child("offLine");
-          _rideRequestRef.set("Available");
-        });
-      }
-    });
+    ///todo
+    // await rideRequestRef.once().then((value) {
+    //   if (value.snapshot.value != null) {
+    //     final snap = value.snapshot.value.toString();
+    //     if (snap == "timeOut" || snap == "canceled") {
+    //       rideRequestRef.set("searching").whenComplete((){
+    //         DatabaseReference _rideRequestRef = FirebaseDatabase.instance
+    //             .ref()
+    //             .child("driver")
+    //             .child(currentUseId!.uid).child("offLine");
+    //         _rideRequestRef.set("Available");
+    //       });
+    //     } else if (snap != "timeOut" || snap != "canceled") {
+    //       return;
+    //     }
+    //   } else if (value.snapshot.value == null) {
+    //     rideRequestRef.set("searching").whenComplete((){
+    //       DatabaseReference _rideRequestRef = FirebaseDatabase.instance
+    //           .ref()
+    //           .child("driver")
+    //           .child(currentUseId!.uid).child("offLine");
+    //       _rideRequestRef.set("Available");
+    //     });
+    //   }
+    // });
 
     //second listing
     rideRequestRef.onValue.listen((event) {});
@@ -80,7 +82,6 @@ class GeoFireSrv {
 
     rideRequestRef .child("newRide").onDisconnect();
     await rideRequestRef .child("newRide").remove();
-    rideRequestRef.child("offLine").set("notAvailable");
   }
 
   // this method for display driver from live location when he accepted on order
@@ -97,11 +98,5 @@ class GeoFireSrv {
     homeScreenStreamSubscription?.resume();
     await Geofire.setLocation(
         currentUseId!.uid, position.latitude, position.longitude);
-    DatabaseReference? rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("driver")
-        .child(currentUseId!.uid);
-    rideRequestRef.child("offLine").set("Available");
   }
-
 }

@@ -1,7 +1,9 @@
 // this class for custom drawer
+import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
+import 'package:driver/widget/switch_bottom_drarwer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -14,11 +16,12 @@ import '../user_screen/profile_screen.dart';
 import '../user_screen/rating_screen.dart';
 import 'custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 Widget customDrawer(BuildContext context) {
   final planProvider = Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
   double day = planProvider/60/24;
   int newDay = day.floor();
-  return Container(
+  return Container  (
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.height,
     decoration: const BoxDecoration(
@@ -66,7 +69,7 @@ Widget customDrawer(BuildContext context) {
           Column(
             children: [
               const SizedBox(
-                height: 4.0,
+                height:   4.0,
               ),
               GestureDetector(
                 onTap: ()=>
@@ -252,6 +255,21 @@ Widget customDrawer(BuildContext context) {
                 ),
               ),
               CustomDivider().customDivider(),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SwitchBottomDrawer(),
+                 const   SizedBox(width: 16.0,),
+                    Image.asset("images/iconDrop.png",height: 60.0,width: 60.0,),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(AppLocalizations.of(context)!.withCard,style: TextStyle(color: Colors.black45,fontSize: 16.0),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+              ),
             ],
           ),
         ],
@@ -259,7 +277,6 @@ Widget customDrawer(BuildContext context) {
     ),
   );
 }
-
 
 Widget showImage(BuildContext context) {
   final userInfoRealTime =
@@ -319,4 +336,7 @@ double valueIconPadding(BuildContext context){
   }
   return val.toDouble();
 }
+
+
+
 

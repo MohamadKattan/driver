@@ -77,7 +77,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                             hintText:AppLocalizations.of(context)!.lastName,
                             hintStyle:
                               const  TextStyle(color: Colors.black54, fontSize: 16),
-                            contentPadding: EdgeInsets.all(8.0),
+                            contentPadding: const EdgeInsets.all(8.0),
                           )),
                       CustomTextField().customTextField(
                           controller: DriverInfoScreen.idNo,

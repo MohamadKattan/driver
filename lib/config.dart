@@ -13,7 +13,6 @@ StreamSubscription<Position>?homeScreenStreamSubscription;
 StreamSubscription<Position>?newRideScreenStreamSubscription;
 StreamSubscription<Position>?newStreamSubscription;
 User? currentUser = AuthSev().auth.currentUser;
-double myRating = 0.0;
 bool isLite = false;
 int rideRequestTimeOut = 120;
 String riderName = "";
@@ -21,6 +20,7 @@ final AssetsAudioPlayer assetsAudioPlayer =AssetsAudioPlayer();
  int exPlan = 0;
  int tripcount = 5;
  bool isBackground=false;
+
 
 
 

@@ -30,6 +30,7 @@ class AuthSev {
       await getCurrentUserId(context).whenComplete(() async {
         if (userCredential.user!.uid.isNotEmpty) {
           currentUser = userCredential.user!;
+          // await PlanDays().setIfBackgroundOrForeground(true);
           await DataBaseReal()
               .getDriverInfoFromDataBase(context)
               .whenComplete(() {
@@ -56,6 +57,7 @@ class AuthSev {
               "userId": currentUser!.uid,
               "phoneNumber": result.toString(),
               "email": email.text.trim(),
+              "backbool":false,
               "status": "",
               "firstName": "",
               "country":"",

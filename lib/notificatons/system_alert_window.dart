@@ -1,3 +1,5 @@
+import 'package:system_alert_window/system_alert_window.dart';
+
 ///* this class for system dailog alert stopped for now
 ///if you went to use this plugin check doc for some premising *///
 // import 'dart:isolate';
@@ -7,29 +9,14 @@
 // import '../tools/background_serv.dart';
 //
 // bool _isShowingWindow = false;
-// SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
-//
+SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
+///not method initPlatformState
 // // this method connect with dailog overlay init Platform if want move this void to home screen
-// Future<void> initPlatformState() async {
-//   await sys.SystemAlertWindow.enableLogs(true);
-//   String? platformVersion;
-//   // Platform messages may fail, so we use a try/catch PlatformException.
-//   try {
-//     platformVersion = await sys.SystemAlertWindow.platformVersion;
-//   } on PlatformException {
-//     platformVersion = 'Failed to get platform version.';
-//   }
-//   if (!mounted) return;
-//
-//   setState(() {
-//     _platformVersion = platformVersion!;
-//   });
-// }
-//
+
 // // this method connect with dailog overlay permission
-// Future<void> requestPermissionsSystem() async {
-//   await SystemAlertWindow.requestPermissions(prefMode: prefMode);
-// }
+Future<void> requestPermissionsSystem() async {
+  await SystemAlertWindow.requestPermissions(prefMode: prefMode);
+}
 //
 //
 // bool callBack(String tag) {

@@ -457,6 +457,11 @@
   "van": "Big commercial-11-19 seats",
   "@van": {
     "description": "Big commercial-11-19 seats"
+  },
+
+  "withCard": "With card more customer",
+  "@withCard": {
+    "description": "With card more customer "
   }
 
 }

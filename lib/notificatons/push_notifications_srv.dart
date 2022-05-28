@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:driver/repo/auth_srv.dart';
-import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/background_serv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -13,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../model/rideDetails.dart';
 import '../my_provider/ride_request_info.dart';
+import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
 import 'local_notifications.dart';
@@ -20,6 +20,7 @@ import 'local_notifications.dart';
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
 DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+
 Future<String?> getToken() async {
   String? token = await firebaseMessaging.getToken();
   if (kDebugMode) {
@@ -39,11 +40,11 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
       if (value.snapshot.value != null) {
         final snap = value.snapshot.value;
         String serviceWork = snap.toString();
-        if (serviceWork == "working") {
-          showNotification();
+        if (serviceWork == "not") {
+          return;
         }
       } else {
-        return;
+        showNotification();
       }
     });
   }
@@ -220,17 +221,14 @@ class PushNotificationsSrv {
         if (_riderId == "searching") {
           return;
         } else if (_riderId == "canceled") {
-          driverRef.child(userId).child("newRide").set("searching");
+          Future.delayed(const Duration(seconds: 20)).whenComplete(
+              () => driverRef.child(userId).child("newRide").set("searching"));
+
+          return;
         } else if (_riderId == "timeOut") {
-          int _count = 20;
-          Timer.periodic(const Duration(seconds: 1), (timer) {
-            _count = _count - 1;
-            if (_count == 0) {
-              timer.cancel();
-              _count = 20;
-              GeoFireSrv().enableLocationLiveUpdates(context);
-              driverRef.child(userId).child("newRide").set("searching");
-            }
+          Future.delayed(const Duration(seconds: 60)).whenComplete(() {
+            driverRef.child(userId).child("newRide").set("searching");
+            GeoFireSrv().enableLocationLiveUpdates(context);
           });
         } else if (_riderId == "accepted") {
           return;
@@ -238,7 +236,9 @@ class PushNotificationsSrv {
           openDailog();
           playSound();
           openDailogOld();
-          retrieveRideRequestInfo(_riderId, context);
+          retrieveRideRequestInfo(_riderId, context).whenComplete(() {
+            FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+          });
         }
       }
     });

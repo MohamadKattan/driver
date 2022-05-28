@@ -17,6 +17,7 @@ class RatingScreen extends StatefulWidget {
 class _RatingScreenState extends State<RatingScreen> {
   final currentUser = AuthSev().auth.currentUser;
   late DatabaseReference ref;
+  double myRating = 0.0;
   @override
   void initState() {
     getRating();
@@ -104,8 +105,8 @@ class _RatingScreenState extends State<RatingScreen> {
   }
 
   // get rating
-Future<void>getRating()async{
-  ref = FirebaseDatabase.instance
+ getRating()async{
+ DatabaseReference ref =  FirebaseDatabase.instance
       .ref()
       .child("driver")
       .child(currentUser!.uid);
@@ -114,9 +115,10 @@ Future<void>getRating()async{
         return;
       }
       Map<String,dynamic>map = Map<String,dynamic>.from(value.snapshot.value as Map);
-      setState(() {
-        myRating = double.parse(map["rating"].toString());
-      });
+      if(!mounted) return;
+       setState(() {
+         myRating = double.parse(map["rating"].toString());
+       });
     });
 }
 }

@@ -69,7 +69,7 @@ class PlanDays {
 
     if(isBackground == false){
       await getExPlanFromReal();
-      Timer.periodic(const Duration(minutes: 1), (timer) async {
+      Timer.periodic(const Duration(seconds: 40), (timer) async {
         if (exPlan < 0) {
           Tools().toastMsg("", Colors.redAccent.shade700);
           driverRef.child(userId).child("status").once().then((value){

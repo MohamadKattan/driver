@@ -1,12 +1,18 @@
-
+import 'dart:async';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'dart:math';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:system_alert_window/system_alert_window.dart';
 import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
@@ -14,11 +20,131 @@ import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
+import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
+import '../repo/auth_srv.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+Future<void> initializeService() async {
+  final service = FlutterBackgroundService();
+  await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      onStart: onStart,
+      autoStart: true,
+      isForegroundMode: true,
+    ),
+    iosConfiguration: IosConfiguration(
+      autoStart: true,
+      onForeground: onStart,
+      onBackground: onIosBackground,
+    ),
+  );
+  service.startService();
+}
+
+bool onIosBackground(ServiceInstance service) {
+  WidgetsFlutterBinding.ensureInitialized();
+  return true;
+}
+
+void onStart(ServiceInstance service) async {
+  await Firebase.initializeApp();
+  String userId = AuthSev().auth.currentUser!.uid;
+  DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+
+  if (service is AndroidServiceInstance) {
+    service.on('setAsForeground').listen((event) {
+      service.setAsForegroundService();
+    });
+
+    service.on('setAsBackground').listen((event) {
+      service.setAsBackgroundService();
+      driverRef.child(userId).child("service").onDisconnect().remove();
+    });
+  }
+  service.on('stopService').listen((event) {
+    service.stopSelf();
+  });
+
+  if (userId.isNotEmpty) {
+    await PlanDays().setIfBackgroundOrForeground(true);
+    await driverRef.child(userId).child("exPlan").once().then((value) {
+      if (value.snapshot.exists && value.snapshot.value != null) {
+        final snap = value.snapshot.value;
+        if (snap != null) {
+          exPlan = int.parse(snap.toString());
+        }
+      }
+    });
+  }
+
+  Timer.periodic(const Duration(seconds: 50), (timer) async {
+    if (exPlan == 0) {
+      driverRef.child(userId).child("status").once().then((value) {
+        if (value.snapshot.exists && value.snapshot.value != null) {
+          final snap = value.snapshot.value;
+          String _status = snap.toString();
+          if (_status == "checkIn" || _status == "") {
+            timer.cancel();
+            return;
+          }
+          driverRef.child(userId).child("status").set("payTime");
+          timer.cancel();
+          GeoFireSrv().makeDriverOffLine();
+        }
+      });
+    } else if (exPlan > 0) {
+      exPlan = exPlan - 1;
+      await driverRef.child(userId).child("exPlan").set(exPlan);
+      print("hello");
+
+      if (exPlan <= 0) {
+        driverRef.child(userId).child("status").once().then((value) {
+          if (value.snapshot.exists && value.snapshot.value != null) {
+            final snap = value.snapshot.value;
+            String _status = snap.toString();
+            if (_status == "checkIn" || _status == "") {
+              timer.cancel();
+              return;
+            }
+            driverRef.child(userId).child("status").set("payTime");
+            timer.cancel();
+            GeoFireSrv().makeDriverOffLine();
+          }
+        });
+      }
+    }
+    if (service is AndroidServiceInstance) {
+      service.setForegroundNotificationInfo(
+        title: "Garanti Taxi : ",
+        content: "Location working in background",
+      );
+      // test using external plugin
+      final deviceInfo = DeviceInfoPlugin();
+      String? device;
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        device = androidInfo.model;
+      }
+
+      if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        device = iosInfo.model;
+      }
+
+      service.invoke(
+        'update',
+        {
+          "current_date": DateTime.now().toIso8601String(),
+          "device": device,
+        },
+      );
+    }
+  });
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,24 +155,42 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late bool valueSwitchBottom = true;
-  // String _platformVersion = 'Unknown';
+  String _platformVersion = 'Unknown';
   // sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
   @override
-  void initState(){
+  void initState() {
+    initializeService();
     getToken();
-    FlutterBackgroundService().invoke("setAsBackground");
     initializationLocal(context);
     requestPermissions();
     PlanDays().countDayPlansInForeground();
-    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     PushNotificationsSrv().gotNotificationInBackground(context);
-    ///local for ios
+
+    /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     ///system dailog alert 3 methodes
     // initPlatformState();
-    // requestPermissionsSystem();
+    requestPermissionsSystem();
     // checkOnclick();
+    FlutterBackgroundService().invoke("setAsBackground");
     super.initState();
+  }
+
+  // system over vlowy
+  Future<void> initPlatformState() async {
+    await SystemAlertWindow.enableLogs(true);
+    String? platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await SystemAlertWindow.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion!;
+    });
   }
 
   @override
@@ -106,9 +250,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .locationPosition(context);
                                     GeoFireSrv().getLocationLiveUpdates(
                                         valueSwitchBottom);
-                                    driverRef.child(userId).child("service").set("not");
                                     getCountryName();
                                     tostDriverAvailable();
+                                    driverRef
+                                        .child(userId)
+                                        .child("service")
+                                        .set("not");
                                   },
                                 ),
                               ),
@@ -118,9 +265,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : const Text(""),
                               //widget
                               Positioned(
-
-                                  right:AppLocalizations.of(context)!.day == "يوم"? 25.0:null,
-                                  left:AppLocalizations.of(context)!.day == "يوم"? null:25.0,
+                                  right:
+                                      AppLocalizations.of(context)!.day == "يوم"
+                                          ? 25.0
+                                          : null,
+                                  left:
+                                      AppLocalizations.of(context)!.day == "يوم"
+                                          ? null
+                                          : 25.0,
                                   bottom: 10.0,
                                   child: customSwitchBottom())
                             ],
@@ -131,8 +283,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               changeColorBottom == false
                   ? Positioned(
-                left: AppLocalizations.of(context)!.day == "يوم"?0.0:null,
-                    child: Padding(
+                      left: AppLocalizations.of(context)!.day == "يوم"
+                          ? 0.0
+                          : null,
+                      child: Padding(
                         padding: const EdgeInsets.only(top: 30.0, left: 15.0),
                         child: CircleAvatar(
                           radius: 30,
@@ -154,10 +308,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ),
                       ),
-                  )
+                    )
                   : Positioned(
-                left: AppLocalizations.of(context)!.day == "يوم"?0.0:null,
-                    child: Padding(
+                      left: AppLocalizations.of(context)!.day == "يوم"
+                          ? 0.0
+                          : null,
+                      child: Padding(
                         padding: const EdgeInsets.only(top: 30.0, left: 15.0),
                         child: CircleAvatar(
                           radius: 25,
@@ -180,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ),
                       ),
-                  ),
+                    ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -232,8 +388,8 @@ class _HomeScreenState extends State<HomeScreen> {
 // this method for show tost driver if he Available or not
   void tostDriverAvailable() {
     if (valueSwitchBottom == true) {
-      Tools()
-          .toastMsg(AppLocalizations.of(context)!.avilbel, Colors.green.shade700);
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.avilbel, Colors.green.shade700);
     } else {
       Tools().toastMsg(
           AppLocalizations.of(context)!.notAvilbel, Colors.redAccent.shade700);
