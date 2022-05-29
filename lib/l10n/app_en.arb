@@ -462,6 +462,14 @@
   "withCard": "With card more customer",
   "@withCard": {
     "description": "With card more customer "
-  }
+  },
 
+  "interNetWeak": "Internet week try loading again !!!",
+  "@interNetWeak": {
+    "description": "Internet week try loading again !!!"
+  },
+  "try1": "Try again",
+  "@try1": {
+    "description": "Try again"
+  }
 }

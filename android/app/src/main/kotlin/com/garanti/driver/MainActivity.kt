@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
 import android.util.Log
+import android.view.WindowManager
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -39,7 +40,7 @@ class MainActivity: FlutterActivity() {
                             val packageManager: PackageManager = context.packageManager
                             val intent = packageManager.getLaunchIntentForPackage("com.garanti.driver")
                                 intent!!.setPackage(null)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             context.startActivity(intent)
                         }
                         else -> {
@@ -50,7 +51,8 @@ class MainActivity: FlutterActivity() {
         }
     }
 
-    private  fun  openOld(context: Context,messenger: BinaryMessenger){
+    @Suppress("DEPRECATION")
+    private  fun  openOld(context: Context, messenger: BinaryMessenger){
         methodChannel4 = MethodChannel(messenger,METHOD_CHANNEL4)
         methodChannel4!!.setMethodCallHandler { call, result ->
             when (call.method) {
@@ -59,14 +61,14 @@ class MainActivity: FlutterActivity() {
                     val isScreenOn = pm.isInteractive
                     if (!isScreenOn) {
                         if( Build.VERSION.SDK_INT <= 24 ){
-                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:MyLock")
+                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:GarantiTaxi Driver")
                             wl.acquire(10000)
-                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:mycpuMyCpuLock")
+                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:Garanti Driver")
                             wl_cpu.acquire(10000)
                         }else{
-                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:MyLock")
+                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:GarantiTaxi Driver")
                             wl.acquire(10000)
-                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:mycpuMyCpuLock")
+                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:Garanti Driver")
                             wl_cpu.acquire(10000)
                         }
                     }

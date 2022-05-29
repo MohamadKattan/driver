@@ -1,5 +1,6 @@
 /// this class for localNoitifction we will use with ios just
 import 'dart:async';
+import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -68,6 +69,7 @@ Future<void> initializationLocal(BuildContext context) async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
+        DataBaseReal().getDriverInfoFromDataBase(context);
     // final ref = FirebaseDatabase.instance
     //     .ref()
     //     .child("driver")

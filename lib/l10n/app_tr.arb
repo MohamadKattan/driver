@@ -111,5 +111,7 @@
   "taxi": "Taksi-4 koltuk",
   "veto": "Orta boy ticari-6-10 koltuk",
   "van": "Büyük ticari 11-19 koltuk",
-  "withCard": "Kart ile daha fazla müşteri"
+  "withCard": "Kart ile daha fazla müşteri",
+  "interNetWeek": "İnternet zayıf tekrar yüklemeyi deneyin !!!",
+  "try1": "Tekrar deneyin"
 }

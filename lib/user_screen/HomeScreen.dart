@@ -60,9 +60,8 @@ void onStart(ServiceInstance service) async {
       service.setAsForegroundService();
     });
 
-    service.on('setAsBackground').listen((event) {
+    service.on('setAsBackground').listen((event){
       service.setAsBackgroundService();
-      driverRef.child(userId).child("service").onDisconnect().remove();
     });
   }
   service.on('stopService').listen((event) {
@@ -70,6 +69,7 @@ void onStart(ServiceInstance service) async {
   });
 
   if (userId.isNotEmpty) {
+    await  driverRef.child(userId).child("service").onDisconnect().remove();
     await PlanDays().setIfBackgroundOrForeground(true);
     await driverRef.child(userId).child("exPlan").once().then((value) {
       if (value.snapshot.exists && value.snapshot.value != null) {
@@ -160,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     initializeService();
+    FlutterBackgroundService().invoke("setAsBackground");
     getToken();
     initializationLocal(context);
     requestPermissions();
@@ -172,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // initPlatformState();
     requestPermissionsSystem();
     // checkOnclick();
-    FlutterBackgroundService().invoke("setAsBackground");
     super.initState();
   }
 

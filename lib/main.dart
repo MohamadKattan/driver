@@ -1,17 +1,11 @@
-import 'dart:async';
-import 'package:driver/payment/couut_plan_days.dart';
-import 'package:driver/repo/auth_srv.dart';
-import 'package:driver/repo/geoFire_srv.dart';
+
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'config.dart';
 import 'my_provider/auth__inductor_provider.dart';
 import 'my_provider/bottom_sheet_value.dart';
 import 'my_provider/change_color_bottom.dart';
@@ -32,9 +26,6 @@ import 'my_provider/ride_request_info.dart';
 import 'my_provider/tilte_arrived_button_provider.dart';
 import 'my_provider/trip_history_provider.dart';
 import 'my_provider/user_id_provider.dart';
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
