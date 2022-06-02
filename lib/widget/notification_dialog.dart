@@ -19,7 +19,6 @@ import '../user_screen/new_ride_screen.dart';
 import '../widget/custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class NotificationDialog extends StatefulWidget {
   const NotificationDialog(BuildContext context, {Key? key}) : super(key: key);
 
@@ -41,6 +40,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
     // _playSound();
     super.initState();
   }
+
   /// with ios just
   // @override
   // void dispose() {
@@ -60,9 +60,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Colors.transparent,
       child: Container(
-        height: MediaQuery.of(context).size.height * 65 / 100,
+        height: MediaQuery.of(context).size.height * 75 / 100,
         width: double.infinity,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0),color: Colors.white),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6.0), color: Colors.white),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +72,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
               Center(
                   child: Lottie.asset('images/lf30_editor_mtfshyfg.json',
                       height: 160, width: 160)),
-               Text(AppLocalizations.of(context)!.rideRequest,
+              Text(
+                AppLocalizations.of(context)!.rideRequest,
                 style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 24.0,
@@ -136,14 +138,49 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   Text("Km : ${rideInfoProvider.km}",
                       style: const TextStyle(
                           color: Colors.black45, fontSize: 16.0)),
-                  Text( AppLocalizations.of(context)!.fare + currencyTypeCheck(context) +" : "+ rideInfoProvider.amount,
-                      style:  TextStyle(
+                  Text(
+                      AppLocalizations.of(context)!.fare +
+                          currencyTypeCheck(context) +
+                          " : " +
+                          rideInfoProvider.amount,
+                      style: TextStyle(
                           color: Colors.redAccent.shade700, fontSize: 20.0))
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 2 / 100),
               CustomDivider().customDivider(),
-              SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+              rideInfoProvider.tourismCityName != ""
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        "Tourism trip for full day about 10 hour",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Colors.black45,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(""),
+                    ),
+              rideInfoProvider.tourismCityName != ""
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("In : ${rideInfoProvider.tourismCityName}",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: Colors.greenAccent.shade700,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold)),
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(""),
+                    ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -151,6 +188,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   GestureDetector(
                     onTap: () async {
                       stopSound();
+
+                      ///ios
                       // _stopSound();
                       driverCancelOrder(context);
                       Navigator.pop(context);
@@ -161,45 +200,48 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2.0),
                           color: Colors.redAccent.shade700),
-                      child:  Center(
+                      child: Center(
                           child: Text(
-                            AppLocalizations.of(context)!.cancel,
+                        AppLocalizations.of(context)!.cancel,
                         style: const TextStyle(color: Colors.white),
                       )),
                     ),
                   ),
-                  isHideButton==false?
-                  GestureDetector(
-                    onTap: () async {
-                      stopSound();
-                    // _stopSound();
-                      checkAvailableOfRide(context, rideInfoProvider);
-                      setState(() {
-                        isHideButton=true;
-                      });
-                    },
-                    child: Container(
-                        width: MediaQuery.of(context).size.width * 30 / 100,
-                        height: MediaQuery.of(context).size.height * 7 / 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.0),
-                            color: Colors.green.shade700),
-                        child:  Center(
-                            child: Text(AppLocalizations.of(context)!.ok,
-                          style:const TextStyle(color: Colors.white),
-                        ))),
-                  )
-                      :Container(
+                  isHideButton == false
+                      ? GestureDetector(
+                          onTap: () async {
+                            stopSound();
+                            // _stopSound();
+                            checkAvailableOfRide(context, rideInfoProvider);
+                            setState(() {
+                              isHideButton = true;
+                            });
+                          },
+                          child: Container(
+                              width:
+                                  MediaQuery.of(context).size.width * 30 / 100,
+                              height:
+                                  MediaQuery.of(context).size.height * 7 / 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2.0),
+                                  color: Colors.green.shade700),
+                              child: Center(
+                                  child: Text(
+                                AppLocalizations.of(context)!.ok,
+                                style: const TextStyle(color: Colors.white),
+                              ))),
+                        )
+                      : Container(
                           width: MediaQuery.of(context).size.width * 30 / 100,
                           height: MediaQuery.of(context).size.height * 7 / 100,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(2.0),
                               color: Colors.green.shade700),
-                          child:  Center(
+                          child: Center(
                               child: Text(
-                                AppLocalizations.of(context)!.ok,
-                                style:const TextStyle(color: Colors.white),
-                              )))
+                            AppLocalizations.of(context)!.ok,
+                            style: const TextStyle(color: Colors.white),
+                          )))
                 ],
               ),
             ],
@@ -229,7 +271,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
       if (value.snapshot.value != null) {
         newRideState = value.snapshot.value.toString();
       } else {
-        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,
+            Colors.redAccent.shade700);
         rideRequestRef.set("searching");
         Navigator.pop(context);
       }
@@ -238,27 +281,30 @@ class _NotificationDialogState extends State<NotificationDialog> {
         homeScreenStreamSubscription?.pause();
         Geofire.stopListener();
         Geofire.removeLocation(currentUseId);
-       await GeoFireSrv().displayLocationLiveUpdates();
+        await GeoFireSrv().displayLocationLiveUpdates();
         await rideRequestRef.set("accepted").whenComplete(() {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const NewRideScreen()));
         });
       } else if (newRideState == "canceled") {
-        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,
+            Colors.redAccent.shade700);
         rideRequestRef.set("searching");
         Navigator.pop(context);
       } else if (newRideState == "timeOut") {
         rideRequestRef.set("searching");
-        Tools().toastMsg(AppLocalizations.of(context)!.timeOut,Colors.redAccent.shade700);
+        Tools().toastMsg(
+            AppLocalizations.of(context)!.timeOut, Colors.redAccent.shade700);
         Navigator.pop(context);
       } else {
         rideRequestRef.set("searching");
-        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,Colors.redAccent.shade700);
+        Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,
+            Colors.redAccent.shade700);
         Navigator.pop(context);
       }
     });
     setState(() {
-       isHideButton = false;
+      isHideButton = false;
     });
   }
 
@@ -268,10 +314,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
         .currentPosition;
     final currentUseId =
-        Provider.of<DriverInfoModelProvider>(context, listen: false)
-            .driverInfo;
+        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
 
-  final newRef =   _ref.child(currentUseId.userId).child("newRide");
+    final newRef = _ref.child(currentUseId.userId).child("newRide");
     newRef.onDisconnect();
     newRef.remove();
 
@@ -279,7 +324,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
     Geofire.stopListener();
     Geofire.removeLocation(currentUseId.userId);
 
-  _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
+    _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
     const duration = Duration(seconds: 1);
     Timer.periodic(duration, (timer) async {
       rideRequestTimeOut = rideRequestTimeOut - 1;
@@ -287,7 +332,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         timer.cancel();
         homeScreenStreamSubscription?.resume();
         await Geofire.setLocation(
-            currentUseId.userId ,position.latitude, position.longitude);
+            currentUseId.userId, position.latitude, position.longitude);
         _ref.child(currentUseId.userId).child("newRide").set("searching");
         _ref.child(currentUseId.userId).child("offLine").set("Available");
         rideRequestTimeOut = 120;
@@ -295,11 +340,13 @@ class _NotificationDialogState extends State<NotificationDialog> {
     });
   }
 
- Future <void> _playSound()async {
-   await audioCache.play(path);
- }
-  Future <void> _stopSound()async {
+  ///ios
+  Future<void> _playSound() async {
+    await audioCache.play(path);
+  }
+
+  ///ios
+  Future<void> _stopSound() async {
     await audioPlayer.stop();
   }
 }
-

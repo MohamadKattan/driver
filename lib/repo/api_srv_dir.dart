@@ -7,6 +7,7 @@ import '../config.dart';
 import '../model/direction_details.dart';
 import '../my_provider/direction_details_provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import '../my_provider/ride_request_info.dart';
 import '../tools/get_url.dart';
 
 class ApiSrvDir {
@@ -47,7 +48,6 @@ class ApiSrvDir {
     return null;
   }
 
-
   // static int calculateFares(DirectionDetails directionDetails,
   //     String carTypePro, BuildContext context) {
   //   final contryName =
@@ -73,71 +73,89 @@ class ApiSrvDir {
       String carTypePro, BuildContext context) {
     final contryName =
         Provider.of<DriverInfoModelProvider>(context, listen: false)
-            .driverInfo.country;
-    late  double culculFinal;
+            .driverInfo
+            .country;
+    final rideInfoProvider = Provider.of<RideRequestInfoProvider>(context,listen: false)
+        .rideDetails
+        .amount;
+    late double culculFinal;
     double timeTravleFare = (directionDetails.durationVale / 60) * 0.20;
     double distanceTravleFare = (directionDetails.distanceVale / 1000) * 0.60;
     double fareAmont = timeTravleFare + distanceTravleFare;
     if (carTypePro == "Taxi-4 seats" && contryName == "Turkey") {
-     culculFinal= fareAmont * 13 + 0.70 * 13.00;
+      culculFinal = fareAmont * 13 + 0.70 * 13.00;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Morocco") {
-      culculFinal= fareAmont * 10 + 0.70 * 10.00;
+      culculFinal = fareAmont * 10 + 0.70 * 10.00;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Sudan") {
-      culculFinal= fareAmont *450+ 0.70 * 450;
+      culculFinal = fareAmont * 450 + 0.70 * 450;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Saudi Arabia") {
-      culculFinal=fareAmont + 1.85 * 3.75 + 2.70 * 3.75;
+      culculFinal = fareAmont + 1.85 * 3.75 + 2.70 * 3.75;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Qatar") {
-      culculFinal=fareAmont - 0.25 * 3.64 + 2.75 * 3.75;
+      culculFinal = fareAmont - 0.25 * 3.64 + 2.75 * 3.75;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Libya") {
-      culculFinal=fareAmont - 0.30 * 4.80 + 1 * 4.80;
+      culculFinal = fareAmont - 0.30 * 4.80 + 1 * 4.80;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Kuwait") {
-      culculFinal=fareAmont + 1.65 * 0.32 + 4.88 * 0.32;
+      culculFinal = fareAmont + 1.65 * 0.32 + 4.88 * 0.32;
     } else if (carTypePro == "Taxi-4 seats" && contryName == "Iraq") {
-      culculFinal=fareAmont + 1.20 + 2.73;
+      culculFinal = fareAmont + 1.20 + 2.73;
     } else if (carTypePro == "Taxi-4 seats" &&
         contryName == "United Arab Emirates") {
-      culculFinal=fareAmont - 0.30 * 3.67 + 3.30 * 3.67;
-    }
-    else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Turkey") {
-      culculFinal=100;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Morocco") {
-      culculFinal=fareAmont + 0.20 * 10 + 1.50 * 10.00;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Sudan") {
-      culculFinal=fareAmont *450+ 1.50 * 450;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Saudi Arabia") {
-      culculFinal=fareAmont + 1.85 + 0.20 * 3.75 + 3.70 * 3.75;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Qatar") {
-      culculFinal=fareAmont  * 3.64 + 4.75 * 3.75;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Libya") {
-      culculFinal=fareAmont  * 4.80 + 3 * 4.80;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Kuwait") {
-      culculFinal=fareAmont +0.10+ 1.65 * 0.32 + 5.88 * 0.32;
-    } else if (carTypePro == "Medium commercial-6-10 seats" && contryName == "Iraq") {
-      culculFinal=fareAmont +0.20 + 1.20 + 4.73;
+      culculFinal = fareAmont - 0.30 * 3.67 + 3.30 * 3.67;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Turkey") {
+         culculFinal= double.parse(rideInfoProvider);
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Morocco") {
+      culculFinal = fareAmont + 0.20 * 10 + 1.50 * 10.00;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Sudan") {
+      culculFinal = fareAmont * 450 + 1.50 * 450;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Saudi Arabia") {
+      culculFinal = fareAmont + 1.85 + 0.20 * 3.75 + 3.70 * 3.75;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Qatar") {
+      culculFinal = fareAmont * 3.64 + 4.75 * 3.75;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Libya") {
+      culculFinal = fareAmont * 4.80 + 3 * 4.80;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Kuwait") {
+      culculFinal = fareAmont + 0.10 + 1.65 * 0.32 + 5.88 * 0.32;
+    } else if (carTypePro == "Medium commercial-6-10 seats" &&
+        contryName == "Iraq") {
+      culculFinal = fareAmont + 0.20 + 1.20 + 4.73;
     } else if (carTypePro == "Medium commercial-6-10 seats" &&
         contryName == "United Arab Emirates") {
-      culculFinal=fareAmont  * 3.67 + 5.30 * 3.67;
-    }
-    else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Turkey") {
-      culculFinal=120;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Morocco") {
-      culculFinal=fareAmont + 0.20 * 10 + 2 * 10.00;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Sudan") {
-      culculFinal=fareAmont *450+ 2 * 450;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Saudi Arabia") {
-      culculFinal=fareAmont + 1.85 + 0.20 * 3.75 + 4.70 * 3.75;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Qatar") {
-      culculFinal=fareAmont  * 3.64 + 5.75 * 3.64;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Libya") {
-      culculFinal=fareAmont  * 4.80 + 4 * 4.80;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Kuwait") {
-      culculFinal=fareAmont +0.10+ 1.65 * 0.32 + 6.88 * 0.32;
-    } else if (carTypePro == "Big commercial-11-19 seats" && contryName == "Iraq") {
-      culculFinal=fareAmont +0.20 + 1.20 + 5.73;
+      culculFinal = fareAmont * 3.67 + 5.30 * 3.67;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Turkey") {
+   culculFinal= double.parse(rideInfoProvider);
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Morocco") {
+      culculFinal = fareAmont + 0.20 * 10 + 2 * 10.00;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Sudan") {
+      culculFinal = fareAmont * 450 + 2 * 450;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Saudi Arabia") {
+      culculFinal = fareAmont + 1.85 + 0.20 * 3.75 + 4.70 * 3.75;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Qatar") {
+      culculFinal = fareAmont * 3.64 + 5.75 * 3.64;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Libya") {
+      culculFinal = fareAmont * 4.80 + 4 * 4.80;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Kuwait") {
+      culculFinal = fareAmont + 0.10 + 1.65 * 0.32 + 6.88 * 0.32;
+    } else if (carTypePro == "Big commercial-11-19 seats" &&
+        contryName == "Iraq") {
+      culculFinal = fareAmont + 0.20 + 1.20 + 5.73;
     } else if (carTypePro == "Big commercial-11-19 seats" &&
         contryName == "United Arab Emirates") {
-      culculFinal= fareAmont  * 3.67 + 6.30 * 3.67;
-    }else{
+      culculFinal = fareAmont * 3.67 + 6.30 * 3.67;
+    } else {
       culculFinal = 0.0;
     }
     return culculFinal.truncate();

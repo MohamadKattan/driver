@@ -1,10 +1,14 @@
 /// this class for localNoitifction we will use with ios just
 import 'dart:async';
+import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
+
+import '../config.dart';
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -69,28 +73,27 @@ Future<void> initializationLocal(BuildContext context) async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
-        DataBaseReal().getDriverInfoFromDataBase(context);
-    // final ref = FirebaseDatabase.instance
-    //     .ref()
-    //     .child("driver")
-    //     .child(currentUser!.uid)
-    //     .child("newRide");
-    // await ref.once().then((value) {
-    //   if (value.snapshot.value != null) {
-    //     final snap = value.snapshot.value;
-    //     String id = snap.toString();
-    //    const _duration= Duration(seconds: 1);
-    //     int count = 1;
-    //     Timer.periodic(_duration, (timer) {
-    //       count =count - 1;
-    //       if(count==0){
-    //         timer.cancel();
-    //         count = 1;
-    //         PushNotificationsSrv().retrieveRideRequestInfo(id, context);
-    //       }
-    //     });
-    //   }
-    // });
+    final ref = FirebaseDatabase.instance
+        .ref()
+        .child("driver")
+        .child(currentUser!.uid)
+        .child("newRide");
+    await ref.once().then((value) {
+      if (value.snapshot.value != null) {
+        final snap = value.snapshot.value;
+        String id = snap.toString();
+       const _duration= Duration(milliseconds: 600);
+        int count = 1;
+        Timer.periodic(_duration, (timer) {
+          count =count - 1;
+          if(count==0){
+            timer.cancel();
+            count = 1;
+            PushNotificationsSrv().retrieveRideRequestInfo(id, context);
+          }
+        });
+      }
+    });
     selectedNotificationPayload = payload;
     selectNotificationSubject.add(payload);
   });

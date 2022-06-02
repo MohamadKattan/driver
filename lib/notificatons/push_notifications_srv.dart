@@ -178,6 +178,7 @@ class PushNotificationsSrv {
         String dropoffAddress = map["dropoffAddress"];
         String km = map["km"];
         String amount = map["amount"];
+        String tourismCityName = map["tourismCityName"];
 
         RideDetails rideDetails = RideDetails(
           userId: userId,
@@ -191,6 +192,7 @@ class PushNotificationsSrv {
           dropoff: LatLng(dropOffLinlatitude, dropOffLontitude),
           km: km,
           amount: amount,
+          tourismCityName: tourismCityName,
         );
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .updateState(rideDetails);
@@ -223,8 +225,6 @@ class PushNotificationsSrv {
         } else if (_riderId == "canceled") {
           Future.delayed(const Duration(seconds: 20)).whenComplete(
               () => driverRef.child(userId).child("newRide").set("searching"));
-
-          return;
         } else if (_riderId == "timeOut") {
           Future.delayed(const Duration(seconds: 60)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
@@ -236,9 +236,7 @@ class PushNotificationsSrv {
           openDailog();
           playSound();
           openDailogOld();
-          retrieveRideRequestInfo(_riderId, context).whenComplete(() {
-            FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-          });
+          retrieveRideRequestInfo(_riderId, context);
         }
       }
     });

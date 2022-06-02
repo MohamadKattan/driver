@@ -17,6 +17,7 @@ class RideRequestInfoProvider extends ChangeNotifier {
     dropoff: const LatLng(0.0, 0.0),
     km: "",
     amount: "",
+    tourismCityName: "",
   );
 
   void updateState(RideDetails rideInfo) {

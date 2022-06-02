@@ -1,4 +1,3 @@
-
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';

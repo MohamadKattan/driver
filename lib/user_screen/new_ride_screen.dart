@@ -180,7 +180,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 12.0),
                             child: Text(
-                              AppLocalizations.of(context)!.riderName +" "+
+                              AppLocalizations.of(context)!.riderName +
+                                  " " +
                                   rideInfoProvider.riderName,
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 20.0),
@@ -692,13 +693,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
       timerStop3 = Timer.periodic(const Duration(milliseconds: 1400), (timer) {
         count = count - 1;
         if (count == 0) {
-          if(AppLocalizations.of(context)!.day == "Gun"){
+          if (AppLocalizations.of(context)!.day == "Gun") {
             assetsAudioPlayer.open(Audio("sounds/end_trip_tr.mp3"));
-          }
-          else if(AppLocalizations.of(context)!.day == "يوم"){
+          } else if (AppLocalizations.of(context)!.day == "يوم") {
             assetsAudioPlayer.open(Audio("sounds/end_trip_ar.wav"));
-          }
-          else{
+          } else {
             assetsAudioPlayer.open(Audio("sounds/end_trip_en.wav"));
           }
           timer.cancel();

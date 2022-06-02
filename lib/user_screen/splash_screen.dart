@@ -11,9 +11,9 @@ import '../payment/couut_plan_days.dart';
 import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
 import 'auth_screen.dart';
+import 'driverInfo_screen.dart';
 import 'if_you_wanttopay.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'intrentet_week.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     checkInternet();
-    if (AuthSev().auth.currentUser?.uid != null){
+    if (AuthSev().auth.currentUser?.uid != null) {
       DataBaseReal().getDriverInfoFromDataBase(context);
       PlanDays().getBackGroundBoolValue();
     }
@@ -46,10 +46,12 @@ class _SplashScreenState extends State<SplashScreen>
         await DataBaseReal().getDriverInfoFromDataBase(context);
       }
       if (status == AnimationStatus.completed) {
-        if(result==false){
-         Tools().toastMsg(AppLocalizations.of(context)!.noNet, Colors.redAccent);
-         Tools().toastMsg(AppLocalizations.of(context)!.checkNet, Colors.redAccent);
-        }else{
+        if (result == false) {
+          Tools()
+              .toastMsg(AppLocalizations.of(context)!.noNet, Colors.redAccent);
+          Tools().toastMsg(
+              AppLocalizations.of(context)!.checkNet, Colors.redAccent);
+        } else {
           final driverInfo =
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .driverInfo;
@@ -57,10 +59,11 @@ class _SplashScreenState extends State<SplashScreen>
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AuthScreen()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.status == "" ||
-              driverInfo.status.isEmpty) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const InterNetWeak()));
+              driverInfo.status == "info") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DriverInfoScreen()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.status == "checkIn") {
             Navigator.push(context,
@@ -73,6 +76,10 @@ class _SplashScreenState extends State<SplashScreen>
               driverInfo.status == "payed") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.status.isEmpty) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const InterNetWeak()));
           } else {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AuthScreen()));
@@ -103,8 +110,9 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-  Future<void>  checkInternet()async {
-    result=await InternetConnectionChecker().hasConnection;
+
+  Future<void> checkInternet() async {
+    result = await InternetConnectionChecker().hasConnection;
   }
 
   @override

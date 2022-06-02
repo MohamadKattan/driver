@@ -471,5 +471,13 @@
   "try1": "Try again",
   "@try1": {
     "description": "Try again"
+  },
+  "yourCode": "Your code",
+  "@yourCode": {
+    "description": "Your code"
+  },
+  "typeCode": "Type the code",
+  "@typeCode": {
+    "description": "Type the code"
   }
 }

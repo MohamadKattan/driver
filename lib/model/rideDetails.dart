@@ -14,17 +14,19 @@ class RideDetails {
   late LatLng dropoff;
   late String km;
   late String amount;
-  RideDetails(
-      {required this.userId,
-      required this.riderName,
-      required this.riderPhone,
-      required this.paymentMethod,
-      required this.vehicleTypeId,
-      required this.pickupAddress,
-      required this.pickup,
-      required this.dropoffAddress,
-      required this.dropoff,
-      required this.km,
-      required this.amount,
-      });
+  late String tourismCityName;
+  RideDetails({
+    required this.userId,
+    required this.riderName,
+    required this.riderPhone,
+    required this.paymentMethod,
+    required this.vehicleTypeId,
+    required this.pickupAddress,
+    required this.pickup,
+    required this.dropoffAddress,
+    required this.dropoff,
+    required this.km,
+    required this.amount,
+    required this.tourismCityName,
+  });
 }

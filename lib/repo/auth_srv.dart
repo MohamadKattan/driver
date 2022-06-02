@@ -58,7 +58,7 @@ class AuthSev {
               "phoneNumber": result.toString(),
               "email": email.text.trim(),
               "backbool":false,
-              "status": "",
+              "status": "info",
               "firstName": "",
               "country":"",
               "exPlan":0,
@@ -82,7 +82,7 @@ class AuthSev {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Text("type a code"),
+                             Text(AppLocalizations.of(context)!.typeCode),
                             Expanded(
                               flex: 1,
                               child: Padding(
@@ -94,16 +94,16 @@ class AuthSev {
                                   style: const TextStyle(
                                       fontSize: 16, fontWeight: FontWeight.w600),
                                   cursorColor: const Color(0xFFFFD54F),
-                                  decoration: const InputDecoration(
-                                    icon: Padding(
+                                  decoration:  InputDecoration(
+                                    icon: const Padding(
                                       padding: EdgeInsets.only(top: 15.0),
                                       child: Icon(
                                         Icons.vpn_key,
                                         color: Color(0xFFFFD54F),
                                       ),
                                     ),
-                                    fillColor: Color(0xFFFFD54F),
-                                    hintText: "Your Code",
+                                    fillColor: const Color(0xFFFFD54F),
+                                    hintText: AppLocalizations.of(context)!.yourCode,
                                   ),
                                   keyboardType: TextInputType.phone,
                                 ),
@@ -129,12 +129,12 @@ class AuthSev {
                                     decoration: BoxDecoration(
                                         color: const Color(0xFFFFD54F),
                                         borderRadius: BorderRadius.circular(8)),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
+                                    child:  Padding(
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Center(
                                           child: Text(
-                                            "verify",
-                                            style: TextStyle(
+                                            AppLocalizations.of(context)!.confirm,
+                                            style: const TextStyle(
                                                 fontSize: 25.0,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
@@ -151,7 +151,7 @@ class AuthSev {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const SplashScreen()));
+                      builder: (context) => const DriverInfoScreen()));
               Provider.of<TrueFalse>(context, listen: false).updateState(false);
             });
           }

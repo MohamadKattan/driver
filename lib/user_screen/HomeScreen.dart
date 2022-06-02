@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'dart:math';
 import 'package:driver/repo/geoFire_srv.dart';
@@ -58,6 +59,7 @@ void onStart(ServiceInstance service) async {
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
+      driverRef.child(userId).child("service").onDisconnect().remove();
     });
 
     service.on('setAsBackground').listen((event){
@@ -166,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
     requestPermissions();
     PlanDays().countDayPlansInForeground();
     PushNotificationsSrv().gotNotificationInBackground(context);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
 
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);

@@ -29,8 +29,8 @@ class InterNetWeak extends StatelessWidget {
           ),
        const   SizedBox(height: 16.0),
           GestureDetector(
-            onTap: (){
-              DataBaseReal().getDriverInfoFromDataBase(context).whenComplete(() =>
+            onTap: () async {
+            await  DataBaseReal().getDriverInfoFromDataBase(context).whenComplete(() =>
                   Navigator.push(context, MaterialPageRoute(builder:(_)=>const SplashScreen()))
               );
             },
