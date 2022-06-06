@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .updateColorBottom(false);
                               },
                               icon: const Icon(
-                                Icons.arrow_back_ios,
+                                Icons.close,
                                 color: Colors.black54,
                                 size: 25,
                               )),

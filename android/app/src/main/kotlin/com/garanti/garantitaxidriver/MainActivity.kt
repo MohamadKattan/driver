@@ -1,12 +1,10 @@
 
-package com.garanti.driver
+package com.garanti.garantitaxidriver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
-import android.util.Log
-import android.view.WindowManager
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -38,9 +36,9 @@ class MainActivity: FlutterActivity() {
             when (call.method) {
                         "openDailog" -> {
                             val packageManager: PackageManager = context.packageManager
-                            val intent = packageManager.getLaunchIntentForPackage("com.garanti.driver")
+                            val intent = packageManager.getLaunchIntentForPackage("com.garanti.garantitaxidriver")
                                 intent!!.setPackage(null)
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED or  Intent.FLAG_FROM_BACKGROUND
                             context.startActivity(intent)
                         }
                         else -> {

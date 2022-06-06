@@ -1,5 +1,5 @@
 // this class for custom drawer
-import 'package:driver/notificatons/push_notifications_srv.dart';
+
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
@@ -18,10 +18,11 @@ import 'custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget customDrawer(BuildContext context) {
-  final planProvider = Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
-  double day = planProvider/60/24;
+  final planProvider =
+      Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
+  double day = planProvider / 60 / 24;
   int newDay = day.floor();
-  return Container  (
+  return Container(
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.height,
     decoration: const BoxDecoration(
@@ -40,9 +41,11 @@ Widget customDrawer(BuildContext context) {
           SizedBox(
             height: MediaQuery.of(context).size.height * 25 / 100,
             child: GestureDetector(
-              onTap: (){
-                Provider.of<DrawerValueChange>(context, listen: false).updateValue(0);
-                Provider.of<ChangeColorBottomDrawer>(context, listen: false).updateColorBottom(false);
+              onTap: () {
+                Provider.of<DrawerValueChange>(context, listen: false)
+                    .updateValue(0);
+                Provider.of<ChangeColorBottomDrawer>(context, listen: false)
+                    .updateColorBottom(false);
               },
               child: DrawerHeader(
                 child: Column(
@@ -56,9 +59,21 @@ Widget customDrawer(BuildContext context) {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children:   [
-                         Text(planProvider<=0?AppLocalizations.of(context)!.planFinished:AppLocalizations.of(context)!.yPlan,style: const TextStyle(color: Colors.black45,fontSize: 16.0)),
-                        Text(newDay.toString() +AppLocalizations.of(context)!.day,style:  TextStyle(fontSize: 20.0,color:planProvider<=7200?Colors.redAccent.shade700:Colors.greenAccent.shade700))
+                      children: [
+                        Text(
+                            planProvider <= 0
+                                ? AppLocalizations.of(context)!.planFinished
+                                : AppLocalizations.of(context)!.yPlan,
+                            style: const TextStyle(
+                                color: Colors.black45, fontSize: 16.0)),
+                        Text(
+                            newDay.toString() +
+                                AppLocalizations.of(context)!.day,
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: planProvider <= 7200
+                                    ? Colors.redAccent.shade700
+                                    : Colors.greenAccent.shade700))
                       ],
                     )
                   ],
@@ -69,27 +84,35 @@ Widget customDrawer(BuildContext context) {
           Column(
             children: [
               const SizedBox(
-                height:   4.0,
+                height: 4.0,
               ),
               GestureDetector(
-                onTap: ()=>
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const BookingScreen())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BookingScreen())),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                      children:  [
-                     Padding(
-                      padding: EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                      child:const Icon(Icons.history, color: Colors.black45,size: 35,),
-                    ),
-                   const  SizedBox(width: 8.0),
+                  child: Row(mainAxisSize: MainAxisSize.max, children: [
                     Padding(
-                        padding:const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      padding: EdgeInsets.only(
+                          left: 8.0,
+                          bottom: 8.0,
+                          top: 8.0,
+                          right: valueIconPadding(context)),
+                      child: const Icon(
+                        Icons.history,
+                        color: Colors.black45,
+                        size: 35,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: Text(
                           AppLocalizations.of(context)!.booking,
-                          style:const TextStyle(color: Colors.black45,fontSize: 20.0),
+                          style: const TextStyle(
+                              color: Colors.black45, fontSize: 20.0),
                         ))
                   ]),
                 ),
@@ -99,23 +122,31 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap:()=> Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const EarningScreen())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EarningScreen())),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children:  [
-                       Padding(
-                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                        child:const Icon(Icons.money, color: Colors.black45,size: 35),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 8.0,
+                            top: 8.0,
+                            right: valueIconPadding(context)),
+                        child: const Icon(Icons.money,
+                            color: Colors.black45, size: 35),
                       ),
-                    const  SizedBox(
+                      const SizedBox(
                         width: 8.0,
                       ),
                       Text(
                         AppLocalizations.of(context)!.myEarning,
-                        style:const TextStyle(color: Colors.black45,fontSize: 20),
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 20),
                       ),
                     ],
                   ),
@@ -126,23 +157,31 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ProfileScreen())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileScreen())),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children:  [
-                       Padding(
-                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                        child:const Icon(Icons.person, color: Colors.black45,size: 35),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 8.0,
+                            top: 8.0,
+                            right: valueIconPadding(context)),
+                        child: const Icon(Icons.person,
+                            color: Colors.black45, size: 35),
                       ),
                       const SizedBox(
                         width: 8.0,
                       ),
                       Text(
                         AppLocalizations.of(context)!.update,
-                        style: const TextStyle(color: Colors.black45,fontSize: 20),
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 20),
                       ),
                     ],
                   ),
@@ -153,24 +192,70 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder:(_)=>const RatingScreen()));
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const RatingScreen()));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    children:  [
-                       Padding(
-                        padding: EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                        child:const Icon(Icons.star, color: Colors.black45,size: 35,),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 8.0,
+                            top: 8.0,
+                            right: valueIconPadding(context)),
+                        child: const Icon(
+                          Icons.star,
+                          color: Colors.black45,
+                          size: 35,
+                        ),
                       ),
                       const SizedBox(
                         width: 8.0,
                       ),
-                      Text(AppLocalizations.of(context)!.myRating,
-                        style:const TextStyle(color: Colors.black45,fontSize: 20.0),
+                      Text(
+                        AppLocalizations.of(context)!.myRating,
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 20.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              CustomDivider().customDivider(),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PlanScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 8.0,
+                            top: 8.0,
+                            right: valueIconPadding(context)),
+                        child: const Icon(
+                          Icons.payment,
+                          color: Colors.black45,
+                          size: 35,
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        AppLocalizations.of(context)!.paymentScreen,
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 20.0),
                       ),
                     ],
                   ),
@@ -182,23 +267,31 @@ Widget customDrawer(BuildContext context) {
               CustomDivider().customDivider(),
               GestureDetector(
                 onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>const PlanScreen())),
+                    MaterialPageRoute(builder: (context) => const ContactUs())),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children:  [
-                      Padding(
-                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                        child:const Icon(Icons.payment, color: Colors.black45,size: 35,),
+                  child: Row(mainAxisSize: MainAxisSize.max, children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 8.0,
+                          bottom: 8.0,
+                          top: 8.0,
+                          right: valueIconPadding(context)),
+                      child: const Icon(
+                        Icons.email,
+                        color: Colors.black45,
+                        size: 35,
                       ),
-                     const SizedBox(width: 8.0),
-                      Text(
-                          AppLocalizations.of(context)!.paymentScreen,
-                        style:const TextStyle(color: Colors.black45,fontSize: 20.0),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.uss,
+                          style: const TextStyle(
+                              color: Colors.black45, fontSize: 20.0),
+                        ))
+                  ]),
                 ),
               ),
               const SizedBox(
@@ -206,34 +299,7 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: ()=>
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const ContactUs())),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children:  [
-                        Padding(
-                          padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                          child:const Icon(Icons.email, color: Colors.black45,size: 35,),
-                        ),
-                    const    SizedBox(width: 8.0),
-                        Padding(
-                            padding:const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                            child: Text(
-                                AppLocalizations.of(context)!.uss,
-                              style:const TextStyle(color: Colors.black45,fontSize: 20.0),
-                            ))
-                      ]),
-                ),
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              CustomDivider().customDivider(),
-              GestureDetector(
-                onTap: (){
+                onTap: () {
                   // GeoFireSrv().makeDriverOffLine(context);
                   // FlutterBackgroundService().invoke("setAsBackground");
                   SystemNavigator.pop();
@@ -241,15 +307,27 @@ Widget customDrawer(BuildContext context) {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    children:  [
+                    children: [
                       Padding(
-                        padding:  EdgeInsets.only(left: 8.0,bottom: 8.0,top: 8.0,right:valueIconPadding(context)),
-                        child:const Icon(Icons.exit_to_app, color: Colors.black45,size: 35.0,),
+                        padding: EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 8.0,
+                            top: 8.0,
+                            right: valueIconPadding(context)),
+                        child: const Icon(
+                          Icons.exit_to_app,
+                          color: Colors.black45,
+                          size: 35.0,
+                        ),
                       ),
-                    const  SizedBox(
+                      const SizedBox(
                         width: 8.0,
                       ),
-                      Text(AppLocalizations.of(context)!.exit,style:const TextStyle(color: Colors.black45,fontSize: 20.0),),
+                      Text(
+                        AppLocalizations.of(context)!.exit,
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 20.0),
+                      ),
                     ],
                   ),
                 ),
@@ -261,14 +339,28 @@ Widget customDrawer(BuildContext context) {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SwitchBottomDrawer(),
-                 const   SizedBox(width: 16.0,),
-                    Image.asset("images/iconDrop.png",height: 60.0,width: 60.0,),
+                    const SizedBox(
+                      width: 16.0,
+                    ),
+                    Image.asset(
+                      "images/iconDrop.png",
+                      height: 60.0,
+                      width: 60.0,
+                    ),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text(AppLocalizations.of(context)!.withCard,style: TextStyle(color: Colors.black45,fontSize: 16.0),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,),
+                child: Text(
+                  AppLocalizations.of(context)!.withCard,
+                  style: const TextStyle(
+                      color: Colors.black45,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -280,43 +372,45 @@ Widget customDrawer(BuildContext context) {
 
 Widget showImage(BuildContext context) {
   final userInfoRealTime =
-  Provider.of<DriverInfoModelProvider>(context,listen: false).driverInfo;
+      Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
   return userInfoRealTime.personImage.isNotEmpty
       ? Expanded(
-    child: CachedNetworkImage(
-      imageBuilder: (context, imageProvider) => Container(
-        width: 60.0,
-        height: 60.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-        ),
-      ),
-      imageUrl: userInfoRealTime.personImage,
-      placeholder: (context, url) => const CircularProgressIndicator(),
-      errorWidget: (context, url, error) => const Icon(Icons.person),
-    ),
-  )
+          child: CachedNetworkImage(
+            imageBuilder: (context, imageProvider) => Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
+            ),
+            imageUrl: userInfoRealTime.personImage,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.person),
+          ),
+        )
       : const Expanded(
-    flex: 0,
-    child: CircleAvatar(
-      radius: 30,
-      backgroundColor: Colors.white,
-      child: Icon(
-        Icons.person,
-        color: Colors.black12,
-        size: 35,
-      ),
-    ),
-  );
+          flex: 0,
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.person,
+              color: Colors.black12,
+              size: 35,
+            ),
+          ),
+        );
 }
 
 Widget showUserName(BuildContext context) {
   final userInfoRealTime =
       Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
   return userInfoRealTime.firstName.isNotEmpty
-      ? Text("Hi ${userInfoRealTime.firstName}")
-      : const Expanded(child: Text("Welcome back"));
+      ? Text(AppLocalizations.of(context)!.welcome +
+          " " +
+          userInfoRealTime.firstName)
+      :  Expanded(child: Text(AppLocalizations.of(context)!.welcome));
 }
 
 Widget showUserPhone(BuildContext context) {
@@ -327,16 +421,12 @@ Widget showUserPhone(BuildContext context) {
       : const Text("");
 }
 
-double valueIconPadding(BuildContext context){
- late double val;
-  if(AppLocalizations.of(context)!.day == "يوم"){
-    val=65.0;
-  }else{
-    val=8.0;
+double valueIconPadding(BuildContext context) {
+  late double val;
+  if (AppLocalizations.of(context)!.day == "يوم") {
+    val = 65.0;
+  } else {
+    val = 8.0;
   }
   return val.toDouble();
 }
-
-
-
-
