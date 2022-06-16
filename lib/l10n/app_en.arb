@@ -1,15 +1,15 @@
 {
-    "logIn": "Log in to Garanti driver taxi",
+    "logIn": "LogIn to Garanti driver taxi",
     "@logIn": {
       "description": "Log in to Garanti driver taxi"
     },
-     "enteryournumber": "Enter your number to be able to log in or create a new account",
+     "enteryournumber": "Enter your email & passWord  to be able to log in or create a new account",
       "@enteryournumber": {
         "description": "user number phone"
     },
-    "email": "Enter your email & phone number",
+    "email": "Enter your email & passWord",
        "@email": {
-         "description": "user number phone & email"
+         "description": "user passWord  & email"
     },
     "country": "Pick your country",
         "@country": {
@@ -479,5 +479,50 @@
   "typeCode": "Type the code",
   "@typeCode": {
     "description": "Type the code"
+  },
+  "holderName": "Holder Name",
+  "@holderName": {
+    "description": "Holder Name"
+  },
+  "policy": "Policy",
+  "@policy": {
+    "description": "Policy"
+  },
+  "policyInfp": "Garanti Taxi Driver 2021-2022 This Privacy Policy sets out the basis on which Garanti Driver will process information, including personal data, that we collect from you or that you provide to us. Each time you access or use the Services or provide us with information, in doing so you accept and agree to the practices described in this Privacy Policy.Scope and application Scope and Application This privacy policy (“Privacy Policy”) applies to persons anywhere in the world who access and use our Services (“Users”) as well as to Driver or any other persons using the Garanti Driver system.Data collection We collect information that you provide to us directly through your access or use of the Services, for example, when you create or modify your account, order on-demand services, contact customer support or otherwise contact us. This information may include: your name, email, phone number, postal address, profile picture, payment method, financial and credit card information, and any other information you choose to provide to us.Information we collect through your use of our services When you use our Services, we collect information (i.e. information that can be used to contact you directly such as your full name, postal address, phone number, credit/debit card information, or email address) (Personal Information)and demographic information (i.e. information you provide or that we collect It is not personal information, including, but not limited to, zip code, country of origin, gender, username.We also use GPS technology to determine your current location. Some of our site-enabled services request your personal data to operate in the future. If you wish to use a particular feature, you will be asked to consent to the data being used for that purpose. Information we collect from other sources We may also obtain information from other sources and combine it with personal information we receive from you or collect through our Services. for example: If you choose to link, create or log into your Garanti Driver account with a payment service provider or social media service (for example Facebook) or if you link through a separate app or website that uses our API (or API) that we use), we may obtain information about you or your communications from that website or app. Our driver may provide us with a user rating after providing services to you.If you also interact with our Services in another capacity, for example as a driver, we may combine and associate that information with personal information we have collected from you as a user or passenger.Use of personal data We may use the personal information you provide to us that we collect from you for the following purposes:Provide, maintain, and improve our Services, including, for example, facilitating payments, sending receipts, providing products and services you request (and sending related information), developing new features, providing customer support to Users and Captains, developing security features, giving permission to users, and sending product upgrades and updates and administrative messages .Perform internal operations and management, including, for example, preventing fraud and abuse of our Services, troubleshooting software errors and operational problems, performing data analysis, testing and research, and monitoring and analyzing usage and activity trends.Send or facilitate communications (i) between you and the Driver, such as estimated times of arrival (ETAs), or (ii) between you and a contact of yours at your direction in connection with your use of certain features such as referrals or invitations.Storage and transfer of personal data You agree that we have the right to transfer the personal data described in this Privacy Policy to and from, and to process and store it and we will take the necessary measures to protect your personal data in accordance with this Privacy Policy. By submitting your personal data, you consent to such transfer, storage or processing. We will take all necessary and reasonable steps to ensure that your data is processed securely and in accordance with this Privacy Policy.Sharing personal data We may share personal data we collect about you as described in this statement or as described at the time the information is collected or shared, including the following:through our services We may share your personal data: With the driver to provide the services you request. For example, we share your name and pick-up and/or delivery locations with the Captain. With third parties to provide a service you have requested through a partnership or promotion offered by a third party or by us. We may share your personal data: With affiliated and subsidiary entities of Garanti Driver.with agents, consultants, marketing and advertising partners and other service providers who need access to that personal data to perform work on our behalf; or to perform any contract we enter into with them.In response to a request for any information by a competent authority if we believe that disclosure of that information was under, or otherwise required by, any applicable law, regulation or legal process.with law enforcement officials, government authorities or other third parties to enforce or apply your Terms and Conditions, to investigate potential violations or if we believe your actions are in violation of our Terms and Conditions of Service, or to protect the rights, property, and safety of Garanti Driver or others;with third parties in connection with, or during negotiations of, any merger, sale of company assets, consolidation, restructuring, financing, or purchase of a share or all of our company by any other company, or our purchase of any other company.If we otherwise notify you and you agree to participate;with third parties in an aggregated and/or anonymized form that cannot reasonably be used to identify you.your options Changes to this Privacy Policy We may change this Privacy Policy from time to time. If we make any material changes to the way we treat your personal data, or to the Privacy Policy, we will provide you with notice through the Services or by other means such as email. Your continued use of the Services after such notice constitutes your acceptance of those changes. We encourage you to periodically review our Privacy Policy for the most current information about our privacy practices. security precautions Your Garanti Taxi Driver profile is password protected so that you and authorized Garanti Driver employees have access to your account information. Our staff will not proactively contact you and ask for any personal account information, including your password. call us If you have any questions, comments or requests related to this Privacy Statement, or if you have any complaints or objections regarding the way Garanti Driver handles your personal data, please contact us at:cust@garantidriver.com",
+  "@policyInfo": {
+    "description": "Policy"
+  },
+  "pass": "PassWord",
+  "@pass": {
+    "description": "PassWord"
+  },
+  "passLength": "The password is weak, it must consist of 8 numbers or letters",
+  "@passLength": {
+    "description": "The password is weak, it must consist of 8 numbers or letters"
+  },
+
+  "passRequired": "PassWord required can not be empty ",
+  "@passRequired": {
+    "description": "PassWord required"
+  },
+  "declaration": "Request a permission !!",
+  "@declaration": {
+    "description": "request a permission !!"
+  },
+  "background": "GarantiTaxi Driver App collects location data to enable identification of your location even when the app is closed or not in use for  Chances of getting more customer orders",
+  "@background": {
+    "description": "GarantiTaxi Driver App collects location data to enable identification of your location even when the app is closed or not in use for  Chances of getting more customer orders"
+  },
+  "dataScuer": "2_ All data that we collect from you is highly secure and preserved and is fully encrypted and is not available to share with anyone",
+  "@dataScuer": {
+    "description": "2_ All data that we collect from you is highly secure and fully encrypted and is not available to share with anyone"
+  },
+  "approval": "ACCEPT",
+  "@approval": {
+    "description": "Approval"
+  },
+  "noApproval": "DENY",
+  "@noApproval": {
+    "description": "No"
   }
 }

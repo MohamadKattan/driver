@@ -7,12 +7,13 @@ import 'package:provider/provider.dart';
 import '../model/card_payment.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/payment_indector_provider.dart';
+import '../payment/easy_go_payment.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class CardPaymentScreen extends StatefulWidget {
-  final int amount;
+  final double amount;
   final int planexpirt;
   const CardPaymentScreen({Key? key, required this.amount,required this.planexpirt}) : super(key: key);
 
@@ -24,6 +25,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
   String cardNumber = "";
   String expiryDateMouthe = "";
   String expiryDateYear = "";
+  String cardHolderName = "";
   String cvv = "";
   bool showBack = false;
    FocusNode _focusNode = FocusNode();
@@ -63,6 +65,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       cardNumber: cardNumber,
                       cardExpiry: "$expiryDateMouthe/$expiryDateYear",
                       cvv: cvv,
+                      cardHolderName: cardHolderName,
                       showBackSide: showBack,
                       frontBackground: CardBackgrounds.black,
                       backBackground: CardBackgrounds.white,
@@ -129,6 +132,21 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       },
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: TextFormField(
+                      decoration:   InputDecoration(hintText:AppLocalizations.of(context)!.holderName),
+                      maxLength: 20,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        setState(() {
+                          cardHolderName = value;
+                        });
+                      },
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -149,15 +167,18 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                               expiryDateYear:expiryDateYear,
                               expiryDateMouthe: expiryDateMouthe,
                               cardNumber: cardNumber,
+                              holderName: cardHolderName
                                );
-                            CheckOutPayment checkOut = CheckOutPayment();
-                            await checkOut.makePayment(
-                                card,
-                                widget.amount,
-                              countryName=="Turkey"?"TRY":"USD",
-                                context,
-                              widget.planexpirt
-                        );
+                          await  PayNow().tryPay(context,card,widget.planexpirt,widget.amount);
+                          ///checkout
+                        //     CheckOutPayment checkOut = CheckOutPayment();
+                        //     await checkOut.makePayment(
+                        //         card,
+                        //         widget.amount,
+                        //       countryName=="Turkey"?"TRY":"USD",
+                        //         context,
+                        //       widget.planexpirt
+                        // );
                             Provider.of<PaymentIndector>(context,listen: false).updateState(false);
 
                           }),

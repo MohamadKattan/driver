@@ -135,7 +135,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
               right: 0.0,
               bottom: 0.0,
               child: Container(
-                height: MediaQuery.of(context).size.height * 30 / 100,
+                height: MediaQuery.of(context).size.height * 32 / 100,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
                     color: Colors.white,
@@ -259,20 +259,17 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         height: 2.0,
                       ),
                       CustomDivider().customDivider(),
-                      const SizedBox(
-                        height: 2.0,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          status == "onride"
-                              ? GestureDetector(
-                                  onTap: () {
-                                    navigationPickToDrop(context);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 15.0),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom:8.0,top: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            status == "onride"
+                                ? GestureDetector(
+                                    onTap: () {
+                                      navigationPickToDrop(context);
+                                    },
                                     child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -306,16 +303,13 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                                     color: Colors.white))
                                           ],
                                         )),
-                                  ),
-                                )
-                              : const Text(""),
-                          GestureDetector(
-                            onTap: () {
-                              changeColorArrivedAndTileButton(
-                                  context, rideInfoProvider);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15.0),
+                                  )
+                                : const Text(""),
+                            GestureDetector(
+                              onTap: () {
+                                changeColorArrivedAndTileButton(
+                                    context, rideInfoProvider);
+                              },
                               child: Container(
                                   width: MediaQuery.of(context).size.width *
                                       40 /
@@ -332,14 +326,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                     style: TextStyle(color: buttonColor),
                                   ))),
                             ),
-                          ),
-                          status == "accepted"
-                              ? GestureDetector(
-                                  onTap: () {
-                                    navigationDriverToPickUpRi(context);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 15.0),
+                            status == "accepted"
+                                ? GestureDetector(
+                                    onTap: () {
+                                      navigationDriverToPickUpRi(context);
+                                    },
                                     child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -376,10 +367,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                             ))
                                           ],
                                         )),
-                                  ),
-                                )
-                              : const Text("")
-                        ],
+                                  )
+                                : const Text("")
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -934,11 +925,15 @@ class _NewRideScreenState extends State<NewRideScreen> {
         }
         timer.cancel();
         timerStop1.cancel();
-        timerCount1 = 3;
+       setState(() {
+         timerCount1 = 3;
+       });
       } else if (status == "arrived") {
         timer.cancel();
         timerStop1.cancel();
-        timerCount1 = 3;
+        setState(() {
+          timerCount1 = 3;
+        });
       }
     });
   }
@@ -957,11 +952,15 @@ class _NewRideScreenState extends State<NewRideScreen> {
           assetsAudioPlayer.open(Audio("sounds/start_trip_en.wav"));
         }
         timer.cancel();
-        _timerCount2 = 5;
+       setState(() {
+         _timerCount2 = 5;
+       });
       } else if (status == "onride") {
         timer.cancel();
         timerStop2.cancel();
-        _timerCount2 = 5;
+       setState(() {
+         _timerCount2 = 5;
+       });
       }
     });
   }

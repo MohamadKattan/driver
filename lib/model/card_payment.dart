@@ -5,10 +5,13 @@ class CardPayment {
   late String expiryDateMouthe;
   late String expiryDateYear;
   late String cvv;
+  late String holderName;
 
-  CardPayment(
-      {required this.cardNumber,
-      required this.cvv,
-      required this.expiryDateMouthe,
-      required this.expiryDateYear});
+  CardPayment({
+    required this.cardNumber,
+    required this.cvv,
+    required this.expiryDateMouthe,
+    required this.expiryDateYear,
+    required this.holderName,
+  });
 }

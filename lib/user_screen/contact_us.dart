@@ -37,7 +37,7 @@ class ContactUs extends StatelessWidget {
                 children: const [
                   Icon(Icons.email, color: Colors.yellow, size: 20.0),
                   SizedBox(width: 6.0),
-                  Text("Garanti@gmail.com",
+                  Text("vba@garantitaxi.com",
                       style: TextStyle(color: Colors.black45, fontSize: 24.0))
                 ],
               ),
@@ -59,7 +59,7 @@ class ContactUs extends StatelessWidget {
                 children: [
                   Icon(Icons.call, color: Colors.green.shade700),
                   const SizedBox(width: 6.0),
-                  const Text("00000000000000",style: TextStyle(color: Colors.black45,fontSize: 24),)
+                  const Text("5366034616",style: TextStyle(color: Colors.black45,fontSize: 24),)
                 ],
               ),
             ),

@@ -3,6 +3,7 @@
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
+import 'package:driver/user_screen/policy_screen.dart';
 import 'package:driver/widget/switch_bottom_drarwer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -237,32 +238,78 @@ Widget customDrawer(BuildContext context) {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 8.0,
-                            bottom: 8.0,
-                            top: 8.0,
-                            right: valueIconPadding(context)),
-                        child: const Icon(
-                          Icons.payment,
-                          color: Colors.black45,
-                          size: 35,
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 8.0,
+                                bottom: 8.0,
+                                top: 8.0,
+                                right: valueIconPadding(context)),
+                            child: const Icon(
+                              Icons.payment,
+                              color: Colors.black45,
+                              size: 35,
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            AppLocalizations.of(context)!.paymentScreen,
+                            style: const TextStyle(
+                                color: Colors.black45, fontSize: 20.0),
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: Padding(
+                          padding:  EdgeInsets.only(top: 8.0,bottom: 8.0,left: 8.0,right:valueIconPadding1(context) ),
+                          child: Container(
+                            height: 20,
+                            decoration: const BoxDecoration(
+                            shape: BoxShape.circle
+                            ),
+                              child: Image.asset("images/credit.png",width: 40,height: 40,fit: BoxFit.cover,)),
                         ),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        AppLocalizations.of(context)!.paymentScreen,
-                        style: const TextStyle(
-                            color: Colors.black45, fontSize: 20.0),
-                      ),
+                      )
                     ],
                   ),
                 ),
               ),
               const SizedBox(
                 height: 8.0,
+              ),
+              CustomDivider().customDivider(),
+              GestureDetector(
+                onTap: ()=> Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const PolicyScreen())),
+                child:Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(mainAxisSize: MainAxisSize.max, children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 8.0,
+                          bottom: 8.0,
+                          top: 8.0,
+                          right: valueIconPadding(context)),
+                      child: const Icon(
+                        Icons.policy,
+                        color: Colors.black45,
+                        size: 35,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.policy,
+                          style: const TextStyle(
+                              color: Colors.black45, fontSize: 20.0),
+                        ))
+                  ]),
+                ),
               ),
               CustomDivider().customDivider(),
               GestureDetector(
@@ -424,6 +471,16 @@ Widget showUserPhone(BuildContext context) {
 double valueIconPadding(BuildContext context) {
   late double val;
   if (AppLocalizations.of(context)!.day == "يوم") {
+    val = 65.0;
+  } else {
+    val = 8.0;
+  }
+  return val.toDouble();
+}
+
+double valueIconPadding1(BuildContext context) {
+  late double val;
+  if (AppLocalizations.of(context)!.day == "Day"||AppLocalizations.of(context)!.day =="Gun") {
     val = 65.0;
   } else {
     val = 8.0;

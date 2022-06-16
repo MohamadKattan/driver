@@ -1,4 +1,5 @@
 
+import 'package:driver/config.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +15,9 @@ class PlanScreen extends StatefulWidget {
 }
 
 class _PlanScreenState extends State<PlanScreen> {
-  late int amountPlan1 ;
-  late  int amountPlan2 ;
-  late int amountPlan3 ;
+  late double amountPlan1 ;
+  late  double amountPlan2 ;
+  late double amountPlan3 ;
 
   @override
   Widget build(BuildContext context) {
@@ -195,15 +196,20 @@ class _PlanScreenState extends State<PlanScreen> {
   void checkamout1(String carType, BuildContext context, String countryName){
     if(countryName == "Turkey"){
       if(carType=="Taxi-4 seats"){
-        amountPlan1 =18000;
-      }else{
-        amountPlan1 = 30000;
+        // amountPlan1 =18000;
+        amountPlan1 =180;
+      }
+      else{
+        // amountPlan1 = 30000;
+        amountPlan1 = 300;
       }
     }else{
       if(carType=="Taxi-4 seats"){
-        amountPlan1 =1000;
+        // amountPlan1 =1000;
+        amountPlan1 = 10;
       }else{
-        amountPlan1 = 2000;
+        amountPlan1 = 20;
+        // amountPlan1 = 2000;
       }
     }
 
@@ -214,15 +220,19 @@ class _PlanScreenState extends State<PlanScreen> {
   checkAmount2(String carType, BuildContext context,String countryName ) {
     if(countryName == "Turkey"){
       if(carType=="Taxi-4 seats"){
-        amountPlan2 =47000;
+        // amountPlan2 =47000;
+        amountPlan2 =470;
       }else{
-        amountPlan2 = 70000;
+        // amountPlan2 = 70000;
+        amountPlan2 = 700;
       }
     }else{
       if(carType=="Taxi-4 seats"){
-        amountPlan2 =3000;
+        // amountPlan2 =3000;
+        amountPlan2 =30;
       }else{
-        amountPlan2 = 5500;
+        // amountPlan2 = 5500;
+        amountPlan2 = 55;
       }
     }
     Navigator.push(context,
@@ -232,15 +242,19 @@ class _PlanScreenState extends State<PlanScreen> {
   checkAmount3(String carType, BuildContext context,String countryName) {
     if(countryName == "Turkey"){
       if(carType=="Taxi-4 seats"){
-        amountPlan3 =80000;
+        // amountPlan3 =80000;
+        amountPlan3 =800;
       }else{
-        amountPlan3 = 135000;
+        // amountPlan3 = 135000;
+        amountPlan3 = 1350;
       }
     }else{
       if(carType=="Taxi-4 seats"){
-        amountPlan3 =5500;
+        // amountPlan3 =5500;
+        amountPlan3 =55;
       }else{
-        amountPlan3 = 9500;
+        amountPlan3 = 95;
+        // amountPlan3 = 9500;
       }
     }
     Navigator.push(context,

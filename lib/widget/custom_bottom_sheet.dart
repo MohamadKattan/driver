@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
+import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,6 +35,7 @@ class CustomBottomSheet {
     TextEditingController carColor,
     TextEditingController carModel,
     String dropBottomValue,
+    String result,
   ) {
     final driverImage = Provider.of<GetImageProvider>(context).personImage;
     final driverLis = Provider.of<GetImageProvider>(context).imageDriverLis;
@@ -67,8 +69,7 @@ class CustomBottomSheet {
                   size: 35.0,
                   color: Colors.black45,
                 )),
-             Center(
-                child: Text(AppLocalizations.of(context)!.approveImages)),
+            Center(child: Text(AppLocalizations.of(context)!.approveImages)),
             const SizedBox(height: 15.0),
             Container(
               height: MediaQuery.of(context).size.height * 10 / 100,
@@ -87,8 +88,8 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Padding(
-                    padding:const EdgeInsets.only(left: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Text(AppLocalizations.of(context)!.personnelImage),
                   ),
                   Padding(
@@ -147,8 +148,8 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Padding(
-                    padding:const EdgeInsets.only(left: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Text(AppLocalizations.of(context)!.driverLicense),
                   ),
                   Padding(
@@ -206,8 +207,8 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Padding(
-                    padding:const EdgeInsets.only(left: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Text(AppLocalizations.of(context)!.carLicense),
                   ),
                   Padding(
@@ -265,8 +266,8 @@ class CustomBottomSheet {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Padding(
-                    padding:const EdgeInsets.only(left: 8.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Text(AppLocalizations.of(context)!.carImage),
                   ),
                   Padding(
@@ -310,13 +311,19 @@ class CustomBottomSheet {
             GestureDetector(
               onTap: () {
                 if (driverImage == null) {
-                  Tools().toastMsg(AppLocalizations.of(context)!.imageDrequired,Colors.redAccent.shade700);
+                  Tools().toastMsg(AppLocalizations.of(context)!.imageDrequired,
+                      Colors.redAccent.shade700);
                 } else if (driverLis == null) {
-                  Tools().toastMsg(AppLocalizations.of(context)!.licenseDrequired,Colors.redAccent.shade700);
+                  Tools().toastMsg(
+                      AppLocalizations.of(context)!.licenseDrequired,
+                      Colors.redAccent.shade700);
                 } else if (carLisImage == null) {
-                  Tools().toastMsg(AppLocalizations.of(context)!.licenseCrequired,Colors.redAccent.shade700);
+                  Tools().toastMsg(
+                      AppLocalizations.of(context)!.licenseCrequired,
+                      Colors.redAccent.shade700);
                 } else if (carImage == null) {
-                  Tools().toastMsg(AppLocalizations.of(context)!.imageCrequired,Colors.redAccent.shade700);
+                  Tools().toastMsg(AppLocalizations.of(context)!.imageCrequired,
+                      Colors.redAccent.shade700);
                 } else {
                   Provider.of<BottomSheetValue>(context, listen: false)
                       .updateValue(-600.0);
@@ -336,7 +343,9 @@ class CustomBottomSheet {
                       carColor,
                       carModel,
                       dropBottomValue,
-                      context);
+                      context,
+                    result
+                  );
                 }
               },
               child: Container(
@@ -346,7 +355,8 @@ class CustomBottomSheet {
                   color: const Color(0xFFFFD54F),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                child:  Center(child: Text(AppLocalizations.of(context)!.confirm)),
+                child:
+                    Center(child: Text(AppLocalizations.of(context)!.confirm)),
               ),
             ),
           ],
@@ -459,7 +469,7 @@ class CustomBottomSheet {
       TextEditingController carColor,
       TextEditingController carModel,
       String dropBottomValue,
-      BuildContext context) async {
+      BuildContext context, String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -467,7 +477,7 @@ class CustomBottomSheet {
     await ref.putFile(File(driverImage.path));
     String url1 = await ref.getDownloadURL();
     setToStorage2(url1, driverLis, carImage, carLisImage, name, lastName, idNo,
-         carBrand, carModel, carColor, dropBottomValue, context);
+        carBrand, carModel, carColor, dropBottomValue, context,result);
   }
 
   void setToStorage2(
@@ -482,7 +492,7 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context) async {
+      BuildContext context, String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -490,7 +500,7 @@ class CustomBottomSheet {
     await ref.putFile(File(driverLis.path));
     String url2 = await ref.getDownloadURL();
     setFromToStorage3(url1, url2, carLisImage, carImage, name, lastName, idNo,
-        carBrand, carModel, carColor, dropBottomValue, context);
+        carBrand, carModel, carColor, dropBottomValue, context,result);
   }
 
   void setFromToStorage3(
@@ -505,15 +515,15 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context) async {
+      BuildContext context, String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
         .child(path.basename(carLisImage!.path));
     await ref.putFile(File(carLisImage.path));
     String url3 = await ref.getDownloadURL();
-    storgeFrom3To4(url1, url2, url3, carImage, name, lastName, idNo,
-        carBrand, carModel, carColor, dropBottomValue, context);
+    storgeFrom3To4(url1, url2, url3, carImage, name, lastName, idNo, carBrand,
+        carModel, carColor, dropBottomValue, context,result);
   }
 
   void storgeFrom3To4(
@@ -528,7 +538,7 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context) async {
+      BuildContext context, String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -536,7 +546,7 @@ class CustomBottomSheet {
     await ref.putFile(File(carImage.path));
     String url4 = await ref.getDownloadURL();
     setToRealTimeDataBase(url1, url2, url3, url4, name, lastName, idNo,
-        carBrand, carModel, carColor, dropBottomValue, context);
+        carBrand, carModel, carColor, dropBottomValue, context,result);
   }
 
   void setToRealTimeDataBase(
@@ -551,7 +561,7 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context) async {
+      BuildContext context, String result) async {
     if (currentUser!.uid.isNotEmpty) {
       DatabaseReference driverRef = FirebaseDatabase.instance
           .ref()
@@ -559,7 +569,9 @@ class CustomBottomSheet {
           .child(currentUser!.uid);
       await driverRef.update({
         "userId": currentUser!.uid,
-        "status": "checkIn",
+        "status": "payed",
+        "exPlan": 43200,
+        "phoneNumber": result.toString(),
         "firstName": name.text,
         "lastName": lastName.text,
         "idNo": idNo.text.trim(),
@@ -567,7 +579,7 @@ class CustomBottomSheet {
         "driverLis": url2.toString(),
         "carLis": url3.toString(),
       }).whenComplete(() async {
-        await driverRef.child("carInfo").set({
+        await driverRef.child("carInfo").update({
           "carBrand": carBrand.text,
           "carColor": carColor.text,
           "carModel": carModel.text,
@@ -577,9 +589,11 @@ class CustomBottomSheet {
       }).whenComplete(() {
         Provider.of<DriverInfoInductor>(context, listen: false)
             .updateState(false);
+
+        /// reback to checkIn screen
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const CheckInScreen()),
+            MaterialPageRoute(builder: (context) => const SplashScreen()),
             (route) => false);
       });
     }

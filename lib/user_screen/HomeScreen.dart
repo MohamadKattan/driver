@@ -23,6 +23,7 @@ import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
+import '../payment/easy_go_payment.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
 import '../widget/custom_container_ofLine.dart';
@@ -73,7 +74,7 @@ void onStart(ServiceInstance service) async {
   if (userId.isNotEmpty) {
     await  driverRef.child(userId).child("service").onDisconnect().remove();
     await PlanDays().setIfBackgroundOrForeground(true);
-    await driverRef.child(userId).child("exPlan").once().then((value) {
+    await driverRef.child(userId).child("exPlan").onValue.listen((value) {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value;
         if (snap != null) {
@@ -81,6 +82,9 @@ void onStart(ServiceInstance service) async {
         }
       }
     });
+    // await driverRef.child(userId).child("exPlan").once().then((value) {
+    //
+    // });
   }
 
   Timer.periodic(const Duration(seconds: 50), (timer) async {
@@ -101,7 +105,7 @@ void onStart(ServiceInstance service) async {
     } else if (exPlan > 0) {
       exPlan = exPlan - 1;
       await driverRef.child(userId).child("exPlan").set(exPlan);
-      print("hello");
+      print("hello $exPlan");
 
       if (exPlan <= 0) {
         driverRef.child(userId).child("status").once().then((value) {
@@ -296,7 +300,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: const Color(0xFFFFD54F),
                           child: IconButton(
                               onPressed: () {
-                                PlanDays().getExPlanFromReal();
                                 Provider.of<DrawerValueChange>(context,
                                         listen: false)
                                     .updateValue(1);

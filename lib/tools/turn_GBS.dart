@@ -6,6 +6,7 @@ class TurnOnGBS {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
+
   Future<LocationData?> turnOnGBSifNot() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {

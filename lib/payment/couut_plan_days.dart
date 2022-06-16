@@ -23,15 +23,17 @@ class PlanDays {
         if(oldExPlan>0){
           int updateExPlan = oldExPlan + exPlan;
           await driverRef.child(userId).child("exPlan").set(updateExPlan);
-        }else{
+        }else if(oldExPlan <=0){
           await driverRef.child(userId).child("exPlan").set(exPlan);
+        }else{
+          return;
         }
       }
     });
   }
 
 // this method for get value plan from real time
- Future <void> getExPlanFromReal() async {
+ Future <int> getExPlanFromReal() async {
     await driverRef.child(userId).child("exPlan").once().then((value) {
       final snap = value.snapshot.value;
       if (snap != null) {
@@ -39,6 +41,7 @@ class PlanDays {
         exPlan = int.parse(plan);
       }
     });
+    return exPlan;
   }
 
   // this method for set true or false if background service or not
