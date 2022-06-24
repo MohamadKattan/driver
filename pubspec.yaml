@@ -47,13 +47,13 @@ dependencies:
   firebase_storage: ^10.2.9
   firebase_database: ^9.0.8
   url_launcher: ^6.0.20
-  cached_network_image: ^3.2.0
+  cached_network_image: "3.2.0"
   google_maps_flutter: ^2.1.4
   geolocator: ^8.2.1
   flutter_geofire: ^2.0.1
-  location: ^4.3.0
+  location: ^4.4.0
   firebase_messaging: ^11.2.11
-  assets_audio_player: ^3.0.4+1
+  assets_audio_player: ^3.0.4+3
   http: ^0.13.4
   flutter_polyline_points: ^1.0.0
   maps_toolkit: ^2.0.0

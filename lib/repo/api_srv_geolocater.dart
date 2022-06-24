@@ -2,6 +2,7 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
 import '../my_provider/driver_currentPosition_provider.dart';
@@ -24,6 +25,19 @@ class ApiSrvGeolocater{
       driverRef.child(userId).child("country").set(placeAddress);
       //for update
       Provider.of<PlaceName>(context, listen: false).updateState(placeAddress);
+    }
+    return placeAddress;
+  }
+
+  Future<dynamic>getContry() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    String placeAddress = "";
+    var url = Uri.parse("https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey");
+    final response = await _getUrl.getUrlMethod(url);
+    if (response != "failed") {
+      placeAddress = response["results"][0]["address_components"][5]["long_name"];
+      driverRef.child(userId).child("country").set(placeAddress);
     }
     return placeAddress;
   }

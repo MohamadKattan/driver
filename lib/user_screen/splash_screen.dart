@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import '../notificatons/push_notifications_srv.dart';
 import '../payment/couut_plan_days.dart';
 import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
@@ -33,6 +34,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     checkInternet();
     if (AuthSev().auth.currentUser?.uid != null) {
+      getToken();
       DataBaseReal().getDriverInfoFromDataBase(context);
       PlanDays().getBackGroundBoolValue();
     }

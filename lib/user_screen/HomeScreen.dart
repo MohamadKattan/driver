@@ -23,9 +23,9 @@ import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
-import '../payment/easy_go_payment.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
+import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -173,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
     PlanDays().countDayPlansInForeground();
     PushNotificationsSrv().gotNotificationInBackground(context);
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+    TurnOnGBS().turnOnGBSifNot();
 
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);

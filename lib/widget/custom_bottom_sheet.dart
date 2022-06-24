@@ -1,6 +1,7 @@
 // this class for custom bottom sheet use in DriverInfoScreen
 
 import 'dart:io';
+import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
 import 'package:driver/user_screen/splash_screen.dart';
@@ -100,9 +101,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 70,
-                                  maxHeight: 140.0,
-                                  maxWidth: 140.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updatePersonImage(image1!);
@@ -113,9 +115,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                 source: ImageSource.gallery,
-                                imageQuality: 70,
-                                maxWidth: 140,
-                                maxHeight: 140,
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -160,9 +162,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 70,
-                                  maxHeight: 140.0,
-                                  maxWidth: 140.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageDriverLis(image2!);
@@ -173,9 +176,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                  imageQuality: 70,
-                                  maxHeight: 140.0,
-                                  maxWidth: 140.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageDriverLis(image2!);
@@ -219,9 +223,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 70,
-                                  maxHeight: 140.0,
-                                  maxWidth: 140.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageCarLis(image3!);
@@ -232,9 +237,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                  imageQuality: 30,
-                                  maxHeight: 120.0,
-                                  maxWidth: 120.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImageCarLis(image3!);
@@ -278,9 +284,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                  imageQuality: 70,
-                                  maxHeight: 140.0,
-                                  maxWidth: 140.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImagePlatLis(image4!);
@@ -291,9 +298,10 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                  imageQuality: 70,
-                                  maxHeight: 140.0,
-                                  maxWidth: 140.0);
+                                imageQuality: 100,
+                                maxHeight: 250.0,
+                                maxWidth: 250.0,
+                              );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
                                   .updateImagePlatLis(image4!);
@@ -569,8 +577,8 @@ class CustomBottomSheet {
           .child(currentUser!.uid);
       await driverRef.update({
         "userId": currentUser!.uid,
-        "status": "payed",
-        "exPlan": 43200,
+        "status": "checkIn",
+        "exPlan": 0,
         "phoneNumber": result.toString(),
         "firstName": name.text,
         "lastName": lastName.text,
@@ -586,14 +594,14 @@ class CustomBottomSheet {
           "carType": dropBottomValue.toString(),
           "carImage": url4.toString(),
         });
-      }).whenComplete(() {
+      }).whenComplete(() async {
+      await  getToken();
         Provider.of<DriverInfoInductor>(context, listen: false)
             .updateState(false);
-
         /// reback to checkIn screen
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const SplashScreen()),
+            MaterialPageRoute(builder: (context) => const CheckInScreen()),
             (route) => false);
       });
     }
