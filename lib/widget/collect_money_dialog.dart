@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
+import '../tools/background_serv.dart';
 import '../tools/curanny_type.dart';
 import 'custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,6 +56,7 @@ Widget collectMoney(
               onTap: ()async {
                 GeoFireSrv().enableLocationLiveUpdates(context);
                 await  restNewRide(context);
+                clearCash();
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);

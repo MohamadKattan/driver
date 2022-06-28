@@ -12,6 +12,7 @@ import '../notificatons/push_notifications_srv.dart';
 import '../payment/couut_plan_days.dart';
 import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
+import '../tools/url_lunched.dart';
 import '../widget/custom_divider.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';
@@ -59,11 +60,17 @@ class _SplashScreenState extends State<SplashScreen>
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .driverInfo;
           if (AuthSev().auth.currentUser?.uid == null) {
-            showDialog(context: context,
+            showDialog(
+                context: context,
                 barrierDismissible: false,
-                builder:(_)=>showDialogPolicy(context));
+                builder: (_) => showDialogPolicy(context));
             // Navigator.push(context,
             //     MaterialPageRoute(builder: (context) => const AuthScreen()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.update == true) {
+            await ToUrlLunch().toPlayStore().whenComplete(() {
+              driverRef.child(userId).child("update").set(false);
+            });
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.status == "info") {
             Navigator.push(
@@ -126,15 +133,16 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
     _animationController.dispose();
   }
-  showDialogPolicy(BuildContext context) {
 
+  showDialogPolicy(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       color: Colors.black.withOpacity(0.7),
       child: Dialog(
         elevation: 1.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         backgroundColor: Colors.transparent,
         child: Container(
           height: MediaQuery.of(context).size.height * 50 / 100,
@@ -162,7 +170,9 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 CustomDivider().customDivider(),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
@@ -170,13 +180,12 @@ class _SplashScreenState extends State<SplashScreen>
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
-                        fontWeight: FontWeight.w500
-                    ),
+                        fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 CustomDivider().customDivider(),
-                const  SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
@@ -192,7 +201,8 @@ class _SplashScreenState extends State<SplashScreen>
                               borderRadius: BorderRadius.circular(4.0),
                               color: Colors.redAccent.shade700),
                           child: Center(
-                            child: Text(AppLocalizations.of(context)!.noApproval,
+                            child: Text(
+                                AppLocalizations.of(context)!.noApproval,
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16.0,
@@ -201,11 +211,12 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ),
                       GestureDetector(
-                        onTap: ()async{
-                        await  TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
-                            Navigator.push(context, MaterialPageRoute(builder:(_)=>const AuthScreen()))
-                        );
-
+                        onTap: () async {
+                          await TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const AuthScreen())));
                         },
                         child: Container(
                           height: 40,

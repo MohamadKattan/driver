@@ -60,7 +60,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Colors.transparent,
       child: Container(
-        height: MediaQuery.of(context).size.height * 75 / 100,
+        height: MediaQuery.of(context).size.height * 70 / 100,
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6.0), color: Colors.white),
@@ -71,7 +71,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
             children: [
               Center(
                   child: Lottie.asset('images/lf30_editor_mtfshyfg.json',
-                      height: 160, width: 160)),
+                      height: 140, width: 140)),
               Text(
                 AppLocalizations.of(context)!.rideRequest,
                 style: const TextStyle(
@@ -79,7 +79,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+              const SizedBox(height: 15),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +106,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                                 fontSize: 18.0,
                                 overflow: TextOverflow.ellipsis)))
                   ]),
-              SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+              const SizedBox(height: 15),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,7 +130,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               overflow: TextOverflow.ellipsis)),
                     )
                   ]),
-              SizedBox(height: MediaQuery.of(context).size.height * 4 / 100),
+              const SizedBox(height: 15.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -147,18 +147,18 @@ class _NotificationDialogState extends State<NotificationDialog> {
                           color: Colors.redAccent.shade700, fontSize: 20.0))
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 2 / 100),
+              const SizedBox(height: 10.0),
               CustomDivider().customDivider(),
               rideInfoProvider.tourismCityName != ""
-                  ? const Padding(
-                      padding: EdgeInsets.all(8.0),
+                  ?  Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Tourism trip for full day about 10 hour",
+                        AppLocalizations.of(context)!.fullDay,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black45,
-                            fontSize: 16.0,
+                            fontSize: 12.0,
                             fontWeight: FontWeight.bold),
                       ),
                     )
@@ -169,7 +169,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
               rideInfoProvider.tourismCityName != ""
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("In : ${rideInfoProvider.tourismCityName}",
+                      child: Text( AppLocalizations.of(context)!.ini + " : ${rideInfoProvider.tourismCityName}",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

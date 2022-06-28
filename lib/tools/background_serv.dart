@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
  const channel = MethodChannel("com.garanti.driver/channel");
 const channelSound = MethodChannel("com.garanti.driverSound/channel");
 const channelOpenDailogOld = MethodChannel("com.garanti.driverOld/channel");
+const channelClearCash = MethodChannel("com.garanti.driverClearCash/channel");
 
  openDailog()async{
   try{
@@ -32,6 +33,14 @@ playSound()async{
 stopSound()async{
   try{
     await channelSound.invokeMethod("stopSound");
+  }on PlatformException catch(ex){
+    debugPrint( ex.message);
+  }
+}
+
+ clearCash()async{
+  try{
+    await channelClearCash.invokeMethod("clearCash");
   }on PlatformException catch(ex){
     debugPrint( ex.message);
   }

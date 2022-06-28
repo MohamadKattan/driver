@@ -122,10 +122,10 @@ Future<void> showNotification() async {
 
    var bigImage =const BigPictureStyleInformation(
      DrawableResourceAndroidBitmap("map1"),
-     contentTitle: "New Ride Request",
+     contentTitle: "Garanti Taxi",
      htmlFormatContent: true,
      htmlFormatContentTitle: true,
-     summaryText: "click here to accepted",
+     summaryText: "isteğinizi kabul etti",
      // largeIcon: DrawableResourceAndroidBitmap("app_icon"),
    ) ;
    AndroidNotificationDetails androidPlatformChannelSpecifics =

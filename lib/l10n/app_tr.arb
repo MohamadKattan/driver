@@ -57,7 +57,7 @@
    "from": "dan : ",
    "too": "e : ",
    "toTrip": "yolculuk",
-   "rider": "Müşteri",
+   "rider": "Yolcuyu git",
    "paymentScreen": "Ödeme ekranı",
    "planChoose": "Sizin için 3 planımız var, istediğiniz gibi seçin",
      "plan1": "paket 1",
@@ -102,7 +102,7 @@
   "rideRequest": "Yeni yolculuk",
   "beenCanceled": "Yolculuk iptal edildi",
    "timeOut": "Yolculuk Zaman aşımına uğradı ",
-  "arrived": "Yolcuya git",
+  "arrived": "Yolcuya Çağır",
   "startTrip": "Yolculuğa başla",
   "endTrip": "Yolculuğu bitir",
   "avilbel": "Yeni Yolculuk için müsaitsiniz",
@@ -126,5 +126,7 @@
   "background": "GarantiTaxi Driver Uygulaması, daha fazla müşteri siparişi alma şansı için uygulama kapalıyken veya kullanımda değilken bile konumunuzun tanımlanmasını sağlamak için konum verilerini toplar.",
   "dataScuer": "2_ Sizden topladığımız tüm veriler son derece güvenli ve tamamen şifrelidir ve kimseyle paylaşılamaz.",
   "approval": "onay",
-  "noApproval": "onay değil"
+  "noApproval": "onay değil",
+  "fullDay": "Tam gün yaklaşık 10 saat turizm gezisi",
+  "ini": "İçinde"
 }

@@ -260,7 +260,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                       ),
                       CustomDivider().customDivider(),
                       Padding(
-                        padding: const EdgeInsets.only(bottom:8.0,top: 8.0),
+                        padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -354,9 +354,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                               child: Text(
                                                 AppLocalizations.of(context)!
                                                     .rider,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 12.0),
+                                                    fontSize: 10.0),
                                               ),
                                             )),
                                             const Center(
@@ -925,9 +926,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
         }
         timer.cancel();
         timerStop1.cancel();
-       setState(() {
-         timerCount1 = 3;
-       });
+        setState(() {
+          timerCount1 = 3;
+        });
       } else if (status == "arrived") {
         timer.cancel();
         timerStop1.cancel();
@@ -952,15 +953,15 @@ class _NewRideScreenState extends State<NewRideScreen> {
           assetsAudioPlayer.open(Audio("sounds/start_trip_en.wav"));
         }
         timer.cancel();
-       setState(() {
-         _timerCount2 = 5;
-       });
+        setState(() {
+          _timerCount2 = 5;
+        });
       } else if (status == "onride") {
         timer.cancel();
         timerStop2.cancel();
-       setState(() {
-         _timerCount2 = 5;
-       });
+        setState(() {
+          _timerCount2 = 5;
+        });
       }
     });
   }

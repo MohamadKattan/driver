@@ -12,6 +12,13 @@ class ToUrlLunch {
         : Tools().toastMsg('Could not launch $url', Colors.redAccent.shade700);
   }
 
+  Future<void> toPlayStore() async {
+    // if (!await launch(url)) throw 'Could not launch $url';
+    await canLaunch("https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
+        ? launch("https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
+        : Tools().toastMsg('Could not launch ', Colors.redAccent.shade700);
+  }
+
   Future<void> toCallLunch({required String phoneNumber}) async {
     // if (!await launch(url)) throw 'Could not launch $url';
     await canLaunch("tel:$phoneNumber")

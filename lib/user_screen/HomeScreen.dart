@@ -11,13 +11,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:system_alert_window/system_alert_window.dart';
 import '../config.dart';
 import '../logic_google_map.dart';
-import '../model/listSipyJson.dart';
-import '../model/sipayjson.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
@@ -25,15 +24,13 @@ import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
-import '../payment/sipay.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
+import '../tools/background_serv.dart';
 import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:convert'as cover;
-import 'package:http/http.dart' as http;
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -68,7 +65,7 @@ void onStart(ServiceInstance service) async {
       driverRef.child(userId).child("service").onDisconnect().remove();
     });
 
-    service.on('setAsBackground').listen((event){
+    service.on('setAsBackground').listen((event) {
       service.setAsBackgroundService();
     });
   }
@@ -77,9 +74,14 @@ void onStart(ServiceInstance service) async {
   });
 
   if (userId.isNotEmpty) {
-    await  driverRef.child(userId).child("service").onDisconnect().remove();
+    Geofire.initialize("availableDrivers");
+    Geofire.stopListener();
+    Geofire.removeLocation(userId);
+    driverRef.child(userId).child("newRide").onDisconnect();
+    await driverRef.child(userId).child("newRide").remove();
+    await driverRef.child(userId).child("service").onDisconnect().remove();
     await PlanDays().setIfBackgroundOrForeground(true);
-    await driverRef.child(userId).child("exPlan").onValue.listen((value) {
+    driverRef.child(userId).child("exPlan").onValue.listen((value) {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value;
         if (snap != null) {
@@ -110,8 +112,6 @@ void onStart(ServiceInstance service) async {
     } else if (exPlan > 0) {
       exPlan = exPlan - 1;
       await driverRef.child(userId).child("exPlan").set(exPlan);
-      print("hello $exPlan");
-
       if (exPlan <= 0) {
         driverRef.child(userId).child("status").once().then((value) {
           if (value.snapshot.exists && value.snapshot.value != null) {
@@ -168,18 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool valueSwitchBottom = true;
   String _platformVersion = 'Unknown';
   // sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
-  ListSiPayModel listSiPayModel = ListSiPayModel();
-  static const testUrl = "https://provisioning.sipay.com.tr/ccpayment/api/paySmart2D";
-  static const liveUrl = "https://app.sipay.com.tr/ccpayment/api/paySmart2D";
-  static const sKey = "b46a67571aa1e7ef5641dc3fa6f1712a";
-  static const pKey = "6d4a7e9374a76c15260fcc75e315b0b9";
-  static const merchantKey =r"$2y$10$HmRgYosneqcwHj.UH7upGuyCZqpQ1ITgSMj9Vvxn.t6f.Vdf2SQFO";
-  SiPayModel siPayModel =SiPayModel();
-  Map<String, String> header = {
-    "Content type": "application/json;charset=UTF-8",
-    "Authorization": " Bearer",
-    "Accept": "application/json",
-  };
   @override
   void initState() {
     initializeService();
@@ -191,13 +179,14 @@ class _HomeScreenState extends State<HomeScreen> {
     PushNotificationsSrv().gotNotificationInBackground(context);
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     TurnOnGBS().turnOnGBSifNot();
-    listSiPayModel.siPayList=<SiPayModel>[];
+    clearCash();
+
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     ///system dailog alert 3 methodes
     // initPlatformState();
     requestPermissionsSystem();
-    // checkOnclick();
+    onForground();
     super.initState();
   }
 
@@ -277,10 +266,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         valueSwitchBottom);
                                     getCountryName();
                                     tostDriverAvailable();
-                                    driverRef
-                                        .child(userId)
-                                        .child("service")
-                                        .set("not");
                                   },
                                 ),
                               ),
@@ -344,7 +329,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: Colors.white,
                           child: IconButton(
                               onPressed: () async {
-
                                 FlutterBackgroundService()
                                     .invoke("setAsBackground");
                                 Provider.of<DrawerValueChange>(context,
@@ -367,52 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
             onPressed: () async {
-              setState(() {
-                // SiPayModel  siPayModel=
-                // SiPayModel(
-                //     ccHolderName: "John Dao",
-                //     ccNo: "4508034508034509",
-                //     expiryMonth: 12,
-                //     expiryYear: 2026,
-                //     cvv: 543,
-                //     currencyCode: "TRY",
-                //     installmentsNumber: 1,
-                //     invoiceId: 5874544,
-                //     invoiceDescription: "5974544 Ödemesi",
-                //     name: "John",
-                //     surname: "Dao",
-                //     total: 458,
-                //     merchantKey: r"$2y$10$HmRgYosneqcwHj.UH7upGuyCZqpQ1ITgSMj9Vvxn.t6f.Vdf2SQFO",
-                //     items: "[{\"name\":\"pr001\",\"price\":\"2.30\"}]",
-                //     cancelUrl: "",
-                //     returnUrl: "",
-                //     hashKey: "",
-                //     orderType: 0
-                // );
-                listSiPayModel.siPayList?.add(SiPayModel(
-                    ccHolderName: "John Dao",
-                    ccNo: "4508034508034509",
-                    expiryMonth: 12,
-                    expiryYear: 2026,
-                    cvv: 543,
-                    currencyCode: "TRY",
-                    installmentsNumber: 1,
-                    invoiceId: 5874544,
-                    invoiceDescription: "5974544 Ödemesi",
-                    name: "John",
-                    surname: "Dao",
-                    total: 458,
-                    merchantKey: r"$2y$10$HmRgYosneqcwHj.UH7upGuyCZqpQ1ITgSMj9Vvxn.t6f.Vdf2SQFO",
-                    items: "[{\"name\":\"pr001\",\"price\":\"2.30\"}]",
-                    cancelUrl: "",
-                    returnUrl: "",
-                    hashKey: "",
-                    orderType: 0
-                ));
-                print(listSiPayModel.siPayList?.first.merchantKey);
-              });
-              send();
-              // await SiPay().doPayment();
+              await clearCash();
               await LogicGoogleMap().locationPosition(context);
               GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
               getCountryName();
@@ -478,19 +417,9 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
   }
-///for sipay payment
-  void send()async{
-    var res = await http.post(
-        Uri.parse(testUrl),
-        headers: header,
-        body:cover.jsonEncode(listSiPayModel.toJson())
-    );
-    if (res.statusCode == 200) {
-      print(res.statusCode);
-      print(res.body);
-    } else {
-      print(res.statusCode);
-      throw Exception("Payment error");
-    }
+
+// this method for stop local Notification
+  void onForground() {
+    driverRef.child(userId).child("service").set("not");
   }
 }

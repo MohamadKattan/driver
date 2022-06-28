@@ -6,8 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-String mapKey = "AIzaSyBt7etvZRY_OrzFcCsawNb22jqSzE2mRDg";
-String mapBox = "pk.eyJ1IjoibW9oYW1hZDg4IiwiYSI6ImNsMWl5NGdwdjBvcnUzY24zOWs0ejUyczYifQ.yvLkipuTn_XHHBz-lCAUAA";
+String mapKey = "AIzaSyDh5NNwfDJFU27Y_yMpVcWeeepBQBbewmM";
+String mapBox = "pk.eyJ1Ijoibml6YW04NCIsImEiOiJjbDR3c3FhdDUxbHM5M2NzM2kydjR0Zzl0In0.24gmrxZ6tyh636f7bkV3og";
 GoogleMapController? newGoogleMapController;
 StreamSubscription<Position>?homeScreenStreamSubscription;
 StreamSubscription<Position>?newRideScreenStreamSubscription;

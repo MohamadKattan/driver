@@ -16,6 +16,7 @@ class DriverInfo {
   late String earning;
   late String country;
   late int exPlan;
+  late bool update;
   DriverInfo(
       this.userId,
       this.country,
@@ -32,20 +33,22 @@ class DriverInfo {
       this.carType,
       this.earning,
       this.exPlan,
+      this.update
       // this.history
       );
   DriverInfo.fromMap(Map<String, dynamic> map) {
     userId = map["userId"];
     status = map["status"];
     country = map["country"];
-    exPlan= map["exPlan"];
+    exPlan = map["exPlan"];
+    update = map["update"];
     firstName = map["firstName"];
     lastName = map["lastName"];
     idNo = map["idNo"];
     phoneNumber = map["phoneNumber"];
     email = map["email"];
     personImage = map["personImage"];
-    earning= map["earning"];
+    earning = map["earning"];
     carBrand = map["carInfo"]["carBrand"];
     carColor = map["carInfo"]["carColor"];
     carModel = map["carInfo"]["carModel"];

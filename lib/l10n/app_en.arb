@@ -524,5 +524,13 @@
   "noApproval": "DENY",
   "@noApproval": {
     "description": "No"
-  }
+  },
+    "fullDay": "Tourism trip for full day about 10 hour",
+    "@fullDay": {
+      "description": "Tourism trip for full day about 10 hour"
+    },
+       "ini": "In",
+        "@ini": {
+          "description": "In"
+        }
 }

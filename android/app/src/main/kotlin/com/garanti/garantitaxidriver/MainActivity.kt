@@ -21,13 +21,18 @@ class MainActivity: FlutterActivity() {
 //    private  var methodChannel3:MethodChannel?=null
     private val METHOD_CHANNEL4 = "com.garanti.driverOld/channel"
     private  var methodChannel4:MethodChannel?=null
+    private val METHOD_CHANNEL5 = "com.garanti.driverClearCash/channel"
+    private  var methodChannel5:MethodChannel?=null
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
        super.configureFlutterEngine(flutterEngine)
+
         launchMediaPlayerDailog(this,flutterEngine.dartExecutor.binaryMessenger)
+
         playSound(this,flutterEngine.dartExecutor.binaryMessenger)
-//        playNot(this,flutterEngine.dartExecutor.binaryMessenger)
+
         openOld(this,flutterEngine.dartExecutor.binaryMessenger)
 
+        clearCash(this,flutterEngine.dartExecutor.binaryMessenger)
     }
 
     private fun launchMediaPlayerDailog(context: Context,messenger: BinaryMessenger){
@@ -104,26 +109,22 @@ class MainActivity: FlutterActivity() {
     }
 
 
-//    private  fun  playNot(context: Context,messenger: BinaryMessenger){
-//        methodChannel3 = MethodChannel(messenger,METHOD_CHANNEL3)
-//        methodChannel3!!.setMethodCallHandler { call, result ->
-//            when (call.method) {
-//                "playNot" -> {
-//                    try {
-//                        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-//                        val r = RingtoneManager.getRingtone(applicationContext, notification)
-//                        r.play()
-//                    } catch (e: Exception) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//                else -> {
-//                    result.notImplemented()
-//                }
-//            }
-//
-//        }
-//    }
+    private fun clearCash(context: Context,messenger: BinaryMessenger){
+        methodChannel5 = MethodChannel(messenger,METHOD_CHANNEL5)
+        methodChannel5!!.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "clearCash" -> {
+                    context.cacheDir.deleteRecursively()
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+
+        }
+    }
+
+
 
 }
 
