@@ -1,13 +1,11 @@
 
 import 'package:awesome_card/credit_card.dart';
 import 'package:awesome_card/style/card_background.dart';
-import 'package:driver/payment/checkOut_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/card_payment.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/payment_indector_provider.dart';
-import '../payment/easy_go_payment.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -169,7 +167,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                               cardNumber: cardNumber,
                               holderName: cardHolderName
                                );
-                          await  PayNow().tryPay(context,card,widget.planexpirt,widget.amount);
+                          // await  PayNow().tryPay(context,card,widget.planexpirt,widget.amount);
                           ///checkout
                         //     CheckOutPayment checkOut = CheckOutPayment();
                         //     await checkOut.makePayment(

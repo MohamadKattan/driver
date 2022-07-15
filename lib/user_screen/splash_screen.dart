@@ -3,10 +3,12 @@ import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
+import 'package:driver/user_screen/refresh_after_active.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../payment/couut_plan_days.dart';
@@ -14,6 +16,7 @@ import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
 import '../tools/url_lunched.dart';
 import '../widget/custom_divider.dart';
+import 'active_account.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';
 import 'if_you_wanttopay.dart';
@@ -35,19 +38,19 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     checkInternet();
     if (AuthSev().auth.currentUser?.uid != null) {
-      getToken();
       DataBaseReal().getDriverInfoFromDataBase(context);
       PlanDays().getBackGroundBoolValue();
     }
     _animationController = AnimationController(
         vsync: this,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 800),
         lowerBound: 0.6,
         upperBound: 0.7);
     _animationController.forward();
     _animationController.addStatusListener((status) async {
       if (AuthSev().auth.currentUser?.uid != null) {
         await DataBaseReal().getDriverInfoFromDataBase(context);
+        tokenPhone = await firebaseMessaging.getToken();
       }
       if (status == AnimationStatus.completed) {
         if (result == false) {
@@ -64,13 +67,28 @@ class _SplashScreenState extends State<SplashScreen>
                 context: context,
                 barrierDismissible: false,
                 builder: (_) => showDialogPolicy(context));
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => const AuthScreen()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
+          }
+          else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
             await ToUrlLunch().toPlayStore().whenComplete(() {
               driverRef.child(userId).child("update").set(false);
             });
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.tok == "r") {
+            Tools().toastMsg(
+                AppLocalizations.of(context)!.active, Colors.greenAccent);
+            await getToken();
+            tokenPhone = await firebaseMessaging.getToken();
+            Navigator.push(context, MaterialPageRoute(builder:(_)=>const RefreshAfterActived()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.tok == "") {
+            Navigator.push(context, MaterialPageRoute(builder:(_)=>const DriverInfoScreen()));
+          }
+          else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.tok.substring(0,5) != tokenPhone?.substring(0,5)) {
+            Tools().toastMsg(
+                AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+            Navigator.push(context, MaterialPageRoute(builder:(_)=>const ActiveAccount()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.status == "info") {
             Navigator.push(
@@ -100,7 +118,6 @@ class _SplashScreenState extends State<SplashScreen>
         }
       }
     });
-
     super.initState();
   }
 

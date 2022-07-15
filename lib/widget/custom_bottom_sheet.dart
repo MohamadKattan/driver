@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
-import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +15,7 @@ import '../my_provider/get_image_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
 import 'package:firebase_database/firebase_database.dart';
+import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -102,8 +102,6 @@ class CustomBottomSheet {
                               image1 = await _picker.pickImage(
                                   source: ImageSource.camera,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -116,8 +114,6 @@ class CustomBottomSheet {
                               image1 = await _picker.pickImage(
                                 source: ImageSource.gallery,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -162,9 +158,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
+                                imageQuality: 80,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -177,8 +171,6 @@ class CustomBottomSheet {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.gallery,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -224,8 +216,6 @@ class CustomBottomSheet {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.camera,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -238,8 +228,6 @@ class CustomBottomSheet {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.gallery,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -285,8 +273,6 @@ class CustomBottomSheet {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.camera,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -299,8 +285,6 @@ class CustomBottomSheet {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.gallery,
                                 imageQuality: 100,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -595,10 +579,10 @@ class CustomBottomSheet {
           "carImage": url4.toString(),
         });
       }).whenComplete(() async {
-      await  getToken();
+        ApiSrvGeolocater().searchCoordinatesAddress(context);
+        await  getToken();
         Provider.of<DriverInfoInductor>(context, listen: false)
             .updateState(false);
-        /// reback to checkIn screen
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const CheckInScreen()),

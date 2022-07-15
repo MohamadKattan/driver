@@ -22,7 +22,9 @@ class ApiSrvGeolocater{
     final response = await _getUrl.getUrlMethod(url);
     if (response != "failed") {
       placeAddress = response["results"][0]["address_components"][5]["long_name"];
-      driverRef.child(userId).child("country").set(placeAddress);
+      driverRef.child(userId).update({
+        "country":placeAddress
+      });
       //for update
       Provider.of<PlaceName>(context, listen: false).updateState(placeAddress);
     }

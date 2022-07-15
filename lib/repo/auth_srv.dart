@@ -4,11 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../config.dart';
 import '../model/driverInfo.dart';
 import '../my_provider/auth__inductor_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/user_id_provider.dart';
+import '../notificatons/push_notifications_srv.dart';
 import '../tools/tools.dart';
+import '../user_screen/active_account.dart';
 import '../user_screen/splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,31 +33,42 @@ class AuthSev {
           email: email.text.trim(), password: passWord.text.trim());
       await getCurrentUserId(context).whenComplete(() async {
         if (userCredential.user!.uid.isNotEmpty) {
+          tokenPhone = await firebaseMessaging.getToken();
           currentUser = userCredential.user!;
           snapshot = await driverRef.child(currentUser!.uid).get();
           if (snapshot.exists) {
             Map<String, dynamic> map =
                 Map<String, dynamic>.from(snapshot.value as Map);
             DriverInfo driverInfo = DriverInfo.fromMap(map);
-            Provider.of<DriverInfoModelProvider>(context, listen: false)
-                .updateDriverInfo(driverInfo);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SplashScreen()));
-            Provider.of<TrueFalse>(context, listen: false).updateState(false);
+            if (driverInfo.tok.substring(0,5) != tokenPhone?.substring(0,5)) {
+              _tools.toastMsg(
+                  AppLocalizations.of(context)!.tokenUesd,Colors.red);
+              Navigator.push(context, MaterialPageRoute(builder:(_)=>const ActiveAccount()));
+            } else {
+              Provider.of<DriverInfoModelProvider>(context, listen: false)
+                  .updateDriverInfo(driverInfo);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SplashScreen()));
+              Provider.of<TrueFalse>(context, listen: false).updateState(false);
+            }
             return;
           } else if (!snapshot.exists || snapshot.key!.isEmpty) {
             driverRef.child(currentUser!.uid).set({
               "userId": currentUser!.uid,
               "phoneNumber": "",
               "email": email.text.trim(),
+              "pass":passWord.text.trim(),
               "backbool": false,
-              "update":false,
+              "update": false,
               "status": "info",
               "firstName": "",
               "country": "",
               "exPlan": 0,
               "lastName": "",
               "idNo": "",
+              "token": "",
               "driverLis": "",
               "carLis": "",
               "earning": "0.0",
@@ -69,88 +83,6 @@ class AuthSev {
               });
             }).whenComplete(() async {
               Provider.of<TrueFalse>(context, listen: false).updateState(false);
-
-              ///Stop for now
-              // showDialog(
-              //     context: context,
-              //     barrierDismissible: false,
-              //     builder: (context) {
-              //       return AlertDialog(
-              //         content: SizedBox(
-              //           height: 80,
-              //           width: MediaQuery.of(context).size.width * 80 / 100,
-              //           child: Column(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             crossAxisAlignment: CrossAxisAlignment.center,
-              //             children: [
-              //               Text(AppLocalizations.of(context)!.typeCode),
-              //               Expanded(
-              //                 flex: 1,
-              //                 child: Padding(
-              //                   padding: const EdgeInsets.only(top: 8.0),
-              //                   child: TextField(
-              //                     controller: codeText,
-              //                     maxLength: 15,
-              //                     showCursor: true,
-              //                     style: const TextStyle(
-              //                         fontSize: 16,
-              //                         fontWeight: FontWeight.w600),
-              //                     cursorColor: const Color(0xFFFFD54F),
-              //                     decoration: InputDecoration(
-              //                       icon: const Padding(
-              //                         padding: EdgeInsets.only(top: 15.0),
-              //                         child: Icon(
-              //                           Icons.vpn_key,
-              //                           color: Color(0xFFFFD54F),
-              //                         ),
-              //                       ),
-              //                       fillColor: const Color(0xFFFFD54F),
-              //                       hintText:
-              //                           AppLocalizations.of(context)!.yourCode,
-              //                     ),
-              //                     keyboardType: TextInputType.phone,
-              //                   ),
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //         actions: [
-              //           GestureDetector(
-              //               onTap: () async {
-              //                 if (codeText.text.isEmpty) {
-              //                   Tools().toastMsg("..........", Colors.red);
-              //                 }
-              //               },
-              //               child: Row(
-              //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //                 children: [
-              //                   _tools.timerAuth(context, 120),
-              //                   Container(
-              //                       height: 60,
-              //                       width: 140,
-              //                       decoration: BoxDecoration(
-              //                           color: const Color(0xFFFFD54F),
-              //                           borderRadius: BorderRadius.circular(8)),
-              //                       child: Padding(
-              //                         padding: const EdgeInsets.all(8.0),
-              //                         child: Center(
-              //                             child: Text(
-              //                           AppLocalizations.of(context)!.confirm,
-              //                           style: const TextStyle(
-              //                               fontSize: 25.0,
-              //                               color: Colors.white,
-              //                               fontWeight: FontWeight.bold),
-              //                         )),
-              //                       )),
-              //                 ],
-              //               ))
-              //         ],
-              //       );
-              //     });
-              // await Future.delayed(const Duration(seconds: 6));
-              // codeText.text = "917628";
-              // await Future.delayed(const Duration(milliseconds: 300));
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -162,7 +94,12 @@ class AuthSev {
         Provider.of<TrueFalse>(context, listen: false).updateState(false);
       });
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      if (e.code == "wrong-password") {
+        _tools.toastMsg(
+            AppLocalizations.of(context)!.wrongPass, Colors.redAccent.shade700);
+        Provider.of<TrueFalse>(context, listen: false).updateState(false);
+      }
+      else if (e.code == 'user-not-found') {
         try {
           userCredential = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
@@ -174,13 +111,15 @@ class AuthSev {
               "userId": currentUser!.uid,
               "phoneNumber": "",
               "email": email.text.trim(),
+              "pass":passWord.text.trim(),
               "backbool": false,
-              "update":false,
+              "update": false,
               "status": "info",
               "firstName": "",
               "country": "",
               "exPlan": 0,
               "lastName": "",
+              "token": "",
               "idNo": "",
               "driverLis": "",
               "carLis": "",
@@ -196,88 +135,6 @@ class AuthSev {
               });
             }).whenComplete(() async {
               Provider.of<TrueFalse>(context, listen: false).updateState(false);
-
-              ///Stop for now
-              // showDialog(
-              //     context: context,
-              //     barrierDismissible: false,
-              //     builder: (context) {
-              //       return AlertDialog(
-              //         content: SizedBox(
-              //           height: 80,
-              //           width: MediaQuery.of(context).size.width * 80 / 100,
-              //           child: Column(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             crossAxisAlignment: CrossAxisAlignment.center,
-              //             children: [
-              //               Text(AppLocalizations.of(context)!.typeCode),
-              //               Expanded(
-              //                 flex: 1,
-              //                 child: Padding(
-              //                   padding: const EdgeInsets.only(top: 8.0),
-              //                   child: TextField(
-              //                     controller: codeText,
-              //                     maxLength: 15,
-              //                     showCursor: true,
-              //                     style: const TextStyle(
-              //                         fontSize: 16,
-              //                         fontWeight: FontWeight.w600),
-              //                     cursorColor: const Color(0xFFFFD54F),
-              //                     decoration: InputDecoration(
-              //                       icon: const Padding(
-              //                         padding: EdgeInsets.only(top: 15.0),
-              //                         child: Icon(
-              //                           Icons.vpn_key,
-              //                           color: Color(0xFFFFD54F),
-              //                         ),
-              //                       ),
-              //                       fillColor: const Color(0xFFFFD54F),
-              //                       hintText:
-              //                           AppLocalizations.of(context)!.yourCode,
-              //                     ),
-              //                     keyboardType: TextInputType.phone,
-              //                   ),
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //         actions: [
-              //           GestureDetector(
-              //               onTap: () async {
-              //                 if (codeText.text.isEmpty) {
-              //                   Tools().toastMsg("..........", Colors.red);
-              //                 }
-              //               },
-              //               child: Row(
-              //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //                 children: [
-              //                   _tools.timerAuth(context, 120),
-              //                   Container(
-              //                       height: 60,
-              //                       width: 140,
-              //                       decoration: BoxDecoration(
-              //                           color: const Color(0xFFFFD54F),
-              //                           borderRadius: BorderRadius.circular(8)),
-              //                       child: Padding(
-              //                         padding: const EdgeInsets.all(8.0),
-              //                         child: Center(
-              //                             child: Text(
-              //                           AppLocalizations.of(context)!.confirm,
-              //                           style: const TextStyle(
-              //                               fontSize: 25.0,
-              //                               color: Colors.white,
-              //                               fontWeight: FontWeight.bold),
-              //                         )),
-              //                       )),
-              //                 ],
-              //               ))
-              //         ],
-              //       );
-              //     });
-              // await Future.delayed(const Duration(seconds: 6));
-              // codeText.text = "917628";
-              // await Future.delayed(const Duration(milliseconds: 300));
               Navigator.push(
                   context,
                   MaterialPageRoute(

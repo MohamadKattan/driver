@@ -3,9 +3,9 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +64,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   bool isInductor = false;
 
   late MapBoxNavigation directions;
-  late MapBoxNavigationViewController _controller;
+   late final MapBoxNavigationViewController _controller;
   bool arrivedMapBox = false;
   String instruction = "";
   bool routeBuilt = false;
@@ -135,7 +135,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
               right: 0.0,
               bottom: 0.0,
               child: Container(
-                height: MediaQuery.of(context).size.height * 32 / 100,
+                height: MediaQuery.of(context).size.height * 30 / 100,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
                     color: Colors.white,
@@ -862,9 +862,13 @@ class _NewRideScreenState extends State<NewRideScreen> {
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-          mode: MapBoxNavigationMode.driving,
-          simulateRoute: false,
-          zoom: 13.0,
+            initialLatitude: myPosition?.latitude ,
+            initialLongitude: myPosition?.longitude,
+            zoom: 13.0,
+            tilt: 0.0,
+            bearing: 0.0,
+            mode: MapBoxNavigationMode.driving,
+            language: mapBoxLanguages()
         ));
   }
 
@@ -889,22 +893,33 @@ class _NewRideScreenState extends State<NewRideScreen> {
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-          mode: MapBoxNavigationMode.drivingWithTraffic,
-          simulateRoute: false,
-          zoom: 16.0,
+            initialLatitude: rideInfo.pickup.latitude,
+            initialLongitude: rideInfo.pickup.longitude,
+            zoom: 13.0,
+            tilt: 0.0,
+            bearing: 0.0,
+            mode: MapBoxNavigationMode.driving,
+            language: mapBoxLanguages()
         ));
   }
 
-// this method for tost
-  void tost() {
-    Fluttertoast.showToast(
-        msg: "you arrived to rider click back button",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.redAccent.shade700,
-        textColor: Colors.white,
-        fontSize: 16.0);
+  // this method for set lang mapBox
+  String mapBoxLanguages(){
+    String lan = "tr";
+    if(AppLocalizations.of(context)!.rider=="Yolcuya git"){
+      setState(() {
+        lan = "tr";
+      });
+    }else if(AppLocalizations.of(context)!.rider=="زبون"){
+      setState(() {
+        lan = "ar";
+      });
+    }else{
+      setState(() {
+        lan = "en";
+      });
+    }
+    return lan;
   }
 
 //==================================End Navigation==============================

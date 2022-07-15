@@ -26,7 +26,6 @@ import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
-import '../tools/background_serv.dart';
 import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
@@ -179,8 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
     PushNotificationsSrv().gotNotificationInBackground(context);
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     TurnOnGBS().turnOnGBSifNot();
-    clearCash();
-
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     ///system dailog alert 3 methodes
@@ -351,7 +348,6 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
             onPressed: () async {
-              await clearCash();
               await LogicGoogleMap().locationPosition(context);
               GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
               getCountryName();
@@ -407,6 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getCountryName() {
+    ApiSrvGeolocater().searchCoordinatesAddress(context);
     final _country =
         Provider.of<DriverInfoModelProvider>(context, listen: false)
             .driverInfo

@@ -532,5 +532,33 @@
        "ini": "In",
         "@ini": {
           "description": "In"
-        }
+        },
+  "tokenUesd": "This Account used on another device Before",
+  "@tokenUesd": {
+    "description": "This Account used on another device Before"
+  },
+  "wrongPass": "passWord wrong try again !!",
+  "@wrongPass": {
+    "description": "passWord wrong try again !!"
+  },
+  "activeAccount": "Activate your Account",
+  "@activeAccount": {
+    "description": "Activate your Account"
+  },
+  "activeAccountEx": "For keep your Account info safety you should activate your Account again after format your mobile or use new mobile. call support or send a massage by email , normal call or whatsapp",
+  "@activeAccountEx": {
+    "description": "Activate your AccountEx"
+  },
+  "activeAccountDon": "Activated your Account. click button below or close app and reopen again to be able to use app",
+  "@activeAccountDon": {
+    "description": "Activate your Account don"
+  },
+  "active": "Activate",
+  "@active": {
+    "description": "Activate"
+  },
+  "wait": "Please wait ...",
+  "@wait": {
+    "description": "Activate"
+  }
 }

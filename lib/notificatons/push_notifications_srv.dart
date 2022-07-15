@@ -10,12 +10,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import '../config.dart';
 import '../model/rideDetails.dart';
 import '../my_provider/ride_request_info.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
-import 'local_notifications.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
@@ -26,6 +26,7 @@ Future<String?> getToken() async {
   if (kDebugMode) {
     print("this is token::$token");
   }
+  tokenPhone=token!;
   await driverRef.child(userId).child("token").set(token);
   firebaseMessaging.subscribeToTopic("allDrivers");
   firebaseMessaging.subscribeToTopic("allUsers");
@@ -35,19 +36,19 @@ Future<String?> getToken() async {
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
   getToken();
-  if (message.data.isNotEmpty && message.notification != null) {
-    await driverRef.child(userId).child("service").once().then((value) {
-      if (value.snapshot.value != null) {
-        final snap = value.snapshot.value;
-        String serviceWork = snap.toString();
-        if (serviceWork == "not") {
-          return;
-        }
-      } else {
-        showNotification();
-      }
-    });
-  }
+  // if (message.data.isNotEmpty && message.notification != null) {
+  //   await driverRef.child(userId).child("service").once().then((value) {
+  //     if (value.snapshot.value != null) {
+  //       final snap = value.snapshot.value;
+  //       String serviceWork = snap.toString();
+  //       if (serviceWork == "not") {
+  //         return;
+  //       }
+  //     } else {
+  //       showNotification();
+  //     }
+  //   });
+  // }
 }
 
 class PushNotificationsSrv {
@@ -76,6 +77,7 @@ class PushNotificationsSrv {
   //     if (message.data.isNotEmpty && message.notification != null) {
   //       //method in method for string ride id
   //       retrieveRideRequestInfo(getRideRequestId(message), context);
+  //       playSound();
   //     }
   //   });
   // }
@@ -85,14 +87,10 @@ class PushNotificationsSrv {
   // setBackgroundNotifications(BuildContext context) {
   //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
   //     if (message.data.isNotEmpty && message.notification != null) {
-  //       //method in method for string ride id
   //       retrieveRideRequestInfo(getRideRequestId(message), context);
-  //       await FirebaseMessaging.instance
-  //           .setForegroundNotificationPresentationOptions(
-  //         alert: true,
-  //         badge: true,
-  //         sound: true,
-  //       );
+  //       openDailog();
+  //       playSound();
+  //       openDailogOld();
   //     }
   //   });
   // }
@@ -123,7 +121,6 @@ class PushNotificationsSrv {
   //   }
   //   setForegroundNotifications(context);
   //   setBackgroundNotifications(context);
-  //   setTerminateNotifications(context);
   // }
 
   // this method will use in home screen in instant for auto starting
@@ -214,7 +211,6 @@ class PushNotificationsSrv {
       stopSound();
     }
   }
-
   Future<void> gotNotificationInBackground(BuildContext context) async {
     subscription =
         driverRef.child(userId).child("newRide").onValue.listen((event) {

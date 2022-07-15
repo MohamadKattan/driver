@@ -23,6 +23,7 @@ final AssetsAudioPlayer assetsAudioPlayer =AssetsAudioPlayer();
 ///for payment
 double finalAmont = 0;
 double finalPlan = 0;
+String? tokenPhone;
 
 
 
