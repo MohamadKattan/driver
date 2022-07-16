@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
@@ -63,16 +64,22 @@ class _SplashScreenState extends State<SplashScreen>
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .driverInfo;
           if (AuthSev().auth.currentUser?.uid == null) {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => showDialogPolicy(context));
+            if(Platform.isAndroid){
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => showDialogPolicy(context));
+            }
+             TurnOnGBS().turnOnGBSifNot();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AuthScreen()));
           }
           else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
-            await ToUrlLunch().toPlayStore().whenComplete(() {
-              driverRef.child(userId).child("update").set(false);
-            });
+            await ToUrlLunch().toPlayStore();
+           await driverRef.child(userId).child("update").set(false);
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder:(_)=>const SplashScreen()), (route) => false);
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.tok == "r") {
             Tools().toastMsg(
@@ -228,8 +235,8 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          await TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
+                        onTap: () {
+                           TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

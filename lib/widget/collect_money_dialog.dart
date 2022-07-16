@@ -1,5 +1,7 @@
 // this widget for dialog collect money after finish trip
 
+import 'dart:io';
+
 import 'package:driver/model/rideDetails.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ Widget collectMoney(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
     backgroundColor: Colors.transparent,
     child: Container(
-      height: MediaQuery.of(context).size.height * 50 / 100,
+      height: 275,
       width: double.infinity,
       decoration:  BoxDecoration(borderRadius: BorderRadius.circular(6.0),color: Colors.white),
       child: SingleChildScrollView(
@@ -31,47 +33,59 @@ Widget collectMoney(
                 child: Lottie.asset('images/51765-cash.json',
                     height: 90, width: 90)),
              Text(AppLocalizations.of(context)!.amountTrip,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
               style:const TextStyle(
                   color: Colors.black87,
-                  fontSize: 24.0,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+            const SizedBox(height:2),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(AppLocalizations.of(context)!.paymentMethod + rideInfoProvider.paymentMethod,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                   style:
                       const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(" ${currencyTypeCheck(context)} $totalAmount ",
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                   style:
                       const TextStyle(color: Colors.black87, fontSize: 16.0)),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+            const SizedBox(height: 2),
             CustomDivider().customDivider(),
-            SizedBox(height: MediaQuery.of(context).size.height * 3.5 / 100),
-            GestureDetector(
-              onTap: ()async {
-                GeoFireSrv().enableLocationLiveUpdates(context);
-                await  restNewRide(context);
-                clearCash();
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 30 / 100,
-                  height: MediaQuery.of(context).size.height * 8 / 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: Colors.greenAccent.shade700),
-                  child:  Center(
-                      child: Text(AppLocalizations.of(context)!.ok,
-                    style:const TextStyle(color: Colors.white),
-                  )),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: ()async {
+                  GeoFireSrv().enableLocationLiveUpdates(context);
+                  await  restNewRide(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  if(Platform.isAndroid){
+                    clearCash();
+                  }
+                },
+                child: Center(
+                  child: Container(
+                    width:90,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: Colors.greenAccent.shade700),
+                    child:  Center(
+                        child: Text(AppLocalizations.of(context)!.ok,
+                      textAlign: TextAlign.center,
+                      style:const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16),
+                    )),
+                  ),
                 ),
               ),
             ),

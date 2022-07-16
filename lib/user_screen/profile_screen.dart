@@ -21,6 +21,12 @@ class ProfileScreen extends StatelessWidget {
     bool isTrue =  Provider.of<InductorProfileProvider>(context).isTrue;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFFFD54F),
+          automaticallyImplyLeading: true,
+          title:  Text(AppLocalizations.of(context)!.update,
+              style: const TextStyle(color: Colors.white, fontSize: 16.0)),
+        ),
         body:
         Stack(
           children: [

@@ -1,5 +1,7 @@
 // this class for custom drawer
 
+import 'dart:io';
+
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
@@ -347,9 +349,10 @@ Widget customDrawer(BuildContext context) {
               CustomDivider().customDivider(),
               GestureDetector(
                 onTap: () {
-                  // GeoFireSrv().makeDriverOffLine(context);
-                  // FlutterBackgroundService().invoke("setAsBackground");
-                  SystemNavigator.pop();
+                  if(Platform.isAndroid){
+                    SystemNavigator.pop();
+                  }
+                  exit(0);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

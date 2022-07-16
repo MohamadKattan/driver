@@ -25,12 +25,18 @@ Widget callRider(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Text(AppLocalizations.of(context)!.callRider,
-                style: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Text(AppLocalizations.of(context)!.callRider,
+                    style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold),
               ),
+                   IconButton(onPressed:()=>Navigator.pop(context), icon: Icon(Icons.close,color: Colors.redAccent.shade700,))
+                 ],
+               ),
               SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -42,11 +48,12 @@ Widget callRider(
                   },
                   child: Row(
                     children: [
-                      const Icon(Icons.phone,size: 24.0,color: Colors.greenAccent,),
-                      const SizedBox(width: 6.0),
+                      const Icon(Icons.phone,size: 20.0,color: Colors.greenAccent,),
+                      const SizedBox(width: 4.0),
                       Text(AppLocalizations.of(context)!.normalCall + rideInfoProvider.riderPhone ,
+                          overflow: TextOverflow.ellipsis,
                           style:
-                          const TextStyle(color: Colors.black87, fontSize: 16.0)),
+                          const TextStyle(color: Colors.black87, fontSize: 14.0)),
                     ],
                   ),
                 ),
@@ -61,10 +68,11 @@ Widget callRider(
                   child: Row(
                     children: [
                        CircleAvatar(backgroundColor: Colors.green.shade700,radius: 15.0,child: const Icon(Icons.phone,size: 15.0,color: Colors.white)),
-                      const SizedBox(width: 6.0),
+                      const SizedBox(width: 4.0),
                       Text(" What app  : ${rideInfoProvider.riderPhone} ",
+                          overflow: TextOverflow.ellipsis,
                           style:
-                          const TextStyle(color: Colors.black87, fontSize: 16.0)),
+                          const TextStyle(color: Colors.black87, fontSize: 14.0)),
                     ],
                   ),
                 ),

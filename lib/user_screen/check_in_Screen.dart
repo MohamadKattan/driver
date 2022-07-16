@@ -40,6 +40,7 @@ class CheckInScreen extends StatelessWidget {
                         Center(
                         child: Text(
                           AppLocalizations.of(context)!.checking,
+                          textAlign: TextAlign.center,
                           style:const TextStyle(
                               fontSize: 30.0,
                               overflow: TextOverflow.ellipsis,
@@ -51,6 +52,7 @@ class CheckInScreen extends StatelessWidget {
                        Center(
                         child: Text(
                             AppLocalizations.of(context)!.appreciate,
+                          textAlign: TextAlign.center,
                           style:const TextStyle(
                               fontSize: 28.0,
                               fontWeight: FontWeight.bold,
@@ -61,6 +63,7 @@ class CheckInScreen extends StatelessWidget {
                        Center(
                         child: Text(
                             AppLocalizations.of(context)!.sendnot,
+                          textAlign: TextAlign.center,
                           style:const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
@@ -100,7 +103,6 @@ class CheckInScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),

@@ -323,7 +323,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                   child: Center(
                                       child: Text(
                                     buttonTitle,
-                                    style: TextStyle(color: buttonColor),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: buttonColor,fontSize: 16,fontWeight: FontWeight.bold),
                                   ))),
                             ),
                             status == "accepted"

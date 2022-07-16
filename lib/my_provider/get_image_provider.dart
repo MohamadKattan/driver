@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
 class GetImageProvider extends ChangeNotifier {
-  late  XFile? personImage=null;
-  late  XFile? imageDriverLis=null;
-  late XFile? imageCarLis = null;
-  late XFile? platLis = null;
+    XFile? personImage;
+    XFile? imageDriverLis;
+   XFile? imageCarLis;
+   XFile? platLis;
 
   void updatePersonImage(XFile val) {
     personImage = val;

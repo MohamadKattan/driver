@@ -248,9 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mapType: MapType.normal,
                                   initialCameraPosition:
                                       LogicGoogleMap().kGooglePlex,
-                                  myLocationButtonEnabled: true,
+                                  myLocationButtonEnabled: Platform.isAndroid?true:false,
                                   myLocationEnabled: true,
-                                  liteModeEnabled: true,
+                                  liteModeEnabled: Platform.isAndroid?true:false,
                                   onMapCreated:
                                       (GoogleMapController controller) async {
                                     LogicGoogleMap()
@@ -348,8 +348,8 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
             onPressed: () async {
-              await LogicGoogleMap().locationPosition(context);
               GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
+              await LogicGoogleMap().locationPosition(context);
               getCountryName();
             },
             child: const Icon(
@@ -364,29 +364,32 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget customSwitchBottom() => Transform.scale(
-        scale: 2.5,
-        child: SizedBox(
-          width: 60.0,
-          child: Switch.adaptive(
-            activeColor: Colors.green,
-            activeTrackColor: Colors.green.shade200,
-            inactiveThumbColor: Colors.redAccent.shade700,
-            inactiveTrackColor: Colors.redAccent.shade200,
-            value: valueSwitchBottom,
-            splashRadius: 40.0,
-            onChanged: (val) {
-              setState(() {
-                valueSwitchBottom = val;
-              });
-              if (valueSwitchBottom == true) {
-                // GeoFireSrv().makeDriverOnlineNow(context);
-                tostDriverAvailable();
-                GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
-              } else if (valueSwitchBottom == false) {
-                GeoFireSrv().makeDriverOffLine();
-                tostDriverAvailable();
-              }
-            },
+        scale: 1.5,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 50.0,
+            child: Switch.adaptive(
+              activeColor: Colors.green,
+              activeTrackColor: Colors.green.shade200,
+              inactiveThumbColor: Colors.redAccent.shade700,
+              inactiveTrackColor: Colors.redAccent.shade200,
+              value: valueSwitchBottom,
+              splashRadius: 40.0,
+              onChanged: (val) {
+                setState(() {
+                  valueSwitchBottom = val;
+                });
+                if (valueSwitchBottom == true) {
+                  // GeoFireSrv().makeDriverOnlineNow(context);
+                  tostDriverAvailable();
+                  GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
+                } else if (valueSwitchBottom == false) {
+                  GeoFireSrv().makeDriverOffLine();
+                  tostDriverAvailable();
+                }
+              },
+            ),
           ),
         ),
       );

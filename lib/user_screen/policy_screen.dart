@@ -9,6 +9,12 @@ class PolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFFD54F),
+        automaticallyImplyLeading: true,
+        title:  Text(AppLocalizations.of(context)!.policy,
+            style: const TextStyle(color: Colors.white, fontSize: 16.0)),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

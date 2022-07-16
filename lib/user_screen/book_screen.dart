@@ -31,7 +31,7 @@ class _BookingScreenState extends State<BookingScreen> {
       appBar: AppBar(
         actions: [IconButton(onPressed: ()=>clearHistory(), icon:const Icon(Icons.delete),)],
         backgroundColor: const Color(0xFFFFD54F),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title:  Text(AppLocalizations.of(context)!.booking,
             style: const TextStyle(color: Colors.white, fontSize: 16.0)),
       ),

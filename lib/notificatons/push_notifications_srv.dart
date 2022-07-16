@@ -211,6 +211,7 @@ class PushNotificationsSrv {
       stopSound();
     }
   }
+
   Future<void> gotNotificationInBackground(BuildContext context) async {
     subscription =
         driverRef.child(userId).child("newRide").onValue.listen((event) {
@@ -229,9 +230,12 @@ class PushNotificationsSrv {
         } else if (_riderId == "accepted") {
           return;
         } else {
-          openDailog();
-          playSound();
-          openDailogOld();
+          if(Platform.isAndroid){
+            openDailog();
+            playSound();
+            openDailogOld();
+            retrieveRideRequestInfo(_riderId, context);
+          }
           retrieveRideRequestInfo(_riderId, context);
         }
       }

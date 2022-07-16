@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:system_alert_window/system_alert_window.dart';
 
 ///* this class for system dailog alert stopped for now
@@ -15,7 +17,9 @@ SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
 
 // // this method connect with dailog overlay permission
 Future<void> requestPermissionsSystem() async {
-  await SystemAlertWindow.requestPermissions(prefMode: prefMode);
+  if(Platform.isAndroid){
+    await SystemAlertWindow.requestPermissions(prefMode: prefMode);
+  }
 }
 //
 //

@@ -1,5 +1,6 @@
 // this widget dialog notification show to driver for accept or cancel order
 import 'dart:async';
+import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:driver/tools/background_serv.dart';
 import 'package:driver/tools/curanny_type.dart';
@@ -36,19 +37,23 @@ class _NotificationDialogState extends State<NotificationDialog> {
   @override
   void initState() {
     ///stop for ios just
-    // audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
-    // _playSound();
+    if(Platform.isIOS){
+      audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
+      _playSound();
+    }
     super.initState();
   }
 
   /// with ios just
-  // @override
-  // void dispose() {
-  //   audioPlayer.release();
-  //   audioPlayer.dispose();
-  //   audioCache.clearAll();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    if(Platform.isIOS){
+      audioPlayer.release();
+      audioPlayer.dispose();
+      audioCache.clearAll();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +65,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Colors.transparent,
       child: Container(
-        height: MediaQuery.of(context).size.height * 70 / 100,
+        height: 425,
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6.0), color: Colors.white),
@@ -74,12 +79,14 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       height: 140, width: 140)),
               Text(
                 AppLocalizations.of(context)!.rideRequest,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,6 +103,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               width: 20)),
                     ),
                     Text(AppLocalizations.of(context)!.from + " ",
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             color: Colors.greenAccent.shade700, fontSize: 14)),
                     Expanded(
@@ -106,7 +114,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                                 fontSize: 18.0,
                                 overflow: TextOverflow.ellipsis)))
                   ]),
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,6 +132,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                             color: Colors.redAccent.shade700, fontSize: 14)),
                     Expanded(
                       child: Text(rideInfoProvider.dropoffAddress,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               color: Colors.black45,
                               fontSize: 18.0,
@@ -187,48 +196,56 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      stopSound();
-
+                      if(Platform.isAndroid){
+                        stopSound();
+                      }
                       ///ios
-                      // _stopSound();
+                      _stopSound();
                       driverCancelOrder(context);
                       Navigator.pop(context);
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 30 / 100,
-                      height: MediaQuery.of(context).size.height * 7 / 100,
+                      width: 120,
+                      height: 50,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2.0),
                           color: Colors.redAccent.shade700),
                       child: Center(
                           child: Text(
                         AppLocalizations.of(context)!.cancel,
-                        style: const TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
                       )),
                     ),
                   ),
                   isHideButton == false
                       ? GestureDetector(
                           onTap: () async {
-                            stopSound();
-                            // _stopSound();
+                            if(Platform.isAndroid){
+                              stopSound();
+                            }
+                            _stopSound();
                             checkAvailableOfRide(context, rideInfoProvider);
                             setState(() {
                               isHideButton = true;
                             });
                           },
                           child: Container(
-                              width:
-                                  MediaQuery.of(context).size.width * 30 / 100,
-                              height:
-                                  MediaQuery.of(context).size.height * 7 / 100,
+                              width:120,
+                              height:50,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(2.0),
                                   color: Colors.green.shade700),
                               child: Center(
                                   child: Text(
                                 AppLocalizations.of(context)!.ok,
-                                style: const TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),
                               ))),
                         )
                       : Container(

@@ -13,7 +13,7 @@ Widget callUs(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
     backgroundColor: Colors.transparent,
     child: Container(
-      height: MediaQuery.of(context).size.height * 25 / 100,
+      height: 200,
       width: double.infinity,
       decoration:  BoxDecoration(
           borderRadius: BorderRadius.circular(6.0)
@@ -25,14 +25,20 @@ Widget callUs(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               Text(
-                AppLocalizations.of(context)!.uss,
-                style:const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                 children: [
+                   Text(
+                    AppLocalizations.of(context)!.uss,
+                    style:const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+                   IconButton(onPressed:()=>Navigator.pop(context), icon:Icon(Icons.close,color: Colors.redAccent.shade700,))
+                 ],
+               ),
+              const SizedBox(height: 4),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
@@ -43,9 +49,11 @@ Widget callUs(
                   },
                   child: Row(
                     children:  [
-                     const Icon(Icons.phone,size: 24.0,color: Colors.greenAccent,),
-                     const SizedBox(width: 6.0),
+                     const Icon(Icons.phone,size: 20.0,color: Colors.greenAccent,),
+                     const SizedBox(width: 4.0),
                       Text(AppLocalizations.of(context)!.normalCall + "+905366034616",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                           style:
                          const TextStyle(color: Colors.black87, fontSize: 16.0)),
                     ],
@@ -64,6 +72,8 @@ Widget callUs(
                       CircleAvatar(backgroundColor: Colors.green.shade700,radius: 15.0,child: const Icon(Icons.phone,size: 15.0,color: Colors.white)),
                       const SizedBox(width: 6.0),
                       const Text(" What app  : +905366034616 ",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                           style:
                           TextStyle(color: Colors.black87, fontSize: 16.0)),
                     ],
