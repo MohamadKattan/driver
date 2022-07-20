@@ -1,5 +1,8 @@
-// this class for let user turn his GBS
+//this class for let user turn his GBS
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+
+import '../my_provider/driver_currentPosition_provider.dart';
 
 class TurnOnGBS {
   Location location = Location();
@@ -25,6 +28,7 @@ class TurnOnGBS {
     }
 
     _locationData = await location.getLocation();
+    // Provider.of<DriverCurrentPosition>(context,listen: false).updateSate(_locationData);
     location.enableBackgroundMode(enable: false);
     return _locationData;
   }

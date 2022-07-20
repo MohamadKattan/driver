@@ -6,14 +6,16 @@ import 'package:provider/provider.dart';
 import '../model/card_payment.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/payment_indector_provider.dart';
+import '../payment/checkOut_payment.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class CardPaymentScreen extends StatefulWidget {
-  final double amount;
+  final int amount;
   final int planexpirt;
-  const CardPaymentScreen({Key? key, required this.amount,required this.planexpirt}) : super(key: key);
+  final DateTime planDateExpirt;
+  const CardPaymentScreen({Key? key, required this.amount,required this.planexpirt,required this.planDateExpirt}) : super(key: key);
 
   @override
   State<CardPaymentScreen> createState() => _CardPaymentScreenState();
@@ -167,16 +169,16 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                               cardNumber: cardNumber,
                               holderName: cardHolderName
                                );
-                          // await  PayNow().tryPay(context,card,widget.planexpirt,widget.amount);
                           ///checkout
-                        //     CheckOutPayment checkOut = CheckOutPayment();
-                        //     await checkOut.makePayment(
-                        //         card,
-                        //         widget.amount,
-                        //       countryName=="Turkey"?"TRY":"USD",
-                        //         context,
-                        //       widget.planexpirt
-                        // );
+                            CheckOutPayment checkOut = CheckOutPayment();
+                            await checkOut.makePayment(
+                                card,
+                                widget.amount,
+                              countryName=="Turkey"?"TRY":"USD",
+                                context,
+                              widget.planexpirt,
+                              widget.planDateExpirt
+                        );
                             Provider.of<PaymentIndector>(context,listen: false).updateState(false);
 
                           }),

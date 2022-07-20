@@ -28,9 +28,9 @@ import 'my_provider/user_id_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await initializeService();
   await Firebase.initializeApp();
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;

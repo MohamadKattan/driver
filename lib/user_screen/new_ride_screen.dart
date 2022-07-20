@@ -3,7 +3,6 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:geolocator/geolocator.dart';
@@ -89,7 +88,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final rideInfoProvider =
         Provider.of<RideRequestInfoProvider>(context).rideDetails;
     final initialPos =
-        Provider.of<DriverCurrentPosition>(context, listen: false)
+        Provider.of<DriverCurrentPosition>(context)
             .currentPosition;
     final directionDetails =
         Provider.of<DirectionDetailsPro>(context).directionDetails;
@@ -442,6 +441,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final details = await ApiSrvDir.obtainPlaceDirectionDetails(
         pickUpLatling, dropOfLatling, context);
 
+    CameraPosition cameraPosition = CameraPosition(
+        target: startPontLoc, zoom: 16.90, tilt: 80.0, bearing: 15.0);
+    newRideControllerGoogleMap
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
     /// PolylinePoints method
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> decodedPolylineResult =
@@ -471,15 +475,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
       ///set from above
       polylineSet.add(polyline);
     });
-
-    ///for fit line on map PolylinePoints
-    // LatLngBounds latLngBounds;
-    //
-    //   latLngBounds =
-    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
-    //
-    // newGoogleMapController
-    //     ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
 
     ///Marker
     Marker markerPickUpLocation = Marker(
@@ -532,6 +527,27 @@ class _NewRideScreenState extends State<NewRideScreen> {
         isInductor = false;
       }
     });
+
+    ///for fit line on map PolylinePoints
+    // LatLngBounds latLngBounds;
+    // if (pickUpLatling.latitude > dropOfLatling.latitude &&
+    //     pickUpLatling.longitude > dropOfLatling.longitude) {
+    //   latLngBounds =
+    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
+    // } else if (pickUpLatling.longitude > dropOfLatling.longitude) {
+    //   latLngBounds = LatLngBounds(
+    //       southwest: LatLng(pickUpLatling.latitude, dropOfLatling.longitude),
+    //       northeast: LatLng(dropOfLatling.latitude, pickUpLatling.longitude));
+    // } else if (pickUpLatling.latitude > dropOfLatling.latitude) {
+    //   latLngBounds = LatLngBounds(
+    //       southwest: LatLng(dropOfLatling.latitude, pickUpLatling.longitude),
+    //       northeast: LatLng(pickUpLatling.latitude, dropOfLatling.longitude));
+    // } else {
+    //   latLngBounds =
+    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
+    // }
+    // newGoogleMapController
+    //     ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
   }
 
 // contact to method getPlaceDirection

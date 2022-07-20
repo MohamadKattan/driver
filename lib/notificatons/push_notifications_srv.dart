@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/tools/background_serv.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -16,11 +15,11 @@ import '../my_provider/ride_request_info.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
+import 'local_notifications.dart';
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
 DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
-
 Future<String?> getToken() async {
   String? token = await firebaseMessaging.getToken();
   if (kDebugMode) {
@@ -33,27 +32,20 @@ Future<String?> getToken() async {
   return token;
 }
 
-Future<void> onBackgroundMessage(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  getToken();
-  // if (message.data.isNotEmpty && message.notification != null) {
-  //   await driverRef.child(userId).child("service").once().then((value) {
-  //     if (value.snapshot.value != null) {
-  //       final snap = value.snapshot.value;
-  //       String serviceWork = snap.toString();
-  //       if (serviceWork == "not") {
-  //         return;
-  //       }
-  //     } else {
-  //       showNotification();
-  //     }
-  //   });
-  // }
-}
+// Future<void> onBackgroundMessage(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   // await driverRef.child(userId).child("service").once().then((value) async {
+//   //   if (value.snapshot.value != null) {
+//   //     final snap = value.snapshot.value;
+//   //     String serviceWork = snap.toString();
+//   //     if (serviceWork == "not") {
+//   //     }
+//   //   } else {
+//   //   }
+//   // });
+// }
 
 class PushNotificationsSrv {
-  late StreamSubscription<DatabaseEvent> subscription;
-
   // THIS method for ios permission
   ///for ios code
   // Future<AppleNotificationSetting> iosPermission() async {
@@ -147,7 +139,6 @@ class PushNotificationsSrv {
     }
     return rideId;
   }
-
   //this method for retrieve rider info from Ride Request collection when rider do order
   Future<void> retrieveRideRequestInfo(
       String rideId, BuildContext context) async {
@@ -213,12 +204,14 @@ class PushNotificationsSrv {
   }
 
   Future<void> gotNotificationInBackground(BuildContext context) async {
-    subscription =
-        driverRef.child(userId).child("newRide").onValue.listen((event) {
+    subscriptionNot1 =
+        driverRef.child(userId).child("newRide").onValue.listen((event)  {
       if (event.snapshot.value != null) {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
-          return;
+          // Future.delayed(const Duration(seconds: 120)).whenComplete(() {
+          //   GeoFireSrv().enableLocationLiveUpdates(context);
+          // });
         } else if (_riderId == "canceled") {
           Future.delayed(const Duration(seconds: 20)).whenComplete(
               () => driverRef.child(userId).child("newRide").set("searching"));
@@ -235,8 +228,12 @@ class PushNotificationsSrv {
             playSound();
             openDailogOld();
             retrieveRideRequestInfo(_riderId, context);
+          }else{
+            retrieveRideRequestInfo(_riderId, context);
+            if(runLocale){
+              showNotification();
+            }
           }
-          retrieveRideRequestInfo(_riderId, context);
         }
       }
     });

@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../notificatons/push_notifications_srv.dart';
 import '../tools/url_lunched.dart';
 import '../widget/call_us_phone_whatApp.dart';
 
-class ActiveAccount extends StatelessWidget {
+class ActiveAccount extends StatefulWidget {
   const ActiveAccount({Key? key}) : super(key: key);
 
+  @override
+  State<ActiveAccount> createState() => _ActiveAccountState();
+}
+
+class _ActiveAccountState extends State<ActiveAccount> {
+  @override
+  void initState() {
+     driverRef.child(userId).child("active").set("notactive");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(

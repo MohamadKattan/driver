@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-
 import 'my_provider/driver_currentPosition_provider.dart';
 
 
 class LogicGoogleMap {
   // final ApiSrvGeo _apiMethods = ApiSrvGeo();
-  late Position currentPosition;
   var geolocator = Geolocator();
 
   //instant current location on map before any request on map
@@ -49,17 +47,16 @@ class LogicGoogleMap {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    currentPosition = position;
+        desiredAccuracy: LocationAccuracy.best);
+    Provider.of<DriverCurrentPosition>(context,listen: false).updateSate(position);
     // to fitch LatLng in google map
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);
-    Provider.of<DriverCurrentPosition>(context,listen: false).updateSate(currentPosition);
     // update on google map
     CameraPosition cameraPosition =
     CameraPosition(target: latLngPosition, zoom: 16.50,tilt: 80.0,bearing: 35.0);
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-    return currentPosition;
+    return position;
   }
 }

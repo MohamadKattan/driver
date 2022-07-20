@@ -333,10 +333,9 @@ class CustomBottomSheet {
                       Colors.redAccent.shade700);
                 } else {
                   Provider.of<BottomSheetValue>(context, listen: false)
-                      .updateValue(-600.0);
+                      .updateValue(-700.0);
                   Provider.of<DriverInfoInductor>(context, listen: false)
                       .updateState(true);
-
                   ///from here the main logic !!
                   storage1(
                       driverImage,

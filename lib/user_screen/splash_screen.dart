@@ -69,10 +69,11 @@ class _SplashScreenState extends State<SplashScreen>
                   context: context,
                   barrierDismissible: false,
                   builder: (_) => showDialogPolicy(context));
+            }else{
+              TurnOnGBS().turnOnGBSifNot();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const AuthScreen()));
             }
-             TurnOnGBS().turnOnGBSifNot();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const AuthScreen()));
           }
           else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
@@ -86,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
                 AppLocalizations.of(context)!.active, Colors.greenAccent);
             await getToken();
             tokenPhone = await firebaseMessaging.getToken();
+           await driverRef.child(userId).child("active").set("active");
             Navigator.push(context, MaterialPageRoute(builder:(_)=>const RefreshAfterActived()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.tok == "") {

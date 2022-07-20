@@ -38,34 +38,6 @@ class GeoFireSrv {
         .child("driver")
         .child(currentUseId!.uid).child("newRide");
         rideRequestRef.set("searching");
-    //first set new value when driver switch bottom online and waiting for a new order rider
-    ///todo
-    // await rideRequestRef.once().then((value) {
-    //   if (value.snapshot.value != null) {
-    //     final snap = value.snapshot.value.toString();
-    //     if (snap == "timeOut" || snap == "canceled") {
-    //       rideRequestRef.set("searching").whenComplete((){
-    //         DatabaseReference _rideRequestRef = FirebaseDatabase.instance
-    //             .ref()
-    //             .child("driver")
-    //             .child(currentUseId!.uid).child("offLine");
-    //         _rideRequestRef.set("Available");
-    //       });
-    //     } else if (snap != "timeOut" || snap != "canceled") {
-    //       return;
-    //     }
-    //   } else if (value.snapshot.value == null) {
-    //     rideRequestRef.set("searching").whenComplete((){
-    //       DatabaseReference _rideRequestRef = FirebaseDatabase.instance
-    //           .ref()
-    //           .child("driver")
-    //           .child(currentUseId!.uid).child("offLine");
-    //       _rideRequestRef.set("Available");
-    //     });
-    //   }
-    // });
-
-    //second listing
     rideRequestRef.onValue.listen((event) {});
   }
 
@@ -96,6 +68,7 @@ class GeoFireSrv {
     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
         .currentPosition;
     homeScreenStreamSubscription?.resume();
+    subscriptionNot1.resume();
     await Geofire.setLocation(
         currentUseId!.uid, position.latitude, position.longitude);
   }

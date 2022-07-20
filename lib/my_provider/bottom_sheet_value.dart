@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 
 class BottomSheetValue extends ChangeNotifier {
-  double bottomSheetValue = -600.0;
+  double bottomSheetValue = -700.0;
 
   void updateValue(double val) {
     bottomSheetValue = val;

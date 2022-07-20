@@ -296,6 +296,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       //id in newRide value = rider id from Ride Request collection
       if (newRideState == rideInfoProvider.userId) {
         homeScreenStreamSubscription?.pause();
+        subscriptionNot1.pause();
         Geofire.stopListener();
         Geofire.removeLocation(currentUseId);
         await GeoFireSrv().displayLocationLiveUpdates();

@@ -1,20 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'dart:math';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:system_alert_window/system_alert_window.dart';
 import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
@@ -26,7 +23,6 @@ import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
-import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,13 +51,13 @@ bool onIosBackground(ServiceInstance service) {
 
 void onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
-  String userId = AuthSev().auth.currentUser!.uid;
+  final userId = AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
 
   if (service is AndroidServiceInstance) {
+
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
-      driverRef.child(userId).child("service").onDisconnect().remove();
     });
 
     service.on('setAsBackground').listen((event) {
@@ -71,62 +67,17 @@ void onStart(ServiceInstance service) async {
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
-
   if (userId.isNotEmpty) {
     Geofire.initialize("availableDrivers");
-    Geofire.stopListener();
-    Geofire.removeLocation(userId);
-    driverRef.child(userId).child("newRide").onDisconnect();
-    await driverRef.child(userId).child("newRide").remove();
-    await driverRef.child(userId).child("service").onDisconnect().remove();
-    await PlanDays().setIfBackgroundOrForeground(true);
-    driverRef.child(userId).child("exPlan").onValue.listen((value) {
-      if (value.snapshot.exists && value.snapshot.value != null) {
-        final snap = value.snapshot.value;
-        if (snap != null) {
-          exPlan = int.parse(snap.toString());
-        }
-      }
-    });
-    // await driverRef.child(userId).child("exPlan").once().then((value) {
-    //
-    // });
+    await Geofire.stopListener();
+    await Geofire.removeLocation(userId);
+    driverRef.child(userId).child("newRide").onDisconnect().remove();
+    driverRef.child(userId).child("service").onDisconnect().remove();
+    PlanDays().setIfBackgroundOrForeground(true);
   }
 
-  Timer.periodic(const Duration(seconds: 50), (timer) async {
-    if (exPlan == 0) {
-      driverRef.child(userId).child("status").once().then((value) {
-        if (value.snapshot.exists && value.snapshot.value != null) {
-          final snap = value.snapshot.value;
-          String _status = snap.toString();
-          if (_status == "checkIn" || _status == "") {
-            timer.cancel();
-            return;
-          }
-          driverRef.child(userId).child("status").set("payTime");
-          timer.cancel();
-          GeoFireSrv().makeDriverOffLine();
-        }
-      });
-    } else if (exPlan > 0) {
-      exPlan = exPlan - 1;
-      await driverRef.child(userId).child("exPlan").set(exPlan);
-      if (exPlan <= 0) {
-        driverRef.child(userId).child("status").once().then((value) {
-          if (value.snapshot.exists && value.snapshot.value != null) {
-            final snap = value.snapshot.value;
-            String _status = snap.toString();
-            if (_status == "checkIn" || _status == "") {
-              timer.cancel();
-              return;
-            }
-            driverRef.child(userId).child("status").set("payTime");
-            timer.cancel();
-            GeoFireSrv().makeDriverOffLine();
-          }
-        });
-      }
-    }
+  Timer.periodic(const Duration(seconds: 5), (timer) async {
+    await PlanDays().getDateTime();
     if (service is AndroidServiceInstance) {
       service.setForegroundNotificationInfo(
         title: "Garanti Taxi : ",
@@ -153,6 +104,39 @@ void onStart(ServiceInstance service) async {
         },
       );
     }
+    // if (exPlan == 0) {
+    //   driverRef.child(userId).child("status").once().then((value) {
+    //     if (value.snapshot.exists && value.snapshot.value != null) {
+    //       final snap = value.snapshot.value;
+    //       String _status = snap.toString();
+    //       if (_status == "checkIn" || _status == "") {
+    //         timer.cancel();
+    //         return;
+    //       }
+    //       driverRef.child(userId).child("status").set("payTime");
+    //       timer.cancel();
+    //       GeoFireSrv().makeDriverOffLine();
+    //     }
+    //   });
+    // } else if (exPlan > 0) {
+    //   exPlan = exPlan - 1;
+    //   await driverRef.child(userId).child("exPlan").set(exPlan);
+    //   // if (exPlan <= 0) {
+    //   //   driverRef.child(userId).child("status").once().then((value) {
+    //   //     if (value.snapshot.exists && value.snapshot.value != null) {
+    //   //       final snap = value.snapshot.value;
+    //   //       String _status = snap.toString();
+    //   //       if (_status == "checkIn" || _status == "") {
+    //   //         timer.cancel();
+    //   //         return;
+    //   //       }
+    //   //       driverRef.child(userId).child("status").set("payTime");
+    //   //       timer.cancel();
+    //   //       GeoFireSrv().makeDriverOffLine();
+    //   //     }
+    //   //   });
+    //   // }
+    // }
   });
 }
 
@@ -163,46 +147,72 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late bool valueSwitchBottom = true;
-  String _platformVersion = 'Unknown';
+  // String _platformVersion = 'Unknown';
   // sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
   @override
   void initState() {
-    initializeService();
-    FlutterBackgroundService().invoke("setAsBackground");
+    WidgetsBinding.instance.addObserver(this);
     getToken();
-    initializationLocal(context);
+    initializeService();
     requestPermissions();
-    PlanDays().countDayPlansInForeground();
+    initializationLocal(context);
+    FlutterBackgroundService().invoke("setAsBackground");
     PushNotificationsSrv().gotNotificationInBackground(context);
-    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-    TurnOnGBS().turnOnGBSifNot();
+    requestPermissionsSystem();
+    onForground();
+    PlanDays().getDateTime();
+    // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     ///system dailog alert 3 methodes
     // initPlatformState();
-    requestPermissionsSystem();
-    onForground();
+    /// count
+    //PlanDays().countDayPlansInForeground();
     super.initState();
   }
 
-  // system over vlowy
-  Future<void> initPlatformState() async {
-    await SystemAlertWindow.enableLogs(true);
-    String? platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await SystemAlertWindow.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion!;
-    });
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive||
+        state == AppLifecycleState.detached
+    ) return;
+    final isBackGround = state == AppLifecycleState.paused;
+    if (isBackGround) {
+      setState(() {
+        runLocale = true;
+      });
+    } else {
+      setState(() {
+        runLocale = false;
+      });
+    }
+  }
+
+  // system over vlowy
+  // Future<void> initPlatformState() async {
+  //   await SystemAlertWindow.enableLogs(true);
+  //   String? platformVersion;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     platformVersion = await SystemAlertWindow.platformVersion;
+  //   } on PlatformException {
+  //     platformVersion = 'Failed to get platform version.';
+  //   }
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //     _platformVersion = platformVersion!;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -248,9 +258,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mapType: MapType.normal,
                                   initialCameraPosition:
                                       LogicGoogleMap().kGooglePlex,
-                                  myLocationButtonEnabled: Platform.isAndroid?true:false,
+                                  myLocationButtonEnabled:
+                                      Platform.isAndroid ? true : false,
                                   myLocationEnabled: true,
-                                  liteModeEnabled: Platform.isAndroid?true:false,
+                                  liteModeEnabled:
+                                      Platform.isAndroid ? true : false,
                                   onMapCreated:
                                       (GoogleMapController controller) async {
                                     LogicGoogleMap()
@@ -348,8 +360,8 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
             onPressed: () async {
-              GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
               await LogicGoogleMap().locationPosition(context);
+              GeoFireSrv().getLocationLiveUpdates(valueSwitchBottom);
               getCountryName();
             },
             child: const Icon(
@@ -422,4 +434,5 @@ class _HomeScreenState extends State<HomeScreen> {
   void onForground() {
     driverRef.child(userId).child("service").set("not");
   }
+
 }

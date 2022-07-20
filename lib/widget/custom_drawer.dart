@@ -352,7 +352,10 @@ Widget customDrawer(BuildContext context) {
                   if(Platform.isAndroid){
                     SystemNavigator.pop();
                   }
-                  exit(0);
+                  Provider.of<DrawerValueChange>(context,
+                      listen: false)
+                      .updateValue(0);
+                  // exit(0);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

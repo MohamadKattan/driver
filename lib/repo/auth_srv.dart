@@ -73,6 +73,8 @@ class AuthSev {
               "carLis": "",
               "earning": "0.0",
               "personImage": "",
+              "plandate":DateTime.now().toString(),
+              "active":"active"
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
@@ -125,6 +127,8 @@ class AuthSev {
               "carLis": "",
               "earning": "0.0",
               "personImage": "",
+              "plandate":DateTime.now().toString(),
+              "active":"active"
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
