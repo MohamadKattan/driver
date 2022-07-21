@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../model/driverInfo.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/indctor_profile_screen.dart';
+import '../repo/dataBaseReal_sev.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -86,34 +87,60 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: GestureDetector(
-                      onTap: (){
-                          Provider.of<InductorProfileProvider>(context,listen: false).updateState(true);
-                          startUpdateInfoUser(
-                              driverInfo, name, lastName, email,context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFD54F),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        height: MediaQuery.of(context).size.height * 10 / 100,
-                        width: MediaQuery.of(context).size.width * 80 / 100,
-                        child:  Center(
-                          child: Text(
-                            AppLocalizations.of(context)!.update,
-                            style:const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: GestureDetector(
+                          onTap: (){
+                              Provider.of<InductorProfileProvider>(context,listen: false).updateState(true);
+                              startUpdateInfoUser(driverInfo, name, lastName, email,context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFD54F),
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            height: MediaQuery.of(context).size.height * 10 / 100,
+                            width: MediaQuery.of(context).size.width * 40 / 100,
+                            child:  Center(
+                              child: Text(
+                                AppLocalizations.of(context)!.update,
+                                style:const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                      GestureDetector(
+                        onTap:()=>DataBaseReal().deleteAccount(context) ,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent.shade700,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          height: MediaQuery.of(context).size.height * 10 / 100,
+                          width: MediaQuery.of(context).size.width * 40 / 100,
+                          child:  Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.del,
+                              style:const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

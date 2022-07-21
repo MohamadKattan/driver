@@ -71,13 +71,17 @@ void onStart(ServiceInstance service) async {
     Geofire.initialize("availableDrivers");
     await Geofire.stopListener();
     await Geofire.removeLocation(userId);
-    driverRef.child(userId).child("newRide").onDisconnect().remove();
-    driverRef.child(userId).child("service").onDisconnect().remove();
+    driverRef.child(userId).child("newRide").onDisconnect();
+    await driverRef.child(userId).child("newRide").remove();
+    driverRef.child(userId).child("service").onDisconnect();
+   await driverRef.child(userId).child("service").remove();
     PlanDays().setIfBackgroundOrForeground(true);
   }
 
-  Timer.periodic(const Duration(seconds: 5), (timer) async {
-    await PlanDays().getDateTime();
+  Timer.periodic(const Duration(minutes: 15), (timer) async {
+    if(Platform.isAndroid){
+      PlanDays().getDateTime();
+    }
     if (service is AndroidServiceInstance) {
       service.setForegroundNotificationInfo(
         title: "Garanti Taxi : ",

@@ -135,5 +135,8 @@
   "activeAccountEx": "Hesap bilgilerinizin güvenliğini sağlamak için, cep telefonunuzu biçimlendirdikten veya yeni bir cep telefonu kullandıktan sonra Hesabınızı tekrar etkinleştirmelisiniz. desteği arayın veya e-posta, normal arama veya whatsapp ile bir masaj gönderin",
   "activeAccountDon": "Hesabınızı Etkinleştirdi. uygulamayı kullanabilmek için aşağıdaki düğmeyi tıklayın veya uygulamayı kapatın ve yeniden açın",
   "active": "etkinleştir",
-  "wait": "Lütfen bekle ..."
+  "wait": "Lütfen bekle ...",
+  "del": "Silmek",
+  "delDon": "Silme başarılı",
+  "youCanExit": "Uygulamadan Çıkabilirsiniz"
 }

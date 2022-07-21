@@ -560,5 +560,17 @@
   "wait": "Please wait ...",
   "@wait": {
     "description": "Activate"
+  },
+  "del": "Delete",
+  "@del": {
+    "description": "Delete"
+  },
+  "delDon": "Delete successful",
+  "@delDon": {
+    "description": "Delete successful"
+  },
+  "youCanExit": "You can Exit from app",
+  "@youCanExit": {
+    "description": "You can Exit from app"
   }
 }
