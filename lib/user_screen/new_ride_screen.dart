@@ -413,6 +413,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     rideRequestRef.child("status").set("accepted");
     rideRequestRef.child("driverId").set(driverInfo.userId);
+    rideRequestRef.child("driverImage").set(driverInfo.personImage);
     rideRequestRef
         .child("driverName")
         .set("${driverInfo.firstName} ${driverInfo.lastName}");

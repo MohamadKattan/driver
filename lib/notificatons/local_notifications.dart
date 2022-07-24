@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -114,7 +115,7 @@ void requestPermissions() {
       );
 }
 
-Future<void> showNotification() async {
+Future<void> showNotification(BuildContext context) async {
 
    var bigImage =const BigPictureStyleInformation(
      DrawableResourceAndroidBitmap("map1"),
@@ -139,13 +140,13 @@ Future<void> showNotification() async {
     playSound: true,
         sound:  const RawResourceAndroidNotificationSound("new_order1"),
   );
-  const IOSNotificationDetails iOSPlatformChannelSpecifics =
-      IOSNotificationDetails(
+   IOSNotificationDetails iOSPlatformChannelSpecifics =
+      const IOSNotificationDetails(
           presentBadge: true,
           sound: 'new_order.mp3',
           presentAlert: true,
         presentSound: true,
-        subtitle: "subtitle",
+        subtitle: "  ",
           );
 
   final NotificationDetails platform = NotificationDetails(
@@ -153,8 +154,8 @@ Future<void> showNotification() async {
       iOS: iOSPlatformChannelSpecifics);
   await flutterLocalNotificationsPlugin.show(
     0,
-    'New ride request ',
-    'click here for more info',
+    AppLocalizations.of(context)!.rideRequest,
+    AppLocalizations.of(context)!.clickHere,
     platform,
     payload: 'item x',
   );

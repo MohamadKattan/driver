@@ -3,7 +3,7 @@ import 'package:driver/user_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
-import 'card_payment_screen.dart';
+import '../payment/param_payment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlanScreen extends StatefulWidget {
@@ -14,9 +14,18 @@ class PlanScreen extends StatefulWidget {
 }
 
 class _PlanScreenState extends State<PlanScreen> {
-  late int amountPlan1 ;
-  late  int amountPlan2 ;
-  late int amountPlan3 ;
+  late double amountPlan;
+  late String currencyType;
+  late String url;
+  // late double amountPlan1 ;
+  // late  double amountPlan2 ;
+  // late double amountPlan3 ;
+  // String urlEn = "https://garantidriver.com/New_Pay";
+  // String urlAn = "https://garantidriver.com/New_pay_ar";
+  // String urlTr = "https://garantidriver.com/tr_pay";
+  // String currencyTr = "TRY";
+  // String currencyUsd= "USD";
+
 
   @override
   Widget build(BuildContext context) {
@@ -194,82 +203,106 @@ class _PlanScreenState extends State<PlanScreen> {
   }
   void checkamout1(String carType, BuildContext context, String countryName){
     if(countryName == "Turkey"){
+       currencyType="TRY";
       if(carType=="Taxi-4 seats"){
-        amountPlan1 =18000;
-        // amountPlan1 =180;
+        // amountPlan1 =18000;
+        amountPlan =180.00;
       }
       else{
-        amountPlan1 = 30000;
-        // amountPlan1 = 300;
+        // amountPlan1 = 30000;
+        amountPlan = 300.00;
       }
     }else{
+       currencyType="USD";
       if(carType=="Taxi-4 seats"){
-        amountPlan1 =1000;
-        // amountPlan1 = 10;
+        // amountPlan1 =1000;
+        amountPlan = 10.00;
       }else{
-        // amountPlan1 = 20;
-        amountPlan1 = 2000;
+        amountPlan = 20.00;
+        // amountPlan1 = 2000;
       }
     }
-    int _year = DateTime.now().year;
-    int _month = DateTime.now().month+1;
-    int _day = DateTime.now().day;
-    DateTime _datePlan = DateTime(_year, _month, _day);
-
-    Navigator.push(context,
-        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan1,planexpirt:43200,planDateExpirt:_datePlan)));
+    if(AppLocalizations.of(context)!.paymentScreen=="Ödeme ekranı"){
+      url = "https://garantidriver.com/tr_pay";
+    }else if(AppLocalizations.of(context)!.paymentScreen=="شاشة الدفع"){
+      url = "https://garantidriver.com/New_pay_ar";
+    }else{
+      url = "https://garantidriver.com/New_Pay";
+    }
+    startDoPayment(amountPlan,43200,currencyType,url);
   }
 
   checkAmount2(String carType, BuildContext context,String countryName ) {
     if(countryName == "Turkey"){
+      currencyType="TRY";
       if(carType=="Taxi-4 seats"){
-        amountPlan2 =47000;
-        // amountPlan2 =470;
+        // amountPlan2 =47000;
+        amountPlan =470.00;
       }else{
-        amountPlan2 = 70000;
-        // amountPlan2 = 700;
-      }
-    }else{
-      if(carType=="Taxi-4 seats"){
-        amountPlan2 =3000;
-        // amountPlan2 =30;
-      }else{
-        amountPlan2 = 5500;
-        // amountPlan2 = 55;
+        // amountPlan2 = 70000;
+        amountPlan = 800.00;
       }
     }
-    int _year = DateTime.now().year;
-    int _month = DateTime.now().month+3;
-    int _day = DateTime.now().day;
-    DateTime _datePlan = DateTime(_year, _month, _day);
-    Navigator.push(context,
-        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan2,planexpirt:129600,planDateExpirt: _datePlan)));
+    else{
+      currencyType="USD";
+      if(carType=="Taxi-4 seats"){
+        // amountPlan2 =3000;
+        amountPlan =30.00;
+      }else{
+        // amountPlan2 = 5500;
+        amountPlan = 55.00;
+      }
+    }
+    if(AppLocalizations.of(context)!.paymentScreen=="Ödeme ekranı") {
+      url = "https://garantidriver.com/tr_pay";
+    }
+    else if(AppLocalizations.of(context)!.paymentScreen=="شاشة الدفع"){
+      url = "https://garantidriver.com/New_pay_ar";
+    }
+    else{
+      url = "https://garantidriver.com/New_Pay";
+    }
+    startDoPayment(amountPlan,129600,currencyType,url);
   }
 
   checkAmount3(String carType, BuildContext context,String countryName) {
     if(countryName == "Turkey"){
+       currencyType="TRY";
       if(carType=="Taxi-4 seats"){
-        amountPlan3 =80000;
-        // amountPlan3 =800;
+        // amountPlan3 =80000;
+        amountPlan =800.00;
       }else{
-        amountPlan3 = 135000;
-        // amountPlan3 = 1350;
-      }
-    }else{
-      if(carType=="Taxi-4 seats"){
-        amountPlan3 =5500;
-        // amountPlan3 =55;
-      }else{
-        // amountPlan3 = 95;
-        amountPlan3 = 9500;
+        // amountPlan3 = 135000;
+        amountPlan = 1350.00;
       }
     }
-    int _year = DateTime.now().year;
-    int _month = DateTime.now().month+6;
-    int _day = DateTime.now().day;
-    DateTime _datePlan = DateTime(_year, _month, _day);
-
-    Navigator.push(context,
-        MaterialPageRoute(builder:(_)=> CardPaymentScreen(amount: amountPlan3,planexpirt:259200,planDateExpirt:_datePlan)));
+    else{
+       currencyType="USD";
+      if(carType=="Taxi-4 seats"){
+        // amountPlan3 =5500;
+        amountPlan =55.00;
+      }else{
+        amountPlan = 95.00;
+        // amountPlan3 = 9500;
+      }
+    }
+    if(AppLocalizations.of(context)!.paymentScreen=="Ödeme ekranı") {
+      url = "https://garantidriver.com/tr_pay";
+    }
+    else if(AppLocalizations.of(context)!.paymentScreen=="شاشة الدفع"){
+      url = "https://garantidriver.com/New_pay_ar";
+    }
+    else{
+      url = "https://garantidriver.com/New_Pay";
+    }
+    startDoPayment(amountPlan,259200,currencyType,url);
+  }
+// this method for check parameters before start payment
+ Future<void> startDoPayment(double newAmountPlan, int newExPlan, String newCurrencyType, String url) async{
+    // print("amont$newAmountPlan");
+    // print("plan$newExPlan");
+    // print("currency$newCurrencyType");
+    // print("url$url");
+   ParamPayment().makePayment(newAmountPlan,newExPlan,newCurrencyType,url,context);
   }
 }

@@ -572,5 +572,9 @@
   "youCanExit": "You can Exit from app",
   "@youCanExit": {
     "description": "You can Exit from app"
+  },
+  "clickHere": "click here to accept this order",
+  "@clickHere": {
+    "description": "click here"
   }
 }

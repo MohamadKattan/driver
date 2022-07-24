@@ -69,16 +69,14 @@ void onStart(ServiceInstance service) async {
   });
   if (userId.isNotEmpty) {
     Geofire.initialize("availableDrivers");
-    await Geofire.stopListener();
-    await Geofire.removeLocation(userId);
-    driverRef.child(userId).child("newRide").onDisconnect();
-    await driverRef.child(userId).child("newRide").remove();
+     Geofire.stopListener();
+     Geofire.removeLocation(userId);
     driverRef.child(userId).child("service").onDisconnect();
-   await driverRef.child(userId).child("service").remove();
+    await driverRef.child(userId).child("service").remove();
     PlanDays().setIfBackgroundOrForeground(true);
   }
 
-  Timer.periodic(const Duration(minutes: 15), (timer) async {
+  Timer.periodic(const Duration(minutes: 60), (timer) async {
     if(Platform.isAndroid){
       PlanDays().getDateTime();
     }
@@ -275,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     newGoogleMapController = controller;
                                     await LogicGoogleMap()
                                         .locationPosition(context);
-                                    GeoFireSrv().getLocationLiveUpdates(
+                                   await GeoFireSrv().getLocationLiveUpdates(
                                         valueSwitchBottom);
                                     getCountryName();
                                     tostDriverAvailable();

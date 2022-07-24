@@ -209,9 +209,7 @@ class PushNotificationsSrv {
       if (event.snapshot.value != null) {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
-          // Future.delayed(const Duration(seconds: 120)).whenComplete(() {
-          //   GeoFireSrv().enableLocationLiveUpdates(context);
-          // });
+            GeoFireSrv().enableLocationLiveUpdates(context);
         } else if (_riderId == "canceled") {
           Future.delayed(const Duration(seconds: 20)).whenComplete(
               () => driverRef.child(userId).child("newRide").set("searching"));
@@ -231,7 +229,7 @@ class PushNotificationsSrv {
           }else{
             retrieveRideRequestInfo(_riderId, context);
             if(runLocale){
-              showNotification();
+              showNotification(context);
             }
           }
         }

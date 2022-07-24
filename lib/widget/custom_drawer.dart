@@ -355,6 +355,9 @@ Widget customDrawer(BuildContext context) {
                   Provider.of<DrawerValueChange>(context,
                       listen: false)
                       .updateValue(0);
+                  Provider.of<ChangeColorBottomDrawer>(context,
+                      listen: false)
+                      .updateColorBottom(false);
                   // exit(0);
                 },
                 child: Padding(

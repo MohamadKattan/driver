@@ -138,5 +138,6 @@
   "wait": "Lütfen bekle ...",
   "del": "Silmek",
   "delDon": "Silme başarılı",
-  "youCanExit": "Uygulamadan Çıkabilirsiniz"
+  "youCanExit": "Uygulamadan Çıkabilirsiniz",
+  "clickHere": "bu siparişi kabul etmek için buraya tıklayın"
 }

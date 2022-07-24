@@ -21,8 +21,8 @@ class ToUrlLunch {
           ? launch("https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
           : Tools().toastMsg('Could not launch ', Colors.redAccent.shade700);
     }else{
-      await canLaunch("https://www.apple.com/tr/app-store/")
-          ? launch("https://www.apple.com/tr/app-store/")
+      await canLaunch("https://apps.apple.com/tr/app/garantitaxi-driver/id1635534414")
+          ? launch("https://apps.apple.com/tr/app/garantitaxi-driver/id1635534414")
           : Tools().toastMsg('Could not launch ', Colors.redAccent.shade700);
     }
   }

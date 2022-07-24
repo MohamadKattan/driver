@@ -14,8 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CardPaymentScreen extends StatefulWidget {
   final int amount;
   final int planexpirt;
-  final DateTime planDateExpirt;
-  const CardPaymentScreen({Key? key, required this.amount,required this.planexpirt,required this.planDateExpirt}) : super(key: key);
+  const CardPaymentScreen({Key? key, required this.amount,required this.planexpirt}) : super(key: key);
 
   @override
   State<CardPaymentScreen> createState() => _CardPaymentScreenState();
@@ -170,15 +169,14 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                               holderName: cardHolderName
                                );
                           ///checkout
-                            CheckOutPayment checkOut = CheckOutPayment();
-                            await checkOut.makePayment(
-                                card,
-                                widget.amount,
-                              countryName=="Turkey"?"TRY":"USD",
-                                context,
-                              widget.planexpirt,
-                              widget.planDateExpirt
-                        );
+                          //   CheckOutPayment checkOut = CheckOutPayment();
+                        //     await checkOut.makePayment(
+                        //         card,
+                        //         widget.amount,
+                        //       countryName=="Turkey"?"TRY":"USD",
+                        //         context,
+                        //       widget.planexpirt
+                        // );
                             Provider.of<PaymentIndector>(context,listen: false).updateState(false);
 
                           }),

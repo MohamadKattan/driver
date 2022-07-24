@@ -28,6 +28,7 @@ double finalAmont = 0;
 double finalPlan = 0;
 String? tokenPhone;
 bool runLocale = false;
+// last ios version: 1.0.0+1 uploaded
 
 
 
