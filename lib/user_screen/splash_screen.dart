@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen>
     checkInternet();
     if (AuthSev().auth.currentUser?.uid != null) {
       DataBaseReal().getDriverInfoFromDataBase(context);
-      PlanDays().getBackGroundBoolValue();
+      // PlanDays().getBackGroundBoolValue();
     }
     _animationController = AnimationController(
         vsync: this,
@@ -152,6 +152,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> checkInternet() async {
     result = await InternetConnectionChecker().hasConnection;
+    if(result==false){
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const InterNetWeak()));
+    }
   }
 
   @override

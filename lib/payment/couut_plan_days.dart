@@ -15,34 +15,37 @@ class PlanDays {
   String userId = AuthSev().auth.currentUser!.uid;
 
 // this method for set value plan to real time
-  Future<void> setExPlanToRealTime(int exPlan) async {
-    await driverRef.child(userId).child("exPlan").once().then((value) async {
-      if(value.snapshot.exists&&value.snapshot.value!=null){
-        final snap = value.snapshot.value.toString();
-        int oldExPlan = int.parse(snap);
-        if(oldExPlan>0){
-          int updateExPlan = oldExPlan + exPlan;
-          await driverRef.child(userId).child("exPlan").set(updateExPlan);
-        }else if(oldExPlan <=0){
-          await driverRef.child(userId).child("exPlan").set(exPlan);
-        }else{
-          return;
-        }
-      }
-    });
-  }
-
+  ///Stop for now
+  // Future<void> setExPlanToRealTime(int exPlan) async {
+  //   await driverRef.child(userId).child("exPlan").once().then((value) async {
+  //     if(value.snapshot.exists&&value.snapshot.value!=null){
+  //       final snap = value.snapshot.value.toString();
+  //       int oldExPlan = int.parse(snap);
+  //       if(oldExPlan>0){
+  //         int updateExPlan = oldExPlan + exPlan;
+  //         await driverRef.child(userId).child("exPlan").set(updateExPlan);
+  //       }else if(oldExPlan <=0){
+  //         await driverRef.child(userId).child("exPlan").set(exPlan);
+  //       }else{
+  //         return;
+  //       }
+  //     }
+  //   });
+  // }
+  ///
 // this method for get value plan from real time
- Future <int?> getExPlanFromReal() async {
-    await driverRef.child(userId).child("exPlan").once().then((value) {
-      final snap = value.snapshot.value;
-      if (snap != null) {
-        final plan = snap.toString();
-        exPlan = int.parse(plan);
-      }
-    });
-    return exPlan;
-  }
+  ///stop for now
+ // Future <int?> getExPlanFromReal() async {
+ //    await driverRef.child(userId).child("exPlan").once().then((value) {
+ //      final snap = value.snapshot.value;
+ //      if (snap != null) {
+ //        final plan = snap.toString();
+ //        exPlan = int.parse(plan);
+ //      }
+ //    });
+ //    return exPlan;
+ //  }
+  ///
 
   // this method for set true or false if background service or not
   Future<void> setIfBackgroundOrForeground(bool isTrue) async {
@@ -50,23 +53,27 @@ class PlanDays {
   }
 
   // this method will set value payed if payment don
-  Future<void> setDriverPayed() async {
-    await driverRef.child(userId).child("status").set("payed");
-  }
+  ///stop for now
+  // Future<void> setDriverPayed() async {
+  //   await driverRef.child(userId).child("status").set("payed");
+  // }
+  ///
 
   // this method for background bool value working or not
-  void getBackGroundBoolValue()async{
-    await driverRef.child(userId).once().then((value) {
-      if(value.snapshot.exists&&value.snapshot.value!=null){
-        final snap = value.snapshot.value;
-        Map<String,dynamic>map=Map<String,dynamic>.from(snap as Map);
-        if(map["backbool"]!=null){
-          isBackground = map["backbool"];
-        }
-      }
-    });
-  }
-
+  /// stop for now
+  // void getBackGroundBoolValue()async{
+  //   await driverRef.child(userId).once().then((value) {
+  //     if(value.snapshot.exists&&value.snapshot.value!=null){
+  //       final snap = value.snapshot.value;
+  //       Map<String,dynamic>map=Map<String,dynamic>.from(snap as Map);
+  //       if(map["backbool"]!=null){
+  //         isBackground = map["backbool"];
+  //       }
+  //     }
+  //   });
+  // }
+  ///
+// this method for set date time explan date
   Future<void> setDateTime() async {
     int _day;
     int _month = DateTime.now().month;
@@ -82,6 +89,7 @@ class PlanDays {
     // final  String formatted = formatter.format(exPlan1);
   }
 
+  // this method for get value explan for user account and calc daily as 1400
   Future<void> countAndCalcPlan() async {
     await  driverRef.child(userId).child("exPlan").once().then((value) {
       if (value.snapshot.value != null) {
@@ -122,7 +130,7 @@ class PlanDays {
       });
     }
   }
-
+  // this method for get value explan for user account and calc lately as 2800
   Future<void> countAndCalcPlanLate() async {
     await  driverRef.child(userId).child("exPlan").once().then((value) {
       if (value.snapshot.value != null) {
@@ -164,6 +172,7 @@ class PlanDays {
     }
   }
 
+  // this method for got plandate and check if daily or lately then set date now and calc
   Future<void> getDateTime() async {
     await driverRef.child(userId).child("plandate").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
@@ -228,5 +237,4 @@ class PlanDays {
  //      return;
  //    }
  //  }
-
 }

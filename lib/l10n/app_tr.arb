@@ -88,7 +88,7 @@
   "personnelImage": "şahsi Fotoğraf",
    "driverLicense": "Ehliyet",
    "carLicense": "Araba ruhsatı",
-   "carImage": "arabanın çekilmiş resmi",
+   "carImage": "Arabanın önden çekilmiş resmi",
   "imageDrequired": "Sürücü Resmi gerekli",
   "licenseDrequired": "Sürücü ehliyeti gerekli",
    "licenseCrequired": "Araba ruhsatı gerekli",
@@ -139,5 +139,6 @@
   "del": "Silmek",
   "delDon": "Silme başarılı",
   "youCanExit": "Uygulamadan Çıkabilirsiniz",
-  "clickHere": "bu siparişi kabul etmek için buraya tıklayın"
+  "clickHere": "bu siparişi kabul etmek için buraya tıklayın",
+  "interNetWeak": "İnternet ağı yok. Veya İnternet zayıf. İnternet ağınızı açın ve tekrar yüklemeyi deneyin !!!"
 }

@@ -273,7 +273,7 @@ class CustomBottomSheet {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(AppLocalizations.of(context)!.carImage),
+                    child: Text(AppLocalizations.of(context)!.carImage,overflow: TextOverflow.ellipsis,),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

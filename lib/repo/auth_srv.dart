@@ -155,7 +155,8 @@ class AuthSev {
         }
       }
     }
-    return userCredential.user!;
+    return null;
+    // return userCredential.user!;
   }
 
   Future<User> getCurrentUserId(BuildContext context) async {

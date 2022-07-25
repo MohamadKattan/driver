@@ -25,7 +25,6 @@ class InterNetWeak extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
           ),
        const   SizedBox(height: 16.0),
           GestureDetector(

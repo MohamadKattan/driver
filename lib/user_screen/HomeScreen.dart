@@ -68,78 +68,39 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
   if (userId.isNotEmpty) {
-    Geofire.initialize("availableDrivers");
+     Geofire.initialize("availableDrivers");
      Geofire.stopListener();
      Geofire.removeLocation(userId);
     driverRef.child(userId).child("service").onDisconnect();
     await driverRef.child(userId).child("service").remove();
-    PlanDays().setIfBackgroundOrForeground(true);
+    // PlanDays().setIfBackgroundOrForeground(true);
   }
-
-  Timer.periodic(const Duration(minutes: 60), (timer) async {
-    if(Platform.isAndroid){
-      PlanDays().getDateTime();
+  if (service is AndroidServiceInstance) {
+    service.setForegroundNotificationInfo(
+      title: "Garanti Taxi : ",
+      content: "Location working in background",
+    );
+    // test using external plugin
+    final deviceInfo = DeviceInfoPlugin();
+    String? device;
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      device = androidInfo.model;
     }
-    if (service is AndroidServiceInstance) {
-      service.setForegroundNotificationInfo(
-        title: "Garanti Taxi : ",
-        content: "Location working in background",
-      );
-      // test using external plugin
-      final deviceInfo = DeviceInfoPlugin();
-      String? device;
-      if (Platform.isAndroid) {
-        final androidInfo = await deviceInfo.androidInfo;
-        device = androidInfo.model;
-      }
 
-      if (Platform.isIOS) {
-        final iosInfo = await deviceInfo.iosInfo;
-        device = iosInfo.model;
-      }
-
-      service.invoke(
-        'update',
-        {
-          "current_date": DateTime.now().toIso8601String(),
-          "device": device,
-        },
-      );
+    if (Platform.isIOS) {
+      final iosInfo = await deviceInfo.iosInfo;
+      device = iosInfo.model;
     }
-    // if (exPlan == 0) {
-    //   driverRef.child(userId).child("status").once().then((value) {
-    //     if (value.snapshot.exists && value.snapshot.value != null) {
-    //       final snap = value.snapshot.value;
-    //       String _status = snap.toString();
-    //       if (_status == "checkIn" || _status == "") {
-    //         timer.cancel();
-    //         return;
-    //       }
-    //       driverRef.child(userId).child("status").set("payTime");
-    //       timer.cancel();
-    //       GeoFireSrv().makeDriverOffLine();
-    //     }
-    //   });
-    // } else if (exPlan > 0) {
-    //   exPlan = exPlan - 1;
-    //   await driverRef.child(userId).child("exPlan").set(exPlan);
-    //   // if (exPlan <= 0) {
-    //   //   driverRef.child(userId).child("status").once().then((value) {
-    //   //     if (value.snapshot.exists && value.snapshot.value != null) {
-    //   //       final snap = value.snapshot.value;
-    //   //       String _status = snap.toString();
-    //   //       if (_status == "checkIn" || _status == "") {
-    //   //         timer.cancel();
-    //   //         return;
-    //   //       }
-    //   //       driverRef.child(userId).child("status").set("payTime");
-    //   //       timer.cancel();
-    //   //       GeoFireSrv().makeDriverOffLine();
-    //   //     }
-    //   //   });
-    //   // }
-    // }
-  });
+
+    service.invoke(
+      'update',
+      {
+        "current_date": DateTime.now().toIso8601String(),
+        "device": device,
+      },
+    );
+  }
 }
 
 class HomeScreen extends StatefulWidget {

@@ -407,12 +407,12 @@ Widget customDrawer(BuildContext context) {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 8.0,right: 35),
                 child: Text(
                   AppLocalizations.of(context)!.withCard,
                   style: const TextStyle(
                       color: Colors.black45,
-                      fontSize: 20.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
@@ -490,7 +490,7 @@ double valueIconPadding(BuildContext context) {
 double valueIconPadding1(BuildContext context) {
   late double val;
   if (AppLocalizations.of(context)!.day == "Day"||AppLocalizations.of(context)!.day =="Gun") {
-    val = 65.0;
+    val = 95.0;
   } else {
     val = 8.0;
   }

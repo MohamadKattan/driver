@@ -1,5 +1,8 @@
 
+import 'dart:io';
+
 import 'package:driver/user_screen/plan_screen.dart';
+import 'package:driver/user_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -22,7 +25,7 @@ class IfYouWantPay extends StatelessWidget {
                 const SizedBox(height: 20.0),
                  Padding(
                   padding:const  EdgeInsets.all(8.0),
-                  child:  Text(AppLocalizations.of(context)!.planFinished,style: TextStyle(color: Colors.black45,fontSize:20.0)),
+                  child:  Text(AppLocalizations.of(context)!.planFinished,style: const TextStyle(color: Colors.black45,fontSize:20.0)),
                 ),
                 Center(
                     child: Lottie.asset(
@@ -54,7 +57,13 @@ class IfYouWantPay extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                      onTap: ()=>SystemNavigator.pop()
+                      onTap: (){
+                        if(Platform.isAndroid){
+                          SystemNavigator.pop();
+                        }else{
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(_)=>const SplashScreen()), (route) => false);
+                        }
+                      }
                       ,child: Container(
                     height: MediaQuery.of(context).size.height*8/100,
                     width: MediaQuery.of(context).size.width*70/100,

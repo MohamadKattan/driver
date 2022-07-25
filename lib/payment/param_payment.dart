@@ -19,16 +19,17 @@ class ParamPayment{
       "user_id": userId,
       "amount": newAmountPlan,
       "exPlan":newExPlan,
-      "currency": newCurrencyType,
+      "currancy": newCurrencyType,
+      "status":"payed"
     };
     http.Response res = await http.post(Uri.parse(url),
         headers: _headerPayment, body: convert.jsonEncode(body));
-    if (res.statusCode == 201) {
+    if (res.statusCode == 200) {
       // var data = convert.jsonDecode(res.body);
+      Provider.of<PaymentIndector>(context,listen: false).updateState(false);
       await ToUrlLunch().toUrlLunch(url: url);
-      print("codeIS${res.statusCode}");
     } else {
-      print("error${res.statusCode}");
+      Provider.of<PaymentIndector>(context,listen: false).updateState(false);
       Provider.of<PaymentIndector>(context,listen: false).updateState(false);
       Tools().toastMsg(AppLocalizations.of(context)!.notSuccessfully, Colors.redAccent.shade700);
       Tools().toastMsg(AppLocalizations.of(context)!.anotherCard, Colors.redAccent.shade700);

@@ -464,7 +464,7 @@
     "description": "With card more customer "
   },
 
-  "interNetWeak": "Internet week try loading again !!!",
+  "interNetWeak": " No Internet net work .Or Internet weak . turn on your Internet network and try loading again !!!",
   "@interNetWeak": {
     "description": "Internet week try loading again !!!"
   },
