@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
@@ -268,7 +269,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                             status == "onride"
                                 ? GestureDetector(
                                     onTap: () async {
-                                      await clearCash();
+                                      if (Platform.isAndroid){
+                                        await clearCash();
+                                      }
                                       navigationPickToDrop(context);
                                     },
                                     child: Container(
@@ -332,7 +335,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                             status == "accepted"
                                 ? GestureDetector(
                                     onTap: ()async {
-                                      await clearCash();
+                                      if (Platform.isAndroid){
+                                        await clearCash();
+                                      }
                                       navigationDriverToPickUpRi(context);
                                     },
                                     child: Container(
