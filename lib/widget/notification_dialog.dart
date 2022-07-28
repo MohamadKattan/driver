@@ -346,14 +346,14 @@ class _NotificationDialogState extends State<NotificationDialog> {
     const duration = Duration(seconds: 1);
     Timer.periodic(duration, (timer) async {
       rideRequestTimeOut = rideRequestTimeOut - 1;
-      if (rideRequestTimeOut == 0) {
+      if (rideRequestTimeOut <= 0) {
         timer.cancel();
         homeScreenStreamSubscription?.resume();
         await Geofire.setLocation(
             currentUseId.userId, position.latitude, position.longitude);
         _ref.child(currentUseId.userId).child("newRide").set("searching");
         _ref.child(currentUseId.userId).child("offLine").set("Available");
-        rideRequestTimeOut = 120;
+        rideRequestTimeOut = 240;
       }
     });
   }

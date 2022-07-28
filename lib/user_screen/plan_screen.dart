@@ -17,7 +17,7 @@ class PlanScreen extends StatefulWidget {
 }
 
 class _PlanScreenState extends State<PlanScreen> {
-  late double amountPlan;
+  late String amountPlan;
   late String currencyType;
   late String url;
   late int endExPlan;
@@ -217,19 +217,19 @@ class _PlanScreenState extends State<PlanScreen> {
        currencyType="TRY";
       if(carType=="Taxi-4 seats"){
         // amountPlan1 =18000;
-        amountPlan =180.00;
+        amountPlan ="180,00";
       }
       else{
         // amountPlan1 = 30000;
-        amountPlan = 300.00;
+        amountPlan = "300,00";
       }
     }else{
        currencyType="USD";
       if(carType=="Taxi-4 seats"){
         // amountPlan1 =1000;
-        amountPlan = 10.00;
+        amountPlan = "10,00";
       }else{
-        amountPlan = 20.00;
+        amountPlan = "20,00";
         // amountPlan1 = 2000;
       }
     }
@@ -266,20 +266,20 @@ class _PlanScreenState extends State<PlanScreen> {
       currencyType="TRY";
       if(carType=="Taxi-4 seats"){
         // amountPlan2 =47000;
-        amountPlan =470.00;
+        amountPlan ="470,00";
       }else{
         // amountPlan2 = 70000;
-        amountPlan = 800.00;
+        amountPlan = "800,00";
       }
     }
     else{
       currencyType="USD";
       if(carType=="Taxi-4 seats"){
         // amountPlan2 =3000;
-        amountPlan =30.00;
+        amountPlan ="30,00";
       }else{
         // amountPlan2 = 5500;
-        amountPlan = 55.00;
+        amountPlan = "55,00";
       }
     }
     if(AppLocalizations.of(context)!.paymentScreen=="Ödeme ekranı") {
@@ -317,19 +317,19 @@ class _PlanScreenState extends State<PlanScreen> {
        currencyType="TRY";
       if(carType=="Taxi-4 seats"){
         // amountPlan3 =80000;
-        amountPlan =800.00;
+        amountPlan ="800,00";
       }else{
         // amountPlan3 = 135000;
-        amountPlan = 1350.00;
+        amountPlan = "1350,00";
       }
     }
     else{
        currencyType="USD";
       if(carType=="Taxi-4 seats"){
         // amountPlan3 =5500;
-        amountPlan =55.00;
+        amountPlan ="55,00";
       }else{
-        amountPlan = 95.00;
+        amountPlan = "95,00";
         // amountPlan3 = 9500;
       }
     }
@@ -362,11 +362,11 @@ class _PlanScreenState extends State<PlanScreen> {
     startDoPayment(amountPlan,endExPlan,currencyType,url);
   }
 // this method for check parameters before start payment
- Future<void> startDoPayment(double newAmountPlan, int newExPlan, String newCurrencyType, String url) async{
-    // print("amont$newAmountPlan");
-    // print("plan$newExPlan");
-    // print("currency$newCurrencyType");
-    // print("url$url");
+ Future<void> startDoPayment(String newAmountPlan, int newExPlan, String newCurrencyType, String url) async{
+    print("amont$newAmountPlan");
+    print("plan$newExPlan");
+    print("currency$newCurrencyType");
+    print("url$url");
    ParamPayment().makePayment(newAmountPlan,newExPlan,newCurrencyType,url,context);
   }
 }

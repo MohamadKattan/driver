@@ -15,7 +15,7 @@ StreamSubscription<Position>?newStreamSubscription;
 late StreamSubscription<DatabaseEvent> subscriptionNot1;
 User? currentUser = AuthSev().auth.currentUser;
 bool isLite = false;
-int rideRequestTimeOut = 120;
+int rideRequestTimeOut = 240;
 String riderName = "";
 final AssetsAudioPlayer assetsAudioPlayer =AssetsAudioPlayer();
 int? exPlan;
@@ -27,7 +27,7 @@ double finalAmont = 0;
 double finalPlan = 0;
 String? tokenPhone;
 bool runLocale = false;
-// last ios version: 1.0.0+1 uploaded
+// last ios version: 1.0.1 uploaded
 
 
 

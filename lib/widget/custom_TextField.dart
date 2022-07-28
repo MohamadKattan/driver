@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class CustomTextField{
 
-  Widget customTextField({required TextEditingController controller,TextInputType?keyboardType,InputDecoration?decoration}){
+  Widget customTextField({required TextEditingController controller,TextInputType?keyboardType,InputDecoration?decoration,required int lenNumber}){
     return  Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         controller:controller ,
-        maxLength: 11,
+        maxLength: lenNumber,
         showCursor: true,
         cursorColor: const Color(0xFFFFD54F),
         style: const TextStyle(

@@ -14,12 +14,12 @@ class ParamPayment{
   static const Map<String, String> _headerPayment = {
     "Content-Type": "application/json",
   };
-  Future<void>makePayment(double newAmountPlan, int newExPlan, String newCurrencyType, String url, BuildContext context)async{
+  Future<void>makePayment(String newAmountPlan, int newExPlan, String newCurrencyType, String url, BuildContext context)async{
     Map<String, dynamic> body = {
       "user_id": userId,
       "amount": newAmountPlan,
       "exPlan":newExPlan,
-      "currancy": newCurrencyType,
+      "currency": newCurrencyType,
       "status":"payed"
     };
     http.Response res = await http.post(Uri.parse(url),

@@ -17,6 +17,7 @@ import '../my_provider/new_ride_indector.dart';
 import '../my_provider/ride_request_info.dart';
 import '../my_provider/tilte_arrived_button_provider.dart';
 import '../repo/api_srv_dir.dart';
+import '../tools/background_serv.dart';
 import '../tools/curanny_type.dart';
 import '../tools/maps_tooL_kit.dart';
 import '../widget/call_rider_phone_whatApp.dart';
@@ -266,7 +267,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                           children: [
                             status == "onride"
                                 ? GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
+                                      await clearCash();
                                       navigationPickToDrop(context);
                                     },
                                     child: Container(
@@ -329,7 +331,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                             ),
                             status == "accepted"
                                 ? GestureDetector(
-                                    onTap: () {
+                                    onTap: ()async {
+                                      await clearCash();
                                       navigationDriverToPickUpRi(context);
                                     },
                                     child: Container(

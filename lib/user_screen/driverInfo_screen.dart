@@ -66,6 +66,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFFFD54F)))),
                       CustomTextField().customTextField(
+                        lenNumber: 11,
                           controller: DriverInfoScreen.name,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -75,6 +76,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                             contentPadding: const EdgeInsets.all(8.0),
                           )),
                       CustomTextField().customTextField(
+                        lenNumber: 11,
                           controller: DriverInfoScreen.lastName,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -148,6 +150,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                         ),
                       ),
                       CustomTextField().customTextField(
+                        lenNumber: 11,
                           controller: DriverInfoScreen.idNo,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -165,6 +168,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                                 color: Color(0xFFFFD54F))),
                       ),
                       CustomTextField().customTextField(
+                        lenNumber: 30,
                         controller: DriverInfoScreen.carBrand,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -175,6 +179,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                         ),
                       ),
                       CustomTextField().customTextField(
+                        lenNumber: 20,
                         controller: DriverInfoScreen.carModel,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(
@@ -185,6 +190,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                         ),
                       ),
                       CustomTextField().customTextField(
+                        lenNumber: 20,
                         controller: DriverInfoScreen.carColor,
                         keyboardType: TextInputType.name,
                         decoration: InputDecoration(

@@ -25,7 +25,7 @@ Future<String?> getToken() async {
   if (kDebugMode) {
     print("this is token::$token");
   }
-  tokenPhone=token!;
+  tokenPhone = token!;
   await driverRef.child(userId).child("token").set(token);
   firebaseMessaging.subscribeToTopic("allDrivers");
   firebaseMessaging.subscribeToTopic("allUsers");
@@ -139,6 +139,7 @@ class PushNotificationsSrv {
     }
     return rideId;
   }
+
   //this method for retrieve rider info from Ride Request collection when rider do order
   Future<void> retrieveRideRequestInfo(
       String rideId, BuildContext context) async {
@@ -205,30 +206,26 @@ class PushNotificationsSrv {
 
   Future<void> gotNotificationInBackground(BuildContext context) async {
     subscriptionNot1 =
-        driverRef.child(userId).child("newRide").onValue.listen((event)  {
+        driverRef.child(userId).child("newRide").onValue.listen((event) {
       if (event.snapshot.value != null) {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
-            GeoFireSrv().enableLocationLiveUpdates(context);
+          GeoFireSrv().enableLocationLiveUpdates(context);
         } else if (_riderId == "canceled") {
-          Future.delayed(const Duration(seconds: 20)).whenComplete(
-              () => driverRef.child(userId).child("newRide").set("searching"));
+          return;
         } else if (_riderId == "timeOut") {
-          Future.delayed(const Duration(seconds: 60)).whenComplete(() {
-            driverRef.child(userId).child("newRide").set("searching");
-            GeoFireSrv().enableLocationLiveUpdates(context);
-          });
+          return;
         } else if (_riderId == "accepted") {
           return;
         } else {
-          if(Platform.isAndroid){
+          if (Platform.isAndroid) {
             openDailog();
             playSound();
             openDailogOld();
             retrieveRideRequestInfo(_riderId, context);
-          }else{
+          } else {
             retrieveRideRequestInfo(_riderId, context);
-            if(runLocale){
+            if (runLocale) {
               showNotification(context);
             }
           }
