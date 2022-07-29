@@ -1,3 +1,4 @@
+import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -29,9 +30,13 @@ class InterNetWeak extends StatelessWidget {
        const   SizedBox(height: 16.0),
           GestureDetector(
             onTap: () async {
-            await  DataBaseReal().getDriverInfoFromDataBase(context).whenComplete(() =>
-                  Navigator.push(context, MaterialPageRoute(builder:(_)=>const SplashScreen()))
-              );
+              if(userId.isNotEmpty){
+                await  DataBaseReal().getDriverInfoFromDataBase(context).whenComplete(() =>
+                    Navigator.push(context, MaterialPageRoute(builder:(_)=>const SplashScreen()))
+                );
+              }else{
+                Navigator.push(context, MaterialPageRoute(builder:(_)=>const SplashScreen()));
+              }
             },
             child: Container(
               height: 40,

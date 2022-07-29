@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
@@ -55,7 +56,6 @@ void onStart(ServiceInstance service) async {
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
 
   if (service is AndroidServiceInstance) {
-
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
     });
@@ -68,12 +68,30 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
   if (userId.isNotEmpty) {
-     Geofire.initialize("availableDrivers");
-     Geofire.stopListener();
-     Geofire.removeLocation(userId);
+    Geofire.initialize("availableDrivers");
+    Geofire.stopListener();
+    Geofire.removeLocation(userId);
     driverRef.child(userId).child("service").onDisconnect();
     await driverRef.child(userId).child("service").remove();
     // PlanDays().setIfBackgroundOrForeground(true);
+    ///
+    // driverRef.child(userId).child("newRide").onValue.listen((event) {
+    //   if (event.snapshot.value != null) {
+    //     final val = event.snapshot.value.toString();
+    //     if (val == "searching") {
+    //       homeScreenStreamSubscription =
+    //           Geolocator.getPositionStream().listen((Position position) async {
+    //         if (position.latitude == 37.42796133580664 &&
+    //             position.longitude == 122.085749655962) {
+    //           return;
+    //         } else {
+    //           await Geofire.setLocation(
+    //               userId, position.latitude, position.longitude);
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
   }
   if (service is AndroidServiceInstance) {
     service.setForegroundNotificationInfo(
@@ -145,9 +163,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive||
-        state == AppLifecycleState.detached
-    ) return;
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) return;
     final isBackGround = state == AppLifecycleState.paused;
     if (isBackGround) {
       setState(() {
@@ -234,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     newGoogleMapController = controller;
                                     await LogicGoogleMap()
                                         .locationPosition(context);
-                                   await GeoFireSrv().getLocationLiveUpdates(
+                                    await GeoFireSrv().getLocationLiveUpdates(
                                         valueSwitchBottom);
                                     getCountryName();
                                     tostDriverAvailable();
@@ -301,8 +318,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           backgroundColor: Colors.white,
                           child: IconButton(
                               onPressed: () async {
-                                FlutterBackgroundService()
-                                    .invoke("setAsBackground");
                                 Provider.of<DrawerValueChange>(context,
                                         listen: false)
                                     .updateValue(0);
@@ -397,5 +412,4 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void onForground() {
     driverRef.child(userId).child("service").set("not");
   }
-
 }

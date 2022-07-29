@@ -270,9 +270,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 ? GestureDetector(
                                     onTap: () async {
                                       if (Platform.isAndroid){
-                                        await clearCash();
+                                         clearCash();
+                                        navigationPickToDrop(context);
+                                      }else{
+                                        navigationPickToDrop(context);
                                       }
-                                      navigationPickToDrop(context);
                                     },
                                     child: Container(
                                         width:
@@ -336,9 +338,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 ? GestureDetector(
                                     onTap: ()async {
                                       if (Platform.isAndroid){
-                                        await clearCash();
+                                         clearCash();
+                                        navigationDriverToPickUpRi(context);
+                                      }else{
+                                        navigationDriverToPickUpRi(context);
                                       }
-                                      navigationDriverToPickUpRi(context);
                                     },
                                     child: Container(
                                         width:

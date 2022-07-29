@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../notificatons/push_notifications_srv.dart';
-import '../payment/couut_plan_days.dart';
 import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
 import '../tools/url_lunched.dart';
@@ -64,12 +63,12 @@ class _SplashScreenState extends State<SplashScreen>
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .driverInfo;
           if (AuthSev().auth.currentUser?.uid == null) {
-            if(Platform.isAndroid){
+            if (Platform.isAndroid) {
               showDialog(
                   context: context,
                   barrierDismissible: false,
                   builder: (_) => showDialogPolicy(context));
-            }else{
+            } else {
               TurnOnGBS().turnOnGBSifNot();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const AuthScreen()));
@@ -78,26 +77,32 @@ class _SplashScreenState extends State<SplashScreen>
           else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
             await ToUrlLunch().toPlayStore();
-           await driverRef.child(userId).child("update").set(false);
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                builder:(_)=>const SplashScreen()), (route) => false);
-          } else if (AuthSev().auth.currentUser?.uid != null &&
+            await driverRef.child(userId).child("update").set(false);
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => const SplashScreen()),
+                (route) => false);
+          }
+          else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.tok == "r") {
             Tools().toastMsg(
                 AppLocalizations.of(context)!.active, Colors.greenAccent);
             await getToken();
             tokenPhone = await firebaseMessaging.getToken();
-           await driverRef.child(userId).child("active").set("active");
-            Navigator.push(context, MaterialPageRoute(builder:(_)=>const RefreshAfterActived()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok == "") {
-            Navigator.push(context, MaterialPageRoute(builder:(_)=>const DriverInfoScreen()));
+            await driverRef.child(userId).child("active").set("active");
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const RefreshAfterActived()));
           }
           else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok.substring(0,5) != tokenPhone?.substring(0,5)) {
+              driverInfo.tok == "" && driverInfo.status =="") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const InterNetWeak()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
             Tools().toastMsg(
                 AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
-            Navigator.push(context, MaterialPageRoute(builder:(_)=>const ActiveAccount()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const ActiveAccount()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.status == "info") {
             Navigator.push(
@@ -117,7 +122,8 @@ class _SplashScreenState extends State<SplashScreen>
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.status.isEmpty) {
+                  driverInfo.status.isEmpty ||
+              driverInfo.status == "") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const InterNetWeak()));
           } else {
@@ -152,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> checkInternet() async {
     result = await InternetConnectionChecker().hasConnection;
-    if(result==false){
+    if (result == false) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const InterNetWeak()));
     }
@@ -242,7 +248,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       GestureDetector(
                         onTap: () {
-                           TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
+                          TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
