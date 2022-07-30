@@ -5,6 +5,7 @@ import 'package:driver/model/rideDetails.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -64,14 +65,17 @@ class _NewRideScreenState extends State<NewRideScreen> {
   int durationContour = 0;
   bool isInductor = false;
 
+  /// mapBox
   late MapBoxNavigation directions;
-   late final MapBoxNavigationViewController _controller;
+  late final MapBoxNavigationViewController _controller;
+  String _platformVersion = 'Unknown';
+  // late MapBoxOptions _options;
   bool arrivedMapBox = false;
   String instruction = "";
   bool routeBuilt = false;
   bool isNavigating = false;
   bool isMultipleStop = false;
-  late WayPoint sourceWayPoint, distintionWayPoint, sourceWayPointDriver;
+  // late WayPoint sourceWayPoint, distintionWayPoint;
 
   @override
   void initState() {
@@ -90,8 +94,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final rideInfoProvider =
         Provider.of<RideRequestInfoProvider>(context).rideDetails;
     final initialPos =
-        Provider.of<DriverCurrentPosition>(context)
-            .currentPosition;
+        Provider.of<DriverCurrentPosition>(context).currentPosition;
     final directionDetails =
         Provider.of<DirectionDetailsPro>(context).directionDetails;
     final buttonTitle = Provider.of<TitleArrived>(context).titleButton;
@@ -118,12 +121,16 @@ class _NewRideScreenState extends State<NewRideScreen> {
               onMapCreated: (GoogleMapController controller) async {
                 controllerGoogleMap.complete(controller);
                 newRideControllerGoogleMap = controller;
+                Position _newPosition = await Geolocator.getCurrentPosition(
+                    desiredAccuracy: LocationAccuracy.best);
+                Provider.of<DriverCurrentPosition>(context, listen: false)
+                    .updateSate(_newPosition);
+                print("this lll${_newPosition.longitude}");
                 LatLng startPontLoc =
                     LatLng(initialPos.latitude, initialPos.longitude); //driver
                 LatLng secondPontLoc = LatLng(rideInfoProvider.pickup.latitude,
                     rideInfoProvider.pickup.longitude);
                 riderName = rideInfoProvider.riderName;
-                //rider pickUp
                 await getPlaceDirection(context, startPontLoc, secondPontLoc);
                 getRideLiveLocationUpdate();
                 Provider.of<TitleArrived>(context, listen: false)
@@ -269,10 +276,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
                             status == "onride"
                                 ? GestureDetector(
                                     onTap: () async {
-                                      if (Platform.isAndroid){
-                                         clearCash();
+                                      if (Platform.isAndroid) {
+                                        clearCash();
                                         navigationPickToDrop(context);
-                                      }else{
+                                      } else {
                                         navigationPickToDrop(context);
                                       }
                                     },
@@ -331,16 +338,19 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                     buttonTitle,
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: buttonColor,fontSize: 16,fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        color: buttonColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ))),
                             ),
                             status == "accepted"
                                 ? GestureDetector(
-                                    onTap: ()async {
-                                      if (Platform.isAndroid){
-                                         clearCash();
+                                    onTap: () async {
+                                      if (Platform.isAndroid) {
+                                        clearCash();
                                         navigationDriverToPickUpRi(context);
-                                      }else{
+                                      } else {
                                         navigationDriverToPickUpRi(context);
                                       }
                                     },
@@ -827,6 +837,33 @@ class _NewRideScreenState extends State<NewRideScreen> {
   Future<void> inTailiz() async {
     if (!mounted) return;
     directions = MapBoxNavigation(onRouteEvent: _onRouteEvent);
+    // _options = MapBoxOptions(
+    //     //initialLatitude: 36.1175275,
+    //     //initialLongitude: -115.1839524,
+    //     zoom: 15.0,
+    //     tilt: 0.0,
+    //     bearing: 0.0,
+    //     enableRefresh: false,
+    //     alternatives: true,
+    //     voiceInstructionsEnabled: true,
+    //     bannerInstructionsEnabled: true,
+    //     allowsUTurnAtWayPoints: true,
+    //     mode: MapBoxNavigationMode.drivingWithTraffic,
+    //     units: VoiceUnits.imperial,
+    //     simulateRoute: false,
+    //     animateBuildRoute: true,
+    //     longPressDestinationEnabled: true,
+    //     language: "en");
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await directions.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+    setState(() {
+      _platformVersion = platformVersion;
+    });
   }
 
   Future<void> _onRouteEvent(e) async {
@@ -878,28 +915,32 @@ class _NewRideScreenState extends State<NewRideScreen> {
   navigationDriverToPickUpRi(BuildContext c) async {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(c, listen: false).rideDetails;
+    final _driver =
+        Provider.of<DriverCurrentPosition>(c, listen: false).currentPosition;
 
-    sourceWayPointDriver = WayPoint(
+    final start1 = WayPoint(
         name: "Driver",
-        latitude: myPosition?.latitude,
-        longitude: myPosition?.longitude);
-    sourceWayPoint = WayPoint(
+        latitude: _driver.latitude,
+        longitude: _driver.longitude);
+    final stop1 = WayPoint(
         name: "Source",
         latitude: rideInfo.pickup.latitude,
         longitude: rideInfo.pickup.longitude);
     var wayPoints = <WayPoint>[];
-    wayPoints.add(sourceWayPointDriver);
-    wayPoints.add(sourceWayPoint);
+    wayPoints.add(start1);
+    wayPoints.add(stop1);
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-            initialLatitude: myPosition?.latitude ,
-            initialLongitude: myPosition?.longitude,
-            zoom: 13.0,
-            tilt: 0.0,
-            bearing: 0.0,
-            mode: MapBoxNavigationMode.driving,
-            language: mapBoxLanguages()
+          initialLatitude: _driver.latitude,
+          initialLongitude: _driver.longitude,
+          mode: MapBoxNavigationMode.driving,
+          simulateRoute: false,
+          language: mapBoxLanguages(),
+          units: VoiceUnits.metric,
+          zoom: 13.0,
+          tilt: 0.0,
+          bearing: 0.0,
         ));
   }
 
@@ -908,44 +949,46 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
-
-    sourceWayPoint = WayPoint(
-        name: "Distintion",
+    final start2 = WayPoint(
+        name: "start",
         latitude: rideInfo.pickup.latitude,
         longitude: rideInfo.pickup.longitude);
-    distintionWayPoint = WayPoint(
-        name: "Distintion",
+    final stop2 = WayPoint(
+        name: "stop",
         latitude: rideInfo.dropoff.latitude,
         longitude: rideInfo.dropoff.longitude);
     var wayPoints = <WayPoint>[];
-    wayPoints.add(sourceWayPoint);
-    wayPoints.add(distintionWayPoint);
+    wayPoints.add(start2);
+    wayPoints.add(stop2);
 
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-            initialLatitude: rideInfo.pickup.latitude,
-            initialLongitude: rideInfo.pickup.longitude,
-            zoom: 13.0,
-            tilt: 0.0,
-            bearing: 0.0,
-            mode: MapBoxNavigationMode.driving,
-            language: mapBoxLanguages()
+          initialLatitude: rideInfo.dropoff.latitude,
+          initialLongitude: rideInfo.dropoff.longitude,
+          mode: MapBoxNavigationMode.driving,
+          simulateRoute: false,
+          language: mapBoxLanguages(),
+          units: VoiceUnits.metric,
+          zoom: 13.0,
+          tilt: 0.0,
+          bearing: 0.0,
+          // mode: MapBoxNavigationMode.driving,
         ));
   }
 
   // this method for set lang mapBox
-  String mapBoxLanguages(){
+  String mapBoxLanguages() {
     String lan = "tr";
-    if(AppLocalizations.of(context)!.rider=="Yolcuya git"){
+    if (AppLocalizations.of(context)!.rider == "Yolcuya git") {
       setState(() {
         lan = "tr";
       });
-    }else if(AppLocalizations.of(context)!.rider=="زبون"){
+    } else if (AppLocalizations.of(context)!.rider == "زبون") {
       setState(() {
         lan = "ar";
       });
-    }else{
+    } else {
       setState(() {
         lan = "en";
       });

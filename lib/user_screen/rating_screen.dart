@@ -28,13 +28,13 @@ class _RatingScreenState extends State<RatingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: const Color(0xFFFFD54F),
-              title:  Text(AppLocalizations.of(context)!.myRating,
-                  style:const TextStyle(color: Colors.white, fontSize: 16.0)),
-            ),
-            body:myRating==0.0?noRatingYet(context):dailog(myRating,context),
-            ));
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFFD54F),
+        title: Text(AppLocalizations.of(context)!.myRating,
+            style: const TextStyle(color: Colors.white, fontSize: 16.0)),
+      ),
+      body: myRating == 0.0 ? noRatingYet(context) : dailog(myRating, context),
+    ));
   }
 
   //if history is empty
@@ -52,12 +52,13 @@ class _RatingScreenState extends State<RatingScreen> {
               height: MediaQuery.of(context).size.height * 60 / 100,
               width: MediaQuery.of(context).size.width * 60 / 100,
             ),
-             Text(
+            Text(
               AppLocalizations.of(context)!.noRating,
-              style:const TextStyle(
+              style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 35.0,
-                  fontWeight: FontWeight.bold),textAlign: TextAlign.center,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -65,60 +66,59 @@ class _RatingScreenState extends State<RatingScreen> {
     );
   }
 
-  Widget dailog(double myRate,BuildContext context) {
-    return
-      Container(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Colors.white),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height*30/100),
-               Center(
-                 child: Text(
-                  AppLocalizations.of(context)!.myRating,
-                  style:const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 45.0,
-                      fontWeight: FontWeight.bold),
+  Widget dailog(double myRate, BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: double.infinity,
+      decoration: const BoxDecoration(color: Colors.white),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 30 / 100),
+            Center(
+              child: Text(
+                AppLocalizations.of(context)!.myRating,
+                style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.bold),
               ),
-               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
-              SmoothStarRating(
-                allowHalfRating: true,
-                starCount: 5,
-                rating: myRate,
-                size: 50.0,
-                color: Colors.yellow.shade700,
-                borderColor: Colors.yellow,
-                spacing:0.0,
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 1 / 100),
-              CustomDivider().customDivider(),
-            ],
-          ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 3 / 100),
+            SmoothStarRating(
+              allowHalfRating: true,
+              starCount: 5,
+              rating: myRate,
+              size: 50.0,
+              color: Colors.yellow.shade700,
+              borderColor: Colors.yellow,
+              spacing: 0.0,
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 1 / 100),
+            CustomDivider().customDivider(),
+          ],
         ),
+      ),
     );
   }
 
   // get rating
- getRating()async{
- DatabaseReference ref =  FirebaseDatabase.instance
-      .ref()
-      .child("driver")
-      .child(currentUser!.uid);
-     ref.onValue.listen((value)async{
-      if(value.snapshot.value == null){
+  getRating() async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref().child("driver").child(currentUser!.uid);
+    await ref.once().then((value) async {
+      if (value.snapshot.value != null) {
+        Map<String, dynamic> map =
+            Map<String, dynamic>.from(value.snapshot.value as Map);
+        if (!mounted) return;
+        setState(() {
+          myRating = double.parse(map["rating"].toString());
+        });
+      }else{
         return;
       }
-      Map<String,dynamic>map = Map<String,dynamic>.from(value.snapshot.value as Map);
-      if(!mounted) return;
-       setState(() {
-         myRating = double.parse(map["rating"].toString());
-       });
     });
-}
+  }
 }

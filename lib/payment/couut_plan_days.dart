@@ -6,10 +6,6 @@ import 'package:firebase_database/firebase_database.dart';
 import '../config.dart';
 import '../repo/geoFire_srv.dart';
 
-
-
-
-
 class PlanDays {
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   String userId = AuthSev().auth.currentUser!.uid;
@@ -35,16 +31,16 @@ class PlanDays {
   ///
 // this method for get value plan from real time
   ///stop for now
- // Future <int?> getExPlanFromReal() async {
- //    await driverRef.child(userId).child("exPlan").once().then((value) {
- //      final snap = value.snapshot.value;
- //      if (snap != null) {
- //        final plan = snap.toString();
- //        exPlan = int.parse(plan);
- //      }
- //    });
- //    return exPlan;
- //  }
+  // Future <int?> getExPlanFromReal() async {
+  //    await driverRef.child(userId).child("exPlan").once().then((value) {
+  //      final snap = value.snapshot.value;
+  //      if (snap != null) {
+  //        final plan = snap.toString();
+  //        exPlan = int.parse(plan);
+  //      }
+  //    });
+  //    return exPlan;
+  //  }
   ///
 
   // this method for set true or false if background service or not
@@ -76,12 +72,33 @@ class PlanDays {
 // this method for set date time explan date
   Future<void> setDateTime() async {
     int _day;
-    int _month = DateTime.now().month;
+    int _month;
     int _year = DateTime.now().year;
-    if (DateTime.now().day < 30) {
-      _day = DateTime.now().day +1;
+    if (DateTime.now().month == 2 && DateTime.now().day == 28) {
+      _day = 1;
+      _month = DateTime.now().month + 1;
+    }
+    if (DateTime.now().month == 2 && DateTime.now().day == 29) {
+      _day = 1;
+      _month = DateTime.now().month + 1;
+    } else if (DateTime.now().month == 2 && DateTime.now().day < 28) {
+      _day = DateTime.now().day + 1;
+      _month = DateTime.now().month;
+    } else if (DateTime.now().month == 12 && DateTime.now().day < 30) {
+      _day = DateTime.now().day + 1;
+      _month = DateTime.now().month;
+    } else if (DateTime.now().month == 12 && DateTime.now().day == 30) {
+      _day = 1;
+      _month = 1;
+    } else if (DateTime.now().month == 12 && DateTime.now().day == 31) {
+      _day = 1;
+      _month = 1;
+    } else if (DateTime.now().day < 30) {
+      _day = DateTime.now().day + 1;
+      _month = DateTime.now().month;
     } else {
       _day = 1;
+      _month = DateTime.now().month + 1;
     }
     DateTime datePlan1 = DateTime(_year, _month, _day);
     await driverRef.child(userId).child("plandate").set(datePlan1.toString());
@@ -91,7 +108,7 @@ class PlanDays {
 
   // this method for get value explan for user account and calc daily as 1400
   Future<void> countAndCalcPlan() async {
-    await  driverRef.child(userId).child("exPlan").once().then((value) {
+    await driverRef.child(userId).child("exPlan").once().then((value) {
       if (value.snapshot.value != null) {
         final snap = value.snapshot.value;
         if (snap != null) {
@@ -100,7 +117,7 @@ class PlanDays {
       }
     });
     if (exPlan == 0) {
-      await  driverRef.child(userId).child("status").once().then((value) {
+      await driverRef.child(userId).child("status").once().then((value) {
         if (value.snapshot.exists && value.snapshot.value != null) {
           final snap = value.snapshot.value;
           String _status = snap.toString();
@@ -130,9 +147,10 @@ class PlanDays {
       });
     }
   }
+
   // this method for get value explan for user account and calc lately as 2800
   Future<void> countAndCalcPlanLate() async {
-    await  driverRef.child(userId).child("exPlan").once().then((value) {
+    await driverRef.child(userId).child("exPlan").once().then((value) {
       if (value.snapshot.value != null) {
         final snap = value.snapshot.value;
         if (snap != null) {
@@ -141,7 +159,7 @@ class PlanDays {
       }
     });
     if (exPlan == 0) {
-      await  driverRef.child(userId).child("status").once().then((value) {
+      await driverRef.child(userId).child("status").once().then((value) {
         if (value.snapshot.exists && value.snapshot.value != null) {
           final snap = value.snapshot.value;
           String _status = snap.toString();
@@ -178,63 +196,67 @@ class PlanDays {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final _val = value.snapshot.value;
         DateTime _valDateTime = DateTime.parse(_val.toString());
-        if (_valDateTime.day == DateTime.now().day) {
+        if (_valDateTime.month == DateTime.now().month &&
+            _valDateTime.day == DateTime.now().day) {
           await setDateTime();
           await countAndCalcPlan();
-        }else if(_valDateTime.day < DateTime.now().day){
+        } else if (_valDateTime.day < DateTime.now().day &&
+            _valDateTime.month == DateTime.now().month) {
           await setDateTime();
           await countAndCalcPlanLate();
+        } else {
+          return;
         }
       }
     });
   }
 
   // this method for foreground service
-/// stop for now
- // Future <void> countDayPlansInForeground()async {
- //
- //    if(isBackground == false){
- //      await getExPlanFromReal();
- //      Timer.periodic(const Duration(seconds: 40), (timer) async {
- //        if (exPlan! < 0) {
- //          Tools().toastMsg("", Colors.redAccent.shade700);
- //          driverRef.child(userId).child("status").once().then((value){
- //            if(value.snapshot.exists&&value.snapshot.value!=null){
- //              final snap = value.snapshot.value;
- //              String _status = snap.toString();
- //              if(_status=="checkIn"){
- //                return;
- //              }
- //              driverRef.child(userId).child("status").set("payTime");
- //            }
- //          });
- //          timer.cancel();
- //        }
- //        else {
- //          exPlan = exPlan! - 1;
- //          await driverRef.child(userId).child("exPlan").set(exPlan);
- //          if(exPlan==0){
- //            Tools().toastMsg("", Colors.redAccent.shade700);
- //          }
- //          if(exPlan! < 0){
- //            Tools().toastMsg("", Colors.redAccent.shade700);
- //            driverRef.child(userId).child("status").once().then((value){
- //              if(value.snapshot.exists&&value.snapshot.value!=null){
- //                final snap = value.snapshot.value;
- //                String _status = snap.toString();
- //                if(_status=="checkIn"){
- //                  return;
- //                }
- //                driverRef.child(userId).child("status").set("payTime");
- //              }
- //            });
- //            timer.cancel();
- //          }
- //        }
- //      });
- //    }
- //    else{
- //      return;
- //    }
- //  }
+  /// stop for now
+  // Future <void> countDayPlansInForeground()async {
+  //
+  //    if(isBackground == false){
+  //      await getExPlanFromReal();
+  //      Timer.periodic(const Duration(seconds: 40), (timer) async {
+  //        if (exPlan! < 0) {
+  //          Tools().toastMsg("", Colors.redAccent.shade700);
+  //          driverRef.child(userId).child("status").once().then((value){
+  //            if(value.snapshot.exists&&value.snapshot.value!=null){
+  //              final snap = value.snapshot.value;
+  //              String _status = snap.toString();
+  //              if(_status=="checkIn"){
+  //                return;
+  //              }
+  //              driverRef.child(userId).child("status").set("payTime");
+  //            }
+  //          });
+  //          timer.cancel();
+  //        }
+  //        else {
+  //          exPlan = exPlan! - 1;
+  //          await driverRef.child(userId).child("exPlan").set(exPlan);
+  //          if(exPlan==0){
+  //            Tools().toastMsg("", Colors.redAccent.shade700);
+  //          }
+  //          if(exPlan! < 0){
+  //            Tools().toastMsg("", Colors.redAccent.shade700);
+  //            driverRef.child(userId).child("status").once().then((value){
+  //              if(value.snapshot.exists&&value.snapshot.value!=null){
+  //                final snap = value.snapshot.value;
+  //                String _status = snap.toString();
+  //                if(_status=="checkIn"){
+  //                  return;
+  //                }
+  //                driverRef.child(userId).child("status").set("payTime");
+  //              }
+  //            });
+  //            timer.cancel();
+  //          }
+  //        }
+  //      });
+  //    }
+  //    else{
+  //      return;
+  //    }
+  //  }
 }
