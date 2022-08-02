@@ -210,8 +210,10 @@ class PushNotificationsSrv {
       if (event.snapshot.value != null) {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
-          GeoFireSrv().enableLocationLiveUpdates(context);
-        } else if (_riderId == "canceled") {
+          // Future.delayed(const Duration(seconds: 5)).whenComplete(
+          //     () => );
+          // GeoFireSrv().enableLocationLiveUpdates(context);
+        }  else if (_riderId == "canceled") {
           return;
         } else if (_riderId == "timeOut") {
           return;

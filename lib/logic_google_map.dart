@@ -7,10 +7,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'my_provider/driver_currentPosition_provider.dart';
 
-
 class LogicGoogleMap {
   // final ApiSrvGeo _apiMethods = ApiSrvGeo();
-  var geolocator = Geolocator();
+  // var geolocator = Geolocator();
 
   //instant current location on map before any request on map
   Completer<GoogleMapController> controllerGoogleMap = Completer();
@@ -32,6 +31,8 @@ class LogicGoogleMap {
       return Future.error('Location services are disabled.');
     }
     permission = await Geolocator.checkPermission();
+    // await Geolocator.openAppSettings();
+    // await Geolocator.openLocationSettings();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -47,13 +48,14 @@ class LogicGoogleMap {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-    Provider.of<DriverCurrentPosition>(context,listen: false).updateSate(position);
+        desiredAccuracy: LocationAccuracy.high);
+    Provider.of<DriverCurrentPosition>(context, listen: false)
+        .updateSate(position);
     // to fitch LatLng in google map
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);
     // update on google map
-    CameraPosition cameraPosition =
-    CameraPosition(target: latLngPosition, zoom: 16.50,tilt: 80.0,bearing: 35.0);
+    CameraPosition cameraPosition = CameraPosition(
+        target: latLngPosition, zoom: 16.50, tilt: 80.0, bearing: 35.0);
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 

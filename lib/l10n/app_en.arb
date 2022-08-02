@@ -576,5 +576,9 @@
   "clickHere": "click here to accept this order",
   "@clickHere": {
     "description": "click here"
+  },
+  "locationBackground": "Running in Background",
+  "@locationBackground": {
+    "description": "Running in Background"
   }
 }

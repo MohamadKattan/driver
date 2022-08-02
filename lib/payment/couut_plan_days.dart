@@ -69,36 +69,51 @@ class PlanDays {
   //   });
   // }
   ///
+  void seett(){
+    int _day =DateTime.now().day ;
+    int _month = DateTime.now().month;
+    int _year = DateTime.now().year + 2;
+    final time  = DateTime(_year,_month,_day);
+    print("timeee$time");
+  }
 // this method for set date time explan date
   Future<void> setDateTime() async {
     int _day;
     int _month;
-    int _year = DateTime.now().year;
+    int _year;
     if (DateTime.now().month == 2 && DateTime.now().day == 28) {
       _day = 1;
       _month = DateTime.now().month + 1;
+      _year = DateTime.now().year;
     }
     if (DateTime.now().month == 2 && DateTime.now().day == 29) {
       _day = 1;
       _month = DateTime.now().month + 1;
+      _year = DateTime.now().year;
     } else if (DateTime.now().month == 2 && DateTime.now().day < 28) {
       _day = DateTime.now().day + 1;
       _month = DateTime.now().month;
+      _year = DateTime.now().year;
     } else if (DateTime.now().month == 12 && DateTime.now().day < 30) {
       _day = DateTime.now().day + 1;
       _month = DateTime.now().month;
+      _year = DateTime.now().year;
     } else if (DateTime.now().month == 12 && DateTime.now().day == 30) {
       _day = 1;
       _month = 1;
+      _year = DateTime.now().year+1;
     } else if (DateTime.now().month == 12 && DateTime.now().day == 31) {
       _day = 1;
       _month = 1;
+      _year = DateTime.now().year+1;
     } else if (DateTime.now().day < 30) {
       _day = DateTime.now().day + 1;
       _month = DateTime.now().month;
+      _year = DateTime.now().year;
     } else {
       _day = 1;
       _month = DateTime.now().month + 1;
+      _year = DateTime.now().year;
     }
     DateTime datePlan1 = DateTime(_year, _month, _day);
     await driverRef.child(userId).child("plandate").set(datePlan1.toString());

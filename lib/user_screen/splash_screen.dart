@@ -69,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
                   barrierDismissible: false,
                   builder: (_) => showDialogPolicy(context));
             } else {
-              TurnOnGBS().turnOnGBSifNot();
+              // TurnOnGBS().turnOnGBSifNot();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const AuthScreen()));
             }
@@ -248,11 +248,15 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       GestureDetector(
                         onTap: () {
-                          TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => const AuthScreen())));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const AuthScreen()));
+                          // TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
+                          //     Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (_) => const AuthScreen())));
                         },
                         child: Container(
                           height: 40,

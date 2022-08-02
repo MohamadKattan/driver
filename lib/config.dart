@@ -9,9 +9,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 String mapKey = "AIzaSyDh5NNwfDJFU27Y_yMpVcWeeepBQBbewmM";
 String mapBox = "pk.eyJ1Ijoibml6YW04NCIsImEiOiJjbDR3c3FhdDUxbHM5M2NzM2kydjR0Zzl0In0.24gmrxZ6tyh636f7bkV3og";
 GoogleMapController? newGoogleMapController;
-StreamSubscription<Position>?homeScreenStreamSubscription;
-StreamSubscription<Position>?newRideScreenStreamSubscription;
-StreamSubscription<Position>?newStreamSubscription;
+late StreamSubscription <Position> homeScreenStreamSubscription;
+ StreamSubscription <Position>? newRideScreenStreamSubscription;
+// StreamSubscription<Position>?newStreamSubscription;
 late StreamSubscription<DatabaseEvent> subscriptionNot1;
 User? currentUser = AuthSev().auth.currentUser;
 bool isLite = false;
@@ -27,7 +27,7 @@ double finalAmont = 0;
 double finalPlan = 0;
 String? tokenPhone;
 bool runLocale = false;
-// last ios version: 1.0.1 uploaded
+
 
 
 

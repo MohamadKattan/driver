@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import '../config.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/background_serv.dart';
@@ -64,7 +65,10 @@ Widget collectMoney(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: ()async {
-                  GeoFireSrv().enableLocationLiveUpdates(context);
+                  homeScreenStreamSubscription.resume();
+                  subscriptionNot1.resume();
+                  // await GeoFireSrv().enableLocationLiveUpdates(context);
+                  await GeoFireSrv().getLocationLiveUpdates(context);
                   await  restNewRide(context);
                   Navigator.pop(context);
                   Navigator.pop(context);

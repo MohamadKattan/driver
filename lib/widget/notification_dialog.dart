@@ -295,11 +295,11 @@ class _NotificationDialogState extends State<NotificationDialog> {
       }
       //id in newRide value = rider id from Ride Request collection
       if (newRideState == rideInfoProvider.userId) {
-        homeScreenStreamSubscription?.pause();
+        homeScreenStreamSubscription.pause();
         subscriptionNot1.pause();
         Geofire.stopListener();
-        Geofire.removeLocation(currentUseId);
-        await GeoFireSrv().displayLocationLiveUpdates();
+      await  Geofire.removeLocation(currentUseId);
+        // await GeoFireSrv().displayLocationLiveUpdates();
         await rideRequestRef.set("accepted").whenComplete(() {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const NewRideScreen()));
@@ -328,6 +328,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   // this method if driver press cancel button
   Future<void> driverCancelOrder(BuildContext context) async {
+    subscriptionNot1.pause();
+    homeScreenStreamSubscription.pause();
     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
         .currentPosition;
@@ -338,9 +340,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
     newRef.onDisconnect();
     newRef.remove();
 
-    homeScreenStreamSubscription?.pause();
     Geofire.stopListener();
-    Geofire.removeLocation(currentUseId.userId);
+  await  Geofire.removeLocation(currentUseId.userId);
 
     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
     const duration = Duration(seconds: 1);
@@ -348,9 +349,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
       rideRequestTimeOut = rideRequestTimeOut - 1;
       if (rideRequestTimeOut <= 0) {
         timer.cancel();
-        homeScreenStreamSubscription?.resume();
-        await Geofire.setLocation(
-            currentUseId.userId, position.latitude, position.longitude);
+        subscriptionNot1.resume();
+        homeScreenStreamSubscription.resume();
+      await GeoFireSrv().getLocationLiveUpdates(context);
         _ref.child(currentUseId.userId).child("newRide").set("searching");
         _ref.child(currentUseId.userId).child("offLine").set("Available");
         rideRequestTimeOut = 240;
