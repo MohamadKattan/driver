@@ -26,9 +26,9 @@ class GeoFireSrv {
     if (defaultTargetPlatform == TargetPlatform.android) {
       locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
-          distanceFilter: 100,
+          distanceFilter: 20,
           forceLocationManager: false,
-          intervalDuration: const Duration(seconds: 10),
+          intervalDuration: const Duration(seconds: 2),
           foregroundNotificationConfig: ForegroundNotificationConfig(
             notificationText: AppLocalizations.of(context)!.locationBackground,
             notificationTitle: "Garanti taxi",

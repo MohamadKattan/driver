@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,7 @@ import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
+import '../payment/param_payment.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // initializeService();
     requestPermissions();
     initializationLocal(context);
-    FlutterBackgroundService().invoke("setAsBackground");
+    // FlutterBackgroundService().invoke("setAsBackground");
     PushNotificationsSrv().gotNotificationInBackground(context);
     requestPermissionsSystem();
     onForground();
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       driverRef.child(userId).child("newRide").onDisconnect();
       driverRef.child(userId).child("newRide").remove();
       Geofire.stopListener();
-       Geofire.removeLocation(userId);
+      Geofire.removeLocation(userId);
     } else {
       return;
     }
@@ -340,7 +340,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
             onPressed: () async {
-              PlanDays().seett();
               await LogicGoogleMap().locationPosition(context);
               await GeoFireSrv().getLocationLiveUpdates(context);
               getCountryName();

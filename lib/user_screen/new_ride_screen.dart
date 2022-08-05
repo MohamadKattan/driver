@@ -13,6 +13,7 @@ import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../my_provider/color_arrived_button_provider.dart';
 import '../my_provider/direction_details_provider.dart';
@@ -24,6 +25,7 @@ import '../my_provider/tilte_arrived_button_provider.dart';
 import '../repo/api_srv_dir.dart';
 import '../tools/curanny_type.dart';
 import '../tools/maps_tooL_kit.dart';
+import '../tools/tools.dart';
 import '../widget/call_rider_phone_whatApp.dart';
 import '../widget/collect_money_dialog.dart';
 import '../widget/custom_circuler.dart';
@@ -277,10 +279,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
                           children: [
                             status == "onride"
                                 ? GestureDetector(
-                                    onTap: () {
-                                      if (Platform.isAndroid)
-                                        () async => await clearCash();
-                                      navigationPickToDrop(context);
+                                    onTap: () async {
+                                      if (Platform.isAndroid) {
+                                        await clearCash();
+                                      }
+                                      openGoogleMap(context);
+                                      // navigationPickToDrop(context);
                                     },
                                     child: Container(
                                         width:
@@ -364,8 +368,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                       //   print('$systemName $version, $name $model');
                                       //   // iOS 13.1, iPhone 11 Pro Max iPhone
                                       // }
-                                      if (Platform.isAndroid)
-                                        () async => await clearCash();
+                                      if (Platform.isAndroid) {
+                                        await clearCash();
+                                      }
                                       navigationDriverToPickUpRi(context);
                                     },
                                     child: Container(
@@ -632,8 +637,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
             notificationTitle: "Garanti taxi",
             enableWakeLock: true,
           ));
-    }
-    else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       _locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.fitness,
@@ -641,8 +645,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
-    }
-    else {
+    } else {
       _locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 100,
@@ -654,158 +657,161 @@ class _NewRideScreenState extends State<NewRideScreen> {
       if (sdkInt! <= 27) {
         newRideScreenStreamSubscription =
             Geolocator.getPositionStream().listen((Position position) async {
-              LatLng oldLat = const LatLng(0, 0);
-              setState(() {
-                myPosition = position;
-              });
-              print("hhhhh$position");
-              LatLng mPosition = LatLng(myPosition!.latitude, myPosition!.longitude);
+          LatLng oldLat = const LatLng(0, 0);
+          setState(() {
+            myPosition = position;
+          });
+          print("hhhhh$position");
+          LatLng mPosition =
+              LatLng(myPosition!.latitude, myPosition!.longitude);
 
-              ///...
-              final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-                  oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-              Marker anmiatedMarker = Marker(
-                markerId: const MarkerId("animating"),
-                infoWindow: const InfoWindow(title: "Current Location"),
-                position: mPosition,
-                icon: anmiatedMarkerIcon,
-                rotation: rot,
-              );
-              ///...
-              setState(() {
-                CameraPosition cameraPosition = CameraPosition(
-                    target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
-                newRideControllerGoogleMap
-                    .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-                markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-                markersSet.add(anmiatedMarker);
-              });
+          ///...
+          final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
+              oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
+          Marker anmiatedMarker = Marker(
+            markerId: const MarkerId("animating"),
+            infoWindow: const InfoWindow(title: "Current Location"),
+            position: mPosition,
+            icon: anmiatedMarkerIcon,
+            rotation: rot,
+          );
 
-              ///...
-              oldLat = mPosition;
-              updateRideDetails();
+          ///...
+          setState(() {
+            CameraPosition cameraPosition = CameraPosition(
+                target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
+            newRideControllerGoogleMap
+                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+            markersSet.removeWhere((ele) => ele.markerId.value == "animating");
+            markersSet.add(anmiatedMarker);
+          });
 
-              ///...
-              final riderInfo =
-                  Provider.of<RideRequestInfoProvider>(context, listen: false)
-                      .rideDetails;
+          ///...
+          oldLat = mPosition;
+          updateRideDetails();
 
-              Map driveLoc = {
-                "latitude": myPosition?.latitude.toString(),
-                "longitude": myPosition?.longitude.toString(),
-              };
+          ///...
+          final riderInfo =
+              Provider.of<RideRequestInfoProvider>(context, listen: false)
+                  .rideDetails;
 
-              DatabaseReference rideRequestRef = FirebaseDatabase.instance
-                  .ref()
-                  .child("Ride Request")
-                  .child(riderInfo.userId);
-              rideRequestRef.child("driverLocation").set(driveLoc);
-            });
-      }
-      else {
+          Map driveLoc = {
+            "latitude": myPosition?.latitude.toString(),
+            "longitude": myPosition?.longitude.toString(),
+          };
+
+          DatabaseReference rideRequestRef = FirebaseDatabase.instance
+              .ref()
+              .child("Ride Request")
+              .child(riderInfo.userId);
+          rideRequestRef.child("driverLocation").set(driveLoc);
+        });
+      } else {
         newRideScreenStreamSubscription =
             Geolocator.getPositionStream(locationSettings: _locationSettings)
                 .listen((Position position) async {
-              LatLng oldLat = const LatLng(0, 0);
-              setState(() {
-                myPosition = position;
-              });
-              print("hhhhh$position");
-              LatLng mPosition = LatLng(myPosition!.latitude, myPosition!.longitude);
+          LatLng oldLat = const LatLng(0, 0);
+          setState(() {
+            myPosition = position;
+          });
+          print("hhhhh$position");
+          LatLng mPosition =
+              LatLng(myPosition!.latitude, myPosition!.longitude);
 
-              ///...
-              final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-                  oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-              Marker anmiatedMarker = Marker(
-                markerId: const MarkerId("animating"),
-                infoWindow: const InfoWindow(title: "Current Location"),
-                position: mPosition,
-                icon: anmiatedMarkerIcon,
-                rotation: rot,
-              );
-              ///...
-              setState(() {
-                CameraPosition cameraPosition = CameraPosition(
-                    target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
-                newRideControllerGoogleMap
-                    .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-                markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-                markersSet.add(anmiatedMarker);
-              });
+          ///...
+          final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
+              oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
+          Marker anmiatedMarker = Marker(
+            markerId: const MarkerId("animating"),
+            infoWindow: const InfoWindow(title: "Current Location"),
+            position: mPosition,
+            icon: anmiatedMarkerIcon,
+            rotation: rot,
+          );
 
-              ///...
-              oldLat = mPosition;
-              updateRideDetails();
+          ///...
+          setState(() {
+            CameraPosition cameraPosition = CameraPosition(
+                target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
+            newRideControllerGoogleMap
+                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+            markersSet.removeWhere((ele) => ele.markerId.value == "animating");
+            markersSet.add(anmiatedMarker);
+          });
 
-              ///...
-              final riderInfo =
-                  Provider.of<RideRequestInfoProvider>(context, listen: false)
-                      .rideDetails;
+          ///...
+          oldLat = mPosition;
+          updateRideDetails();
 
-              Map driveLoc = {
-                "latitude": myPosition?.latitude.toString(),
-                "longitude": myPosition?.longitude.toString(),
-              };
+          ///...
+          final riderInfo =
+              Provider.of<RideRequestInfoProvider>(context, listen: false)
+                  .rideDetails;
 
-              DatabaseReference rideRequestRef = FirebaseDatabase.instance
-                  .ref()
-                  .child("Ride Request")
-                  .child(riderInfo.userId);
-              rideRequestRef.child("driverLocation").set(driveLoc);
-            });
+          Map driveLoc = {
+            "latitude": myPosition?.latitude.toString(),
+            "longitude": myPosition?.longitude.toString(),
+          };
+
+          DatabaseReference rideRequestRef = FirebaseDatabase.instance
+              .ref()
+              .child("Ride Request")
+              .child(riderInfo.userId);
+          rideRequestRef.child("driverLocation").set(driveLoc);
+        });
       }
-    }
-    else {
+    } else {
       newRideScreenStreamSubscription =
           Geolocator.getPositionStream(locationSettings: _locationSettings)
               .listen((Position position) async {
-            LatLng oldLat = const LatLng(0, 0);
-            setState(() {
-              myPosition = position;
-            });
-            print("hhhhh$position");
-            LatLng mPosition = LatLng(myPosition!.latitude, myPosition!.longitude);
+        LatLng oldLat = const LatLng(0, 0);
+        setState(() {
+          myPosition = position;
+        });
+        print("hhhhh$position");
+        LatLng mPosition = LatLng(myPosition!.latitude, myPosition!.longitude);
 
-            ///...
-            final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-                oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-            Marker anmiatedMarker = Marker(
-              markerId: const MarkerId("animating"),
-              infoWindow: const InfoWindow(title: "Current Location"),
-              position: mPosition,
-              icon: anmiatedMarkerIcon,
-              rotation: rot,
-            );
-            ///...
-            setState(() {
-              CameraPosition cameraPosition = CameraPosition(
-                  target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
-              newRideControllerGoogleMap
-                  .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-              markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-              markersSet.add(anmiatedMarker);
-            });
+        ///...
+        final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
+            oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
+        Marker anmiatedMarker = Marker(
+          markerId: const MarkerId("animating"),
+          infoWindow: const InfoWindow(title: "Current Location"),
+          position: mPosition,
+          icon: anmiatedMarkerIcon,
+          rotation: rot,
+        );
 
-            ///...
-            oldLat = mPosition;
-            updateRideDetails();
+        ///...
+        setState(() {
+          CameraPosition cameraPosition = CameraPosition(
+              target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
+          newRideControllerGoogleMap
+              .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+          markersSet.removeWhere((ele) => ele.markerId.value == "animating");
+          markersSet.add(anmiatedMarker);
+        });
 
-            ///...
-            final riderInfo =
-                Provider.of<RideRequestInfoProvider>(context, listen: false)
-                    .rideDetails;
+        ///...
+        oldLat = mPosition;
+        updateRideDetails();
 
-            Map driveLoc = {
-              "latitude": myPosition?.latitude.toString(),
-              "longitude": myPosition?.longitude.toString(),
-            };
+        ///...
+        final riderInfo =
+            Provider.of<RideRequestInfoProvider>(context, listen: false)
+                .rideDetails;
 
-            DatabaseReference rideRequestRef = FirebaseDatabase.instance
-                .ref()
-                .child("Ride Request")
-                .child(riderInfo.userId);
-            rideRequestRef.child("driverLocation").set(driveLoc);
-          });
+        Map driveLoc = {
+          "latitude": myPosition?.latitude.toString(),
+          "longitude": myPosition?.longitude.toString(),
+        };
+
+        DatabaseReference rideRequestRef = FirebaseDatabase.instance
+            .ref()
+            .child("Ride Request")
+            .child(riderInfo.userId);
+        rideRequestRef.child("driverLocation").set(driveLoc);
+      });
     }
   }
 
@@ -1088,8 +1094,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
     await directions.startNavigation(
         wayPoints: wayPoints,
         options: MapBoxOptions(
-          initialLatitude: 37.42796133580664,
-          initialLongitude: -122.085749655962,
+          initialLatitude: rideInfo.pickup.latitude,
+          initialLongitude: rideInfo.pickup.longitude,
           mode: MapBoxNavigationMode.driving,
           simulateRoute: false,
           language: mapBoxLanguages(),
@@ -1101,38 +1107,52 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   // this method for Navigation between pickUp to drop of rider
-  navigationPickToDrop(BuildContext context) async {
+  ///
+  // navigationPickToDrop(BuildContext context) async {
+  //   final rideInfo =
+  //       Provider.of<RideRequestInfoProvider>(context, listen: false)
+  //           .rideDetails;
+  //   final start2 = WayPoint(
+  //       name: "start1",
+  //       latitude: rideInfo.pickup.latitude,
+  //       longitude: rideInfo.pickup.longitude);
+  //   final stop2 = WayPoint(
+  //       name: "stop1",
+  //       latitude: rideInfo.dropoff.latitude,
+  //       longitude: rideInfo.dropoff.longitude);
+  //   var wayPoints = <WayPoint>[];
+  //   wayPoints.add(start2);
+  //   wayPoints.add(stop2);
+  //
+  //   await directions.startNavigation(
+  //       wayPoints: wayPoints,
+  //       options: MapBoxOptions(
+  //         initialLatitude:rideInfo.pickup.latitude ,
+  //         initialLongitude: rideInfo.pickup.longitude,
+  //         mode: MapBoxNavigationMode.driving,
+  //         simulateRoute: false,
+  //         language: mapBoxLanguages(),
+  //         units: VoiceUnits.metric,
+  //         zoom: 13.0,
+  //         tilt: 0.0,
+  //         bearing: 0.0,
+  //       ));
+  // }
+
+  // this method for set lang mapBox
+  ///
+  //this method for open google Map
+  Future<void> openGoogleMap(BuildContext context) async {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
-    final start2 = WayPoint(
-        name: "start1",
-        latitude: rideInfo.pickup.latitude,
-        longitude: rideInfo.pickup.longitude);
-    final stop2 = WayPoint(
-        name: "stop1",
-        latitude: rideInfo.dropoff.latitude,
-        longitude: rideInfo.dropoff.longitude);
-    var wayPoints = <WayPoint>[];
-    wayPoints.add(start2);
-    wayPoints.add(stop2);
-
-    await directions.startNavigation(
-        wayPoints: wayPoints,
-        options: MapBoxOptions(
-          initialLatitude: 37.42796133580664,
-          initialLongitude: -122.085749655962,
-          mode: MapBoxNavigationMode.driving,
-          simulateRoute: false,
-          language: mapBoxLanguages(),
-          units: VoiceUnits.metric,
-          zoom: 13.0,
-          tilt: 0.0,
-          bearing: 0.0,
-        ));
+    String url =
+        "https://www.google.com/maps/search/?api=1&query=${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude}";
+    await canLaunch(url)
+        ? launch(url)
+        : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
   }
 
-  // this method for set lang mapBox
   String mapBoxLanguages() {
     String lan = "tr";
     if (AppLocalizations.of(context)!.rider == "Yolcuya git") {

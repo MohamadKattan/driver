@@ -5,7 +5,6 @@ import 'package:driver/user_screen/plan_screen.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -40,7 +39,6 @@ class IfYouWantPay extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: (){
-                      FlutterBackgroundService().invoke("setAsBackground");
                       Navigator.push(context,MaterialPageRoute(
                           builder:(_)=>const PlanScreen()));
                     }

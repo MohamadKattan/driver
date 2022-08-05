@@ -147,7 +147,7 @@ packages:
       name: dbus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.3"
+    version: "0.7.4"
   device_info_plus:
     dependency: "direct main"
     description:
@@ -321,34 +321,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_background_service:
-    dependency: "direct main"
-    description:
-      name: flutter_background_service
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
-  flutter_background_service_android:
-    dependency: transitive
-    description:
-      name: flutter_background_service_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
-  flutter_background_service_ios:
-    dependency: transitive
-    description:
-      name: flutter_background_service_ios
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  flutter_background_service_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_background_service_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -699,7 +671,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "5.0.0"
   platform:
     dependency: transitive
     description:
@@ -930,12 +902,12 @@ packages:
     source: hosted
     version: "0.2.0+1"
   xml:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.3.1"
+    version: "6.1.0"
 sdks:
   dart: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0"

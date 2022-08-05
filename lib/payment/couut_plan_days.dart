@@ -69,13 +69,7 @@ class PlanDays {
   //   });
   // }
   ///
-  void seett(){
-    int _day =DateTime.now().day ;
-    int _month = DateTime.now().month;
-    int _year = DateTime.now().year + 2;
-    final time  = DateTime(_year,_month,_day);
-    print("timeee$time");
-  }
+
 // this method for set date time explan date
   Future<void> setDateTime() async {
     int _day;
@@ -101,11 +95,11 @@ class PlanDays {
     } else if (DateTime.now().month == 12 && DateTime.now().day == 30) {
       _day = 1;
       _month = 1;
-      _year = DateTime.now().year+1;
+      _year = DateTime.now().year + 1;
     } else if (DateTime.now().month == 12 && DateTime.now().day == 31) {
       _day = 1;
       _month = 1;
-      _year = DateTime.now().year+1;
+      _year = DateTime.now().year + 1;
     } else if (DateTime.now().day < 30) {
       _day = DateTime.now().day + 1;
       _month = DateTime.now().month;
@@ -219,8 +213,11 @@ class PlanDays {
             _valDateTime.month == DateTime.now().month) {
           await setDateTime();
           await countAndCalcPlanLate();
-        } else {
+        } else if (_valDateTime.month != DateTime.now().month &&
+            _valDateTime.day == 1) {
           return;
+        } else {
+          setDateTime();
         }
       }
     });
