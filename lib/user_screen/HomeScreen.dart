@@ -18,6 +18,7 @@ import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../payment/param_payment.dart';
 import '../repo/api_srv_geolocater.dart';
+import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -130,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     getToken();
+    TurnOnGBS().turnOnGBSifNot();
     // initializeService();
     requestPermissions();
     initializationLocal(context);
@@ -340,6 +342,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0xFFFFD54F),
             onPressed: () async {
+              await TurnOnGBS().turnOnGBSifNot();
               await LogicGoogleMap().locationPosition(context);
               await GeoFireSrv().getLocationLiveUpdates(context);
               getCountryName();

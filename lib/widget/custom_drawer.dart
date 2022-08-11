@@ -267,13 +267,21 @@ Widget customDrawer(BuildContext context) {
                       ),
                       Center(
                         child: Padding(
-                          padding:  EdgeInsets.only(top: 8.0,bottom: 8.0,left: 8.0,right:valueIconPadding1(context) ),
+                          padding: EdgeInsets.only(
+                              top: 8.0,
+                              bottom: 8.0,
+                              left: 8.0,
+                              right: valueIconPadding1(context)),
                           child: Container(
-                            height: 20,
-                            decoration: const BoxDecoration(
-                            shape: BoxShape.circle
-                            ),
-                              child: Image.asset("images/credit.png",width: 40,height: 40,fit: BoxFit.cover,)),
+                              height: 20,
+                              decoration:
+                                  const BoxDecoration(shape: BoxShape.circle),
+                              child: Image.asset(
+                                "images/credit.png",
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              )),
                         ),
                       )
                     ],
@@ -285,9 +293,11 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: ()=> Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PolicyScreen())),
-                child:Padding(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PolicyScreen())),
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(mainAxisSize: MainAxisSize.max, children: [
                     Padding(
@@ -349,14 +359,12 @@ Widget customDrawer(BuildContext context) {
               CustomDivider().customDivider(),
               GestureDetector(
                 onTap: () {
-                  if(Platform.isAndroid){
+                  if (Platform.isAndroid) {
                     SystemNavigator.pop();
                   }
-                  Provider.of<DrawerValueChange>(context,
-                      listen: false)
+                  Provider.of<DrawerValueChange>(context, listen: false)
                       .updateValue(0);
-                  Provider.of<ChangeColorBottomDrawer>(context,
-                      listen: false)
+                  Provider.of<ChangeColorBottomDrawer>(context, listen: false)
                       .updateColorBottom(false);
                   // exit(0);
                 },
@@ -407,7 +415,7 @@ Widget customDrawer(BuildContext context) {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 8.0,right: 35),
+                padding: const EdgeInsets.only(bottom: 8.0, right: 35),
                 child: Text(
                   AppLocalizations.of(context)!.withCard,
                   style: const TextStyle(
@@ -466,7 +474,7 @@ Widget showUserName(BuildContext context) {
       ? Text(AppLocalizations.of(context)!.welcome +
           " " +
           userInfoRealTime.firstName)
-      :  Expanded(child: Text(AppLocalizations.of(context)!.welcome));
+      : Expanded(child: Text(AppLocalizations.of(context)!.welcome));
 }
 
 Widget showUserPhone(BuildContext context) {
@@ -489,7 +497,8 @@ double valueIconPadding(BuildContext context) {
 
 double valueIconPadding1(BuildContext context) {
   late double val;
-  if (AppLocalizations.of(context)!.day == "Day"||AppLocalizations.of(context)!.day =="Gun") {
+  if (AppLocalizations.of(context)!.day == "Day" ||
+      AppLocalizations.of(context)!.day == "Gun") {
     val = 95.0;
   } else {
     val = 8.0;

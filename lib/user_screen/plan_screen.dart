@@ -18,8 +18,9 @@ class PlanScreen extends StatefulWidget {
 
 class _PlanScreenState extends State<PlanScreen> {
   late String amountPlan;
-  late String currencyType;
+  late int currencyType;
   late int endExPlan;
+  late int oldExPlan;
   // late double amountPlan1 ;
   // late  double amountPlan2 ;
   // late double amountPlan3 ;
@@ -271,28 +272,30 @@ class _PlanScreenState extends State<PlanScreen> {
   Future<void> checkamout1(
       String carType, BuildContext context, String countryName) async {
     if (countryName == "Turkey") {
-      currencyType = "TRY";
+      currencyType = 1000;
       if (carType == "Taxi-4 seats") {
-        // amountPlan1 =18000;
+        // amountPlan1 =180;
         amountPlan = "180,00";
       } else {
-        // amountPlan1 = 30000;
+        // amountPlan1 = 300;
         amountPlan = "300,00";
       }
     } else {
-      currencyType = "USD";
+      currencyType = 1001;
       if (carType == "Taxi-4 seats") {
-        // amountPlan1 =1000;
-        amountPlan = "10,00";
+        // amountPlan1 =180;
+        amountPlan = "180,00";
+        // amountPlan = "10,00";
       } else {
-        amountPlan = "20,00";
+        amountPlan = "300,00";
+        // amountPlan = "300,00";
         // amountPlan1 = 2000;
       }
     }
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value.toString();
-        int oldExPlan = int.parse(snap);
+      oldExPlan = int.parse(snap);
         if (oldExPlan > 0) {
           int updateExPlan = oldExPlan + 43200;
           endExPlan = updateExPlan;
@@ -311,12 +314,14 @@ class _PlanScreenState extends State<PlanScreen> {
             builder: (_) => CardPaymentScreen(
                 amount: amountPlan,
                 planDay: endExPlan,
-                currencyType: currencyType)));
+                currencyType: currencyType,
+              oldExplan: oldExPlan,
+            )));
   }
 
   checkAmount2(String carType, BuildContext context, String countryName) async {
     if (countryName == "Turkey") {
-      currencyType = "TRY";
+      currencyType = 1000;
       if (carType == "Taxi-4 seats") {
         // amountPlan2 =47000;
         amountPlan = "470,00";
@@ -325,19 +330,21 @@ class _PlanScreenState extends State<PlanScreen> {
         amountPlan = "800,00";
       }
     } else {
-      currencyType = "USD";
+      currencyType = 1001;
       if (carType == "Taxi-4 seats") {
         // amountPlan2 =3000;
-        amountPlan = "30,00";
+        // amountPlan = "30,00";
+        amountPlan = "470,00";
       } else {
         // amountPlan2 = 5500;
-        amountPlan = "55,00";
+        // amountPlan = "55,00";
+        amountPlan = "800,00";
       }
     }
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value.toString();
-        int oldExPlan = int.parse(snap);
+         oldExPlan = int.parse(snap);
         if (oldExPlan > 0) {
           int updateExPlan = oldExPlan + 129600;
           endExPlan = updateExPlan;
@@ -354,14 +361,16 @@ class _PlanScreenState extends State<PlanScreen> {
         context,
         MaterialPageRoute(
             builder: (_) => CardPaymentScreen(
-                amount: amountPlan,
-                planDay: endExPlan,
-                currencyType: currencyType)));
+              amount: amountPlan,
+              planDay: endExPlan,
+              currencyType: currencyType,
+              oldExplan: oldExPlan,
+            )));
   }
 
   checkAmount3(String carType, BuildContext context, String countryName) async {
     if (countryName == "Turkey") {
-      currencyType = "TRY";
+      currencyType = 1000;
       if (carType == "Taxi-4 seats") {
         // amountPlan3 =80000;
         amountPlan = "800,00";
@@ -370,19 +379,21 @@ class _PlanScreenState extends State<PlanScreen> {
         amountPlan = "1350,00";
       }
     } else {
-      currencyType = "USD";
+      currencyType = 1001;
       if (carType == "Taxi-4 seats") {
         // amountPlan3 =5500;
-        amountPlan = "55,00";
+        // amountPlan = "55,00";
+        amountPlan = "800,00";
       } else {
-        amountPlan = "95,00";
+        amountPlan = "1350,00";
+        // amountPlan = "95,00";
         // amountPlan3 = 9500;
       }
     }
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value.toString();
-        int oldExPlan = int.parse(snap);
+         oldExPlan = int.parse(snap);
         if (oldExPlan > 0) {
           int updateExPlan = oldExPlan + 259200;
           endExPlan = updateExPlan;
@@ -399,8 +410,10 @@ class _PlanScreenState extends State<PlanScreen> {
         context,
         MaterialPageRoute(
             builder: (_) => CardPaymentScreen(
-                amount: amountPlan,
-                planDay: endExPlan,
-                currencyType: currencyType)));
+              amount: amountPlan,
+              planDay: endExPlan,
+              currencyType: currencyType,
+              oldExplan: oldExPlan,
+            )));
   }
 }

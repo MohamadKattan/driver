@@ -580,5 +580,17 @@
   "locationBackground": "Running in Background",
   "@locationBackground": {
     "description": "Running in Background"
+  },
+  "daygift": "congratulations you got 2 day gift for free ",
+  "@daygift": {
+    "description": "gift"
+  },
+  "checkBank": "in this time we are awaiting a notification from your bank to approve your payment it is take from 1 till 8 hour work then will activate your new package. Thanks from GarntiTaxi and have a good day",
+  "@checkBank": {
+    "description": "check bank"
+  },
+  "paymentFailed": "Payment Failed try again ",
+  "@paymentFailed": {
+    "description": "Payment Failed try again "
   }
 }

@@ -13,7 +13,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
 import '../my_provider/driver_currentPosition_provider.dart';
 
 class GeoFireSrv {
@@ -38,7 +37,7 @@ class GeoFireSrv {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.fitness,
-        distanceFilter: 0,
+        distanceFilter: 20,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
@@ -48,71 +47,86 @@ class GeoFireSrv {
         distanceFilter: 100,
       );
     }
-    if (Platform.isAndroid) {
-      var androidInfo = await DeviceInfoPlugin().androidInfo;
-      var sdkInt = androidInfo.version.sdkInt;
-      if (sdkInt! <= 27) {
-        homeScreenStreamSubscription =
-            Geolocator.getPositionStream().listen((Position position) async {
-          if (position.latitude == 37.42796133580664 &&
-              position.longitude == 122.085749655962) {
-            return;
-          } else {
-            await Geofire.setLocation(
-                currentUseId!.uid, position.latitude, position.longitude);
-            Provider.of<DriverCurrentPosition>(context, listen: false)
-                .updateSate(position);
-          }
-
-          LatLng latLng = LatLng(position.latitude, position.longitude);
-          newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
-        });
-        DatabaseReference rideRequestRef = FirebaseDatabase.instance
-            .ref()
-            .child("driver")
-            .child(currentUseId!.uid)
-            .child("newRide");
-        rideRequestRef.set("searching");
-        rideRequestRef.onValue.listen((event) {});
-      } else {
-        homeScreenStreamSubscription =
-            Geolocator.getPositionStream(locationSettings: locationSettings)
-                .listen((Position position) async {
+    // if (Platform.isAndroid) {
+    //   var androidInfo = await DeviceInfoPlugin().androidInfo;
+    //   var sdkInt = androidInfo.version.sdkInt;
+    //   if (sdkInt! <= 27) {
+    //     homeScreenStreamSubscription =
+    //         Geolocator.getPositionStream().listen((Position position) async {
+    //       if (position.latitude == 37.42796133580664 &&
+    //           position.longitude == 122.085749655962) {
+    //         return;
+    //       } else {
+    //         await Geofire.setLocation(
+    //             currentUseId!.uid, position.latitude, position.longitude);
+    //         // Provider.of<DriverCurrentPosition>(context, listen: false)
+    //         //     .updateSate(position);
+    //       }
+    //
+    //       LatLng latLng = LatLng(position.latitude, position.longitude);
+    //       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
+    //     });
+    //     DatabaseReference rideRequestRef = FirebaseDatabase.instance
+    //         .ref()
+    //         .child("driver")
+    //         .child(currentUseId!.uid)
+    //         .child("newRide");
+    //     rideRequestRef.set("searching");
+    //     rideRequestRef.onValue.listen((event) {});
+    //   } else {
+    //     homeScreenStreamSubscription =
+    //         Geolocator.getPositionStream(locationSettings: locationSettings)
+    //             .listen((Position position) async {
+    //       await Geofire.setLocation(
+    //           currentUseId!.uid, position.latitude, position.longitude);
+    //       Provider.of<DriverCurrentPosition>(context, listen: false)
+    //           .updateSate(position);
+    //       LatLng latLng = LatLng(position.latitude, position.longitude);
+    //       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
+    //     });
+    //     DatabaseReference rideRequestRef = FirebaseDatabase.instance
+    //         .ref()
+    //         .child("driver")
+    //         .child(currentUseId!.uid)
+    //         .child("newRide");
+    //     rideRequestRef.set("searching");
+    //     rideRequestRef.onValue.listen((event) {});
+    //   }
+    // }
+    // else {
+    //   homeScreenStreamSubscription =
+    //       Geolocator.getPositionStream(locationSettings: locationSettings)
+    //           .listen((Position position) async {
+    //     await Geofire.setLocation(
+    //         currentUseId!.uid, position.latitude, position.longitude);
+    //     Provider.of<DriverCurrentPosition>(context, listen: false)
+    //         .updateSate(position);
+    //     LatLng latLng = LatLng(position.latitude, position.longitude);
+    //     newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
+    //   });
+    //   DatabaseReference rideRequestRef = FirebaseDatabase.instance
+    //       .ref()
+    //       .child("driver")
+    //       .child(currentUseId!.uid)
+    //       .child("newRide");
+    //   rideRequestRef.set("searching");
+    //   rideRequestRef.onValue.listen((event) {});
+    // }
+    homeScreenStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position position) async {
           await Geofire.setLocation(
               currentUseId!.uid, position.latitude, position.longitude);
-          Provider.of<DriverCurrentPosition>(context, listen: false)
-              .updateSate(position);
           LatLng latLng = LatLng(position.latitude, position.longitude);
           newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
         });
-        DatabaseReference rideRequestRef = FirebaseDatabase.instance
-            .ref()
-            .child("driver")
-            .child(currentUseId!.uid)
-            .child("newRide");
-        rideRequestRef.set("searching");
-        rideRequestRef.onValue.listen((event) {});
-      }
-    }
-    else {
-      homeScreenStreamSubscription =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position position) async {
-        await Geofire.setLocation(
-            currentUseId!.uid, position.latitude, position.longitude);
-        Provider.of<DriverCurrentPosition>(context, listen: false)
-            .updateSate(position);
-        LatLng latLng = LatLng(position.latitude, position.longitude);
-        newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
-      });
-      DatabaseReference rideRequestRef = FirebaseDatabase.instance
-          .ref()
-          .child("driver")
-          .child(currentUseId!.uid)
-          .child("newRide");
-      rideRequestRef.set("searching");
-      rideRequestRef.onValue.listen((event) {});
-    }
+    DatabaseReference rideRequestRef = FirebaseDatabase.instance
+        .ref()
+        .child("driver")
+        .child(currentUseId!.uid)
+        .child("newRide");
+    rideRequestRef.set("searching");
+    rideRequestRef.onValue.listen((event) {});
   }
 
 // this method for delete driver from live location if switch offLine bottom

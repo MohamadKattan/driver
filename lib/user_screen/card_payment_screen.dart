@@ -4,7 +4,6 @@ import 'package:awesome_card/style/card_background.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/card_payment.dart';
-import '../my_provider/driver_model_provider.dart';
 import '../my_provider/payment_indector_provider.dart';
 import '../payment/param_payment.dart';
 import '../widget/custom_circuler.dart';
@@ -14,8 +13,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CardPaymentScreen extends StatefulWidget {
   final String amount;
   final int planDay;
-  final String currencyType;
-  const CardPaymentScreen({Key? key, required this.amount,required this.planDay,required this.currencyType}) : super(key: key);
+  final int currencyType;
+  final int oldExplan;
+  const CardPaymentScreen({Key? key, required this.amount,required this.planDay,required this.currencyType,required this.oldExplan}) : super(key: key);
 
   @override
   State<CardPaymentScreen> createState() => _CardPaymentScreenState();
@@ -122,7 +122,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                     ),
                     child: TextFormField(
                       decoration:  InputDecoration(hintText:AppLocalizations.of(context)!.yexpiry),
-                      maxLength: 2,
+                      maxLength: 4,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         setState(() {
@@ -168,8 +168,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                               cardNumber: cardNumber,
                               holderName: cardHolderName
                                );
-                           await ParamPayment().paramStartPayment(card,widget.amount,widget.planDay,widget.currencyType,context);
-
+                           await ParamPayment().paramToken(card,widget.amount,widget.planDay,widget.currencyType,context,widget.oldExplan);
                           }),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -193,5 +192,14 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
         ),
       )),
     );
+  }
+  void clearText(){
+    setState((){
+       cardNumber = "";
+       expiryDateMouthe = "";
+       expiryDateYear = "";
+       cardHolderName = "";
+       cvv = "";
+    });
   }
 }
