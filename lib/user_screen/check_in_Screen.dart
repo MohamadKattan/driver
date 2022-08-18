@@ -38,37 +38,45 @@ class CheckInScreen extends StatelessWidget {
                                 width: 350)),
                       ),
                         Center(
-                        child: Text(
-                          AppLocalizations.of(context)!.checking,
-                          textAlign: TextAlign.center,
-                          style:const TextStyle(
-                              fontSize: 30.0,
-                              overflow: TextOverflow.ellipsis,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              fontStyle: FontStyle.italic),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            AppLocalizations.of(context)!.checking,
+                            textAlign: TextAlign.center,
+                            style:const TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                                fontStyle: FontStyle.italic),
+                          ),
                         ),
                       ),
                        Center(
-                        child: Text(
-                            AppLocalizations.of(context)!.appreciate,
-                          textAlign: TextAlign.center,
-                          style:const TextStyle(
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54,
-                              fontStyle: FontStyle.italic),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 4.0,right: 4.0),
+                          child: Text(
+                              AppLocalizations.of(context)!.appreciate,
+                            textAlign: TextAlign.center,
+                            style:const TextStyle(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black54,
+                                fontStyle: FontStyle.italic),
+                          ),
                         ),
                       ),
                        Center(
-                        child: Text(
-                            AppLocalizations.of(context)!.sendnot,
-                          textAlign: TextAlign.center,
-                          style:const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54,
-                              fontStyle: FontStyle.italic),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                              AppLocalizations.of(context)!.sendnot,
+                            textAlign: TextAlign.center,
+                            style:const TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black54,
+                                fontStyle: FontStyle.italic),
+                          ),
                         ),
                       ),
                       GestureDetector(
@@ -124,7 +132,7 @@ class CheckInScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      ToUrlLunch().toUrlLunch(url:"https://wa.me/+905384643348");
+                      ToUrlLunch().toUrlLunch(url:"https://wa.me/+905366034616");
                     },
                   ),
                 ),

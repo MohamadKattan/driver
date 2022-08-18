@@ -40,10 +40,17 @@ class AuthSev {
             Map<String, dynamic> map =
                 Map<String, dynamic>.from(snapshot.value as Map);
             DriverInfo driverInfo = DriverInfo.fromMap(map);
-            if (driverInfo.tok.substring(0,5) != tokenPhone?.substring(0,5)) {
+            if(driverInfo.status=="info"&&driverInfo.tok==""){
+              Provider.of<TrueFalse>(context, listen: false).updateState(false);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const DriverInfoScreen()));
+            }
+           else if (driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
+              Provider.of<TrueFalse>(context, listen: false).updateState(false);
               _tools.toastMsg(
-                  AppLocalizations.of(context)!.tokenUesd,Colors.red);
-              Navigator.push(context, MaterialPageRoute(builder:(_)=>const ActiveAccount()));
+                  AppLocalizations.of(context)!.tokenUesd, Colors.red);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const ActiveAccount()));
             } else {
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .updateDriverInfo(driverInfo);
@@ -59,7 +66,7 @@ class AuthSev {
               "userId": currentUser!.uid,
               "phoneNumber": "",
               "email": email.text.trim(),
-              "pass":passWord.text.trim(),
+              "pass": passWord.text.trim(),
               "backbool": false,
               "update": false,
               "status": "info",
@@ -73,8 +80,8 @@ class AuthSev {
               "carLis": "",
               "earning": "0.0",
               "personImage": "",
-              "plandate":DateTime.now().toString(),
-              "active":"active"
+              "plandate": DateTime.now().toString(),
+              "active": "active"
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
@@ -100,8 +107,7 @@ class AuthSev {
         _tools.toastMsg(
             AppLocalizations.of(context)!.wrongPass, Colors.redAccent.shade700);
         Provider.of<TrueFalse>(context, listen: false).updateState(false);
-      }
-      else if (e.code == 'user-not-found') {
+      } else if (e.code == 'user-not-found') {
         try {
           userCredential = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
@@ -113,7 +119,7 @@ class AuthSev {
               "userId": currentUser!.uid,
               "phoneNumber": "",
               "email": email.text.trim(),
-              "pass":passWord.text.trim(),
+              "pass": passWord.text.trim(),
               "backbool": false,
               "update": false,
               "status": "info",
@@ -127,8 +133,8 @@ class AuthSev {
               "carLis": "",
               "earning": "0.0",
               "personImage": "",
-              "plandate":DateTime.now().toString(),
-              "active":"active"
+              "plandate": DateTime.now().toString(),
+              "active": "active"
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
@@ -155,8 +161,6 @@ class AuthSev {
         }
       }
     }
-    return null;
-    // return userCredential.user!;
   }
 
   Future<User> getCurrentUserId(BuildContext context) async {

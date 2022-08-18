@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by mohamad kattan on 16.08.2022.
+  
+*/
+NSCameraUsageDescription = "Bu uygulama, profil fotoğrafınızı yüklemek için kameraya erişim gerektirir.";
+NSLocationAlwaysAndWhenInUseUsageDescription="Bu uygulama, uygulama arka planda çalışırken ve mevcut konumunuz için açıkken uygulama haritasında görüntülendiğinde konumunuza erişim gerektirir ve yakındaki arama sonuçları ve seyahat süreleri için yol tarifleri için kullanılır.";
+NSLocationAlwaysUsageDescription="Bu uygulama, uygulama arka planda çalışırken ve mevcut konumunuz için açıkken uygulama haritasında görüntülendiğinde konumunuza erişim gerektirir ve yakındaki arama sonuçları ve seyahat süreleri için yol tarifleri için kullanılır.";
+NSLocationWhenInUseUsageDescription="Bu uygulama, uygulama arka planda çalışırken ve mevcut konumunuz için açıkken uygulama haritasında görüntülendiğinde konumunuza erişim gerektirir ve yakındaki arama sonuçları ve seyahat süreleri için yol tarifleri için kullanılır.";
+NSPhotoLibraryUsageDescription="Bu uygulama, profil fotoğrafınızı yüklemek için fotoğraf kitaplığına erişim gerektirir.";

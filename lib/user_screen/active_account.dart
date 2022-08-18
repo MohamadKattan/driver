@@ -29,11 +29,15 @@ class _ActiveAccountState extends State<ActiveAccount> {
         body: Column(
           children: [
             const SizedBox(height:40.0),
-            const Text("Garanti taxi driver",
-                style: TextStyle(
-                  color: Colors.black45,
-                  fontSize: 45,
-                )),
+            const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Text("Garanti taxi driver",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black45,
+                    fontSize: 45,
+                  )),
+            ),
             Padding(
               padding:const EdgeInsets.all(8.0),
               child: Text( AppLocalizations.of(context)!.anyquestion,

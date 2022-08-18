@@ -48,6 +48,7 @@ class InterNetWeak extends StatelessWidget {
               child: Center(
                 child: Text(
                   AppLocalizations.of(context)!.try1,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,

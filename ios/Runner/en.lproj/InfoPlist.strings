@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by mohamad kattan on 16.08.2022.
+  
+*/
+NSCameraUsageDescription = "This app requires access to the camera to upload your profile photo.";
+NSLocationAlwaysAndWhenInUseUsageDescription="this app requires  access to your location when app working in background and when open for your current location will be displayed on the app map and used for directions nearby search results and travel times.";
+NSLocationAlwaysUsageDescription="this app requires  access to your location when app working in background and when open for your current location will be displayed on the app map and used for directions nearby search results and travel times.";
+NSLocationWhenInUseUsageDescription="this app requires  access to your location when app working in background and when open for your current location will be displayed on the app map and used for directions nearby search results and travel times.";
+NSPhotoLibraryUsageDescription="This app requires access to the photo library to upload your profile photo.";

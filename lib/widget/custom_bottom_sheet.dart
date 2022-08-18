@@ -100,7 +100,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -114,7 +114,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                 source: ImageSource.gallery,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -161,7 +161,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -175,7 +175,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -222,7 +222,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -236,7 +236,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -283,7 +283,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );
@@ -297,7 +297,7 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                imageQuality: 100,
+                                imageQuality: 80,
                                 maxHeight: 250.0,
                                 maxWidth: 250.0,
                               );

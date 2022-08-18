@@ -69,12 +69,11 @@ class _SplashScreenState extends State<SplashScreen>
                   barrierDismissible: false,
                   builder: (_) => showDialogPolicy(context));
             } else {
-              // TurnOnGBS().turnOnGBSifNot();
+              TurnOnGBS().turnOnGBSifNot();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const AuthScreen()));
             }
-          }
-          else if (AuthSev().auth.currentUser?.uid != null &&
+          } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
             await ToUrlLunch().toPlayStore();
             await driverRef.child(userId).child("update").set(false);
@@ -82,8 +81,7 @@ class _SplashScreenState extends State<SplashScreen>
                 context,
                 MaterialPageRoute(builder: (_) => const SplashScreen()),
                 (route) => false);
-          }
-          else if (AuthSev().auth.currentUser?.uid != null &&
+          } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.tok == "r") {
             Tools().toastMsg(
                 AppLocalizations.of(context)!.active, Colors.greenAccent);
@@ -92,11 +90,16 @@ class _SplashScreenState extends State<SplashScreen>
             await driverRef.child(userId).child("active").set("active");
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const RefreshAfterActived()));
-          }
-          else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok == "" && driverInfo.status =="") {
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.tok == "" &&
+              driverInfo.status == "") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const InterNetWeak()));
+          } else if (AuthSev().auth.currentUser?.uid != null &&
+              driverInfo.tok == "" &&
+              driverInfo.status == "info") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const DriverInfoScreen()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
             Tools().toastMsg(
@@ -121,11 +124,6 @@ class _SplashScreenState extends State<SplashScreen>
               driverInfo.status == "payed") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-                  driverInfo.status.isEmpty ||
-              driverInfo.status == "") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const InterNetWeak()));
           } else {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AuthScreen()));
@@ -248,15 +246,11 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       GestureDetector(
                         onTap: () {
+                          TurnOnGBS().turnOnGBSifNot();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (_) => const AuthScreen()));
-                          // TurnOnGBS().turnOnGBSifNot().whenComplete(() =>
-                          //     Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (_) => const AuthScreen())));
                         },
                         child: Container(
                           height: 40,

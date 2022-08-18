@@ -213,7 +213,7 @@ class PushNotificationsSrv {
           // Future.delayed(const Duration(seconds: 5)).whenComplete(
           //     () => );
           // GeoFireSrv().enableLocationLiveUpdates(context);
-        }  else if (_riderId == "canceled") {
+        } else if (_riderId == "canceled") {
           return;
         } else if (_riderId == "timeOut") {
           return;

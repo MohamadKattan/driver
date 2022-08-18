@@ -1,4 +1,4 @@
-// auth screen
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
@@ -11,9 +11,6 @@ GlobalKey globalKey = GlobalKey();
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({Key? key}) : super(key: key);
-  // static String result = "";
-  // static String? resultCodeCon = "+90";
-  // static final TextEditingController phoneNumber = TextEditingController();
   static final TextEditingController email = TextEditingController();
   static final TextEditingController passWord = TextEditingController();
   static AuthSev authSev = AuthSev();
@@ -79,71 +76,6 @@ class AuthScreen extends StatelessWidget {
                       const SizedBox(
                         height: 25,
                       ),
-                      ///stop for now
-                      // Padding(
-                      //   padding: const EdgeInsets.all(15.0),
-                      //   child: Row(
-                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Padding(
-                      //         padding: const EdgeInsets.only(top: 8.0),
-                      //         child: CountryListPick(
-                      //             appBar: AppBar(
-                      //               backgroundColor: Colors.amber[200],
-                      //               title: Text(
-                      //                   AppLocalizations.of(context)!.country),
-                      //             ),
-                      //             theme: CountryTheme(
-                      //               isShowFlag: true,
-                      //               isShowTitle: false,
-                      //               isShowCode: true,
-                      //               isDownIcon: true,
-                      //               showEnglishName: false,
-                      //               labelColor: Colors.black54,
-                      //               alphabetSelectedBackgroundColor:
-                      //                   const Color(0xFFFFD54F),
-                      //               alphabetTextColor: Colors.deepOrange,
-                      //               alphabetSelectedTextColor:
-                      //                   Colors.deepPurple,
-                      //             ),
-                      //             initialSelection: resultCodeCon,
-                      //             onChanged: (CountryCode? code) {
-                      //               resultCodeCon = code?.dialCode;
-                      //             },
-                      //             useUiOverlay: true,
-                      //             useSafeArea: false),
-                      //       ),
-                      //       const SizedBox(
-                      //         width: 10,
-                      //       ),
-                      //       Expanded(
-                      //         flex: 1,
-                      //         child: TextField(
-                      //           controller: phoneNumber,
-                      //           maxLength: 15,
-                      //           showCursor: true,
-                      //           style: const TextStyle(
-                      //               fontSize: 16, fontWeight: FontWeight.w600),
-                      //           cursorColor: const Color(0xFFFFD54F),
-                      //           decoration: InputDecoration(
-                      //             icon: const Padding(
-                      //               padding: EdgeInsets.only(top: 15.0),
-                      //               child: Icon(
-                      //                 Icons.phone,
-                      //                 color: Color(0xFFFFD54F),
-                      //               ),
-                      //             ),
-                      //             fillColor: const Color(0xFFFFD54F),
-                      //             label: Text(AppLocalizations.of(context)!
-                      //                 .phonenumber),
-                      //           ),
-                      //           keyboardType: TextInputType.phone,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Row(
@@ -232,18 +164,6 @@ class AuthScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 40),
                         child: GestureDetector(
                           onTap: () async {
-                            ///stop for now
-                            // if (phoneNumber.text.isEmpty) {
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     SnackBar(
-                            //       behavior: SnackBarBehavior.fixed,
-                            //       backgroundColor: Colors.red,
-                            //       duration: const Duration(seconds: 3),
-                            //       content: Text(
-                            //           AppLocalizations.of(context)!.phoneempty),
-                            //     ),
-                            //   );
-                            // }
                             if (email.text.isEmpty) {
                               Tools().toastMsg(
                                   AppLocalizations.of(context)!.emailempty,

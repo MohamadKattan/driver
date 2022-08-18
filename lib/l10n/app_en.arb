@@ -84,7 +84,7 @@
            "@cancel": {
                "description": "Cancel"
     },
- "checking": "We are checking information",
+ "checking": "We are checking your information",
             "@checking": {
                 "description": "We are checking information"
      },
