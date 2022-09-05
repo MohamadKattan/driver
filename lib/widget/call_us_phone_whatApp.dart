@@ -16,8 +16,8 @@ Widget callUs(
       height: 200,
       width: double.infinity,
       decoration:  BoxDecoration(
-          borderRadius: BorderRadius.circular(6.0)
-          ,color: Colors.white),
+          borderRadius: BorderRadius.circular(12.0)
+          ,color:const Color(0xFF00A3E0)),
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -31,7 +31,7 @@ Widget callUs(
                    Text(
                     AppLocalizations.of(context)!.uss,
                     style:const TextStyle(
-                        color: Colors.black87,
+                        color: Colors.white,
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold),
               ),
@@ -49,13 +49,13 @@ Widget callUs(
                   },
                   child: Row(
                     children:  [
-                     const Icon(Icons.phone,size: 20.0,color: Colors.greenAccent,),
-                     const SizedBox(width: 4.0),
+                      Icon(Icons.phone,size: 20.0,color: Colors.greenAccent.shade700,),
+                     const SizedBox(width: 6.0),
                       Text(AppLocalizations.of(context)!.normalCall + "+905366034616",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style:
-                         const TextStyle(color: Colors.black87, fontSize: 16.0)),
+                         const TextStyle(color: Colors.white, fontSize: 16.0)),
                     ],
                   ),
                 ),
@@ -75,13 +75,11 @@ Widget callUs(
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style:
-                          TextStyle(color: Colors.black87, fontSize: 16.0)),
+                          TextStyle(color: Colors.white, fontSize: 16.0)),
                     ],
                   ),
                 ),
               ),
-              CustomDivider().customDivider(),
-              SizedBox(height: MediaQuery.of(context).size.height * 3.5 / 100),
             ],
           ),
         ),

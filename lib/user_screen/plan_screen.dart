@@ -50,7 +50,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                 builder: (_) => const SplashScreen()));
                   },
                   icon: const Icon(Icons.arrow_back_ios)),
-              backgroundColor: const Color(0xFFFFD54F),
+              backgroundColor: const Color(0xFF00A3E0),
               title: Text(AppLocalizations.of(context)!.paymentScreen,
                   style: const TextStyle(color: Colors.white)),
             ),
@@ -68,193 +68,172 @@ class _PlanScreenState extends State<PlanScreen> {
                       onTap: () {
                         checkamout1(info.carType, context, info.country);
                       },
-                      child: Padding(
+                      child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 25 / 100,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4.0),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.blueAccent.shade700,
-                                    spreadRadius: 6.0,
-                                    blurRadius: 0.6,
-                                    offset: const Offset(0.7, 0.7))
-                              ]),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(AppLocalizations.of(context)!.plan1,
-                                    style: TextStyle(
-                                        color: Colors.blueAccent.shade700,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              Text(AppLocalizations.of(context)!.working30day,
+                        margin:const EdgeInsets.all(14.0),
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color:const Color(0xFF5CAFE5),
+                            borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(AppLocalizations.of(context)!.plan1,
                                   style: const TextStyle(
-                                      fontSize: 16.0, color: Colors.black45)),
-                              const SizedBox(height: 40.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(AppLocalizations.of(context)!.cost,
-                                      style: const TextStyle(
-                                          color: Colors.black45,
-                                          fontSize: 20.0)),
-                                  info.country == "Turkey"
-                                      ? Text(
-                                          info.carType == "Taxi-4 seats"
-                                              ? " TL 180"
-                                              : "TL 300",
-                                          style: TextStyle(
-                                              color: Colors.blueAccent.shade700,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold))
-                                      : Text(
-                                          info.carType == "Taxi-4 seats"
-                                              ? " \$10"
-                                              : "\$20",
-                                          style: TextStyle(
-                                              color: Colors.blueAccent.shade700,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold))
-                                ],
-                              )
-                            ],
-                          ),
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Text(AppLocalizations.of(context)!.working30day,
+                                style: const TextStyle(
+                                    fontSize: 16.0, color: Colors.white)),
+                            const SizedBox(height: 40.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(AppLocalizations.of(context)!.cost,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0)),
+                                info.country == "Turkey"
+                                    ? Text(
+                                        info.carType == "Taxi-4 seats"
+                                            ? "180 TL"
+                                            : "300 TL",
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold))
+                                    : Text(
+                                        info.carType == "Taxi-4 seats"
+                                            ? "10\$"
+                                            : "20\$",
+                                        style:const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold))
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),
                     GestureDetector(
                       onTap: () =>
                           checkAmount2(info.carType, context, info.country),
-                      child: Padding(
+                      child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 25 / 100,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4.0),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.greenAccent.shade700,
-                                    spreadRadius: 6.0,
-                                    blurRadius: 0.6,
-                                    offset: const Offset(0.7, 0.7))
-                              ]),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(AppLocalizations.of(context)!.plan2,
-                                    style: TextStyle(
-                                        color: Colors.greenAccent.shade700,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              Text(AppLocalizations.of(context)!.working90day,
-                                  style: const TextStyle(
-                                      fontSize: 16.0, color: Colors.black45)),
-                              const SizedBox(height: 40.0),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(AppLocalizations.of(context)!.cost,
-                                        style: const TextStyle(
-                                            color: Colors.black45,
-                                            fontSize: 20.0)),
-                                    info.country == "Turkey"
-                                        ? Text(
-                                            info.carType == "Taxi-4 seats"
-                                                ? " TL 470"
-                                                : "TL 800",
-                                            style: TextStyle(
-                                                color:
-                                                    Colors.greenAccent.shade700,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold))
-                                        : Text(
-                                            info.carType == "Taxi-4 seats"
-                                                ? " \$ 30"
-                                                : "\$ 55",
-                                            style: TextStyle(
-                                                color:
-                                                    Colors.greenAccent.shade700,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold))
-                                  ])
-                            ],
-                          ),
+                        margin:const EdgeInsets.all(14.0),
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:const Color(0xFF00A3E0),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(AppLocalizations.of(context)!.plan2,
+                                  style:const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Text(AppLocalizations.of(context)!.working90day,
+                                style: const TextStyle(
+                                    fontSize: 16.0, color: Colors.white70)),
+                            const SizedBox(height: 40.0),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(AppLocalizations.of(context)!.cost,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20.0)),
+                                  info.country == "Turkey"
+                                      ? Text(
+                                          info.carType == "Taxi-4 seats"
+                                              ? "470 TL"
+                                              : "800 TL",
+                                          style:const TextStyle(
+                                              color:
+                                                  Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold))
+                                      : Text(
+                                          info.carType == "Taxi-4 seats"
+                                              ? " 30\$"
+                                              : "55\$",
+                                          style:const TextStyle(
+                                              color:
+                                                  Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold))
+                                ])
+                          ],
                         ),
                       ),
                     ),
                     GestureDetector(
                       onTap: () =>
                           checkAmount3(info.carType, context, info.country),
-                      child: Padding(
+                      child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 25 / 100,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4.0),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.purple.shade700,
-                                    spreadRadius: 6.0,
-                                    blurRadius: 0.6,
-                                    offset: const Offset(0.7, 0.7))
-                              ]),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(AppLocalizations.of(context)!.plan3,
-                                    style: TextStyle(
-                                        color: Colors.purple.shade700,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              Text(AppLocalizations.of(context)!.working180day,
+                        margin:const EdgeInsets.all(14.0),
+                        height: 200,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:const Color(0xFFFBC408),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(AppLocalizations.of(context)!.plan3,
                                   style: const TextStyle(
-                                      fontSize: 16.0, color: Colors.black45)),
-                              const SizedBox(height: 40.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(AppLocalizations.of(context)!.cost,
-                                      style: const TextStyle(
-                                          color: Colors.black45,
-                                          fontSize: 20.0)),
-                                  info.country == "Turkey"
-                                      ? Text(
-                                          info.carType == "Taxi-4 seats"
-                                              ? " TL 800"
-                                              : "TL 1350",
-                                          style: TextStyle(
-                                              color: Colors.purple.shade700,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold))
-                                      : Text(
-                                          info.carType == "Taxi-4 seats"
-                                              ? " \$ 55"
-                                              : "\$ 95",
-                                          style: TextStyle(
-                                              color: Colors.purple.shade700,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold))
-                                ],
-                              )
-                            ],
-                          ),
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Text(AppLocalizations.of(context)!.working180day,
+                                style: const TextStyle(
+                                    fontSize: 16.0, color: Colors.white70)),
+                            const SizedBox(height: 40.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(AppLocalizations.of(context)!.cost,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0)),
+                                info.country == "Turkey"
+                                    ? Text(
+                                        info.carType == "Taxi-4 seats"
+                                            ? "800TL"
+                                            : "1350TL",
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold))
+                                    : Text(
+                                        info.carType == "Taxi-4 seats"
+                                            ? " 55\$"
+                                            : "95\$",
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold))
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),

@@ -1,8 +1,6 @@
 // this class for update live current location driver to retrieve rider request if driver close to rider
 
 import 'dart:async';
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:driver/config.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:flutter/foundation.dart';
@@ -147,72 +145,4 @@ class GeoFireSrv {
     Geofire.stopListener();
    await Geofire.removeLocation(currentUseId!.uid);
   }
-
-// this method for enable driver in live location when he finished his order
-//   Future<void> enableLocationLiveUpdates(BuildContext context) async {
-//     Geofire.initialize("availableDrivers");
-//     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
-//         .currentPosition;
-//     await Geofire.setLocation(
-//                   currentUseId!.uid, position.latitude, position.longitude);
-//     // if (defaultTargetPlatform == TargetPlatform.android) {
-//     //   locationSettings = AndroidSettings(
-//     //       accuracy: LocationAccuracy.high,
-//     //       distanceFilter: 100,
-//     //       forceLocationManager: false,
-//     //       intervalDuration: const Duration(seconds: 10),
-//     //       foregroundNotificationConfig: ForegroundNotificationConfig(
-//     //         notificationText: AppLocalizations.of(context)!.locationBackground,
-//     //         notificationTitle: "Garanti taxi",
-//     //         enableWakeLock: true,
-//     //       ));
-//     // }
-//     // else if (defaultTargetPlatform == TargetPlatform.iOS) {
-//     //   locationSettings = AppleSettings(
-//     //     accuracy: LocationAccuracy.high,
-//     //     activityType: ActivityType.fitness,
-//     //     distanceFilter: 0,
-//     //     pauseLocationUpdatesAutomatically: false,
-//     //     showBackgroundLocationIndicator: true,
-//     //   );
-//     // }
-//     // else {
-//     //   locationSettings = const LocationSettings(
-//     //     accuracy: LocationAccuracy.high,
-//     //     distanceFilter: 100,
-//     //   );
-//     // }
-//     // if (Platform.isAndroid) {
-//     //   var androidInfo = await DeviceInfoPlugin().androidInfo;
-//     //   var sdkInt = androidInfo.version.sdkInt;
-//     //   if (sdkInt! <= 29) {
-//     //     homeScreenStreamSubscription =
-//     //         Geolocator.getPositionStream().listen((Position position) async {
-//     //       await Geofire.setLocation(
-//     //           currentUseId!.uid, position.latitude, position.longitude);
-//     //       LatLng latLng = LatLng(position.latitude, position.longitude);
-//     //       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
-//     //     });
-//     //   } else {
-//     //     homeScreenStreamSubscription =
-//     //         Geolocator.getPositionStream(locationSettings: locationSettings)
-//     //             .listen((Position position) async {
-//     //       await Geofire.setLocation(
-//     //           currentUseId!.uid, position.latitude, position.longitude);
-//     //       LatLng latLng = LatLng(position.latitude, position.longitude);
-//     //       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
-//     //     });
-//     //   }
-//     // }
-//     // else {
-//     //   homeScreenStreamSubscription =
-//     //       Geolocator.getPositionStream(locationSettings: locationSettings)
-//     //           .listen((Position position) async {
-//     //     await Geofire.setLocation(
-//     //         currentUseId!.uid, position.latitude, position.longitude);
-//     //     LatLng latLng = LatLng(position.latitude, position.longitude);
-//     //     newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
-//     //   });
-//     // }
-//   }
 }

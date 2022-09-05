@@ -1,7 +1,6 @@
 // this class for custom drawer
 
 import 'dart:io';
-
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
@@ -30,11 +29,12 @@ Widget customDrawer(BuildContext context) {
     height: MediaQuery.of(context).size.height,
     decoration: const BoxDecoration(
       gradient: LinearGradient(colors: [
-        Color(0xFFFFD54F),
-        Color(0xFFFFD55F),
-        Color(0xFFFFD56F),
-        Color(0xFFFFD57F),
-      ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+        Color(0xFF00A3E0),
+        Colors.white,
+        Colors.white,
+        Colors.white,
+        Colors.white,
+      ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
     ),
     child: SingleChildScrollView(
       child: Column(
@@ -63,20 +63,24 @@ Widget customDrawer(BuildContext context) {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                            planProvider <= 0
-                                ? AppLocalizations.of(context)!.planFinished
-                                : AppLocalizations.of(context)!.yPlan,
-                            style: const TextStyle(
-                                color: Colors.black45, fontSize: 16.0)),
-                        Text(
-                            newDay.toString() +
-                                AppLocalizations.of(context)!.day,
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: planProvider <= 7200
-                                    ? Colors.redAccent.shade700
-                                    : Colors.greenAccent.shade700))
+                        Column(
+                          children: [
+                            Text(
+                                planProvider <= 0
+                                    ? AppLocalizations.of(context)!.planFinished
+                                    : AppLocalizations.of(context)!.yPlan,
+                                style: const TextStyle(
+                                    color: Colors.black45, fontSize: 16.0)),
+                            Text(
+                                newDay.toString() +
+                                    AppLocalizations.of(context)!.day,
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: planProvider <= 7200
+                                        ? Colors.redAccent.shade700
+                                        : Colors.greenAccent.shade700))
+                          ],
+                        ),
                       ],
                     )
                   ],

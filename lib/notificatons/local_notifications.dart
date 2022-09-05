@@ -69,28 +69,6 @@ Future<void> initializationLocal(BuildContext context) async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload){
-    /// stop for now
-    // final ref = FirebaseDatabase.instance
-    //     .ref()
-    //     .child("driver")
-    //     .child(currentUser!.uid)
-    //     .child("newRide");
-    // await ref.once().then((value) {
-    //   if (value.snapshot.value != null) {
-    //     final snap = value.snapshot.value;
-    //     String id = snap.toString();
-    //    const _duration= Duration(milliseconds: 600);
-    //     int count = 1;
-    //     Timer.periodic(_duration, (timer) {
-    //       count =count - 1;
-    //       if(count==0){
-    //         timer.cancel();
-    //         count = 1;
-    //         PushNotificationsSrv().retrieveRideRequestInfo(id, context);
-    //       }
-    //     });
-    //   }
-    // });
     selectedNotificationPayload = payload;
     selectNotificationSubject.add(payload);
   });

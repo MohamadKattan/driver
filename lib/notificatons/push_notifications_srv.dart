@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../config.dart';
 import '../model/rideDetails.dart';
 import '../my_provider/ride_request_info.dart';
-import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
 import 'local_notifications.dart';
@@ -46,6 +45,7 @@ Future<String?> getToken() async {
 // }
 
 class PushNotificationsSrv {
+
   // THIS method for ios permission
   ///for ios code
   // Future<AppleNotificationSetting> iosPermission() async {

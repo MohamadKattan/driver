@@ -144,5 +144,11 @@
   "locationBackground": "Arka Planda Çalışıyor",
   "daygift": "tebrikler 2 günlük bedava hediye aldınız",
   "checkBank": "Bu süre zarfında bankanızdan ödemenizin onaylanması için bir bildirim bekliyoruz, 1 saatten 8 saate kadar sürecek bir çalışma, ardından yeni paketinizi etkinleştirecek. GarntiTaxi'den teşekkürler ve iyi günler",
-  "paymentFailed": "Ödeme Başarısız Tekrar deneyin"
+  "paymentFailed": "Ödeme Başarısız Sunucu meşgul bir süre sonra tekrar deneyin",
+  "skip": "atlama",
+  "into1": "Garanti Taxi de ihtiyacina göre istedigin araç türünü Seçebilirsin!",
+  "into2": "bizimle en iyi fiyatla çok sayıda müşteriniz olacak",
+  "into3": "Garanti Taksi Uygulasini 3 ayri dil seçenekleriyle kullanabilirsin!",
+  "support": "Destek",
+  "supportInfo": "Herhangi bir bilgi veya soru sormak için bize ulasin."
 }

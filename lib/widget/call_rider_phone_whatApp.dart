@@ -16,8 +16,8 @@ Widget callRider(
       height: MediaQuery.of(context).size.height * 25 / 100,
       width: double.infinity,
       decoration:  BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0)
-      ,color: Colors.white),
+        borderRadius: BorderRadius.circular(12.0)
+      ,color:const Color(0xFF00A3E0)),
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -30,7 +30,7 @@ Widget callRider(
                  children: [
                    Text(AppLocalizations.of(context)!.callRider,
                     style: const TextStyle(
-                        color: Colors.black87,
+                        color: Colors.white,
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold),
               ),
@@ -48,12 +48,12 @@ Widget callRider(
                   },
                   child: Row(
                     children: [
-                      const Icon(Icons.phone,size: 20.0,color: Colors.greenAccent,),
+                       Icon(Icons.phone,size: 20.0,color: Colors.greenAccent.shade700,),
                       const SizedBox(width: 4.0),
                       Text(AppLocalizations.of(context)!.normalCall + rideInfoProvider.riderPhone ,
                           overflow: TextOverflow.ellipsis,
                           style:
-                          const TextStyle(color: Colors.black87, fontSize: 14.0)),
+                          const TextStyle(color: Colors.white, fontSize: 14.0)),
                     ],
                   ),
                 ),
@@ -72,13 +72,11 @@ Widget callRider(
                       Text(" What app  : ${rideInfoProvider.riderPhone} ",
                           overflow: TextOverflow.ellipsis,
                           style:
-                          const TextStyle(color: Colors.black87, fontSize: 14.0)),
+                          const TextStyle(color: Colors.white, fontSize: 14.0)),
                     ],
                   ),
                 ),
               ),
-              CustomDivider().customDivider(),
-              SizedBox(height: MediaQuery.of(context).size.height * 3.5 / 100),
             ],
           ),
         ),

@@ -16,105 +16,14 @@ import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
-import '../payment/param_payment.dart';
 import '../repo/api_srv_geolocater.dart';
+import '../repo/auth_srv.dart';
 import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// Future<void> initializeService() async {
-//   final service = FlutterBackgroundService();
-//   await service.configure(
-//     androidConfiguration: AndroidConfiguration(
-//       onStart: onStart,
-//       autoStart: true,
-//       isForegroundMode: true,
-//     ),
-//     iosConfiguration: IosConfiguration(
-//       autoStart: true,
-//       onForeground: onStart,
-//       onBackground: onIosBackground,
-//     ),
-//   );
-//   service.startService();
-// }
-//
-// bool onIosBackground(ServiceInstance service) {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   return true;
-// }
-//
-// void onStart(ServiceInstance service) async {
-//   await Firebase.initializeApp();
-//   final userId = AuthSev().auth.currentUser!.uid;
-//   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
-//
-//   if (service is AndroidServiceInstance) {
-//     service.on('setAsForeground').listen((event) {
-//       service.setAsForegroundService();
-//     });
-//
-//     service.on('setAsBackground').listen((event) {
-//       service.setAsBackgroundService();
-//     });
-//   }
-//   service.on('stopService').listen((event) {
-//     service.stopSelf();
-//   });
-//   if (userId.isNotEmpty) {
-//     Geofire.initialize("availableDrivers");
-//     Geofire.stopListener();
-//     Geofire.removeLocation(userId);
-//     driverRef.child(userId).child("service").onDisconnect();
-//     await driverRef.child(userId).child("service").remove();
-//     // PlanDays().setIfBackgroundOrForeground(true);
-//     ///
-//     // driverRef.child(userId).child("newRide").onValue.listen((event) {
-//     //   if (event.snapshot.value != null) {
-//     //     final val = event.snapshot.value.toString();
-//     //     if (val == "searching") {
-//     //       homeScreenStreamSubscription =
-//     //           Geolocator.getPositionStream().listen((Position position) async {
-//     //         if (position.latitude == 37.42796133580664 &&
-//     //             position.longitude == 122.085749655962) {
-//     //           return;
-//     //         } else {
-//     //           await Geofire.setLocation(
-//     //               userId, position.latitude, position.longitude);
-//     //         }
-//     //       });
-//     //     }
-//     //   }
-//     // });
-//   }
-//   if (service is AndroidServiceInstance) {
-//     service.setForegroundNotificationInfo(
-//       title: "Garanti Taxi : ",
-//       content: "Some Service working in background",
-//     );
-//     // test using external plugin
-//     final deviceInfo = DeviceInfoPlugin();
-//     String? device;
-//     if (Platform.isAndroid) {
-//       final androidInfo = await deviceInfo.androidInfo;
-//       device = androidInfo.model;
-//     }
-//
-//     if (Platform.isIOS) {
-//       final iosInfo = await deviceInfo.iosInfo;
-//       device = iosInfo.model;
-//     }
-//
-//     service.invoke(
-//       'update',
-//       {
-//         "current_date": DateTime.now().toIso8601String(),
-//         "device": device,
-//       },
-//     );
-//   }
-// }
+import 'active_account.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -130,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    getToken();
     TurnOnGBS().turnOnGBSifNot();
     // initializeService();
     requestPermissions();
@@ -259,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                         .getLocationLiveUpdates(context);
                                     getCountryName();
                                     tostDriverAvailable();
+                                   await checkToken();
                                   },
                                 ),
                               ),
@@ -293,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         padding: const EdgeInsets.only(top: 30.0, left: 15.0),
                         child: CircleAvatar(
                           radius: 30,
-                          backgroundColor: const Color(0xFFFFD54F),
+                          backgroundColor: const Color(0xFF00A3E0),
                           child: IconButton(
                               onPressed: () {
                                 Provider.of<DrawerValueChange>(context,
@@ -305,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               },
                               icon: const Icon(
                                 Icons.format_list_numbered_rtl_rounded,
-                                color: Colors.black54,
+                                color: Colors.white,
                                 size: 25,
                               )),
                         ),
@@ -319,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         padding: const EdgeInsets.only(top: 30.0, left: 15.0),
                         child: CircleAvatar(
                           radius: 25,
-                          backgroundColor: Colors.white,
+                          backgroundColor: const Color(0xFFFBC408),
                           child: IconButton(
                               onPressed: () async {
                                 Provider.of<DrawerValueChange>(context,
@@ -331,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               },
                               icon: const Icon(
                                 Icons.close,
-                                color: Colors.black54,
+                                color: Colors.white,
                                 size: 25,
                               )),
                         ),
@@ -340,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            backgroundColor: const Color(0xFFFFD54F),
+            backgroundColor: const Color(0xFF00A3E0),
             onPressed: () async {
               await TurnOnGBS().turnOnGBSifNot();
               await LogicGoogleMap().locationPosition(context);
@@ -349,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             },
             child: const Icon(
               Icons.my_location,
-              color: Colors.black45,
+              color: Colors.white,
               size: 25,
             ),
           ),
@@ -365,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: SizedBox(
             width: 50.0,
             child: Switch.adaptive(
-              activeColor: Colors.green,
+              activeColor: const Color(0xFF00A3E0),
               activeTrackColor: Colors.green.shade200,
               inactiveThumbColor: Colors.redAccent.shade700,
               inactiveTrackColor: Colors.redAccent.shade200,
@@ -416,5 +325,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 // this method for stop local Notification
   void onForground() {
     driverRef.child(userId).child("service").set("not");
+  }
+
+  Future<void> checkToken() async {
+    final driverInfo =
+        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
+    if (AuthSev().auth.currentUser?.uid != null &&
+        driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
+      Tools()
+          .toastMsg(AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+      await GeoFireSrv().makeDriverOffLine();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
+    } else {
+      getToken();
+    }
   }
 }

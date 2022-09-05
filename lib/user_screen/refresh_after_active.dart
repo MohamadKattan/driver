@@ -9,9 +9,10 @@ class RefreshAfterActived extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor:const Color(0xFF00A3E0),
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor:const Color(0xFFFFD54F),
+          backgroundColor:const Color(0xFFFBC408),
           title:  Text( AppLocalizations.of(context)!.activeAccount,style:const TextStyle(color: Colors.white)),
         ),
         body: Column(
@@ -19,13 +20,13 @@ class RefreshAfterActived extends StatelessWidget {
             const SizedBox(height:40.0),
             const Text("Garanti taxi driver",
                 style: TextStyle(
-                  color: Colors.black45,
+                  color: Colors.white,
                   fontSize: 45,
                 )),
             Padding(
               padding:const EdgeInsets.all(8.0),
               child: Text( AppLocalizations.of(context)!.activeAccountDon,
-                  style:const TextStyle(fontSize: 16.0, color: Colors.greenAccent),textAlign: TextAlign.center),
+                  style:const TextStyle(fontSize: 20.0, color: Colors.white70),textAlign: TextAlign.center),
             ),
             const SizedBox(height: 20.0),
             GestureDetector(
@@ -33,13 +34,14 @@ class RefreshAfterActived extends StatelessWidget {
                   MaterialPageRoute(builder:(_)=>const SplashScreen()), (route) => false),
                 child:Container(
                 height: 60,
-                width: 120,
+                width: 200,
                 decoration:
                 BoxDecoration(
-                    color: Colors.greenAccent.shade700,
-                  borderRadius: BorderRadius.circular(6)
+                    color:const Color(0xFFFBC408),
+                  borderRadius: BorderRadius.circular(12.0)
                 ),
-                child:Center(child: Text(AppLocalizations.of(context)!.active,style: const TextStyle(color: Colors.white),))
+                child:Center(child: Text(AppLocalizations.of(context)!.active,
+                  style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),))
               )
             ),
           ],

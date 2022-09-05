@@ -24,14 +24,15 @@ class _EarningScreenState extends State<EarningScreen> {
   Widget build(BuildContext context) {
     final driverEarn = Provider.of<DriverInfoModelProvider>(context).driverInfo.earning;
     return SafeArea(child: Scaffold(
+      backgroundColor:const Color(0xFF00A3E0),
       appBar: AppBar(
-        backgroundColor:const Color(0xFFFFD54F),
+        backgroundColor:const Color(0xFFFBC408),
         title:  Text(AppLocalizations.of(context)!.myEarning,style: const TextStyle(color: Colors.white)),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        color:const  Color(0xFF00A3E0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -41,13 +42,13 @@ class _EarningScreenState extends State<EarningScreen> {
                Text(
                 AppLocalizations.of(context)!.totalEarning,
                 style:const TextStyle(
-                    color: Colors.black87,
+                    color: Colors.white,
                     fontSize: 35.0,
                     fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("\$$driverEarn",style: TextStyle(color: Colors.greenAccent.shade700,fontSize: 24.0),),
+                child: Text("\$$driverEarn",style:const TextStyle(color: Colors.white,fontSize: 24.0),),
               ),
             ],
           ),

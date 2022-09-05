@@ -589,8 +589,32 @@
   "@checkBank": {
     "description": "check bank"
   },
-  "paymentFailed": "Payment Failed try again ",
+  "paymentFailed": "Payment Failed server busy try again after some time",
   "@paymentFailed": {
     "description": "Payment Failed try again "
+  },
+  "skip": "Skip",
+  "@skip": {
+    "description": "Skip"
+  },
+  "into1": "In Garanti Taxi, you can choose the type of vehicle you want according to your needs!",
+  "@into1": {
+    "description": "into1"
+  },
+  "into2": "with us you will got a lot of customer with the best price.",
+  "@into2": {
+    "description": "into2"
+  },
+  "into3": "You can use Garanti Taxi Application with 3 different language options!",
+  "@into3": {
+    "description": "into3"
+  },
+  "support": "Support",
+  "@support": {
+    "description": "Support"
+  },
+  "supportInfo": "Contact us for any information or questions.",
+  "@supportInfo": {
+    "description": "Contact us for any information or questions."
   }
 }

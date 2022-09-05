@@ -9,17 +9,17 @@ class SwitchBottomDrawer extends StatefulWidget {
   State<SwitchBottomDrawer> createState() => _SwitchBottomDrawerState();
 }
 
-
 class _SwitchBottomDrawerState extends State<SwitchBottomDrawer> {
   bool valueBottom = true;
-@override
+  @override
   void initState() {
-  gotValueBottom();
+    gotValueBottom();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Transform.scale(
+    return Transform.scale(
       scale: 1.5,
       child: SizedBox(
         width: 60.0,
@@ -31,12 +31,11 @@ class _SwitchBottomDrawerState extends State<SwitchBottomDrawer> {
           value: valueBottom,
           splashRadius: 30.0,
           onChanged: (val) {
-                 setState(() {
-                   valueBottom = val;
-                 });
+            setState(() {
+              valueBottom = val;
+            });
             if (valueBottom == true) {
               driverRef.child(userId).child("card").set("foundCard");
-
             } else if (valueBottom == false) {
               driverRef.child(userId).child("card").set("NoCard");
             }
@@ -45,20 +44,21 @@ class _SwitchBottomDrawerState extends State<SwitchBottomDrawer> {
       ),
     );
   }
-gotValueBottom(){
-  driverRef.child(userId).child("card").once().then((value){
-    if(value.snapshot.value!=null){
-    String _card = value.snapshot.value.toString();
-    if(_card=="foundCard"){
-     setState(() {
-       valueBottom=true;
-     });
-    }else{
-    setState(() {
-      valueBottom=false;
+
+  gotValueBottom() {
+    driverRef.child(userId).child("card").once().then((value) {
+      if (value.snapshot.value != null) {
+        String _card = value.snapshot.value.toString();
+        if (_card == "foundCard") {
+          setState(() {
+            valueBottom = true;
+          });
+        } else {
+          setState(() {
+            valueBottom = false;
+          });
+        }
+      }
     });
-    }
-    }
-  });
-}
+  }
 }

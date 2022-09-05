@@ -15,8 +15,6 @@ import '../user_screen/active_account.dart';
 import '../user_screen/splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// this class for Auth by firebase-phone method
-
 class AuthSev {
   final Tools _tools = Tools();
   late FirebaseAuth auth = FirebaseAuth.instance;
@@ -81,7 +79,8 @@ class AuthSev {
               "earning": "0.0",
               "personImage": "",
               "plandate": DateTime.now().toString(),
-              "active": "active"
+              "active": "active",
+              "map":"mapbox",
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
@@ -134,7 +133,8 @@ class AuthSev {
               "earning": "0.0",
               "personImage": "",
               "plandate": DateTime.now().toString(),
-              "active": "active"
+              "active": "active",
+              "map":"mapbox",
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",

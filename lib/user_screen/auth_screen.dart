@@ -31,6 +31,7 @@ class AuthScreen extends StatelessWidget {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: SafeArea(
           child: Scaffold(
+            backgroundColor: const Color(0xFF00A3E0),
             key: globalKey,
             body: Stack(
               children: [
@@ -40,75 +41,81 @@ class AuthScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(
-                        height: 20,
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Image.asset("images/logIn.png",
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ),
                       Text(
                         AppLocalizations.of(context)!.logIn,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                            color: Colors.white,
                             overflow: TextOverflow.fade),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        AppLocalizations.of(context)!.enteryournumber,
-                        style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black26,
-                            overflow: TextOverflow.fade),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!.email,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            overflow: TextOverflow.fade),
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
                       Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.enteryournumber,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white70,
+                              overflow: TextOverflow.fade),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 12.0,right: 12.0),
+                        padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white70,
+                          borderRadius: BorderRadius.circular(12.0)
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Expanded(
                               flex: 0,
-                              child: Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 15.0, left: 15.0),
-                                  child: Icon(
-                                    Icons.email,
-                                    color: Color(0xFFFFD54F),
-                                    size: 35.0,
-                                  )),
+                              child: Icon(
+                                Icons.email,
+                                color: Color(0xFFFBC408),
+                                size: 35.0,
+                              ),
                             ),
                             const SizedBox(
-                              width: 20,
+                              width: 10,
                             ),
                             Expanded(
                               flex: 1,
                               child: TextField(
                                 controller: email,
-                                maxLength: 30,
                                 showCursor: true,
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                    fontSize: 20, fontWeight: FontWeight.w600),
                                 cursorColor: const Color(0xFFFFD54F),
                                 decoration: InputDecoration(
                                   fillColor: const Color(0xFFFFD54F),
-                                  label: Text(
-                                      AppLocalizations.of(context)!.email1),
+                                  hintText:  AppLocalizations.of(context)!.email1,
+                                  hintStyle: const TextStyle(
+                                    color: Colors.black87
+                                  )
                                 ),
                                 keyboardType: TextInputType.emailAddress,
                               ),
@@ -116,39 +123,43 @@ class AuthScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 12.0,right: 12.0),
+                        padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white70,
+                            borderRadius: BorderRadius.circular(12.0)
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Expanded(
                               flex: 0,
-                              child: Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 15.0, left: 15.0),
-                                  child: Icon(
-                                    Icons.vpn_key,
-                                    color: Color(0xFFFFD54F),
-                                    size: 35.0,
-                                  )),
+                              child: Icon(
+                                Icons.vpn_key,
+                                color: Color(0xFFFFD54F),
+                                size: 35.0,
+                              ),
                             ),
                             const SizedBox(
-                              width: 20,
+                              width: 10,
                             ),
                             Expanded(
                               flex: 1,
                               child: TextField(
                                 controller: passWord,
-                                maxLength: 30,
                                 showCursor: true,
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                    fontSize: 20, fontWeight: FontWeight.w600),
                                 cursorColor: const Color(0xFFFFD54F),
                                 decoration: InputDecoration(
                                   fillColor: const Color(0xFFFFD54F),
-                                  label:
-                                      Text(AppLocalizations.of(context)!.pass),
+                                  hintText: AppLocalizations.of(context)!.pass,
+                                 hintStyle: TextStyle(color: Colors.black87)
                                 ),
                                 keyboardType: TextInputType.text,
                               ),
@@ -156,70 +167,68 @@ class AuthScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
-                        child: Text(AppLocalizations.of(context)!.verification),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 40),
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (email.text.isEmpty) {
-                              Tools().toastMsg(
-                                  AppLocalizations.of(context)!.emailempty,
-                                  Colors.redAccent.shade700);
-                            }
-                            else if (!email.text.contains("@")) {
-                              Tools().toastMsg(
-                                  AppLocalizations.of(context)!.checkemail,
-                                  Colors.redAccent.shade700);
-                            }
-                            else if (!email.text.contains(".com")) {
-                              Tools().toastMsg(
-                                  AppLocalizations.of(context)!.checkcom,
-                                  Colors.redAccent.shade700);
-                            }
-                            else if (passWord.text.isEmpty) {
-                              Tools().toastMsg(
-                                  AppLocalizations.of(context)!.passRequired,
-                                  Colors.redAccent.shade700);
-                            }else if(passWord.text.length<8){
-                              Tools().toastMsg(
-                                  AppLocalizations.of(context)!.passLength,
-                                  Colors.redAccent.shade700);
-                            }
-                            else {
-                              Provider.of<TrueFalse>(context, listen: false)
-                                  .updateState(true);
-                              // result = "$resultCodeCon${phoneNumber.text}";
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              await authSev.createOrLoginWithEmail(
-                                  email, context, passWord);
-                              // await authSev.signUpWithPhone(result, context);
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            }
-                          },
-                          child: Container(
-                            child: Center(
-                                child: Text(
-                              AppLocalizations.of(context)!.signUp,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                            width: 180,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFFFFD54F),
-                                borderRadius: BorderRadius.circular(4.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Colors.black45,
-                                      offset: Offset(0.10, 0.7),
-                                      spreadRadius: 0.9)
-                                ]),
-                          ),
+                      GestureDetector(
+                        onTap: () async {
+                          if (email.text.isEmpty) {
+                            Tools().toastMsg(
+                                AppLocalizations.of(context)!.emailempty,
+                                Colors.redAccent.shade700);
+                          }
+                          else if (!email.text.contains("@")) {
+                            Tools().toastMsg(
+                                AppLocalizations.of(context)!.checkemail,
+                                Colors.redAccent.shade700);
+                          }
+                          else if (!email.text.contains(".com")) {
+                            Tools().toastMsg(
+                                AppLocalizations.of(context)!.checkcom,
+                                Colors.redAccent.shade700);
+                          }
+                          else if (passWord.text.isEmpty) {
+                            Tools().toastMsg(
+                                AppLocalizations.of(context)!.passRequired,
+                                Colors.redAccent.shade700);
+                          }else if(passWord.text.length<8){
+                            Tools().toastMsg(
+                                AppLocalizations.of(context)!.passLength,
+                                Colors.redAccent.shade700);
+                          }
+                          else {
+                            Provider.of<TrueFalse>(context, listen: false)
+                                .updateState(true);
+                            // result = "$resultCodeCon${phoneNumber.text}";
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            await authSev.createOrLoginWithEmail(
+                                email, context, passWord);
+                            // await authSev.signUpWithPhone(result, context);
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 40),
+                          padding:  const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Text(
+                            AppLocalizations.of(context)!.signUp,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          width: 200,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: const Color(0xFFFBC408),
+                              borderRadius: BorderRadius.circular(12.0),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.black45,
+                                    offset: Offset(0.10, 0.7),
+                                    spreadRadius: 0.9)
+                              ]),
                         ),
                       ),
                     ],

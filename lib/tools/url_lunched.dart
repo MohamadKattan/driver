@@ -37,8 +37,8 @@ class ToUrlLunch {
 
   Future<void> toUrlEmail() async {
     // if (!await launch(url)) throw 'Could not launch $url';
-    await canLaunch("mailto:granti@ouiquit.com")
-        ? launch("mailto:granti@ouiquit.com")
+    await canLaunch("mailto:vba@garantitaxi.com")
+        ? launch("mailto:vba@garantitaxi.com")
         : Tools()
             .toastMsg('Could not launch gmail now ', Colors.redAccent.shade700);
   }

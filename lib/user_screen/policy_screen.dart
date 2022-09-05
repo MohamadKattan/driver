@@ -10,7 +10,7 @@ class PolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFD54F),
+        backgroundColor: const Color(0xFFFBC408),
         automaticallyImplyLeading: true,
         title:  Text(AppLocalizations.of(context)!.policy,
             style: const TextStyle(color: Colors.white, fontSize: 16.0)),

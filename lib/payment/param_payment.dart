@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/model/card_payment.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,55 @@ import 'package:xml/xml.dart' as xml;
 import '../widget/after_payment.dart';
 
 class ParamPayment {
-  static String paramurl =
+  static String paramUrl =
       "https://posws.param.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl";
   static Map<String, String> paramHeader = {'content-type': 'text/xml'};
   DatabaseReference paidRef = FirebaseDatabase.instance.ref().child("paid");
+  DatabaseReference newIpAddress =
+      FirebaseDatabase.instance.ref().child("newIp");
+
+  DateTime  _setDateTime(){
+    int _day;
+    int _month;
+    int _year;
+    if (DateTime.now().month == 2 && DateTime.now().day == 28) {
+      _day = 1;
+      _month = DateTime.now().month + 1;
+      _year = DateTime.now().year;
+    }
+    if (DateTime.now().month == 2 && DateTime.now().day == 29) {
+      _day = 1;
+      _month = DateTime.now().month + 1;
+      _year = DateTime.now().year;
+    } else if (DateTime.now().month == 2 && DateTime.now().day < 28) {
+      _day = DateTime.now().day + 1;
+      _month = DateTime.now().month;
+      _year = DateTime.now().year;
+    } else if (DateTime.now().month == 12 && DateTime.now().day < 30) {
+      _day = DateTime.now().day + 1;
+      _month = DateTime.now().month;
+      _year = DateTime.now().year;
+    } else if (DateTime.now().month == 12 && DateTime.now().day == 30) {
+      _day = 1;
+      _month = 1;
+      _year = DateTime.now().year + 1;
+    } else if (DateTime.now().month == 12 && DateTime.now().day == 31) {
+      _day = 1;
+      _month = 1;
+      _year = DateTime.now().year + 1;
+    } else if (DateTime.now().day < 30) {
+      _day = DateTime.now().day + 1;
+      _month = DateTime.now().month;
+      _year = DateTime.now().year;
+    } else {
+      _day = 1;
+      _month = DateTime.now().month + 1;
+      _year = DateTime.now().year;
+    }
+    DateTime datePlan1 = DateTime(_year, _month, _day);
+    return datePlan1;
+  }
+
   // this method for create token
   Future<void> paramToken(CardPayment card, String amount, int planDay,
       int currencyType, BuildContext context, int oldExplan) async {
@@ -41,20 +87,21 @@ class ParamPayment {
           builder.attribute('xmlns', 'https://turkpos.com.tr/');
           builder.element('Data', nest: () {
             builder.text(
-                '33485211B6527-D2E1-4247-9590-00B3985504DE1$amount$amount${user.firstName}${idOrder}https://garantitaxi.github.io/errorpaymenthttps://garantitaxi.github.io/payment');
+                '33485211B6527-D2E1-4247-9590-00B3985504DE1$amount$amount${user.firstName}${idOrder}https://errorparam-10.web.app/https://garantitaxi-b463b.web.app/');
           });
         });
       });
     });
     var bookshelfXml = builder.buildDocument();
     String _bodyHash = bookshelfXml.toString();
-    final res = await http.post(Uri.parse(paramurl),
+    final res = await http.post(Uri.parse(paramUrl),
         headers: paramHeader, body: convert.utf8.encode(_bodyHash));
-    if (res.reasonPhrase == "OK" && res.statusCode == 200) {
+    if (res.statusCode == 200) {
+      String ipv4 = await Ipify.ipv4();
       final document = xml.XmlDocument.parse(res.body);
       final _hashCode = document.findAllElements('SHA2B64Result').single.text;
       startPayment(_hashCode, idOrder, amount, user.firstName, user.phoneNumber,
-          card, context, planDay, oldExplan);
+          card, context, planDay, oldExplan, ipv4);
     } else {
       Provider.of<PaymentIndector>(context, listen: false).updateState(false);
       Tools()
@@ -74,7 +121,8 @@ class ParamPayment {
       CardPayment card,
       BuildContext context,
       int planDay,
-      int oldExplan) async {
+      int oldExplan,
+      String ipv4) async {
     var builder = xml.XmlBuilder();
     builder.processing('xml', 'version="1.0" encoding="utf-8"');
     builder.element('soap:Envelope', nest: () {
@@ -98,10 +146,9 @@ class ParamPayment {
           builder.element('KK_SK_Yil', nest: card.expiryDateYear);
           builder.element('KK_CVC', nest: card.cvv);
           builder.element('KK_Sahibi_GSM', nest: phoneNumber);
-          builder.element('Hata_URL',
-              nest: 'https://garantitaxi.github.io/errorpayment');
+          builder.element('Hata_URL', nest: 'https://errorparam-10.web.app/');
           builder.element('Basarili_URL',
-              nest: 'https://garantitaxi.github.io/payment');
+              nest: 'https://garantitaxi-b463b.web.app/');
           builder.element('Siparis_ID', nest: '$firstName$idorder');
           builder.element('Siparis_Aciklama', nest: '');
           builder.element('Taksit', nest: 1);
@@ -109,8 +156,8 @@ class ParamPayment {
           builder.element('Toplam_Tutar', nest: amount);
           builder.element('Islem_Hash', nest: hashCode);
           builder.element('Islem_Guvenlik_Tip', nest: '3D');
-          builder.element('Islem_ID', nest: '');
-          builder.element('IPAdr', nest: '78.191.84.62');
+          builder.element('Islem_ID');
+          builder.element('IPAdr', nest: ipv4);
           builder.element('Ref_URL', nest: '');
           builder.element('Data1', nest: '');
           builder.element('Data2', nest: '');
@@ -127,13 +174,11 @@ class ParamPayment {
     });
     var bookshelfXml = builder.buildDocument();
     String _uriMsj = bookshelfXml.toString();
-    final res = await http.post(Uri.parse(paramurl),
+    final res = await http.post(Uri.parse(paramUrl),
         headers: paramHeader, body: convert.utf8.encode(_uriMsj));
-    if (res.statusCode == 200 && res.reasonPhrase == "OK") {
+    if (res.statusCode == 200) {
       final document = xml.XmlDocument.parse(res.body);
       final _paramResult = document.findAllElements('Sonuc').single.text;
-      final _bankResult =
-          document.findAllElements('Banka_Sonuc_Kod').single.text;
       final _url3d = document.findAllElements('UCD_URL').single.text;
       dekontId = document.findAllElements('Islem_ID').single.text;
       if (_paramResult == "1") {
@@ -141,10 +186,11 @@ class ParamPayment {
         await canLaunch(url).whenComplete(() {})
             ? launch(url).whenComplete(() async {
                 await driverRef.child(userId).update({
-                  "exPlan": oldExplan + 2800,
+                  "exPlan": oldExplan,
+                  "plandate": _setDateTime().toString(),
                   "status": "payed",
-                }).whenComplete(() {
-                  paidRef.child(userId).set({
+                }).whenComplete(() async {
+                  await paidRef.child(userId).set({
                     "userid": userId,
                     "plan": planDay,
                     "cardNo": card.cardNumber,
@@ -152,7 +198,7 @@ class ParamPayment {
                     "phoneNo": phoneNumber,
                     "amount": amount,
                     "token": tokenPhone,
-                    "time":DateTime.now().toString()
+                    "time": DateTime.now().toString()
                   }).whenComplete(() => showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -161,19 +207,24 @@ class ParamPayment {
                       }));
                 });
               })
-            : Tools().toastMsg(AppLocalizations.of(context)!.paymentFailed, Colors.red);
+            : Tools().toastMsg(
+                AppLocalizations.of(context)!.paymentFailed, Colors.red);
         Provider.of<PaymentIndector>(context, listen: false).updateState(false);
       } else {
         Provider.of<PaymentIndector>(context, listen: false).updateState(false);
-        final _erroeMessage = document.findAllElements('Sonuc_Str').single.text;
-        Tools().toastMsg(AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
-        Tools().toastMsg(_erroeMessage, Colors.redAccent);
-        Tools().toastMsg(_erroeMessage, Colors.redAccent);
+        final errorMessage = document.findAllElements('Sonuc_Str').single.text;
+        Tools().toastMsg(
+            AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
+        Tools().toastMsg(errorMessage, Colors.redAccent);
+        Tools().toastMsg(errorMessage, Colors.redAccent);
+        await newIpAddress.child(userId).child('ip').set(ipv4);
       }
     } else {
       Provider.of<PaymentIndector>(context, listen: false).updateState(false);
-      Tools().toastMsg(AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
-      Tools().toastMsg(AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
     }
   }
 
@@ -259,95 +310,97 @@ class ParamPayment {
   // }
   ///
 // tgis method for request payment by 3d url
-// Future<void> startPayment1(
-//   String hashCode,
-//   String idorder,
-//   String amount,
-//   String firstName,
-//   String phoneNumber,
-//   CardPayment card,
-//   BuildContext context,
-//   int planDay,
-// ) async {
-//   Uri _url = Uri.parse(
-//       "https://posws.param.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl");
+//   Future<void> startPayment1(
+//     String hashCode,
+//     String idorder,
+//     String amount,
+//     String firstName,
+//     String phoneNumber,
+//     CardPayment card,
+//     BuildContext context,
+//     int planDay,
+//     int oldExplan,
+//     String ipv4,
+//   ) async {
+//     Uri _url = Uri.parse(
+//         "https://posws.param.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl");
 //
-//   Map<String, String> _headerPayment = {'content-type': 'text/xml'};
+//     Map<String, String> _headerPayment = {'content-type': 'text/xml'};
 //
-//   var builder = xml.XmlBuilder();
-//   builder.processing('xml', 'version="1.0" encoding="utf-8"');
-//   builder.element('soap:Envelope', nest: () {
-//     builder.attribute(
-//         'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-//     builder.attribute('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
-//     builder.attribute(
-//         'xmlns:soap', 'http://schemas.xmlsoap.org/soap/envelope/');
-//     builder.element('soap:Body', nest: () {
-//       builder.element('TP_Islem_Odeme', nest: () {
-//         builder.attribute('xmlns', 'https://turkpos.com.tr/');
-//         builder.element('G', nest: () {
-//           builder.element('CLIENT_CODE', nest: 33485);
-//           builder.element('CLIENT_USERNAME', nest: 'TP10053946');
-//           builder.element('CLIENT_PASSWORD', nest: '0877490DE492A078');
+//     var builder = xml.XmlBuilder();
+//     builder.processing('xml', 'version="1.0" encoding="utf-8"');
+//     builder.element('soap:Envelope', nest: () {
+//       builder.attribute(
+//           'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+//       builder.attribute('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
+//       builder.attribute(
+//           'xmlns:soap', 'http://schemas.xmlsoap.org/soap/envelope/');
+//       builder.element('soap:Body', nest: () {
+//         builder.element('TP_Islem_Odeme', nest: () {
+//           builder.attribute('xmlns', 'https://turkpos.com.tr/');
+//           builder.element('G', nest: () {
+//             builder.element('CLIENT_CODE', nest: 33485);
+//             builder.element('CLIENT_USERNAME', nest: 'TP10053946');
+//             builder.element('CLIENT_PASSWORD', nest: '0877490DE492A078');
+//           });
+//           builder.element('SanalPOS_ID', nest: '119');
+//           builder.element('GUID', nest: '211B6527-D2E1-4247-9590-00B3985504DE');
+//           builder.element('KK_Sahibi', nest: card.holderName);
+//           builder.element('KK_No', nest: card.cardNumber);
+//           builder.element('KK_SK_Ay', nest: card.expiryDateMouthe);
+//           builder.element('KK_SK_Yil', nest: card.expiryDateYear);
+//           builder.element('KK_CVC', nest: card.cvv);
+//           builder.element('KK_Sahibi_GSM', nest: phoneNumber);
+//           builder.element('Hata_URL',
+//               nest: 'https://garantitaxi.github.io/errorpayment');
+//           builder.element('Basarili_URL',
+//               nest: 'https://garantitaxi.github.io/payment');
+//           builder.element('Siparis_ID', nest: '$firstName$idorder');
+//           builder.element('Islem_Guvenlik_Tip', nest: 'NS');
+//           builder.element('Taksit', nest: 1);
+//           builder.element('Islem_Tutar', nest: amount);
+//           builder.element('Toplam_Tutar', nest: amount);
+//           builder.element('Islem_Hash', nest: hashCode);
+//           builder.element('Islem_ID', nest: 'sipariş1');
+//           builder.element('IPAdr', nest: ipv4);
 //         });
-//         builder.element('SanalPOS_ID', nest: '119');
-//         builder.element('GUID', nest: '211B6527-D2E1-4247-9590-00B3985504DE');
-//         builder.element('KK_Sahibi', nest: card.holderName);
-//         builder.element('KK_No', nest: card.cardNumber);
-//         builder.element('KK_SK_Ay', nest: card.expiryDateMouthe);
-//         builder.element('KK_SK_Yil', nest: card.expiryDateYear);
-//         builder.element('KK_CVC', nest: card.cvv);
-//         builder.element('KK_Sahibi_GSM', nest: phoneNumber);
-//         builder.element('Hata_URL', nest: 'https://garantitaxi.github.io/errorpayment');
-//         builder.element('Basarili_URL', nest: 'https://garantitaxi.github.io/payment');
-//         builder.element('Siparis_ID', nest: '$firstName$idorder');
-//         builder.element('Islem_Guvenlik_Tip', nest: 'NS');
-//         builder.element('Taksit', nest: 1);
-//         builder.element('Islem_Tutar', nest: amount);
-//         builder.element('Toplam_Tutar', nest: amount);
-//         builder.element('Islem_Hash', nest: hashCode);
-//         builder.element('Islem_ID', nest: 'sipariş1');
-//         builder.element('IPAdr', nest: '78.191.84.62');
 //       });
 //     });
-//   });
-//   var bookshelfXml = builder.buildDocument();
-//   String _bodyStartPayment1 = bookshelfXml.toString();
-//   final res = await http.post(_url,
-//       headers: _headerPayment, body: convert.utf8.encode(_bodyStartPayment1));
-//   if (res.statusCode == 200 && res.reasonPhrase == "OK") {
-//     final document = xml.XmlDocument.parse(res.body);
-//     final _paymentResult = document.findAllElements('Sonuc').single.text;
-//     final _bankResult =
-//         document.findAllElements('Banka_Sonuc_Kod').single.text;
-//         dekontId = document.findAllElements('Islem_ID').single.text;
-//     final _url3d = document.findAllElements('UCD_URL').single.text;
-//     if (_paymentResult == "1" && _bankResult == "0") {
-//       print("bodyyyyCode: ${res.statusCode}");
-//       print("bodyyyy: ${res.body}");
-//       print("isssssss: $dekontId");
-//       Provider.of<PaymentIndector>(context, listen: false).updateState(false);
-//       String url = _url3d;
-//       await canLaunch(url).whenComplete(() {})
-//           ? launch(url)
-//           : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
-//       await driverRef.child(userId).update({
-//         "exPlan": planDay,
-//         "status": "payed",
-//       });
+//     var bookshelfXml = builder.buildDocument();
+//     String _bodyStartPayment1 = bookshelfXml.toString();
+//     final res = await http.post(_url,
+//         headers: _headerPayment, body: convert.utf8.encode(_bodyStartPayment1));
+//     if (res.statusCode == 200 && res.reasonPhrase == "OK") {
+//       final document = xml.XmlDocument.parse(res.body);
+//       final _paymentResult = document.findAllElements('Sonuc').single.text;
+//       final _bankResult =
+//           document.findAllElements('Banka_Sonuc_Kod').single.text;
+//       dekontId = document.findAllElements('Islem_ID').single.text;
+//       final _url3d = document.findAllElements('UCD_URL').single.text;
+//       if (_paymentResult == "1" && _bankResult == "0") {
+//         print("bodyyyyCode: ${res.statusCode}");
+//         print("bodyyyy: ${res.body}");
+//         print("isssssss: $dekontId");
+//         Provider.of<PaymentIndector>(context, listen: false).updateState(false);
+//         String url = _url3d;
+//         await canLaunch(url).whenComplete(() {})
+//             ? launch(url)
+//             : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
+//         await driverRef.child(userId).update({
+//           "exPlan": planDay,
+//           "status": "payed",
+//         });
+//       } else {
+//         Provider.of<PaymentIndector>(context, listen: false).updateState(false);
+//         final _erroeMessage = document.findAllElements('Sonuc_Str').single.text;
+//         Tools().toastMsg("Payment Failed", Colors.redAccent);
+//         Tools().toastMsg(_erroeMessage, Colors.redAccent);
+//         Tools().toastMsg(_erroeMessage, Colors.redAccent);
+//       }
 //     } else {
 //       Provider.of<PaymentIndector>(context, listen: false).updateState(false);
-//       final _erroeMessage = document.findAllElements('Sonuc_Str').single.text;
-//       Tools().toastMsg("Payment Failed", Colors.redAccent);
-//       Tools().toastMsg(_erroeMessage, Colors.redAccent);
-//       Tools().toastMsg(_erroeMessage, Colors.redAccent);
+//       Tools().toastMsg("Payment Failed 402", Colors.redAccent);
+//       Tools().toastMsg("Payment Failed 402", Colors.redAccent);
 //     }
-//   } else {
-//     Provider.of<PaymentIndector>(context, listen: false).updateState(false);
-//     Tools().toastMsg("Payment Failed 402", Colors.redAccent);
-//     Tools().toastMsg("Payment Failed 402", Colors.redAccent);
 //   }
-// }
-
-// this mehtod for send Receipt
 }

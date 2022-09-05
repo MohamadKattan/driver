@@ -23,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFFFFD54F),
+          backgroundColor: const Color(0xFF00A3E0),
           automaticallyImplyLeading: true,
           title:  Text(AppLocalizations.of(context)!.update,
               style: const TextStyle(color: Colors.white, fontSize: 16.0)),
@@ -38,13 +38,17 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 40.0),
                   showImage(context),
-                  SizedBox(height: MediaQuery.of(context).size.height * 15 / 100),
-                  Padding(
+                  const SizedBox(height: 40.0),
+                  Container(
+                    margin: const EdgeInsets.all(8.0),
                     padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(width: 2.0,color:const Color(0xFF00A3E0))
+                    ),
                     child: TextField(
                       style: const TextStyle(color: Colors.black, fontSize: 16.0),
                       controller: name,
-                      maxLength: 40,
                       maxLines: 1,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
@@ -55,12 +59,16 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  Padding(
+                  Container(
+                    margin: const EdgeInsets.all(8.0),
                     padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(width: 2.0,color:const Color(0xFF00A3E0))
+                    ),
                     child: TextField(
                       style: const TextStyle(color: Colors.black, fontSize: 16.0),
                       controller: lastName,
-                      maxLength: 40,
                       maxLines: 1,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
@@ -71,12 +79,16 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  Padding(
+                  Container(
+                    margin: const EdgeInsets.all(8.0),
                     padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(width: 2.0,color:const Color(0xFF00A3E0))
+                    ),
                     child: TextField(
                       style: const TextStyle(color: Colors.black, fontSize: 16.0),
                       controller: email,
-                      maxLength: 40,
                       maxLines: 1,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
@@ -90,29 +102,30 @@ class ProfileScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: GestureDetector(
-                          onTap: (){
-                              Provider.of<InductorProfileProvider>(context,listen: false).updateState(true);
-                              startUpdateInfoUser(driverInfo, name, lastName, email,context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFD54F),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            height: MediaQuery.of(context).size.height * 10 / 100,
-                            width: MediaQuery.of(context).size.width * 40 / 100,
-                            child:  Center(
-                              child: Text(
-                                AppLocalizations.of(context)!.update,
-                                style:const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
+                      GestureDetector(
+                        onTap: (){
+                            Provider.of<InductorProfileProvider>(context,listen: false).updateState(true);
+                            startUpdateInfoUser(driverInfo, name, lastName, email,context);
+                        },
+                        child: Container(
+                          padding:const EdgeInsets.all(8.0),
+                          margin:const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color:  Colors.white,
+                            border: Border.all(width: 2.0,color:const Color(0xFF00A3E0)),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          height: 60,
+                          width:160,
+                          child:  Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.update,
+                              textAlign: TextAlign.center,
+                              style:const TextStyle(
+                                color: Color(0xFF00A3E0),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
                               ),
                             ),
                           ),
@@ -121,17 +134,20 @@ class ProfileScreen extends StatelessWidget {
                       GestureDetector(
                         onTap:()=>DataBaseReal().deleteAccount(context) ,
                         child: Container(
+                          padding:const EdgeInsets.all(8.0),
+                          margin:const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
-                            color: Colors.redAccent.shade700,
-                            borderRadius: BorderRadius.circular(4.0),
+                            color:  Colors.white,
+                            border: Border.all(width: 2.0,color: Colors.redAccent.shade700),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          height: MediaQuery.of(context).size.height * 10 / 100,
-                          width: MediaQuery.of(context).size.width * 40 / 100,
+                          height: 60,
+                          width:160,
                           child:  Center(
                             child: Text(
                               AppLocalizations.of(context)!.del,
-                              style:const TextStyle(
-                                color: Colors.black,
+                              style: TextStyle(
+                                color: Colors.redAccent.shade700,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic,

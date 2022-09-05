@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:system_alert_window/system_alert_window.dart';
 
 ///* this class for system dailog alert stopped for now
@@ -7,7 +6,6 @@ import 'package:system_alert_window/system_alert_window.dart';
 // import 'dart:isolate';
 // import 'package:flutter/material.dart';
 // import 'package:system_alert_window/system_alert_window.dart';
-// import '../iso_late_manger.dart';
 // import '../tools/background_serv.dart';
 //
 // bool _isShowingWindow = false;

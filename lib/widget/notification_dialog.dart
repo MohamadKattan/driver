@@ -37,8 +37,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
   @override
   void initState() {
     ///stop for ios just
-    if(Platform.isIOS){
-      audioCache = AudioCache(fixedPlayer: audioPlayer,prefix:"sounds/");
+    if (Platform.isIOS) {
+      audioCache = AudioCache(fixedPlayer: audioPlayer, prefix: "sounds/");
       _playSound();
     }
     super.initState();
@@ -47,7 +47,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
   /// with ios just
   @override
   void dispose() {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       audioPlayer.release();
       audioPlayer.dispose();
       audioCache.clearAll();
@@ -65,10 +65,12 @@ class _NotificationDialogState extends State<NotificationDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Colors.transparent,
       child: Container(
-        height: 425,
+        height: 400,
         width: double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6.0), color: Colors.white),
+            borderRadius: BorderRadius.circular(12.0),
+            border: Border.all(width: 2.0,color:  Colors.white),
+            color: const Color(0xFF00A3E0)),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,13 +78,13 @@ class _NotificationDialogState extends State<NotificationDialog> {
             children: [
               Center(
                   child: Lottie.asset('images/lf30_editor_mtfshyfg.json',
-                      height: 140, width: 140)),
+                      height: 120, width: 120)),
               Text(
                 AppLocalizations.of(context)!.rideRequest,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                    color: Colors.black87,
+                    color: Colors.white,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold),
               ),
@@ -104,13 +106,16 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     ),
                     Text(AppLocalizations.of(context)!.from + " ",
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: Colors.greenAccent.shade700, fontSize: 14)),
+                        style:const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14)),
                     Expanded(
                         flex: 1,
                         child: Text(rideInfoProvider.pickupAddress,
                             style: const TextStyle(
-                                color: Colors.black45,
+                                color: Colors.white70,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18.0,
                                 overflow: TextOverflow.ellipsis)))
                   ]),
@@ -128,14 +133,15 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               width: 20)),
                     ),
                     Text(AppLocalizations.of(context)!.too + " ",
-                        style: TextStyle(
-                            color: Colors.redAccent.shade700, fontSize: 14)),
+                        style:const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold,fontSize: 14)),
                     Expanded(
                       child: Text(rideInfoProvider.dropoffAddress,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              color: Colors.black45,
+                              color: Colors.white70,
                               fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis)),
                     )
                   ]),
@@ -146,27 +152,24 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 children: [
                   Text("Km : ${rideInfoProvider.km}",
                       style: const TextStyle(
-                          color: Colors.black45, fontSize: 16.0)),
+                          color: Colors.white,fontWeight: FontWeight.bold, fontSize: 16.0)),
                   Text(
                       AppLocalizations.of(context)!.fare +
-                          currencyTypeCheck(context) +
-                          " : " +
-                          rideInfoProvider.amount,
-                      style: TextStyle(
-                          color: Colors.redAccent.shade700, fontSize: 20.0))
+                          rideInfoProvider.amount+
+                          currencyTypeCheck(context),
+                      style:const TextStyle(
+                          color: Colors.white,fontWeight: FontWeight.bold, fontSize: 20.0))
                 ],
               ),
-              const SizedBox(height: 10.0),
-              CustomDivider().customDivider(),
               rideInfoProvider.tourismCityName != ""
-                  ?  Padding(
+                  ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         AppLocalizations.of(context)!.fullDay,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            color: Colors.black45,
+                            color: Colors.white,
                             fontSize: 12.0,
                             fontWeight: FontWeight.bold),
                       ),
@@ -178,11 +181,13 @@ class _NotificationDialogState extends State<NotificationDialog> {
               rideInfoProvider.tourismCityName != ""
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text( AppLocalizations.of(context)!.ini + " : ${rideInfoProvider.tourismCityName}",
+                      child: Text(
+                          AppLocalizations.of(context)!.ini +
+                              " : ${rideInfoProvider.tourismCityName}",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.greenAccent.shade700,
+                          style:const TextStyle(
+                              color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold)),
                     )
@@ -196,9 +201,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      if(Platform.isAndroid){
+                      if (Platform.isAndroid) {
                         stopSound();
                       }
+
                       ///ios
                       _stopSound();
                       driverCancelOrder(context);
@@ -208,21 +214,22 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       width: 120,
                       height: 50,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2.0),
+                          borderRadius: BorderRadius.circular(8.0),
                           color: Colors.redAccent.shade700),
                       child: Center(
                           child: Text(
                         AppLocalizations.of(context)!.cancel,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       )),
                     ),
                   ),
                   isHideButton == false
                       ? GestureDetector(
                           onTap: () async {
-                            if(Platform.isAndroid){
+                            if (Platform.isAndroid) {
                               stopSound();
                             }
                             _stopSound();
@@ -232,11 +239,11 @@ class _NotificationDialogState extends State<NotificationDialog> {
                             });
                           },
                           child: Container(
-                              width:120,
-                              height:50,
+                              width: 120,
+                              height: 50,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(2.0),
-                                  color: Colors.green.shade700),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  color: const Color(0xFFFBC408)),
                               child: Center(
                                   child: Text(
                                 AppLocalizations.of(context)!.ok,
@@ -244,8 +251,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     color: Colors.white,
-                                  fontWeight: FontWeight.bold
-                                ),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ))),
                         )
                       : Container(
@@ -298,7 +305,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         homeScreenStreamSubscription.pause();
         subscriptionNot1.pause();
         Geofire.stopListener();
-      await  Geofire.removeLocation(currentUseId);
+        await Geofire.removeLocation(currentUseId);
         // await GeoFireSrv().displayLocationLiveUpdates();
         await rideRequestRef.set("accepted").whenComplete(() {
           Navigator.push(context,
@@ -341,7 +348,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
     newRef.remove();
 
     Geofire.stopListener();
-  await  Geofire.removeLocation(currentUseId.userId);
+    await Geofire.removeLocation(currentUseId.userId);
 
     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
     const duration = Duration(seconds: 1);
@@ -351,7 +358,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         timer.cancel();
         subscriptionNot1.resume();
         homeScreenStreamSubscription.resume();
-      await GeoFireSrv().getLocationLiveUpdates(context);
+        await GeoFireSrv().getLocationLiveUpdates(context);
         _ref.child(currentUseId.userId).child("newRide").set("searching");
         _ref.child(currentUseId.userId).child("offLine").set("Available");
         rideRequestTimeOut = 240;

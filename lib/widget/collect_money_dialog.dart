@@ -1,7 +1,6 @@
 // this widget for dialog collect money after finish trip
 
 import 'dart:io';
-
 import 'package:driver/model/rideDetails.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/background_serv.dart';
 import '../tools/curanny_type.dart';
-import 'custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget collectMoney(
@@ -24,7 +22,9 @@ Widget collectMoney(
     child: Container(
       height: 275,
       width: double.infinity,
-      decoration:  BoxDecoration(borderRadius: BorderRadius.circular(6.0),color: Colors.white),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: const Color(0xFF00A3E0)),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,63 +33,63 @@ Widget collectMoney(
             Center(
                 child: Lottie.asset('images/51765-cash.json',
                     height: 90, width: 90)),
-             Text(AppLocalizations.of(context)!.amountTrip,
+            Text(
+              AppLocalizations.of(context)!.amountTrip,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style:const TextStyle(
-                  color: Colors.black87,
+              style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height:2),
+            const SizedBox(height: 2),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(AppLocalizations.of(context)!.paymentMethod + rideInfoProvider.paymentMethod,
+              child: Text(
+                  AppLocalizations.of(context)!.paymentMethod +
+                      rideInfoProvider.paymentMethod,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(color: Colors.black87, fontSize: 16.0)),
+                  style: const TextStyle(color: Colors.white, fontSize: 16.0)),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(" ${currencyTypeCheck(context)} $totalAmount ",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(color: Colors.black87, fontSize: 16.0)),
+                  style: const TextStyle(color: Colors.white, fontSize: 16.0)),
             ),
-            const SizedBox(height: 2),
-            CustomDivider().customDivider(),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: ()async {
-                  homeScreenStreamSubscription.resume();
-                  subscriptionNot1.resume();
-                  // await GeoFireSrv().enableLocationLiveUpdates(context);
-                  await GeoFireSrv().getLocationLiveUpdates(context);
-                  await  restNewRide(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  if(Platform.isAndroid){
-                    clearCash();
-                  }
-                },
-                child: Center(
-                  child: Container(
-                    width:90,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                        color: Colors.greenAccent.shade700),
-                    child:  Center(
-                        child: Text(AppLocalizations.of(context)!.ok,
-                      textAlign: TextAlign.center,
-                      style:const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16),
-                    )),
-                  ),
+            GestureDetector(
+              onTap: () async {
+                homeScreenStreamSubscription.resume();
+                subscriptionNot1.resume();
+                // await GeoFireSrv().enableLocationLiveUpdates(context);
+                await GeoFireSrv().getLocationLiveUpdates(context);
+                await restNewRide(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                if (Platform.isAndroid) {
+                  clearCash();
+                }
+              },
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: 90,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: const Color(0xFFFBC408)),
+                  child: Center(
+                      child: Text(
+                    AppLocalizations.of(context)!.ok,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  )),
                 ),
               ),
             ),
@@ -101,7 +101,7 @@ Widget collectMoney(
 }
 
 // this method for change key newRide:searching
-Future<void> restNewRide(BuildContext context) async{
+Future<void> restNewRide(BuildContext context) async {
   final currentUseId =
       Provider.of<DriverInfoModelProvider>(context, listen: false)
           .driverInfo

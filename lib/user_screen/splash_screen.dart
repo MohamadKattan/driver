@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
+import 'package:driver/user_screen/page_view.dart';
 import 'package:driver/user_screen/refresh_after_active.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +53,8 @@ class _SplashScreenState extends State<SplashScreen>
       if (AuthSev().auth.currentUser?.uid != null) {
         await DataBaseReal().getDriverInfoFromDataBase(context);
         tokenPhone = await firebaseMessaging.getToken();
+        String ipv4 = await Ipify.ipv4();
+        driverRef.child(userId).child("ip").set(ipv4);
       }
       if (status == AnimationStatus.completed) {
         if (result == false) {
@@ -71,9 +75,10 @@ class _SplashScreenState extends State<SplashScreen>
             } else {
               TurnOnGBS().turnOnGBSifNot();
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AuthScreen()));
+                  MaterialPageRoute(builder: (context) => const MyPageView()));
             }
-          } else if (AuthSev().auth.currentUser?.uid != null &&
+          }
+          else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
             await ToUrlLunch().toPlayStore();
             await driverRef.child(userId).child("update").set(false);
@@ -100,13 +105,15 @@ class _SplashScreenState extends State<SplashScreen>
               driverInfo.status == "info") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const DriverInfoScreen()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
-            Tools().toastMsg(
-                AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const ActiveAccount()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
+          }
+          // } else if (AuthSev().auth.currentUser?.uid != null &&
+          //     driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
+          //   Tools().toastMsg(
+          //       AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+          //   Navigator.push(context,
+          //       MaterialPageRoute(builder: (_) => const ActiveAccount()));
+          // }
+          else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.status == "info") {
             Navigator.push(
                 context,
@@ -182,8 +189,8 @@ class _SplashScreenState extends State<SplashScreen>
           height: MediaQuery.of(context).size.height * 50 / 100,
           width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6.0),
-            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+            color: const Color(0xFF00A3E0),
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -193,12 +200,17 @@ class _SplashScreenState extends State<SplashScreen>
                 const SizedBox(
                   height: 10.0,
                 ),
-                Padding(
+                Container(
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFFBC408),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          topRight: Radius.circular(12.0))),
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     AppLocalizations.of(context)!.declaration,
-                    style: TextStyle(
-                        color: Colors.redAccent.shade700,
+                    style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w500),
                   ),
@@ -212,7 +224,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Text(
                     AppLocalizations.of(context)!.background,
                     style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
@@ -250,14 +262,14 @@ class _SplashScreenState extends State<SplashScreen>
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const AuthScreen()));
+                                  builder: (_) => const MyPageView()));
                         },
                         child: Container(
                           height: 40,
                           width: 120,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4.0),
-                              color: Colors.greenAccent.shade700),
+                              color: const Color(0xFFFBC408)),
                           child: Center(
                             child: Text(AppLocalizations.of(context)!.approval,
                                 style: const TextStyle(

@@ -48,27 +48,6 @@ class ApiSrvDir {
     return null;
   }
 
-  // static int calculateFares(DirectionDetails directionDetails,
-  //     String carTypePro, BuildContext context) {
-  //   final contryName =
-  //       Provider.of<DriverInfoModelProvider>(context, listen: false)
-  //           .driverInfo
-  //           .country;
-  //   double timeTravleFare = (directionDetails.durationVale / 60) * 0.20;
-  //   double distanceTravleFare = (directionDetails.distanceVale / 1000) * 0.60;
-  //   double fareAmont = timeTravleFare + distanceTravleFare;
-  //   final culculFinal = carTypePro == "Taxi-4 seats" && contryName == "Turkey"
-  //       ? fareAmont * 13 + 0.70 * 13.00
-  //       : carTypePro == "Medium commercial-6-10 seats" && contryName == "Turkey"
-  //           ? fareAmont * 13 + 1.5 * 13.00
-  //           : carTypePro == "Big commercial-11-19 seats" &&
-  //                   contryName == "Turkey"
-  //               ? fareAmont * 13 + 2 * 13.00
-  //               : 0;
-  //
-  //   return culculFinal.truncate();
-  // }
-
   static int calculateFares1(DirectionDetails directionDetails,
       String carTypePro, BuildContext context) {
     final contryName =

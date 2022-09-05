@@ -52,7 +52,7 @@ class CustomBottomSheet {
                 blurRadius: 7.0,
                 offset: Offset(0.7, 0.7))
           ],
-          color: Colors.white,
+          color: Color(0xFF00A3E0),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
       child: SingleChildScrollView(
@@ -63,13 +63,20 @@ class CustomBottomSheet {
             IconButton(
                 onPressed: () =>
                     Provider.of<BottomSheetValue>(context, listen: false)
-                        .updateValue(-600.0),
+                        .updateValue(-700.0),
                 icon: const Icon(
-                  Icons.remove,
+                  Icons.keyboard_arrow_down_outlined,
                   size: 35.0,
-                  color: Colors.black45,
+                  color: Color(0xFFFBC408),
                 )),
-            Center(child: Text(AppLocalizations.of(context)!.approveImages)),
+            Center(child: Text(AppLocalizations.of(context)!.approveImages,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600
+              ),
+            )),
             const SizedBox(height: 15.0),
             Container(
               height: MediaQuery.of(context).size.height * 10 / 100,
@@ -109,7 +116,7 @@ class CustomBottomSheet {
                                   .updatePersonImage(image1!);
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
                               image1 = await _picker.pickImage(
@@ -123,7 +130,7 @@ class CustomBottomSheet {
                                   .updatePersonImage(image1!);
                             },
                             icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         showIconDriverImage(context, driverImage)
                       ],
                     ),
@@ -170,7 +177,7 @@ class CustomBottomSheet {
                                   .updateImageDriverLis(image2!);
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
                               image2 = await _picker.pickImage(
@@ -184,7 +191,7 @@ class CustomBottomSheet {
                                   .updateImageDriverLis(image2!);
                             },
                             icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         showIconDriverLisImage(context, driverLis)
                       ],
                     ),
@@ -231,7 +238,7 @@ class CustomBottomSheet {
                                   .updateImageCarLis(image3!);
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
                               image3 = await _picker.pickImage(
@@ -245,7 +252,7 @@ class CustomBottomSheet {
                                   .updateImageCarLis(image3!);
                             },
                             icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         showIconCarLisImage(context, carLisImage)
                       ],
                     ),
@@ -292,7 +299,7 @@ class CustomBottomSheet {
                                   .updateImagePlatLis(image4!);
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
                               image4 = await _picker.pickImage(
@@ -306,7 +313,7 @@ class CustomBottomSheet {
                                   .updateImagePlatLis(image4!);
                             },
                             icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFFD54F))),
+                                size: 35.0, color: Color(0xFFFBC408))),
                         showIconCarisImage(context, carImage)
                       ],
                     ),
@@ -358,11 +365,18 @@ class CustomBottomSheet {
                 height: MediaQuery.of(context).size.height * 8 / 100,
                 width: MediaQuery.of(context).size.width * 60 / 100,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFD54F),
-                  borderRadius: BorderRadius.circular(4.0),
+                  color: const Color(0xFFFBC408),
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
                 child:
-                    Center(child: Text(AppLocalizations.of(context)!.confirm)),
+                    Center(child: Text(AppLocalizations.of(context)!.confirm,
+                      textAlign: TextAlign.center,
+                      style:const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),
+                    )),
               ),
             ),
           ],
@@ -410,58 +424,6 @@ class CustomBottomSheet {
       return const Text("");
     }
   }
-
-  /// this method canceled for now
-  // setToDataBase(
-  //      List<XFile> imagesL,
-  //      TextEditingController name,
-  //      TextEditingController lastName,
-  //      TextEditingController idNo,
-  //      TextEditingController email,
-  //      TextEditingController carBrand,
-  //      TextEditingController carColor,
-  //      TextEditingController carModel,
-  //      String dropBottomValue) async {
-  //    User? currentUser = AuthSev().auth.currentUser;
-  //
-  //
-  //    ///first set image to Storage and got url
-  //    for (var _image in imagesL) {
-  //      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-  //          .ref()
-  //          .child('driver/${currentUser!.uid}')
-  //          .child(path.basename(_image.path));
-  //           await ref.putFile(File(_image.path)).whenComplete(()async{
-  //           String url  = await ref.getDownloadURL();
-  //
-  //            if (currentUser.uid.isNotEmpty) {
-  //              DatabaseReference driverRef = FirebaseDatabase.instance
-  //                  .ref()
-  //                  .child("driver")
-  //                  .child(currentUser.uid);
-  //              driverRef.set({
-  //                "userId": currentUser.uid,
-  //                "phoneNumber": currentUser.phoneNumber,
-  //                "firstName": name.text,
-  //                "lastName": lastName.text,
-  //                "idNo": idNo.text.trim(),
-  //                "email": email.text.trim(),
-  //                // "driverLis": url.toString(),
-  //                // "carLis": urlRef.toString(),
-  //                // "carImage": urlRef.toString(),
-  //              }).whenComplete(() async {
-  //                await driverRef.child("carInfo").set({
-  //                  "carBrand": carBrand.text,
-  //                  "carColor": carColor.text,
-  //                  "carModel": carModel.text,
-  //                  "carType": dropBottomValue.toString(),
-  //                  // "carImage": urlRef.toString()
-  //                });
-  //              });
-  //            }
-  //           });
-  //    }
-  //  }
 
   void storage1(
       XFile? driverImage,
