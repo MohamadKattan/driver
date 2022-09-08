@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/HomeScreen.dart';
@@ -18,7 +17,6 @@ import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
 import '../tools/url_lunched.dart';
 import '../widget/custom_divider.dart';
-import 'active_account.dart';
 import 'auth_screen.dart';
 import 'driverInfo_screen.dart';
 import 'if_you_wanttopay.dart';
@@ -53,8 +51,6 @@ class _SplashScreenState extends State<SplashScreen>
       if (AuthSev().auth.currentUser?.uid != null) {
         await DataBaseReal().getDriverInfoFromDataBase(context);
         tokenPhone = await firebaseMessaging.getToken();
-        String ipv4 = await Ipify.ipv4();
-        driverRef.child(userId).child("ip").set(ipv4);
       }
       if (status == AnimationStatus.completed) {
         if (result == false) {
@@ -77,8 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const MyPageView()));
             }
-          }
-          else if (AuthSev().auth.currentUser?.uid != null &&
+          } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.update == true) {
             await ToUrlLunch().toPlayStore();
             await driverRef.child(userId).child("update").set(false);

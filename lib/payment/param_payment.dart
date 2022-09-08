@@ -20,11 +20,13 @@ class ParamPayment {
   static String paramUrl =
       "https://posws.param.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl";
   static Map<String, String> paramHeader = {'content-type': 'text/xml'};
+  DatabaseReference paidCheckRef =
+      FirebaseDatabase.instance.ref().child("paidcheck");
   DatabaseReference paidRef = FirebaseDatabase.instance.ref().child("paid");
-  DatabaseReference newIpAddress =
-      FirebaseDatabase.instance.ref().child("newIp");
+  DatabaseReference errorIpAddress =
+      FirebaseDatabase.instance.ref().child("errorip");
 
-  DateTime  _setDateTime(){
+  DateTime _setDateTime() {
     int _day;
     int _month;
     int _year;
@@ -87,7 +89,7 @@ class ParamPayment {
           builder.attribute('xmlns', 'https://turkpos.com.tr/');
           builder.element('Data', nest: () {
             builder.text(
-                '33485211B6527-D2E1-4247-9590-00B3985504DE1$amount$amount${user.firstName}${idOrder}https://errorparam-10.web.app/https://garantitaxi-b463b.web.app/');
+                '33485211B6527-D2E1-4247-9590-00B3985504DE1$amount$amount${user.firstName}${idOrder}https://errorparam-10.web.app/https://payment-ok.firebaseapp.com/');
           });
         });
       });
@@ -148,7 +150,7 @@ class ParamPayment {
           builder.element('KK_Sahibi_GSM', nest: phoneNumber);
           builder.element('Hata_URL', nest: 'https://errorparam-10.web.app/');
           builder.element('Basarili_URL',
-              nest: 'https://garantitaxi-b463b.web.app/');
+              nest: 'https://payment-ok.firebaseapp.com/');
           builder.element('Siparis_ID', nest: '$firstName$idorder');
           builder.element('Siparis_Aciklama', nest: '');
           builder.element('Taksit', nest: 1);
@@ -185,27 +187,30 @@ class ParamPayment {
         String url = _url3d;
         await canLaunch(url).whenComplete(() {})
             ? launch(url).whenComplete(() async {
+                await paidRef.child(userId).set({
+                  "userid": userId,
+                  "plan": planDay,
+                });
                 await driverRef.child(userId).update({
                   "exPlan": oldExplan,
                   "plandate": _setDateTime().toString(),
                   "status": "payed",
-                }).whenComplete(() async {
-                  await paidRef.child(userId).set({
-                    "userid": userId,
-                    "plan": planDay,
-                    "cardNo": card.cardNumber,
-                    "cardHolder": card.holderName,
-                    "phoneNo": phoneNumber,
-                    "amount": amount,
-                    "token": tokenPhone,
-                    "time": DateTime.now().toString()
-                  }).whenComplete(() => showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return afterPayment(context);
-                      }));
                 });
+                await paidCheckRef.child(userId).set({
+                  "userid": userId,
+                  "plan": planDay,
+                  "cardNo": card.cardNumber,
+                  "cardHolder": card.holderName,
+                  "phoneNo": phoneNumber,
+                  "amount": amount,
+                  "token": tokenPhone,
+                  "time": DateTime.now().toString()
+                }).whenComplete(() => showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return afterPayment(context);
+                    }));
               })
             : Tools().toastMsg(
                 AppLocalizations.of(context)!.paymentFailed, Colors.red);
@@ -217,7 +222,7 @@ class ParamPayment {
             AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
         Tools().toastMsg(errorMessage, Colors.redAccent);
         Tools().toastMsg(errorMessage, Colors.redAccent);
-        await newIpAddress.child(userId).child('ip').set(ipv4);
+        await errorIpAddress.child(userId).child('ip').set(ipv4);
       }
     } else {
       Provider.of<PaymentIndector>(context, listen: false).updateState(false);

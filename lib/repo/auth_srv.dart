@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/user_screen/driverInfo_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -11,7 +12,6 @@ import '../my_provider/driver_model_provider.dart';
 import '../my_provider/user_id_provider.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../tools/tools.dart';
-import '../user_screen/active_account.dart';
 import '../user_screen/splash_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,10 +23,13 @@ class AuthSev {
   final TextEditingController codeText = TextEditingController();
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   late final DataSnapshot snapshot;
+  late String ipv4;
+
   //this method for got user id
-  Future<User?> createOrLoginWithEmail(TextEditingController email,
+  Future<void> createOrLoginWithEmail(TextEditingController email,
       BuildContext context, TextEditingController passWord) async {
     try {
+      ipv4 = await Ipify.ipv4();
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(), password: passWord.text.trim());
       await getCurrentUserId(context).whenComplete(() async {
@@ -38,18 +41,19 @@ class AuthSev {
             Map<String, dynamic> map =
                 Map<String, dynamic>.from(snapshot.value as Map);
             DriverInfo driverInfo = DriverInfo.fromMap(map);
-            if(driverInfo.status=="info"&&driverInfo.tok==""){
+            if (driverInfo.status == "info" && driverInfo.tok == "") {
               Provider.of<TrueFalse>(context, listen: false).updateState(false);
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const DriverInfoScreen()));
             }
-           else if (driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
-              Provider.of<TrueFalse>(context, listen: false).updateState(false);
-              _tools.toastMsg(
-                  AppLocalizations.of(context)!.tokenUesd, Colors.red);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ActiveAccount()));
-            } else {
+            // else if (driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
+            //    Provider.of<TrueFalse>(context, listen: false).updateState(false);
+            //    _tools.toastMsg(
+            //        AppLocalizations.of(context)!.tokenUesd, Colors.red);
+            //    Navigator.push(context,
+            //        MaterialPageRoute(builder: (_) => const ActiveAccount()));
+            //  }
+            else {
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .updateDriverInfo(driverInfo);
               Navigator.push(
@@ -80,7 +84,8 @@ class AuthSev {
               "personImage": "",
               "plandate": DateTime.now().toString(),
               "active": "active",
-              "map":"mapbox",
+              "map": "mapbox",
+              "ip": ipv4
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
@@ -134,7 +139,8 @@ class AuthSev {
               "personImage": "",
               "plandate": DateTime.now().toString(),
               "active": "active",
-              "map":"mapbox",
+              "map": "mapbox",
+              "ip": ipv4
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",

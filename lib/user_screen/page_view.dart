@@ -18,7 +18,7 @@ class MyPageView extends StatelessWidget {
           controller: controller,
           onPageChanged: (index) {
             if (index == 2) {
-              Future.delayed(const Duration(seconds: 3)).whenComplete(() =>
+              Future.delayed(const Duration(seconds: 6)).whenComplete(() =>
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const AuthScreen())));
             }

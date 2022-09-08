@@ -44,7 +44,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: SafeArea(
           child: Scaffold(
-            backgroundColor:const Color(0xFF00A3E0),
+            backgroundColor: const Color(0xFF00A3E0),
             body: Stack(
               children: [
                 SingleChildScrollView(
@@ -67,7 +67,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFFBC408)))),
                       CustomTextField().customTextField(
-                        lenNumber: 11,
+                          lenNumber: 11,
                           controller: DriverInfoScreen.name,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -77,7 +77,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                             contentPadding: const EdgeInsets.all(8.0),
                           )),
                       CustomTextField().customTextField(
-                        lenNumber: 11,
+                          lenNumber: 11,
                           controller: DriverInfoScreen.lastName,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -92,8 +92,8 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                         decoration: BoxDecoration(
                             color: Colors.white70,
                             borderRadius: BorderRadius.circular(12.0),
-                            border: Border.all(width: 2.0,color: Colors.white70)
-                        ),
+                            border:
+                                Border.all(width: 2.0, color: Colors.white70)),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -114,8 +114,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                                   alphabetSelectedBackgroundColor:
                                       const Color(0xFFFFD54F),
                                   alphabetTextColor: Colors.deepOrange,
-                                  alphabetSelectedTextColor:
-                                      Colors.deepPurple,
+                                  alphabetSelectedTextColor: Colors.deepPurple,
                                 ),
                                 initialSelection: resultCodeCon,
                                 onChanged: (CountryCode? code) {
@@ -152,16 +151,6 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                           ],
                         ),
                       ),
-                      CustomTextField().customTextField(
-                        lenNumber: 11,
-                          controller: DriverInfoScreen.idNo,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.idNumber,
-                            hintStyle: const TextStyle(
-                                color: Colors.black54, fontSize: 16),
-                            contentPadding: const EdgeInsets.all(8.0),
-                          )),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(AppLocalizations.of(context)!.carDetails,
@@ -181,6 +170,16 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                           contentPadding: const EdgeInsets.all(8.0),
                         ),
                       ),
+                      CustomTextField().customTextField(
+                          lenNumber: 11,
+                          controller: DriverInfoScreen.idNo,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.idNumber,
+                            hintStyle: const TextStyle(
+                                color: Colors.black54, fontSize: 16),
+                            contentPadding: const EdgeInsets.all(8.0),
+                          )),
                       CustomTextField().customTextField(
                         lenNumber: 20,
                         controller: DriverInfoScreen.carModel,
@@ -212,8 +211,8 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                           onTap: () => checkIfTextFieldNotNull(
                               bottomSheetValue, dropBottomValue, context),
                           child: Container(
-                            height:60,
-                            width:300,
+                            height: 60,
+                            width: 300,
                             decoration: BoxDecoration(
                               color: const Color(0xFFFBC408),
                               borderRadius: BorderRadius.circular(4.0),
@@ -222,7 +221,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                                 child: Text(
                               AppLocalizations.of(context)!.next,
                               style: const TextStyle(
-                                color: Colors.white,
+                                  color: Colors.white,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold),
                             )),
@@ -308,7 +307,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
         height: MediaQuery.of(context).size.height * 6 / 100,
         width: MediaQuery.of(context).size.width * 100,
         decoration: BoxDecoration(
-          color: Colors.white70,
+            color: Colors.white70,
             borderRadius: BorderRadius.circular(4.0),
             border: Border.all(color: const Color(0xFFFBC408), width: 2)),
         child: DropdownButtonHideUnderline(

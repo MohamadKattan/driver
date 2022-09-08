@@ -128,7 +128,7 @@
               "@lastName": {
                   "description": "Last Name"
        },
- "idNumber": "Id Number",
+ "idNumber": "Car plate",
               "@idNumber": {
                   "description": "Id Number"
        },
@@ -561,7 +561,7 @@
   "@wait": {
     "description": "Activate"
   },
-  "del": "Delete",
+  "del": "Delete account",
   "@del": {
     "description": "Delete"
   },
