@@ -1,15 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
@@ -50,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     requestPermissionsSystem();
     onForground();
     PlanDays().getDateTime();
-    getIpAddress();
     // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
@@ -350,22 +346,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       } else {
         getToken();
       }
-    }
-  }
-
-// this method for check ip address if changed
-  Future<void> getIpAddress() async {
-    String ipv4 = await Ipify.ipv4();
-    DatabaseReference ipChanged =
-        FirebaseDatabase.instance.ref().child("ipchanged");
-    final driverInfo =
-        Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-    if (driverInfo.ip != ipv4) {
-      await ipChanged
-          .child(userId)
-          .set({"name": driverInfo.firstName, "ip": ipv4}).whenComplete(() {
-        driverRef.child(userId).child("ip").set(ipv4);
-      });
     }
   }
 }

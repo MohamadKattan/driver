@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/user_screen/driverInfo_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -23,13 +22,11 @@ class AuthSev {
   final TextEditingController codeText = TextEditingController();
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   late final DataSnapshot snapshot;
-  late String ipv4;
 
   //this method for got user id
   Future<void> createOrLoginWithEmail(TextEditingController email,
       BuildContext context, TextEditingController passWord) async {
     try {
-      ipv4 = await Ipify.ipv4();
       userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(), password: passWord.text.trim());
       await getCurrentUserId(context).whenComplete(() async {
@@ -85,7 +82,6 @@ class AuthSev {
               "plandate": DateTime.now().toString(),
               "active": "active",
               "map": "mapbox",
-              "ip": ipv4
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",
@@ -140,7 +136,6 @@ class AuthSev {
               "plandate": DateTime.now().toString(),
               "active": "active",
               "map": "mapbox",
-              "ip": ipv4
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",

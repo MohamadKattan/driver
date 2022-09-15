@@ -18,7 +18,6 @@ class DriverInfo {
   late int exPlan;
   late bool update;
   late String tok;
-  late String ip;
   DriverInfo(
       this.userId,
       this.country,
@@ -37,11 +36,9 @@ class DriverInfo {
       this.exPlan,
       this.update,
       this.tok,
-      this.ip
       );
   DriverInfo.fromMap(Map<String, dynamic> map) {
     userId = map["userId"];
-    ip=map["ip"];
     status = map["status"];
     country = map["country"];
     exPlan = map["exPlan"];

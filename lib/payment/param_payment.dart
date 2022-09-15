@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:dart_ipify/dart_ipify.dart';
 import 'package:driver/model/card_payment.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +13,20 @@ import '../notificatons/push_notifications_srv.dart';
 import '../tools/tools.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:xml/xml.dart' as xml;
-import '../widget/after_payment.dart';
 
 class ParamPayment {
   static String paramUrl =
       "https://posws.param.com.tr/turkpos.ws/service_turkpos_prod.asmx?wsdl";
+  static String serverUrl = "https://param-pay.herokuapp.com/pay";
   static Map<String, String> paramHeader = {'content-type': 'text/xml'};
+  static Map<String, String> serverHeader = {
+    'content-type': 'application/json'
+  };
   DatabaseReference paidCheckRef =
       FirebaseDatabase.instance.ref().child("paidcheck");
   DatabaseReference paidRef = FirebaseDatabase.instance.ref().child("paid");
-  DatabaseReference errorIpAddress =
-      FirebaseDatabase.instance.ref().child("errorip");
 
+  // this method for set data when driver paid
   DateTime _setDateTime() {
     int _day;
     int _month;
@@ -89,7 +90,7 @@ class ParamPayment {
           builder.attribute('xmlns', 'https://turkpos.com.tr/');
           builder.element('Data', nest: () {
             builder.text(
-                '33485211B6527-D2E1-4247-9590-00B3985504DE1$amount$amount${user.firstName}${idOrder}https://errorparam-10.web.app/https://payment-ok.firebaseapp.com/');
+                '33485211B6527-D2E1-4247-9590-00B3985504DE1$amount$amount${idOrder}https://errorparam-10.web.app/https://payment-ok.firebaseapp.com/');
           });
         });
       });
@@ -99,11 +100,10 @@ class ParamPayment {
     final res = await http.post(Uri.parse(paramUrl),
         headers: paramHeader, body: convert.utf8.encode(_bodyHash));
     if (res.statusCode == 200) {
-      String ipv4 = await Ipify.ipv4();
       final document = xml.XmlDocument.parse(res.body);
       final _hashCode = document.findAllElements('SHA2B64Result').single.text;
       startPayment(_hashCode, idOrder, amount, user.firstName, user.phoneNumber,
-          card, context, planDay, oldExplan, ipv4);
+          card, context, planDay, oldExplan);
     } else {
       Provider.of<PaymentIndector>(context, listen: false).updateState(false);
       Tools()
@@ -113,7 +113,7 @@ class ParamPayment {
     }
   }
 
-// this method for start 3D payment or NS
+// this method for start 3D payment or NS connect to our server
   Future<void> startPayment(
       String hashCode,
       String idorder,
@@ -124,68 +124,29 @@ class ParamPayment {
       BuildContext context,
       int planDay,
       int oldExplan,
-      String ipv4) async {
-    var builder = xml.XmlBuilder();
-    builder.processing('xml', 'version="1.0" encoding="utf-8"');
-    builder.element('soap:Envelope', nest: () {
-      builder.attribute(
-          'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-      builder.attribute('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
-      builder.attribute(
-          'xmlns:soap', 'http://schemas.xmlsoap.org/soap/envelope/');
-      builder.element('soap:Body', nest: () {
-        builder.element('Pos_Odeme', nest: () {
-          builder.attribute('xmlns', 'https://turkpos.com.tr/');
-          builder.element('G', nest: () {
-            builder.element('CLIENT_CODE', nest: 33485);
-            builder.element('CLIENT_USERNAME', nest: 'TP10053946');
-            builder.element('CLIENT_PASSWORD', nest: '0877490DE492A078');
-          });
-          builder.element('GUID', nest: '211B6527-D2E1-4247-9590-00B3985504DE');
-          builder.element('KK_Sahibi', nest: card.holderName);
-          builder.element('KK_No', nest: card.cardNumber);
-          builder.element('KK_SK_Ay', nest: card.expiryDateMouthe);
-          builder.element('KK_SK_Yil', nest: card.expiryDateYear);
-          builder.element('KK_CVC', nest: card.cvv);
-          builder.element('KK_Sahibi_GSM', nest: phoneNumber);
-          builder.element('Hata_URL', nest: 'https://errorparam-10.web.app/');
-          builder.element('Basarili_URL',
-              nest: 'https://payment-ok.firebaseapp.com/');
-          builder.element('Siparis_ID', nest: '$firstName$idorder');
-          builder.element('Siparis_Aciklama', nest: '');
-          builder.element('Taksit', nest: 1);
-          builder.element('Islem_Tutar', nest: amount);
-          builder.element('Toplam_Tutar', nest: amount);
-          builder.element('Islem_Hash', nest: hashCode);
-          builder.element('Islem_Guvenlik_Tip', nest: '3D');
-          builder.element('Islem_ID');
-          builder.element('IPAdr', nest: ipv4);
-          builder.element('Ref_URL', nest: '');
-          builder.element('Data1', nest: '');
-          builder.element('Data2', nest: '');
-          builder.element('Data3', nest: '');
-          builder.element('Data4', nest: '');
-          builder.element('Data5', nest: '');
-          builder.element('Data6', nest: '');
-          builder.element('Data7', nest: '');
-          builder.element('Data8', nest: '');
-          builder.element('Data9', nest: '');
-          builder.element('Data10', nest: '');
-        });
-      });
-    });
-    var bookshelfXml = builder.buildDocument();
-    String _uriMsj = bookshelfXml.toString();
-    final res = await http.post(Uri.parse(paramUrl),
-        headers: paramHeader, body: convert.utf8.encode(_uriMsj));
-    if (res.statusCode == 200) {
-      final document = xml.XmlDocument.parse(res.body);
+     ) async {
+    Map<String, dynamic> toServer = {
+      "hash": hashCode,
+      "id": idorder,
+      "amount": amount,
+      "holder": card.holderName,
+      "number": card.cardNumber,
+      "cvv": card.cvv,
+      "month": card.expiryDateMouthe,
+      "year": card.expiryDateYear,
+      "phone": phoneNumber
+    };
+
+    final resServer = await http.post(Uri.parse(serverUrl),
+        headers: serverHeader, body: convert.jsonEncode(toServer));
+    if (resServer.statusCode == 200) {
+      final document = xml.XmlDocument.parse(resServer.body);
       final _paramResult = document.findAllElements('Sonuc').single.text;
       final _url3d = document.findAllElements('UCD_URL').single.text;
       dekontId = document.findAllElements('Islem_ID').single.text;
       if (_paramResult == "1") {
         String url = _url3d;
-        await canLaunch(url).whenComplete(() {})
+        await canLaunch(url)
             ? launch(url).whenComplete(() async {
                 await paidRef.child(userId).set({
                   "userid": userId,
@@ -205,12 +166,7 @@ class ParamPayment {
                   "amount": amount,
                   "token": tokenPhone,
                   "time": DateTime.now().toString()
-                }).whenComplete(() => showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return afterPayment(context);
-                    }));
+                });
               })
             : Tools().toastMsg(
                 AppLocalizations.of(context)!.paymentFailed, Colors.red);
@@ -222,7 +178,6 @@ class ParamPayment {
             AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
         Tools().toastMsg(errorMessage, Colors.redAccent);
         Tools().toastMsg(errorMessage, Colors.redAccent);
-        await errorIpAddress.child(userId).child('ip').set(ipv4);
       }
     } else {
       Provider.of<PaymentIndector>(context, listen: false).updateState(false);

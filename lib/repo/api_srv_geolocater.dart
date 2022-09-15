@@ -11,6 +11,7 @@ import '../tools/get_url.dart';
 import 'auth_srv.dart';
 
 class ApiSrvGeolocater{
+
   String userId =AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   final GetUrl _getUrl = GetUrl();

@@ -1,4 +1,5 @@
 
+import 'package:driver/user_screen/more_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
@@ -41,7 +42,7 @@ class AuthScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -234,6 +235,27 @@ class AuthScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                Positioned(left: 0,top:0,
+                    child: GestureDetector(
+                      onTap: ()=>Navigator.push(context, MaterialPageRoute(
+                          builder:(_){
+                       return  const MoreInfo();
+                          })),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                           Image.asset("images/infoIcon.png",height: 45,width: 45),
+                             Text( AppLocalizations.of(context)!.info,
+                                style:const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                        ),
+                      ),
+                    )),
                 circulerProvider == true
                     ? Opacity(
                         opacity: 0.9,

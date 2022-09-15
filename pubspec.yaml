@@ -69,7 +69,6 @@ dependencies:
   intl: ^0.17.0
   xml: ^6.1.0
   smooth_page_indicator: ^1.0.0+2
-  dart_ipify: ^1.1.1
 
 
 
@@ -101,6 +100,13 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - images/
+     - images/infoIcon.png
+     - images/Varlık 6.png
+     - images/Varlık 5.png
+     - images/Varlık 7.png
+     - images/Varlık 8.png
+     - images/Varlık 9.png
+     - images/Varlık 10.png
      - images/splash.png
      - images/car_test.png
      - images/car_ios.png

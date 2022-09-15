@@ -616,5 +616,45 @@
   "supportInfo": "Contact us for any information or questions.",
   "@supportInfo": {
     "description": "Contact us for any information or questions."
+  },
+  "info": "Info",
+  "@info": {
+    "description": "Info"
+  },
+  "world": "WELCOME TO THE WORLD!",
+  "@world": {
+    "description": "WELCOME TO THE WORLD!"
+  },
+  "carMod": "1- VEHICLE OPTIONS",
+  "@carMod": {
+    "description": "VEHICLE OPTIONS"
+  },
+  "s1": "1. Vehicle Standard Taxi (4 Seated Vehicles)",
+  "@s1": {
+    "description": "1. Vehicle Standard Taxi (4 Seated Vehicles)"
+  },
+  "s2": "2.Vehicle Commercial VIP Vehicles (6 to 10 seat vehicles)",
+  "@s2": {
+    "description": "2.Vehicle Commercial VIP Vehicles (6 to 10 seat vehicles)"
+  },
+  "s3": "3.Vehicle Large Commercial VIP Vehicles (vehicles with 10 to 19 seats)",
+  "@s3": {
+    "description": "Vehicle Large Commercial VIP Vehicles (vehicles with 10 to 19 seats)"
+  },
+  "s4": "2- PRICING",
+  "@s4": {
+    "description": "PRICING"
+  },
+  "s5": "1. 30-day trial for drivers right after your first registration\nYou can start using the package for free.\n2. After 30 days, you will be charged according to your Vehicle Type.\n* For Standard Taxi; $10 per month\n* For Commercial VIP Vehicles; $20\n* For Large Commercial VIP Vehicles; 20 TL\n3. Drivers in the country where you apply Garanti Taxi\nThey are charged according to the determined price schedule.\n4. The fare you have seen in the travel request received by the drivers\nyou will receive.\n5. Extra fees such as Bridge and Highway are not required for travel.\nYou can request these fees as an extra.",
+  "@s5": {
+    "description": "ss5"
+  },
+  "s6": "3- REGISTRATION STAGE",
+  "@s6": {
+    "description": "REGISTRATION STAGE"
+  },
+  "s7": "1. Driver's license requested from drivers, vehicle license information, vehicle\nplate and model year, name, surname, personal photo, seat of your vehicle\nAfter logging in with information such as the number of times, your information will reach us.\n2. After checking your information, you will receive a free 30-day package.\nwe will give consent together and inform you via notification.\n3. When you open the application again after receiving the confirmation notification\nYou can start using the application.\n3. Canceling your trips for which you have accepted the travel request\nIn this case, you will receive a one-hour passenger ban. In this case\nWhen you close and open the application, the application will become active.\nFor more information, you can contact us:\nvba@garantitaxi.com",
+  "@s7": {
+    "description": "ss7"
   }
 }

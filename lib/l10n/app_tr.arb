@@ -150,5 +150,15 @@
   "into2": "bizimle en iyi fiyatla çok sayıda müşteriniz olacak",
   "into3": "Garanti Taksi Uygulasini 3 ayri dil seçenekleriyle kullanabilirsin!",
   "support": "Destek",
-  "supportInfo": "Herhangi bir bilgi veya soru sormak için bize ulasin."
+  "supportInfo": "Herhangi bir bilgi veya soru sormak için bize ulasin.",
+  "info": "Bilgi",
+  "world": "DÜNYAYA HOŞGELDİN!",
+  "carMod": "1- ARAÇ SEÇENEKLERİ",
+  "s1": "1.Araç Standart Taksi (4 Koltuklu araçlar)",
+  "s2": "2.Arac Ticari VIP Araçlar (6 ila 10 koltuklu araçlar)",
+  "s3": "3.Arac Büyük Ticari VIP Araçlar (10 ila 19 koltuklu araçlar)",
+  "s4": "2- ÜCRETLENDiRME ",
+  "s6": "3- KAYIT AŞAMASI",
+  "s5": "1. Sürücüler icin ilk kaydinizdan hemen sonra 30 günlük deneme\npaketini ucretsiz olarak kullanmaya balayabilirsiniz.\n2. 30 günden sonra Araç Tipinize göre ücret ödersiniz.\n* Standart Taksi icin; Aylik 180 tl\n* Ticari VIP Araçlar için; 300 tl\n* Büyük Ticari VIP Araclar icin; 300 tl\n3. Sürücüler, Garanti Taxi uygulamasinda bulundugunuz ülkede\nbelirlenmis olan fiyat tarifesine göre ücret alirlar.\n4. Sürücülere gelen yolculuk talebinde görmüg oldugunuz ücreti\nalirsiniz.\n5. Köprü, Otoban gibi ekstra ücretler, yolculuk talebinde görülmez.\nBu ücretleri ekstra olarak talep edebilirsiniz.",
+  "s7": "1. Söförlerden istenen sürücü belgesi, araç ruhsat bilgileri, \nplakasi ve model yili, isim, soy isim, sahsi fotograf, \n sonra bilgileriniz bize ulaçacaktir.\n2. Bilgileriniz kontrol edikdikten sonra size 30 günlük ücretsiz paket ile\nbirlikte onay verip size bildirim yoluyla bilgilendirecegiz.\n3. Onay bildirimini aldiktan sonra uygulamayi tekrar açtiginizda\nuygulamayi kullanmaya baslayabilirsiniz.\nDaha Fazla Bilgi icin bizimle iletisime gecebilirsiniz:\nvba@garantitaxi.com"
 }
