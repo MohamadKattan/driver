@@ -248,7 +248,23 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                         result),
                     duration: const Duration(milliseconds: 600)),
                 indector == true
-                    ? CircularInductorCostem().circularInductorCostem(context)
+                    ? Opacity(
+                        opacity: 0.9,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.black,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: CircularInductorCostem()
+                                      .circularInductorCostem(context)),
+                              Expanded(child: Tools().timerAuth(context, 60))
+                            ],
+                          ),
+                        ),
+                      )
                     : const Text("")
               ],
             ),

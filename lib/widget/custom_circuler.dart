@@ -25,7 +25,7 @@ class CircularInductorCostem{
           Center(child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text( AppLocalizations.of(context)!.wait,style: const TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-          ))
+          )),
         ],
       ),
     );

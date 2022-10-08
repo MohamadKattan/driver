@@ -12,6 +12,7 @@ import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
+import '../my_provider/placeAdrees_name.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
@@ -22,7 +23,6 @@ import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'active_account.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,26 +34,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late bool valueSwitchBottom = true;
-  // String _platformVersion = 'Unknown';
-  // sys.SystemWindowPrefMode prefMode = sys.SystemWindowPrefMode.OVERLAY;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     TurnOnGBS().turnOnGBSifNot();
-    // initializeService();
     initializationLocal(context);
-    // FlutterBackgroundService().invoke("setAsBackground");
     PushNotificationsSrv().gotNotificationInBackground(context);
     requestPermissionsSystem();
     onForground();
     PlanDays().getDateTime();
+    refreshApp();
     // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     ///system dailog alert 3 methodes
     // initPlatformState();
-    /// count
-    //PlanDays().countDayPlansInForeground();
     super.initState();
   }
 
@@ -65,27 +60,45 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final isBackGround = state == AppLifecycleState.paused;
-    final isdead = state == AppLifecycleState.detached;
+    // final isBackGround = state == AppLifecycleState.paused;
+    // final isdead = state == AppLifecycleState.detached;
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive) return;
-    if (isdead) {
-      driverRef.child(userId).child("newRide").onDisconnect();
-      driverRef.child(userId).child("newRide").remove();
-      Geofire.stopListener();
-      Geofire.removeLocation(userId);
-    } else {
-      return;
-    }
-    if (isBackGround) {
-      setState(() {
+    // if ( state ==AppLifecycleState.inactive||state ==AppLifecycleState.detached) return;
+
+    switch(state){
+      case AppLifecycleState.paused:
         runLocale = true;
-      });
-    } else {
-      setState(() {
+        break;
+      case AppLifecycleState.resumed:
         runLocale = false;
-      });
+        break;
+      case AppLifecycleState.inactive:
+      // TODO: Handle this case.
+        break;
+      case AppLifecycleState.detached:
+        Geofire.removeLocation(userId);
+        Geofire.stopListener();
+        break;
     }
+    // if (isBackGround)
+    // {
+    //   setState(() {
+    //     runLocale = true;
+    //     print('local');
+    //   });
+    // }
+    // else {
+    //   setState(() {
+    //     runLocale = false;
+    //     print('Nolocal');
+    //   });
+    // }
+    // //todo
+    // if (isdead) {
+    //   driverRef.child(userId).child("newRide").onDisconnect().remove();
+    //   Geofire.stopListener();
+    //   Geofire.removeLocation(userId).whenComplete(() =>   print('dead'));
+    // }
   }
 
   // system over vlowy
@@ -266,6 +279,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
+
+  // of line on line
   Widget customSwitchBottom() => Transform.scale(
         scale: 1.5,
         child: Padding(
@@ -296,7 +311,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
         ),
       );
-
 // this method for show tost driver if he Available or not
   void tostDriverAvailable() {
     if (valueSwitchBottom == true) {
@@ -307,33 +321,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           AppLocalizations.of(context)!.notAvilbel, Colors.redAccent.shade700);
     }
   }
-
+  // todo new if country name came null this method it will work
   Future<void> getCountryName() async {
     ApiSrvGeolocater().searchCoordinatesAddress(context);
-    final _country =
+    var _country =
         Provider.of<DriverInfoModelProvider>(context, listen: false)
             .driverInfo
             .country;
+   final _result = Provider.of<PlaceName>(context, listen: false).placeName;
     if (_country == "") {
-      await ApiSrvGeolocater().searchCoordinatesAddress(context);
+       await ApiSrvGeolocater().searchCoordinatesAddress(context);
+    setState(() {
+      _country=_result;
+    });
     } else {
       return;
     }
   }
-
 // this method for stop local Notification
   void onForground() {
     driverRef.child(userId).child("service").set("not");
   }
-
 // this method for check token after map loading
   Future<void> checkToken() async {
     final driverInfo =
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
     final _user = AuthSev().auth.currentUser;
     if (_user?.email == "test036@gmail.com") {
-      print(_user?.email);
-     await getToken();
+      await getToken();
     } else {
       requestPermissions();
       if (_user?.uid != null &&
@@ -348,4 +363,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       }
     }
   }
+  //todo this method new under check for refresh app
+void refreshApp(){
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      if(!mounted)return;
+      setState(() {});
+    });
+}
 }

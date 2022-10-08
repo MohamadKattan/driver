@@ -124,7 +124,7 @@ Future<void> showNotification(BuildContext context) async {
           sound: 'new_order.mp3',
           presentAlert: true,
         presentSound: true,
-        subtitle: "  ",
+        subtitle: "",
           );
 
   final NotificationDetails platform = NotificationDetails(

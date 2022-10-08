@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
 import '../my_provider/driver_currentPosition_provider.dart';
+import '../my_provider/driver_model_provider.dart';
 import '../my_provider/placeAdrees_name.dart';
 import '../tools/get_url.dart';
 import 'auth_srv.dart';
@@ -15,6 +16,7 @@ class ApiSrvGeolocater{
   String userId =AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
   final GetUrl _getUrl = GetUrl();
+
   // this method for got geocoding api for current position address readable
   Future<dynamic> searchCoordinatesAddress(BuildContext context) async {
    final position = Provider.of<DriverCurrentPosition>(context,listen: false).currentPosition;
@@ -22,7 +24,7 @@ class ApiSrvGeolocater{
     var url = Uri.parse("https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey");
     final response = await _getUrl.getUrlMethod(url);
     if (response != "failed") {
-      placeAddress = response["results"][0]["address_components"][5]["long_name"];
+      placeAddress = response["results"][0]["address_components"][6]["long_name"];
       driverRef.child(userId).update({
         "country":placeAddress
       });
@@ -32,14 +34,15 @@ class ApiSrvGeolocater{
     return placeAddress;
   }
 
-  Future<dynamic>getContry() async {
+  // thus method it will work in check in screen just for return country name and set
+  Future<dynamic> getContry () async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     String placeAddress = "";
     var url = Uri.parse("https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey");
     final response = await _getUrl.getUrlMethod(url);
     if (response != "failed") {
-      placeAddress = response["results"][0]["address_components"][5]["long_name"];
+      placeAddress = response["results"][0]["address_components"][6]["long_name"];
       driverRef.child(userId).child("country").set(placeAddress);
     }
     return placeAddress;

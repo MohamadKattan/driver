@@ -41,7 +41,7 @@ class GeoFireSrv {
     } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 100,
+        distanceFilter: 20,
       );
     }
     // if (Platform.isAndroid) {

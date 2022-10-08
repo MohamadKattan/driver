@@ -107,9 +107,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -121,9 +118,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                 source: ImageSource.gallery,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -168,9 +162,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -182,9 +173,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image2 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -229,9 +217,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -243,9 +228,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image3 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -290,9 +272,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.camera,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -304,9 +283,6 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image4 = await _picker.pickImage(
                                   source: ImageSource.gallery,
-                                imageQuality: 80,
-                                maxHeight: 250.0,
-                                maxWidth: 250.0,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -555,10 +531,9 @@ class CustomBottomSheet {
           "carImage": url4.toString(),
         });
       }).whenComplete(() async {
-      await  getToken();
+        await  getToken();
         Provider.of<DriverInfoInductor>(context, listen: false)
             .updateState(false);
-        /// reback to checkIn screen
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const CheckInScreen()),

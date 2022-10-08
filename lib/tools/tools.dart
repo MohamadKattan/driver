@@ -9,7 +9,7 @@ import 'package:crypto/crypto.dart';
 
 
 class Tools {
-  String generateMd5(String input,String input4,String input3,String input2,String input1) {
+  String generateMd5( String input,String input4,String input3,String input2,String input1) {
     final data = input + "|"+input1+input2+input3+input4;
     return md5.convert(utf8.encode(data)).toString();
   }
@@ -30,8 +30,8 @@ class Tools {
       duration: timer,
       initialDuration: 0,
       controller: downController,
-      width: MediaQuery.of(context).size.width / 9,
-      height: MediaQuery.of(context).size.height / 9,
+      width: 60,
+      height: 60,
       ringColor: Colors.white,
       fillColor: Colors.black12,
       backgroundColor: const Color(0xFFFFD54F),

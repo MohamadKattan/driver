@@ -92,7 +92,7 @@
   "imageDrequired": "Sürücü Resmi gerekli",
   "licenseDrequired": "Sürücü ehliyeti gerekli",
    "licenseCrequired": "Araba ruhsatı gerekli",
-   "ImageCrequired": "Araba Resmi gerekli",
+  "imageCrequired": "Araba Resmi gerekli",
    "confirm": "onayla",
   "offLine": "müsait değil",
     "finished": "Paketin süresi doldu : ",

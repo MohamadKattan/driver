@@ -13,7 +13,7 @@ SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
 ///not method initPlatformState
 // // this method connect with dailog overlay init Platform if want move this void to home screen
 
-// // this method connect with dailog overlay permission
+// this method connect with dailog overlay permission
 Future<void> requestPermissionsSystem() async {
   if(Platform.isAndroid){
     await SystemAlertWindow.requestPermissions(prefMode: prefMode);

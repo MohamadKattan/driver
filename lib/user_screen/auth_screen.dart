@@ -22,8 +22,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool circulerProvider = Provider.of<TrueFalse>(context).isTrue;
-    MediaQuery.of(context).size;
+    bool circulerProvider =Provider.of<TrueFalse>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -265,7 +264,13 @@ class AuthScreen extends StatelessWidget {
                             color: Colors.black,
                           )),
                           child:
-                              _inductorCostem.circularInductorCostem(context),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(child: _inductorCostem.circularInductorCostem(context)),
+                                  Expanded(child: Tools().timerAuth(context, 20))
+                                ],
+                              ),
                         ),
                       )
                     : const Text(""),
