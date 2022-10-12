@@ -112,15 +112,15 @@ class PlanDays {
       }
     });
     if (exPlan == 0) {
-      await driverRef.child(userId).child("status").once().then((value) {
+      await driverRef.child(userId).child("status").once().then((value) async {
         if (value.snapshot.exists && value.snapshot.value != null) {
           final snap = value.snapshot.value;
           String _status = snap.toString();
           if (_status == "checkIn" || _status == "") {
             return;
           }
-          driverRef.child(userId).child("status").set("payTime");
-          GeoFireSrv().makeDriverOffLine();
+        await  driverRef.child(userId).child("status").set("payTime");
+         await GeoFireSrv().makeDriverOffLine();
         }
       });
     } else if (exPlan! >= 1400) {

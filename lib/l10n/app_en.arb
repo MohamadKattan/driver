@@ -656,5 +656,17 @@
   "s7": "1. Driver's license requested from drivers, vehicle license information, vehicle\nplate and model year, name, surname, personal photo, seat of your vehicle\nAfter logging in with information such as the number of times, your information will reach us.\n2. After checking your information, you will receive a free 30-day package.\nwe will give consent together and inform you via notification.\n3. When you open the application again after receiving the confirmation notification\nYou can start using the application.\n3. Canceling your trips for which you have accepted the travel request\nIn this case, you will receive a one-hour passenger ban. In this case\nWhen you close and open the application, the application will become active.\nFor more information, you can contact us:\nvba@garantitaxi.com",
   "@s7": {
     "description": "ss7"
+  },
+  "appSetting": "app setting",
+  "@appSetting": {
+    "description": "App Setting"
+  },
+  "appSettingDs": "Some of mobile devices don't allow all of permissions automatically.\n for better experience with our app check\n if all permissions are allowed ",
+  "@appSettingDs": {
+    "description": "some of"
+  },
+  "checkSetting": "Check permissions",
+  "@checkSetting": {
+    "description": "Check permissions"
   }
 }

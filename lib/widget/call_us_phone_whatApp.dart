@@ -44,14 +44,14 @@ Widget callUs(
                 child: GestureDetector(
                   onTap:(){
                     Navigator.pop(context);
-                    ToUrlLunch().toCallLunch(phoneNumber:"+905366034616");
+                    ToUrlLunch().toCallLunch(phoneNumber:"+905057743644");
 
                   },
                   child: Row(
                     children:  [
                       Icon(Icons.phone,size: 20.0,color: Colors.greenAccent.shade700,),
                      const SizedBox(width: 6.0),
-                      Text(AppLocalizations.of(context)!.normalCall + "+905366034616",
+                      Text(AppLocalizations.of(context)!.normalCall + "+905057743644",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style:

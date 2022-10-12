@@ -1,5 +1,6 @@
-
+import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/user_screen/more_info.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
@@ -7,6 +8,8 @@ import '../repo/auth_srv.dart';
 import '../tools/tools.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'contact_us.dart';
 
 GlobalKey globalKey = GlobalKey();
 
@@ -18,11 +21,9 @@ class AuthScreen extends StatelessWidget {
   static final CircularInductorCostem _inductorCostem =
       CircularInductorCostem();
 
-
-
   @override
   Widget build(BuildContext context) {
-    bool circulerProvider =Provider.of<TrueFalse>(context).isTrue;
+    bool circulerProvider = Provider.of<TrueFalse>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -46,7 +47,8 @@ class AuthScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
-                          child: Image.asset("images/logIn.png",
+                          child: Image.asset(
+                            "images/logIn.png",
                             width: 150,
                             height: 150,
                             fit: BoxFit.contain,
@@ -81,12 +83,11 @@ class AuthScreen extends StatelessWidget {
                         height: 25,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 12.0,right: 12.0),
-                        padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                        padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                         decoration: BoxDecoration(
-                          color: Colors.white70,
-                          borderRadius: BorderRadius.circular(12.0)
-                        ),
+                            color: Colors.white70,
+                            borderRadius: BorderRadius.circular(12.0)),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -111,12 +112,11 @@ class AuthScreen extends StatelessWidget {
                                     fontSize: 20, fontWeight: FontWeight.w600),
                                 cursorColor: const Color(0xFFFFD54F),
                                 decoration: InputDecoration(
-                                  fillColor: const Color(0xFFFFD54F),
-                                  hintText:  AppLocalizations.of(context)!.email1,
-                                  hintStyle: const TextStyle(
-                                    color: Colors.black87
-                                  )
-                                ),
+                                    fillColor: const Color(0xFFFFD54F),
+                                    hintText:
+                                        AppLocalizations.of(context)!.email1,
+                                    hintStyle:
+                                        const TextStyle(color: Colors.black87)),
                                 keyboardType: TextInputType.emailAddress,
                               ),
                             ),
@@ -127,12 +127,11 @@ class AuthScreen extends StatelessWidget {
                         height: 25,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 12.0,right: 12.0),
-                        padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                        margin: const EdgeInsets.only(left: 12.0, right: 12.0),
+                        padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                         decoration: BoxDecoration(
                             color: Colors.white70,
-                            borderRadius: BorderRadius.circular(12.0)
-                        ),
+                            borderRadius: BorderRadius.circular(12.0)),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -157,15 +156,34 @@ class AuthScreen extends StatelessWidget {
                                     fontSize: 20, fontWeight: FontWeight.w600),
                                 cursorColor: const Color(0xFFFFD54F),
                                 decoration: InputDecoration(
-                                  fillColor: const Color(0xFFFFD54F),
-                                  hintText: AppLocalizations.of(context)!.pass,
-                                 hintStyle: TextStyle(color: Colors.black87)
-                                ),
+                                    fillColor: const Color(0xFFFFD54F),
+                                    hintText:
+                                        AppLocalizations.of(context)!.pass,
+                                    hintStyle:
+                                        TextStyle(color: Colors.black87)),
                                 keyboardType: TextInputType.text,
                               ),
                             ),
                           ],
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(''),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const ContactUs())),
+                                child: Text('Forgot passWord ?',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16))),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
@@ -176,27 +194,23 @@ class AuthScreen extends StatelessWidget {
                             Tools().toastMsg(
                                 AppLocalizations.of(context)!.emailempty,
                                 Colors.redAccent.shade700);
-                          }
-                          else if (!email.text.contains("@")) {
+                          } else if (!email.text.contains("@")) {
                             Tools().toastMsg(
                                 AppLocalizations.of(context)!.checkemail,
                                 Colors.redAccent.shade700);
-                          }
-                          else if (!email.text.contains(".com")) {
+                          } else if (!email.text.contains(".com")) {
                             Tools().toastMsg(
                                 AppLocalizations.of(context)!.checkcom,
                                 Colors.redAccent.shade700);
-                          }
-                          else if (passWord.text.isEmpty) {
+                          } else if (passWord.text.isEmpty) {
                             Tools().toastMsg(
                                 AppLocalizations.of(context)!.passRequired,
                                 Colors.redAccent.shade700);
-                          }else if(passWord.text.length<8){
+                          } else if (passWord.text.length < 8) {
                             Tools().toastMsg(
                                 AppLocalizations.of(context)!.passLength,
                                 Colors.redAccent.shade700);
-                          }
-                          else {
+                          } else {
                             Provider.of<TrueFalse>(context, listen: false)
                                 .updateState(true);
                             // result = "$resultCodeCon${phoneNumber.text}";
@@ -209,7 +223,7 @@ class AuthScreen extends StatelessWidget {
                         },
                         child: Container(
                           margin: const EdgeInsets.only(top: 40),
-                          padding:  const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Center(
                               child: Text(
                             AppLocalizations.of(context)!.signUp,
@@ -234,19 +248,22 @@ class AuthScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Positioned(left: 0,top:0,
+                Positioned(
+                    left: 0,
+                    top: 0,
                     child: GestureDetector(
-                      onTap: ()=>Navigator.push(context, MaterialPageRoute(
-                          builder:(_){
-                       return  const MoreInfo();
-                          })),
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (_) {
+                        return const MoreInfo();
+                      })),
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         child: Column(
                           children: [
-                           Image.asset("images/infoIcon.png",height: 45,width: 45),
-                             Text( AppLocalizations.of(context)!.info,
-                                style:const TextStyle(
+                            Image.asset("images/infoIcon.png",
+                                height: 45, width: 45),
+                            Text(AppLocalizations.of(context)!.info,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold)),
@@ -263,14 +280,15 @@ class AuthScreen extends StatelessWidget {
                           decoration: (const BoxDecoration(
                             color: Colors.black,
                           )),
-                          child:
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(child: _inductorCostem.circularInductorCostem(context)),
-                                  Expanded(child: Tools().timerAuth(context, 20))
-                                ],
-                              ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: _inductorCostem
+                                      .circularInductorCostem(context)),
+                              Expanded(child: Tools().timerAuth(context, 20))
+                            ],
+                          ),
                         ),
                       )
                     : const Text(""),

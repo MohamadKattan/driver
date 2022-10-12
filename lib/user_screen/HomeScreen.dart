@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     initializationLocal(context);
     PushNotificationsSrv().gotNotificationInBackground(context);
     requestPermissionsSystem();
-    onForground();
+    // onForground();
     PlanDays().getDateTime();
     refreshApp();
     // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
@@ -177,9 +177,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                         .locationPosition(context);
                                     await GeoFireSrv()
                                         .getLocationLiveUpdates(context);
-                                    getCountryName();
-                                    tostDriverAvailable();
                                     await checkToken();
+                                    getCountryName();
+                                     lastSeen();
+                                    tostDriverAvailable();
                                   },
                                 ),
                               ),
@@ -369,5 +370,9 @@ void refreshApp(){
       if(!mounted)return;
       setState(() {});
     });
+}
+//todo new method last seen
+void lastSeen()async{
+    driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
 }
 }

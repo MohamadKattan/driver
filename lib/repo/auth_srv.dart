@@ -74,13 +74,14 @@ class AuthSev {
             "plandate": DateTime.now().toString(),
             "active": "active",
             "map": "mapbox",
-          });
-          await driverRef.child(currentUser!.uid).child("carInfo").set({
-            "carBrand": "",
-            "carColor": "",
-            "carModel": "",
-            "carType": "",
-            "carImage": "",
+          }).whenComplete(() async {
+            await driverRef.child(currentUser!.uid).child("carInfo").set({
+              "carBrand": "",
+              "carColor": "",
+              "carModel": "",
+              "carType": "",
+              "carImage": "",
+            });
           });
           Provider.of<TrueFalse>(context, listen: false).updateState(false);
           Navigator.push(
@@ -123,13 +124,14 @@ class AuthSev {
               "plandate": DateTime.now().toString(),
               "active": "active",
               "map": "mapbox",
-            });
-            await driverRef.child(currentUser!.uid).child("carInfo").set({
-              "carBrand": "",
-              "carColor": "",
-              "carModel": "",
-              "carType": "",
-              "carImage": "",
+            }).whenComplete(() async {
+              await driverRef.child(currentUser!.uid).child("carInfo").set({
+                "carBrand": "",
+                "carColor": "",
+                "carModel": "",
+                "carType": "",
+                "carImage": "",
+              });
             });
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
             Navigator.push(

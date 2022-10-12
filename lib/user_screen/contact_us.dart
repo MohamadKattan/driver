@@ -79,7 +79,7 @@ class ContactUs extends StatelessWidget {
                   children: [
                     Icon(Icons.call, color: Colors.green.shade700,size: 35),
                     const SizedBox(width: 6.0),
-                    const Text("5366034616",style: TextStyle(color: Colors.black45,fontSize: 24),)
+                    const Text("5057743644",style: TextStyle(color: Colors.black45,fontSize: 24),)
                   ],
                 ),
               ),

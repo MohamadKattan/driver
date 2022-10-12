@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 import 'my_provider/auth__inductor_provider.dart';
 import 'my_provider/bottom_sheet_value.dart';
 import 'my_provider/change_color_bottom.dart';
@@ -31,6 +32,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Wakelock.enable();
   await Firebase.initializeApp();
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;

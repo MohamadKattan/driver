@@ -5,6 +5,7 @@ import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
 import 'package:driver/user_screen/policy_screen.dart';
+import 'package:driver/user_screen/sitting_screen.dart';
 import 'package:driver/widget/switch_bottom_drarwer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,6 +119,41 @@ Widget customDrawer(BuildContext context) {
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: Text(
                           AppLocalizations.of(context)!.booking,
+                          style: const TextStyle(
+                              color: Colors.black45, fontSize: 20.0),
+                        ))
+                  ]),
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              CustomDivider().customDivider(),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SettingScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(mainAxisSize: MainAxisSize.max, children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 8.0,
+                          bottom: 8.0,
+                          top: 8.0,
+                          right: valueIconPadding(context)),
+                      child: const Icon(
+                        Icons.settings,
+                        color: Colors.black45,
+                        size: 35,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.appSetting,
                           style: const TextStyle(
                               color: Colors.black45, fontSize: 20.0),
                         ))
@@ -492,14 +528,14 @@ Widget showUserPhone(BuildContext context) {
 double valueIconPadding(BuildContext context) {
   late double val;
   if (AppLocalizations.of(context)!.day == "يوم") {
-    val = 65.0;
+    val = 95.0;
   } else {
     val = 8.0;
   }
   return val.toDouble();
 }
 
-double valueIconPadding1(BuildContext context) {
+double valueIconPadding1 (BuildContext context) {
   late double val;
   if (AppLocalizations.of(context)!.day == "Day" ||
       AppLocalizations.of(context)!.day == "Gun") {
