@@ -54,10 +54,11 @@ class ApiSrvDir {
         Provider.of<DriverInfoModelProvider>(context, listen: false)
             .driverInfo
             .country;
-    final rideInfoProvider = Provider.of<RideRequestInfoProvider>(context,listen: false)
-        .rideDetails
-        .amount;
-    late double culculFinal;
+    final rideInfoProvider =
+        Provider.of<RideRequestInfoProvider>(context, listen: false)
+            .rideDetails
+            .amount;
+    double culculFinal = 0.0;
     double timeTravleFare = (directionDetails.durationVale / 60) * 0.20;
     double distanceTravleFare = (directionDetails.distanceVale / 1000) * 0.60;
     double fareAmont = timeTravleFare + distanceTravleFare;
@@ -82,7 +83,7 @@ class ApiSrvDir {
       culculFinal = fareAmont - 0.30 * 3.67 + 3.30 * 3.67;
     } else if (carTypePro == "Medium commercial-6-10 seats" &&
         contryName == "Turkey") {
-         culculFinal= double.parse(rideInfoProvider);
+      culculFinal = double.parse(rideInfoProvider);
     } else if (carTypePro == "Medium commercial-6-10 seats" &&
         contryName == "Morocco") {
       culculFinal = fareAmont + 0.20 * 10 + 1.50 * 10.00;
@@ -109,7 +110,7 @@ class ApiSrvDir {
       culculFinal = fareAmont * 3.67 + 5.30 * 3.67;
     } else if (carTypePro == "Big commercial-11-19 seats" &&
         contryName == "Turkey") {
-   culculFinal= double.parse(rideInfoProvider);
+      culculFinal = double.parse(rideInfoProvider);
     } else if (carTypePro == "Big commercial-11-19 seats" &&
         contryName == "Morocco") {
       culculFinal = fareAmont + 0.20 * 10 + 2 * 10.00;

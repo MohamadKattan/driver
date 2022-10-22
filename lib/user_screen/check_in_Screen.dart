@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +11,10 @@ class CheckInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ApiSrvGeolocater().getContry();
+    ApiSrvGeolocater().getCountry();
     final phoneIconValue = Provider.of<PhoneIconValue>(context).IconValue;
     return WillPopScope(
-      onWillPop: ()async=>false,
+      onWillPop: () async => false,
       child: SafeArea(
           child: Scaffold(
         body: Stack(
@@ -37,13 +36,13 @@ class CheckInScreen extends StatelessWidget {
                                 height: 350,
                                 width: 350)),
                       ),
-                        Center(
+                      Center(
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Text(
                             AppLocalizations.of(context)!.checking,
                             textAlign: TextAlign.center,
-                            style:const TextStyle(
+                            style: const TextStyle(
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -51,13 +50,13 @@ class CheckInScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                       Center(
+                      Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 4.0,right: 4.0),
+                          padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                           child: Text(
-                              AppLocalizations.of(context)!.appreciate,
+                            AppLocalizations.of(context)!.appreciate,
                             textAlign: TextAlign.center,
-                            style:const TextStyle(
+                            style: const TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black54,
@@ -65,13 +64,13 @@ class CheckInScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                       Center(
+                      Center(
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Text(
-                              AppLocalizations.of(context)!.sendnot,
+                            AppLocalizations.of(context)!.sendnot,
                             textAlign: TextAlign.center,
-                            style:const TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black54,
@@ -80,17 +79,17 @@ class CheckInScreen extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                          onTap: () => Provider.of<PhoneIconValue>(context,
-                              listen: false)
-                              .updateValue(65.0),
+                        onTap: () =>
+                            Provider.of<PhoneIconValue>(context, listen: false)
+                                .updateValue(65.0),
                         child: Column(
-                          children:  [
+                          children: [
                             Center(
                               child: Padding(
-                                padding:const EdgeInsets.only(top: 25.0),
+                                padding: const EdgeInsets.only(top: 25.0),
                                 child: Text(
                                   AppLocalizations.of(context)!.moreinfo,
-                                  style:const TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.green,
@@ -100,8 +99,8 @@ class CheckInScreen extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                  AppLocalizations.of(context)!.click,
-                                style:const TextStyle(
+                                AppLocalizations.of(context)!.click,
+                                style: const TextStyle(
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black54,
@@ -132,7 +131,8 @@ class CheckInScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      ToUrlLunch().toUrlLunch(url:"https://wa.me/+905366034616");
+                      ToUrlLunch()
+                          .toUrlLunch(url: "https://wa.me/+905366034616");
                     },
                   ),
                 ),

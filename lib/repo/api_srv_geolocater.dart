@@ -17,59 +17,90 @@ class ApiSrvGeolocater {
   final GetUrl _getUrl = GetUrl();
 
   // this method for got geocoding api for current position address readable
-  Future<dynamic> searchCoordinatesAddress(BuildContext context) async {
+  Future<void> searchCoordinatesAddress(BuildContext context) async {
     final position = Provider.of<DriverCurrentPosition>(context, listen: false)
         .currentPosition;
-    String placeAddress = "";
-    String placeAddress0 = "";
-    String placeAddress1 = "";
+    String placeAddress0, placeAddress1, placeAddress2, type1, type2;
     var url = Uri.parse(
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey");
     final response = await _getUrl.getUrlMethod(url);
     if (response != "failed") {
+      type1 = response["results"][0]["address_components"][4]["types"][0];
+      type2 = response["results"][0]["address_components"][5]["types"][0];
       placeAddress0 =
-          response["results"][0]["address_components"][5]["long_name"];
+          response["results"][0]["address_components"][4]["long_name"];
       placeAddress1 =
+          response["results"][0]["address_components"][5]["long_name"];
+      placeAddress2 =
           response["results"][0]["address_components"][6]["long_name"];
-      if (placeAddress0 == '0') {
-        placeAddress = placeAddress0;
-      } else if (placeAddress1 == 'Turkey') {
-        placeAddress = placeAddress1;
+
+      if (type1 == 'administrative_area_level_1') {
+        driverRef
+            .child(userId)
+            .update({"city": placeAddress0, "country": placeAddress1});
+      } else if (type2 == 'administrative_area_level_1') {
+        driverRef
+            .child(userId)
+            .update({"city": placeAddress1, "country": placeAddress2});
       } else {
-        placeAddress = placeAddress0;
-        print("elsedon");
+        driverRef
+            .child(userId)
+            .update({"city": placeAddress1, "country": placeAddress2});
       }
-      driverRef.child(userId).update({"country": placeAddress});
-      //for update
-      Provider.of<PlaceName>(context, listen: false).updateState(placeAddress);
+      // if (placeAddress0 == '0') {
+      //   country = placeAddress0;
+      // } else if (placeAddress1 == 'Turkey') {
+      //   country = placeAddress1;
+      // } else {
+      //   country = placeAddress0;
+      // }
+      // driverRef.child(userId).update({"country": country});
+      // Provider.of<PlaceName>(context, listen: false).updateState(country);
     }
-    return placeAddress;
+    // return country;
   }
 
   // thus method it will work in check in screen just for return country name and set
-  Future<dynamic> getContry() async {
+  Future<void> getCountry() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    String placeAddress = "";
-    String placeAddress0 = "";
-    String placeAddress1 = "";
+    String placeAddress0, placeAddress1, placeAddress2, type1, type2;
     var url = Uri.parse(
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey");
     final response = await _getUrl.getUrlMethod(url);
     if (response != "failed") {
+      type1 = response["results"][0]["address_components"][4]["types"][0];
+      type2 = response["results"][0]["address_components"][5]["types"][0];
       placeAddress0 =
-          response["results"][0]["address_components"][5]["long_name"];
+          response["results"][0]["address_components"][4]["long_name"];
       placeAddress1 =
+          response["results"][0]["address_components"][5]["long_name"];
+      placeAddress2 =
           response["results"][0]["address_components"][6]["long_name"];
-      if (placeAddress0 == 'Turkey') {
-        placeAddress = placeAddress0;
-      } else if (placeAddress1 == 'Turkey') {
-        placeAddress = placeAddress1;
+
+      if (type1 == 'administrative_area_level_1') {
+        driverRef
+            .child(userId)
+            .update({"city": placeAddress0, "country": placeAddress1});
+      } else if (type2 == 'administrative_area_level_1') {
+        driverRef
+            .child(userId)
+            .update({"city": placeAddress1, "country": placeAddress2});
       } else {
-        placeAddress = placeAddress0;
+        driverRef
+            .child(userId)
+            .update({"city": placeAddress1, "country": placeAddress2});
       }
-      driverRef.child(userId).child("country").set(placeAddress);
+      //   if (placeAddress0 == 'Turkey') {
+      //     placeAddress = placeAddress0;
+      //   } else if (placeAddress1 == 'Turkey') {
+      //     placeAddress = placeAddress1;
+      //   } else {
+      //     placeAddress = placeAddress0;
+      //   }
+      //   driverRef.child(userId).child("country").set(placeAddress);
+      // }
+      // return placeAddress;
     }
-    return placeAddress;
   }
 }

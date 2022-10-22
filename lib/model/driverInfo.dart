@@ -15,32 +15,35 @@ class DriverInfo {
   late String carType;
   late String earning;
   late String country;
+  late String city;
   late int exPlan;
   late bool update;
   late String tok;
   DriverInfo(
-      this.userId,
-      this.country,
-      this.status,
-      this.firstName,
-      this.lastName,
-      this.idNo,
-      this.phoneNumber,
-      this.email,
-      this.personImage,
-      this.carBrand,
-      this.carColor,
-      this.carModel,
-      this.carType,
-      this.earning,
-      this.exPlan,
-      this.update,
-      this.tok,
-      );
+    this.userId,
+    this.country,
+    this.city,
+    this.status,
+    this.firstName,
+    this.lastName,
+    this.idNo,
+    this.phoneNumber,
+    this.email,
+    this.personImage,
+    this.carBrand,
+    this.carColor,
+    this.carModel,
+    this.carType,
+    this.earning,
+    this.exPlan,
+    this.update,
+    this.tok,
+  );
   DriverInfo.fromMap(Map<String, dynamic> map) {
     userId = map["userId"];
     status = map["status"];
     country = map["country"];
+    city = map["city"];
     exPlan = map["exPlan"];
     update = map["update"];
     firstName = map["firstName"];
@@ -50,7 +53,7 @@ class DriverInfo {
     email = map["email"];
     personImage = map["personImage"];
     earning = map["earning"];
-    tok=map["token"];
+    tok = map["token"];
     carBrand = map["carInfo"]["carBrand"];
     carColor = map["carInfo"]["carColor"];
     carModel = map["carInfo"]["carModel"];

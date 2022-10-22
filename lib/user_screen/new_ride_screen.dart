@@ -442,18 +442,28 @@ class _NewRideScreenState extends State<NewRideScreen> {
         .ref()
         .child("Ride Request")
         .child(riderInfo.userId);
-
-    rideRequestRef.child("status").set("accepted");
-    rideRequestRef.child("driverId").set(driverInfo.userId);
-    rideRequestRef.child("driverImage").set(driverInfo.personImage);
-    rideRequestRef
-        .child("driverName")
-        .set("${driverInfo.firstName} ${driverInfo.lastName}");
-    rideRequestRef.child("driverPhone").set(driverInfo.phoneNumber);
-    rideRequestRef
-        .child("carInfo")
-        .set("${driverInfo.carBrand} - ${driverInfo.carColor}");
-    rideRequestRef.child("driverLocation").set(driveLoc);
+    rideRequestRef.set({
+      "status":"accepted",
+      "driverId":driverInfo.userId,
+      "carPlack":driverInfo.idNo,
+      "driverImage":driverInfo.personImage,
+      "driverName": driverInfo.firstName+" "+ driverInfo.lastName,
+      "driverPhone":driverInfo.phoneNumber,
+      "carInfo":driverInfo.carBrand+"-"+driverInfo.carColor,
+      "driverLocation":driveLoc
+    });
+    ///todo old code stopped
+    // rideRequestRef.child("status").set("accepted");
+    // rideRequestRef.child("driverId").set(driverInfo.userId);
+    // rideRequestRef.child("carPlack").set(driverInfo.idNo);
+    // rideRequestRef.child("driverImage").set(driverInfo.personImage);
+    // rideRequestRef.child("driverName")
+    //     .set("${driverInfo.firstName} ${driverInfo.lastName}");
+    // rideRequestRef.child("driverPhone").set(driverInfo.phoneNumber);
+    // rideRequestRef
+    //     .child("carInfo")
+    //     .set("${driverInfo.carBrand} - ${driverInfo.carColor}");
+    // rideRequestRef.child("driverLocation").set(driveLoc);
   }
 
   /*2..this them main logic for draw direction on marker+ polyline connect
@@ -560,27 +570,26 @@ class _NewRideScreenState extends State<NewRideScreen> {
         isInductor = false;
       }
     });
-
     ///for fit line on map PolylinePoints
-    // LatLngBounds latLngBounds;
-    // if (pickUpLatling.latitude > dropOfLatling.latitude &&
-    //     pickUpLatling.longitude > dropOfLatling.longitude) {
-    //   latLngBounds =
-    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
-    // } else if (pickUpLatling.longitude > dropOfLatling.longitude) {
-    //   latLngBounds = LatLngBounds(
-    //       southwest: LatLng(pickUpLatling.latitude, dropOfLatling.longitude),
-    //       northeast: LatLng(dropOfLatling.latitude, pickUpLatling.longitude));
-    // } else if (pickUpLatling.latitude > dropOfLatling.latitude) {
-    //   latLngBounds = LatLngBounds(
-    //       southwest: LatLng(dropOfLatling.latitude, pickUpLatling.longitude),
-    //       northeast: LatLng(pickUpLatling.latitude, dropOfLatling.longitude));
-    // } else {
-    //   latLngBounds =
-    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
-    // }
-    // newGoogleMapController
-    //     ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+    LatLngBounds latLngBounds;
+    if (pickUpLatling.latitude > dropOfLatling.latitude &&
+        pickUpLatling.longitude > dropOfLatling.longitude) {
+      latLngBounds =
+          LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
+    } else if (pickUpLatling.longitude > dropOfLatling.longitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(pickUpLatling.latitude, dropOfLatling.longitude),
+          northeast: LatLng(dropOfLatling.latitude, pickUpLatling.longitude));
+    } else if (pickUpLatling.latitude > dropOfLatling.latitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(dropOfLatling.latitude, pickUpLatling.longitude),
+          northeast: LatLng(pickUpLatling.latitude, dropOfLatling.longitude));
+    } else {
+      latLngBounds =
+          LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
+    }
+    newGoogleMapController
+        ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
   }
 
 // contact to method getPlaceDirection
@@ -620,7 +629,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       _locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
-          distanceFilter: 20,
+          distanceFilter: 5,
           forceLocationManager: false,
           intervalDuration: const Duration(seconds: 2),
           foregroundNotificationConfig: ForegroundNotificationConfig(
@@ -632,14 +641,14 @@ class _NewRideScreenState extends State<NewRideScreen> {
       _locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.fitness,
-        distanceFilter: 20,
+        distanceFilter: 5,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
     } else {
       _locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 20,
+        distanceFilter: 5,
       );
     }
     // if (Platform.isAndroid) {
@@ -896,8 +905,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   /*6.. this method for change Status & title-color arrived button from
-  * & driver loc to rider pickUp loc then from rider pickUp to rider drop
-  * then update status on fire base
+  & driver loc to rider pickUp loc then from rider pickUp to rider drop
+  then update status on fire base
   */
   Future<void> changeColorArrivedAndTileButton(
       BuildContext context, RideDetails rideInfoProvider) async {
@@ -924,7 +933,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         status = "onride";
       });
       timerStop2.cancel();
-     time3(context,myPosition!,rideInfoProvider.dropoff);
+      time3(context, myPosition!, rideInfoProvider.dropoff);
       Provider.of<TitleArrived>(context, listen: false)
           .updateState(AppLocalizations.of(context)!.endTrip);
       Provider.of<ColorButtonArrived>(context, listen: false)
@@ -1155,11 +1164,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
-    if(Platform.isIOS){
-       url =
+    if (Platform.isIOS) {
+      url =
           "https://www.google.com/maps/search/?api=1&query=${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude}";
-    }else{
-      url = 'https://www.google.com/maps/dir/${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}/${rideInfo.dropoffAddress},+${rideInfo.dropoffAddress}/@${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude},13z/';
+    } else {
+      url =
+          'https://www.google.com/maps/dir/${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}/${rideInfo.dropoffAddress},+${rideInfo.dropoffAddress}/@${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude},13z/';
     }
     // String url =
     //     "https://www.google.com/maps/dir/${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}/${rideInfo.dropoffAddress},+${rideInfo.dropoffAddress}/@${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude},13z/";
@@ -1176,10 +1186,12 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
-    if(Platform.isIOS){
-      url='https://www.google.com/maps/search/?api=1&query=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}';
-    }else{
-      url='https://www.google.com/maps/dir/${_driver.latitude},${_driver.longitude}/${rideInfo.pickupAddress},+${rideInfo.pickupAddress}/@${rideInfo.pickup.latitude},${rideInfo.pickup.longitude},13z/';
+    if (Platform.isIOS) {
+      url =
+          'https://www.google.com/maps/search/?api=1&query=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}';
+    } else {
+      url =
+          'https://www.google.com/maps/dir/${_driver.latitude},${_driver.longitude}/${rideInfo.pickupAddress},+${rideInfo.pickupAddress}/@${rideInfo.pickup.latitude},${rideInfo.pickup.longitude},13z/';
     }
     // String url =
     //     "https://www.google.com/maps/dir/${_driver.latitude},${_driver.longitude}/${rideInfo.pickupAddress},+${rideInfo.pickupAddress}/@${rideInfo.pickup.latitude},${rideInfo.pickup.longitude},13z/";
@@ -1210,18 +1222,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
 //==================================End Navigation==============================
   // when driver arrived to rider for notify rider just by time
   void timer1(BuildContext context) {
-    String _voiceLan= AppLocalizations.of(context)!.day;
+    String _voiceLan = AppLocalizations.of(context)!.day;
     const duration = Duration(minutes: 1);
     int timerCount1 = 3;
     timerStop1 = Timer.periodic(duration, (timer) {
       timerCount1 = timerCount1 - 1;
       if (timerCount1 == 0) {
-        switch(_voiceLan){
-          case'Gun':
+        switch (_voiceLan) {
+          case 'Gun':
             assetsAudioPlayer
                 .open(Audio("sounds/notify_passenger_accessing_tr.mp3"));
             break;
-          case'يوم':
+          case 'يوم':
             assetsAudioPlayer
                 .open(Audio("sounds/notify_passenger_accessing_ar.wav"));
             break;
@@ -1235,8 +1247,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         setState(() {
           timerCount1 = 3;
         });
-      }
-      else if (status == "arrived") {
+      } else if (status == "arrived") {
         timer.cancel();
         timerStop1.cancel();
         setState(() {
@@ -1245,19 +1256,20 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
     });
   }
+
 // this method for remaber driver to click button when start trip
- void timer2() {
-    String voiceLang=AppLocalizations.of(context)!.day;
+  void timer2() {
+    String voiceLang = AppLocalizations.of(context)!.day;
     const duration = Duration(seconds: 1);
     int _timerCount2 = 5;
     timerStop2 = Timer.periodic(duration, (timer) {
       _timerCount2 = _timerCount2 - 1;
       if (_timerCount2 == 0) {
-        switch(voiceLang){
-          case'Gun':
+        switch (voiceLang) {
+          case 'Gun':
             assetsAudioPlayer.open(Audio("sounds/start_trip_tr.mp3"));
             break;
-          case'يوم':
+          case 'يوم':
             assetsAudioPlayer.open(Audio("sounds/start_trip_ar.wav"));
             break;
           default:
@@ -1277,17 +1289,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
     });
   }
+
   // this mehtod calck time trip when than myPosition == dropoff notify end trip
   void time3(BuildContext context, Position myPosition, LatLng dropoff) {
     final res = LatLng(myPosition.latitude, myPosition.longitude);
-   final String soundLan=AppLocalizations.of(context)!.day;
+    final String soundLan = AppLocalizations.of(context)!.day;
     var count = Provider.of<DirectionDetailsPro>(context, listen: false)
         .directionDetails;
     timerStop3 = Timer.periodic(const Duration(milliseconds: 2000), (timer) {
       count.durationVale = count.durationVale - 1;
       if (count.durationVale <= 0) {
-        if(res==dropoff){
-          switch(soundLan){
+        if (res == dropoff) {
+          switch (soundLan) {
             case 'Gun':
               assetsAudioPlayer.open(Audio("sounds/end_trip_tr.mp3"));
               break;
@@ -1304,7 +1317,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
       } else if (status == "ended") {
         timer.cancel();
         timerStop3.cancel();
-      }else{
+      } else {
         timer.cancel();
         timerStop3.cancel();
       }

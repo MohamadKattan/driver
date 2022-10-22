@@ -35,24 +35,20 @@ class AuthSev {
         snapshot = await driverRef.child(currentUser!.uid).get();
         if (snapshot.exists) {
           Map<String, dynamic> map =
-          Map<String, dynamic>.from(snapshot.value as Map);
+              Map<String, dynamic>.from(snapshot.value as Map);
           DriverInfo driverInfo = DriverInfo.fromMap(map);
           if (driverInfo.status == "info" && driverInfo.tok == "") {
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const DriverInfoScreen()));
-          }
-          else {
+          } else {
             Provider.of<DriverInfoModelProvider>(context, listen: false)
                 .updateDriverInfo(driverInfo);
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const SplashScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SplashScreen()));
           }
-        }
-        else if (!snapshot.exists || snapshot.key!.isEmpty) {
+        } else if (!snapshot.exists || snapshot.key!.isEmpty) {
           driverRef.child(currentUser!.uid).set({
             "userId": currentUser!.uid,
             "phoneNumber": "",
@@ -63,6 +59,7 @@ class AuthSev {
             "status": "info",
             "firstName": "",
             "country": "",
+            "city": "",
             "exPlan": 0,
             "lastName": "",
             "idNo": "",
@@ -72,6 +69,7 @@ class AuthSev {
             "earning": "0.0",
             "personImage": "",
             "plandate": DateTime.now().toString(),
+            "lastseen": DateTime.now().toString(),
             "active": "active",
             "map": "mapbox",
           }).whenComplete(() async {
@@ -90,7 +88,7 @@ class AuthSev {
                   builder: (context) => const DriverInfoScreen()));
         }
       }
-       getCurrentUserId(context);
+      getCurrentUserId(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == "wrong-password") {
         _tools.toastMsg(
@@ -113,6 +111,7 @@ class AuthSev {
               "status": "info",
               "firstName": "",
               "country": "",
+              "city": "",
               "exPlan": 0,
               "lastName": "",
               "token": "",
@@ -122,6 +121,7 @@ class AuthSev {
               "earning": "0.0",
               "personImage": "",
               "plandate": DateTime.now().toString(),
+              "lastseen": DateTime.now().toString(),
               "active": "active",
               "map": "mapbox",
             }).whenComplete(() async {
@@ -138,7 +138,7 @@ class AuthSev {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const DriverInfoScreen()));
-             getCurrentUserId(context);
+            getCurrentUserId(context);
           }
         } on FirebaseAuthException catch (e) {
           e.toString();

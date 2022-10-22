@@ -1,5 +1,4 @@
 // this class for custom bottom sheet use in DriverInfoScreen
-
 import 'dart:io';
 import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/tools/tools.dart';
@@ -20,7 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBottomSheet {
   final ImagePicker _picker = ImagePicker();
-  late XFile? image1;
+  late final XFile? image1;
   late final XFile? image2;
   late final XFile? image3;
   late final XFile? image4;
@@ -69,13 +68,14 @@ class CustomBottomSheet {
                   size: 35.0,
                   color: Color(0xFFFBC408),
                 )),
-            Center(child: Text(AppLocalizations.of(context)!.approveImages,
+            Center(
+                child: Text(
+              AppLocalizations.of(context)!.approveImages,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600
-              ),
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600),
             )),
             const SizedBox(height: 15.0),
             Container(
@@ -106,7 +106,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image1 = await _picker.pickImage(
-                                  source: ImageSource.camera,
+                                source: ImageSource.camera,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -118,6 +121,9 @@ class CustomBottomSheet {
                             onPressed: () async {
                               image1 = await _picker.pickImage(
                                 source: ImageSource.gallery,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -161,7 +167,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image2 = await _picker.pickImage(
-                                  source: ImageSource.camera,
+                                source: ImageSource.camera,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -172,7 +181,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image2 = await _picker.pickImage(
-                                  source: ImageSource.gallery,
+                                source: ImageSource.gallery,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -216,7 +228,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image3 = await _picker.pickImage(
-                                  source: ImageSource.camera,
+                                source: ImageSource.camera,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -227,7 +242,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image3 = await _picker.pickImage(
-                                  source: ImageSource.gallery,
+                                source: ImageSource.gallery,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -262,7 +280,10 @@ class CustomBottomSheet {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(AppLocalizations.of(context)!.carImage,overflow: TextOverflow.ellipsis,),
+                    child: Text(
+                      AppLocalizations.of(context)!.carImage,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -271,7 +292,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image4 = await _picker.pickImage(
-                                  source: ImageSource.camera,
+                                source: ImageSource.camera,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -282,7 +306,10 @@ class CustomBottomSheet {
                         IconButton(
                             onPressed: () async {
                               image4 = await _picker.pickImage(
-                                  source: ImageSource.gallery,
+                                source: ImageSource.gallery,
+                                maxWidth: 500,
+                                maxHeight: 500,
+                                imageQuality: 100,
                               );
                               Provider.of<GetImageProvider>(context,
                                       listen: false)
@@ -300,18 +327,18 @@ class CustomBottomSheet {
             const SizedBox(height: 25.0),
             GestureDetector(
               onTap: () {
-                if (driverImage==null) {
+                if (driverImage == null) {
                   Tools().toastMsg(AppLocalizations.of(context)!.imageDrequired,
                       Colors.redAccent.shade700);
-                } else if (driverLis==null) {
+                } else if (driverLis == null) {
                   Tools().toastMsg(
                       AppLocalizations.of(context)!.licenseDrequired,
                       Colors.redAccent.shade700);
-                } else if (carLisImage==null) {
+                } else if (carLisImage == null) {
                   Tools().toastMsg(
                       AppLocalizations.of(context)!.licenseCrequired,
                       Colors.redAccent.shade700);
-                } else if (carImage==null) {
+                } else if (carImage == null) {
                   Tools().toastMsg(AppLocalizations.of(context)!.imageCrequired,
                       Colors.redAccent.shade700);
                 } else {
@@ -319,6 +346,7 @@ class CustomBottomSheet {
                       .updateValue(-700.0);
                   Provider.of<DriverInfoInductor>(context, listen: false)
                       .updateState(true);
+
                   ///from here the main logic !!
                   storage1(
                       driverImage,
@@ -333,8 +361,7 @@ class CustomBottomSheet {
                       carModel,
                       dropBottomValue,
                       context,
-                    result
-                  );
+                      result);
                 }
               },
               child: Container(
@@ -344,15 +371,15 @@ class CustomBottomSheet {
                   color: const Color(0xFFFBC408),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child:
-                    Center(child: Text(AppLocalizations.of(context)!.confirm,
-                      textAlign: TextAlign.center,
-                      style:const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      ),
-                    )),
+                child: Center(
+                    child: Text(
+                  AppLocalizations.of(context)!.confirm,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                )),
               ),
             ),
           ],
@@ -413,7 +440,8 @@ class CustomBottomSheet {
       TextEditingController carColor,
       TextEditingController carModel,
       String dropBottomValue,
-      BuildContext context, String result) async {
+      BuildContext context,
+      String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -421,7 +449,7 @@ class CustomBottomSheet {
     await ref.putFile(File(driverImage.path));
     String url1 = await ref.getDownloadURL();
     setToStorage2(url1, driverLis, carImage, carLisImage, name, lastName, idNo,
-        carBrand, carModel, carColor, dropBottomValue, context,result);
+        carBrand, carModel, carColor, dropBottomValue, context, result);
   }
 
   void setToStorage2(
@@ -436,7 +464,8 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context, String result) async {
+      BuildContext context,
+      String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -444,7 +473,7 @@ class CustomBottomSheet {
     await ref.putFile(File(driverLis.path));
     String url2 = await ref.getDownloadURL();
     setFromToStorage3(url1, url2, carLisImage, carImage, name, lastName, idNo,
-        carBrand, carModel, carColor, dropBottomValue, context,result);
+        carBrand, carModel, carColor, dropBottomValue, context, result);
   }
 
   void setFromToStorage3(
@@ -459,7 +488,8 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context, String result) async {
+      BuildContext context,
+      String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -467,7 +497,7 @@ class CustomBottomSheet {
     await ref.putFile(File(carLisImage.path));
     String url3 = await ref.getDownloadURL();
     storgeFrom3To4(url1, url2, url3, carImage, name, lastName, idNo, carBrand,
-        carModel, carColor, dropBottomValue, context,result);
+        carModel, carColor, dropBottomValue, context, result);
   }
 
   void storgeFrom3To4(
@@ -482,7 +512,8 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context, String result) async {
+      BuildContext context,
+      String result) async {
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('driver/${currentUser!.uid}')
@@ -490,7 +521,7 @@ class CustomBottomSheet {
     await ref.putFile(File(carImage.path));
     String url4 = await ref.getDownloadURL();
     setToRealTimeDataBase(url1, url2, url3, url4, name, lastName, idNo,
-        carBrand, carModel, carColor, dropBottomValue, context,result);
+        carBrand, carModel, carColor, dropBottomValue, context, result);
   }
 
   void setToRealTimeDataBase(
@@ -505,7 +536,8 @@ class CustomBottomSheet {
       TextEditingController carModel,
       TextEditingController carColor,
       String dropBottomValue,
-      BuildContext context, String result) async {
+      BuildContext context,
+      String result) async {
     if (currentUser!.uid.isNotEmpty) {
       DatabaseReference driverRef = FirebaseDatabase.instance
           .ref()
@@ -531,7 +563,7 @@ class CustomBottomSheet {
           "carImage": url4.toString(),
         });
       }).whenComplete(() async {
-        await  getToken();
+        await getToken();
         Provider.of<DriverInfoInductor>(context, listen: false)
             .updateState(false);
         Navigator.pushAndRemoveUntil(

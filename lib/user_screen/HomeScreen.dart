@@ -12,13 +12,13 @@ import '../logic_google_map.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
-import '../my_provider/placeAdrees_name.dart';
 import '../notificatons/local_notifications.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../notificatons/system_alert_window.dart';
 import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
+import '../repo/dataBaseReal_sev.dart';
 import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     // if ( state ==AppLifecycleState.inactive||state ==AppLifecycleState.detached) return;
 
-    switch(state){
+    switch (state) {
       case AppLifecycleState.paused:
         runLocale = true;
         break;
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         runLocale = false;
         break;
       case AppLifecycleState.inactive:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         break;
       case AppLifecycleState.detached:
         Geofire.removeLocation(userId);
@@ -179,8 +179,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                         .getLocationLiveUpdates(context);
                                     await checkToken();
                                     getCountryName();
-                                     lastSeen();
+                                    lastSeen();
                                     tostDriverAvailable();
+                                    await DataBaseReal()
+                                        .getDriverInfoFromDataBase(context);
                                   },
                                 ),
                               ),
@@ -280,7 +282,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-
   // of line on line
   Widget customSwitchBottom() => Transform.scale(
         scale: 1.5,
@@ -322,27 +323,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           AppLocalizations.of(context)!.notAvilbel, Colors.redAccent.shade700);
     }
   }
+
   // todo new if country name came null this method it will work
   Future<void> getCountryName() async {
-    ApiSrvGeolocater().searchCoordinatesAddress(context);
-    var _country =
-        Provider.of<DriverInfoModelProvider>(context, listen: false)
-            .driverInfo
-            .country;
-   final _result = Provider.of<PlaceName>(context, listen: false).placeName;
-    if (_country == "") {
-       await ApiSrvGeolocater().searchCoordinatesAddress(context);
-    setState(() {
-      _country=_result;
-    });
-    } else {
-      return;
-    }
+    await ApiSrvGeolocater().searchCoordinatesAddress(context);
+    //  var _country =
+    //      Provider.of<DriverInfoModelProvider>(context, listen: false)
+    //          .driverInfo
+    //          .country;
+    // final _result = Provider.of<PlaceName>(context, listen: false).placeName;
+    //  setState(() {
+    //    _country=_result;
+    //  });
   }
+
 // this method for stop local Notification
   void onForground() {
     driverRef.child(userId).child("service").set("not");
   }
+
 // this method for check token after map loading
   Future<void> checkToken() async {
     final driverInfo =
@@ -364,15 +363,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       }
     }
   }
+
   //todo this method new under check for refresh app
-void refreshApp(){
+  void refreshApp() {
     Timer.periodic(const Duration(seconds: 10), (timer) {
-      if(!mounted)return;
+      if (!mounted) return;
       setState(() {});
     });
-}
+  }
+
 //todo new method last seen
-void lastSeen()async{
+  void lastSeen() async {
     driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
-}
+  }
 }

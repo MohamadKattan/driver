@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>64762762994-de67kqft6da7asglk4cqvifksgpsdglt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.64762762994-de67kqft6da7asglk4cqvifksgpsdglt</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>64762762994-pgtbbc1rhe9972ggk27uo8bhk6kp7k63.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAp1S1MmXEFlWzScLD1n3EYWmQgp7e8pBQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>64762762994</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.garanti.garantitaxidriver</string>
+	<key>PROJECT_ID</key>
+	<string>garantitaxi-b463b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>garantitaxi-b463b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:64762762994:ios:bff3c9ad35326ed2af626b</string>
+	<key>DATABASE_URL</key>
+	<string>https://garantitaxi-b463b-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
