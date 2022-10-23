@@ -42,4 +42,12 @@ class ToUrlLunch {
         : Tools()
             .toastMsg('Could not launch gmail now ', Colors.redAccent.shade700);
   }
+
+  Future<void> toUrlWebSite() async {
+    // if (!await launch(url)) throw 'Could not launch $url';
+    await canLaunch("https://garantitaxi.com")
+        ? launch("https://garantitaxi.com")
+        : Tools()
+        .toastMsg('Could not launch webSite now ', Colors.redAccent.shade700);
+  }
 }

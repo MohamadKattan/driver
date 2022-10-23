@@ -38,10 +38,10 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     checkInternet();
     //todo old code
-    // if (AuthSev().auth.currentUser?.uid != null) {
-    //   DataBaseReal().getDriverInfoFromDataBase(context);
-    //   // PlanDays().getBackGroundBoolValue();
-    // }
+    if (AuthSev().auth.currentUser?.uid != null) {
+      DataBaseReal().getDriverInfoFromDataBase(context);
+      // PlanDays().getBackGroundBoolValue();
+    }
     _animationController = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 800),

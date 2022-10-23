@@ -1,6 +1,4 @@
-import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/user_screen/more_info.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/auth__inductor_provider.dart';
@@ -8,7 +6,6 @@ import '../repo/auth_srv.dart';
 import '../tools/tools.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'contact_us.dart';
 
 GlobalKey globalKey = GlobalKey();
@@ -160,7 +157,7 @@ class AuthScreen extends StatelessWidget {
                                     hintText:
                                         AppLocalizations.of(context)!.pass,
                                     hintStyle:
-                                        TextStyle(color: Colors.black87)),
+                                        const TextStyle(color: Colors.black87)),
                                 keyboardType: TextInputType.text,
                               ),
                             ),
@@ -179,8 +176,10 @@ class AuthScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => const ContactUs())),
-                                child: Text('Forgot passWord ?',
-                                    style: TextStyle(
+                                child: Text(
+                                    AppLocalizations.of(context)!
+                                        .forgetPassWord,
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 16))),
                           ),
                         ],

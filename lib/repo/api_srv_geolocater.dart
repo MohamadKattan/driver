@@ -14,6 +14,9 @@ import 'auth_srv.dart';
 class ApiSrvGeolocater {
   String userId = AuthSev().auth.currentUser!.uid;
   DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
+  DatabaseReference preBookRef =
+      FirebaseDatabase.instance.ref().child("prebook");
+
   final GetUrl _getUrl = GetUrl();
 
   // this method for got geocoding api for current position address readable
@@ -35,17 +38,44 @@ class ApiSrvGeolocater {
           response["results"][0]["address_components"][6]["long_name"];
 
       if (type1 == 'administrative_area_level_1') {
-        driverRef
-            .child(userId)
-            .update({"city": placeAddress0, "country": placeAddress1});
+        driverRef.child(userId).update(
+            {"city": placeAddress0, "country": placeAddress1}).whenComplete(() {
+          preBookRef.child(userId).once().then((value) {
+            if (!value.snapshot.exists) {
+              return;
+            } else {
+              preBookRef
+                  .child(userId)
+                  .update({"city": placeAddress0, "country": placeAddress1});
+            }
+          });
+        });
       } else if (type2 == 'administrative_area_level_1') {
-        driverRef
-            .child(userId)
-            .update({"city": placeAddress1, "country": placeAddress2});
+        driverRef.child(userId).update(
+            {"city": placeAddress1, "country": placeAddress2}).whenComplete(() {
+          preBookRef.child(userId).once().then((value) {
+            if (!value.snapshot.exists) {
+              return;
+            } else {
+              preBookRef
+                  .child(userId)
+                  .update({"city": placeAddress1, "country": placeAddress2});
+            }
+          });
+        });
       } else {
-        driverRef
-            .child(userId)
-            .update({"city": placeAddress1, "country": placeAddress2});
+        driverRef.child(userId).update(
+            {"city": placeAddress1, "country": placeAddress2}).whenComplete(() {
+          preBookRef.child(userId).once().then((value) {
+            if (!value.snapshot.exists) {
+              return;
+            } else {
+              preBookRef
+                  .child(userId)
+                  .update({"city": placeAddress1, "country": placeAddress2});
+            }
+          });
+        });
       }
       // if (placeAddress0 == '0') {
       //   country = placeAddress0;

@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock/wakelock.dart';
 import 'my_provider/auth__inductor_provider.dart';
+import 'my_provider/bottom_sheet_preBook.dart';
 import 'my_provider/bottom_sheet_value.dart';
 import 'my_provider/change_color_bottom.dart';
 import 'my_provider/color_arrived_button_provider.dart';
@@ -22,6 +23,7 @@ import 'my_provider/indctor_profile_screen.dart';
 import 'my_provider/new_ride_indector.dart';
 import 'my_provider/payment_indector_provider.dart';
 import 'my_provider/placeAdrees_name.dart';
+import 'my_provider/preBook_imagePro.dart';
 import 'my_provider/ride_request_info.dart';
 import 'my_provider/tilte_arrived_button_provider.dart';
 import 'my_provider/trip_history_provider.dart';
@@ -70,6 +72,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => InductorProfileProvider()),
         ChangeNotifierProvider(create: (context) => PaymentIndector()),
         ChangeNotifierProvider(create: (context) => PlaceName()),
+        ChangeNotifierProvider(
+            create: (context) => BottomSheetProviderPreBooking()),
+        ChangeNotifierProvider(create: (context) => GetImagePreBook()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

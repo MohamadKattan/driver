@@ -5,6 +5,7 @@ import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
 import 'package:driver/user_screen/policy_screen.dart';
+import 'package:driver/user_screen/pre-booking.dart';
 import 'package:driver/user_screen/sitting_screen.dart';
 import 'package:driver/widget/switch_bottom_drarwer.dart';
 import 'package:flutter/material.dart';
@@ -154,6 +155,41 @@ Widget customDrawer(BuildContext context) {
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: Text(
                           AppLocalizations.of(context)!.appSetting,
+                          style: const TextStyle(
+                              color: Colors.black45, fontSize: 20.0),
+                        ))
+                  ]),
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              CustomDivider().customDivider(),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PreBooking())),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(mainAxisSize: MainAxisSize.max, children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 8.0,
+                          bottom: 8.0,
+                          top: 8.0,
+                          right: valueIconPadding(context)),
+                      child: const Icon(
+                        Icons.timer,
+                        color: Colors.black45,
+                        size: 35,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.reservation,
                           style: const TextStyle(
                               color: Colors.black45, fontSize: 20.0),
                         ))

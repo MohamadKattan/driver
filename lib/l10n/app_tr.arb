@@ -163,5 +163,17 @@
   "s7": "1. Söförlerden istenen sürücü belgesi, araç ruhsat bilgileri, \nplakasi ve model yili, isim, soy isim, sahsi fotograf, \n sonra bilgileriniz bize ulaçacaktir.\n2. Bilgileriniz kontrol edikdikten sonra size 30 günlük ücretsiz paket ile\nbirlikte onay verip size bildirim yoluyla bilgilendirecegiz.\n3. Onay bildirimini aldiktan sonra uygulamayi tekrar açtiginizda\nuygulamayi kullanmaya baslayabilirsiniz.\nDaha Fazla Bilgi icin bizimle iletisime gecebilirsiniz:\nvba@garantitaxi.com",
   "appSetting": "uygulama ayarı",
   "appSettingDs": "Bazı mobil cihazlar tüm izinlere otomatik olarak izin vermez.\n uygulama denetimimizle daha iyi bir deneyim için\ntüm izinlere izin veriniz",
-  "checkSetting": "İzinleri kontrol et"
+  "checkSetting": "İzinleri kontrol et",
+  "reservation": "rezervasyon hizmeti",
+  "doReservation": "Erken rezervasyon hizmetinden\n yararlanmak ister misiniz?",
+  "uploadImageReservation": "Erken rezervasyon talebi almak ve daha iyi bir müşteri pörtfeyi yakalamak için aracınızın iç de dış resimlerini yükleyin ön Rezervasyon listesinde yer aldığınızda müşteriler sizi doğrudan arayabilir ve seyahat saati ve zamanı ve maliyet i size uygun ise onay verebilirsiniz",
+  "uploadImage": "Resimleri yükle",
+  "carInside": "araba iç resimleri",
+  "carOutside": "Araba dış resimleri",
+  "carOutside1": "arabanın önden resmi",
+  "carInsideReq": "araba iç resimleri gerekli",
+  "carOutSideReq": "araba dış resimleri gerekli",
+  "carOutside1Req": "gerekli arabanın ön resmi",
+  "preBookOkay": "operasyon başarıyla tamamlandı",
+  "forgetPassWord": "Şifremi Unuttum?"
 }

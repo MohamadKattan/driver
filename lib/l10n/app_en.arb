@@ -668,5 +668,53 @@
   "checkSetting": "Check permissions",
   "@checkSetting": {
     "description": "Check permissions"
+  },
+  "reservation": "Reservation service",
+  "@reservation": {
+    "description": "Reservation service"
+  },
+  "doReservation": "Do you want to take advantage\n of the advance reservations service?",
+  "@doReservation": {
+    "description": "Reservation service00"
+  },
+  "uploadImageReservation": "Upload more photos of the interior and exterior of your vehicle.\n Then take advantage of the pre-booking service.\n Our customers will be able to contact you directly by calling your phone number as it will be on the pre-reservations list.\n directly with you about the time and cost of the trip.",
+  "@uploadImageReservation": {
+    "description": "Reservation service11"
+  },
+  "uploadImage": "upload Images",
+  "@uploadImage": {
+    "description": "Reservation service33"
+  },
+  "carInside": "car interior pictures",
+  "@carInside": {
+    "description": "car interior pictures"
+  },
+  "carOutside": "Car exterior pictures",
+  "@carOutside": {
+    "description": "Car exterior pictures"
+  },
+  "carOutside1": "front picture of the car",
+  "@carOutside1": {
+    "description": "front picture of the car"
+  },
+  "carInsideReq": "car interior pictures required",
+  "@carInsideReq": {
+    "description": "car interior pictures required"
+  },
+  "carOutSideReq": "car exterior pictures required",
+  "@carOutSideReq": {
+    "description": "car exterior pictures required"
+  },
+  "carOutside1Req": "front picture of the car required",
+  "@carOutside1Req": {
+    "description": "front picture of the car required"
+  },
+  "preBookOkay": "operation accomplished successfully",
+  "@preBookOkay": {
+    "description": "operation accomplished successfully"
+  },
+  "forgetPassWord": "Forgot PassWord?",
+  "@forgetPassWord": {
+    "description": "Forget PassWord?"
   }
 }
