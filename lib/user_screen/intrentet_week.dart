@@ -35,6 +35,7 @@ class InterNetWeak extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder:(_)=>const SplashScreen()))
                 );
               }else{
+                // return;
                 Navigator.push(context, MaterialPageRoute(builder:(_)=>const SplashScreen()));
               }
             },

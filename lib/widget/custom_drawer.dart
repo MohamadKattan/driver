@@ -316,14 +316,14 @@ Widget customDrawer(BuildContext context) {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 8.0,
+                                left: 4.0,
                                 bottom: 8.0,
                                 top: 8.0,
                                 right: valueIconPadding(context)),
@@ -333,7 +333,6 @@ Widget customDrawer(BuildContext context) {
                               size: 35,
                             ),
                           ),
-                          const SizedBox(width: 8.0),
                           Text(
                             AppLocalizations.of(context)!.paymentScreen,
                             style: const TextStyle(
@@ -341,12 +340,13 @@ Widget customDrawer(BuildContext context) {
                           ),
                         ],
                       ),
+                    const  SizedBox(width: 40),
                       Center(
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: 8.0,
                               bottom: 8.0,
-                              left: 8.0,
+                              left: 4.0,
                               right: valueIconPadding1(context)),
                           child: Container(
                               height: 20,
@@ -491,7 +491,7 @@ Widget customDrawer(BuildContext context) {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 8.0, right: 35),
+                padding: const EdgeInsets.only(bottom: 14.0, right: 35),
                 child: Text(
                   AppLocalizations.of(context)!.withCard,
                   style: const TextStyle(

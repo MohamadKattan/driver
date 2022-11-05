@@ -22,7 +22,7 @@ class GeoFireSrv {
     if (defaultTargetPlatform == TargetPlatform.android) {
       locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
-          distanceFilter: 20,
+          distanceFilter: 5,
           forceLocationManager: false,
           intervalDuration: const Duration(seconds: 2),
           foregroundNotificationConfig: ForegroundNotificationConfig(
@@ -34,14 +34,14 @@ class GeoFireSrv {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.fitness,
-        distanceFilter: 20,
+        distanceFilter: 5,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
     } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 20,
+        distanceFilter: 5,
       );
     }
     // if (Platform.isAndroid) {

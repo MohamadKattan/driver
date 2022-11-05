@@ -11,13 +11,11 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
 import '../model/rideDetails.dart';
-import '../my_provider/driver_currentPosition_provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/ride_request_info.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../user_screen/new_ride_screen.dart';
-import '../widget/custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationDialog extends StatefulWidget {
@@ -314,10 +312,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
       } else if (newRideState == "canceled") {
         Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,
             Colors.redAccent.shade700);
-        rideRequestRef.set("searching");
+        // rideRequestRef.set("searching");
         Navigator.pop(context);
       } else if (newRideState == "timeOut") {
-        rideRequestRef.set("searching");
+        // rideRequestRef.set("searching");
         Tools().toastMsg(
             AppLocalizations.of(context)!.timeOut, Colors.redAccent.shade700);
         Navigator.pop(context);
@@ -335,35 +333,33 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   // this method if driver press cancel button
   Future<void> driverCancelOrder(BuildContext context) async {
-    subscriptionNot1.pause();
-    homeScreenStreamSubscription.pause();
+
     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
-    final position = Provider.of<DriverCurrentPosition>(context, listen: false)
-        .currentPosition;
+
     final currentUseId =
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
 
-    final newRef = _ref.child(currentUseId.userId).child("newRide");
-    newRef.onDisconnect();
-    newRef.remove();
 
-    Geofire.stopListener();
-    await Geofire.removeLocation(currentUseId.userId);
-
+    ///todo new code
+    _ref.child(currentUseId.userId).child("newRide").set("canceled");
     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
-    const duration = Duration(seconds: 1);
-    Timer.periodic(duration, (timer) async {
-      rideRequestTimeOut = rideRequestTimeOut - 1;
-      if (rideRequestTimeOut <= 0) {
-        timer.cancel();
-        subscriptionNot1.resume();
-        homeScreenStreamSubscription.resume();
-        await GeoFireSrv().getLocationLiveUpdates(context);
-        _ref.child(currentUseId.userId).child("newRide").set("searching");
-        _ref.child(currentUseId.userId).child("offLine").set("Available");
-        rideRequestTimeOut = 240;
-      }
-    });
+
+///todo old code
+    // subscriptionNot1.pause();
+    // homeScreenStreamSubscription.pause();
+    // const duration = Duration(seconds: 1);
+    // Timer.periodic(duration, (timer) async {
+    //   rideRequestTimeOut = rideRequestTimeOut - 1;
+    //   if (rideRequestTimeOut <= 0) {
+    //     timer.cancel();
+    //     subscriptionNot1.resume();
+    //     homeScreenStreamSubscription.resume();
+    //     _ref.child(currentUseId.userId).child("newRide").set("searching");
+    //     _ref.child(currentUseId.userId).child("offLine").set("Available");
+    //     rideRequestTimeOut = 240;
+    //     await GeoFireSrv().getLocationLiveUpdates(context);
+    //   }
+    // });
   }
 
   ///ios

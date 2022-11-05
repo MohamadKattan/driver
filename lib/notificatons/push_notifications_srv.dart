@@ -210,13 +210,21 @@ class PushNotificationsSrv {
       if (event.snapshot.value != null) {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
-          // Future.delayed(const Duration(seconds: 5)).whenComplete(
-          //     () => );
-          // GeoFireSrv().enableLocationLiveUpdates(context);
+          return;
         } else if (_riderId == "canceled") {
-          return;
+          driverRef.child(userId).child("newRide").set("searching");
+          driverRef.child(userId).child("offLine").set("Available");
+         // Future.delayed(const Duration(seconds:20)).whenComplete((){
+         //   driverRef.child(userId).child("newRide").set("searching");
+         //   driverRef.child(userId).child("offLine").set("Available");
+         // });
         } else if (_riderId == "timeOut") {
-          return;
+          driverRef.child(userId).child("newRide").set("searching");
+          driverRef.child(userId).child("offLine").set("Available");
+          // Future.delayed(const Duration(seconds:20)).whenComplete((){
+          //   driverRef.child(userId).child("newRide").set("searching");
+          //   driverRef.child(userId).child("offLine").set("Available");
+          // });
         } else if (_riderId == "accepted") {
           return;
         } else {

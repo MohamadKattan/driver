@@ -36,10 +36,10 @@ class NewRideScreen extends StatefulWidget {
   const NewRideScreen({Key? key}) : super(key: key);
 
   final CameraPosition kGooglePlex = const CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 17,
-    tilt: 45,
-    bearing: 45,
+    target: LatLng(41.084253576036936,28.89201922194848),
+    zoom: 14,
+    tilt: 0.0,
+    bearing: 0.0,
   );
 
   @override
@@ -571,25 +571,25 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
     });
     ///for fit line on map PolylinePoints
-    LatLngBounds latLngBounds;
-    if (pickUpLatling.latitude > dropOfLatling.latitude &&
-        pickUpLatling.longitude > dropOfLatling.longitude) {
-      latLngBounds =
-          LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
-    } else if (pickUpLatling.longitude > dropOfLatling.longitude) {
-      latLngBounds = LatLngBounds(
-          southwest: LatLng(pickUpLatling.latitude, dropOfLatling.longitude),
-          northeast: LatLng(dropOfLatling.latitude, pickUpLatling.longitude));
-    } else if (pickUpLatling.latitude > dropOfLatling.latitude) {
-      latLngBounds = LatLngBounds(
-          southwest: LatLng(dropOfLatling.latitude, pickUpLatling.longitude),
-          northeast: LatLng(pickUpLatling.latitude, dropOfLatling.longitude));
-    } else {
-      latLngBounds =
-          LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
-    }
-    newGoogleMapController
-        ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+    // LatLngBounds latLngBounds;
+    // if (pickUpLatling.latitude > dropOfLatling.latitude &&
+    //     pickUpLatling.longitude > dropOfLatling.longitude) {
+    //   latLngBounds =
+    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
+    // } else if (pickUpLatling.longitude > dropOfLatling.longitude) {
+    //   latLngBounds = LatLngBounds(
+    //       southwest: LatLng(pickUpLatling.latitude, dropOfLatling.longitude),
+    //       northeast: LatLng(dropOfLatling.latitude, pickUpLatling.longitude));
+    // } else if (pickUpLatling.latitude > dropOfLatling.latitude) {
+    //   latLngBounds = LatLngBounds(
+    //       southwest: LatLng(dropOfLatling.latitude, pickUpLatling.longitude),
+    //       northeast: LatLng(pickUpLatling.latitude, dropOfLatling.longitude));
+    // } else {
+    //   latLngBounds =
+    //       LatLngBounds(southwest: dropOfLatling, northeast: pickUpLatling);
+    // }
+    // newGoogleMapController
+    //     ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
   }
 
 // contact to method getPlaceDirection

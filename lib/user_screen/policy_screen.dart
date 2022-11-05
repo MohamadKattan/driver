@@ -46,7 +46,7 @@ class PolicyScreen extends StatelessWidget {
                 AppLocalizations.of(context)!.policyInfp,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 10,
+                  fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
               ),

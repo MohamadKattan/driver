@@ -1,11 +1,9 @@
 {
   "ar": [
-    "noNet",
     "notExists"
   ],
 
   "tr": [
-    "noNet",
     "notExists"
   ]
 }
