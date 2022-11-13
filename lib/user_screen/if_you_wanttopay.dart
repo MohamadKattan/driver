@@ -8,11 +8,14 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../repo/dataBaseReal_sev.dart';
+
 class IfYouWantPay extends StatelessWidget {
   const IfYouWantPay({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    DataBaseReal().listingForChangeInStatus(context);
     return WillPopScope(
       onWillPop: () async=>false,
       child: SafeArea(

@@ -1,3 +1,4 @@
+import 'package:driver/user_screen/forgot_passWord.dart';
 import 'package:driver/user_screen/more_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import '../repo/auth_srv.dart';
 import '../tools/tools.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'contact_us.dart';
+
 
 GlobalKey globalKey = GlobalKey();
 
@@ -175,7 +176,7 @@ class AuthScreen extends StatelessWidget {
                                 onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => const ContactUs())),
+                                        builder: (_) => const ForgotPass())),
                                 child: Text(
                                     AppLocalizations.of(context)!
                                         .forgetPassWord,

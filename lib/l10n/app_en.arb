@@ -685,27 +685,27 @@
   "@uploadImage": {
     "description": "Reservation service33"
   },
-  "carInside": "car interior pictures",
+  "carInside": "one pictures\nof car from interior",
   "@carInside": {
     "description": "car interior pictures"
   },
-  "carOutside": "Car exterior pictures",
+  "carOutside": "one pictures\n of Car exterior",
   "@carOutside": {
     "description": "Car exterior pictures"
   },
-  "carOutside1": "front picture of the car",
+  "carOutside1": "one front\n picture of the car",
   "@carOutside1": {
     "description": "front picture of the car"
   },
-  "carInsideReq": "car interior pictures required",
+  "carInsideReq": "one car interior pictures required",
   "@carInsideReq": {
     "description": "car interior pictures required"
   },
-  "carOutSideReq": "car exterior pictures required",
+  "carOutSideReq": "one car exterior pictures required",
   "@carOutSideReq": {
     "description": "car exterior pictures required"
   },
-  "carOutside1Req": "front picture of the car required",
+  "carOutside1Req": "one front picture of the car required",
   "@carOutside1Req": {
     "description": "front picture of the car required"
   },
@@ -716,5 +716,17 @@
   "forgetPassWord": "Forgot PassWord?",
   "@forgetPassWord": {
     "description": "Forget PassWord?"
+  },
+  "exForgotPass":"If you forgot your account password,\n type your account email in the field below\n and then click the button below\n to send a link to your email address in order to type a new password",
+  "@exForgotPass": {
+    "description": "ex Forgot passWord ?"
+  },
+  "send":"send",
+  "@send": {
+    "description": "send"
+  },
+  "emailCheck":"The operation\n was completed successfully.\n Check your email",
+  "@emailCheck": {
+    "description": "send"
   }
 }

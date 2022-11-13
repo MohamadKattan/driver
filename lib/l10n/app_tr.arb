@@ -168,12 +168,15 @@
   "doReservation": "Erken rezervasyon hizmetinden\n yararlanmak ister misiniz?",
   "uploadImageReservation": "Erken rezervasyon talebi almak ve daha iyi bir müşteri pörtfeyi yakalamak için aracınızın iç de dış resimlerini yükleyin ön Rezervasyon listesinde yer aldığınızda müşteriler sizi doğrudan arayabilir ve seyahat saati ve zamanı ve maliyet i size uygun ise onay verebilirsiniz",
   "uploadImage": "Resimleri yükle",
-  "carInside": "araba iç resimleri",
-  "carOutside": "Araba dış resimleri",
-  "carOutside1": "arabanın önden resmi",
+  "carInside": "Araba iç bir resim",
+  "carOutside": "Araba dış\n bir resim",
+  "carOutside1": "Araban önden\n bir resmi",
   "carInsideReq": "araba iç resimleri gerekli",
   "carOutSideReq": "araba dış resimleri gerekli",
   "carOutside1Req": "gerekli arabanın ön resmi",
   "preBookOkay": "operasyon başarıyla tamamlandı",
-  "forgetPassWord": "Şifremi Unuttum?"
+  "forgetPassWord": "Şifremi Unuttum?",
+  "exForgotPass":"Hesap şifrenizi unuttuysanız,\n aşağıdaki alana hesap e-postanızı yazın\n ve ardından yeni bir şifre yazmak için e-posta adresinize\n bir bağlantı göndermek için aşağıdaki düğmeyi tıklayın.",
+  "send":"göndermek",
+  "emailCheck":"İşlem başarıyla tamamlandı.\n E-postanızı kontrol edin"
 }

@@ -206,25 +206,21 @@ class PushNotificationsSrv {
 
   Future<void> gotNotificationInBackground(BuildContext context) async {
     subscriptionNot1 =
-        driverRef.child(userId).child("newRide").onValue.listen((event) {
+        driverRef.child(userId).child("newRide").onValue.listen((event) async {
       if (event.snapshot.value != null) {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
           return;
         } else if (_riderId == "canceled") {
-          driverRef.child(userId).child("newRide").set("searching");
-          driverRef.child(userId).child("offLine").set("Available");
-         // Future.delayed(const Duration(seconds:20)).whenComplete((){
-         //   driverRef.child(userId).child("newRide").set("searching");
-         //   driverRef.child(userId).child("offLine").set("Available");
-         // });
+          Future.delayed(const Duration(seconds: 73)).whenComplete((){
+            driverRef.child(userId).child("newRide").set("searching");
+            driverRef.child(userId).child("offLine").set("Available");
+          });
         } else if (_riderId == "timeOut") {
-          driverRef.child(userId).child("newRide").set("searching");
-          driverRef.child(userId).child("offLine").set("Available");
-          // Future.delayed(const Duration(seconds:20)).whenComplete((){
-          //   driverRef.child(userId).child("newRide").set("searching");
-          //   driverRef.child(userId).child("offLine").set("Available");
-          // });
+         Future.delayed(const Duration(seconds: 73)).whenComplete((){
+           driverRef.child(userId).child("newRide").set("searching");
+           driverRef.child(userId).child("offLine").set("Available");
+         });
         } else if (_riderId == "accepted") {
           return;
         } else {
@@ -243,4 +239,52 @@ class PushNotificationsSrv {
       }
     });
   }
+
+//   Future<void> driverTimeOut(BuildContext context) async {
+//     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
+//     final currentUseId = Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
+//     _ref.child(currentUseId.userId).child("newRide").set("searching");
+//     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
+//     const duration = Duration(seconds: 1);
+//     Timer.periodic(duration, (timer) async {
+//       rideRequestTimeOut = rideRequestTimeOut - 1;
+//       await Geofire.stopListener();
+//       await Geofire.removeLocation(currentUseId.userId);
+//       if (rideRequestTimeOut <= 0) {
+//         print('count$rideRequestTimeOut');
+//         timer.cancel();
+//         subscriptionNot1.resume();
+//         homeScreenStreamSubscription.resume();
+//         rideRequestTimeOut = 120;
+//         print('tttttt$rideRequestTimeOut');
+//         _ref.child(currentUseId.userId).child("offLine").set("Available");
+//          GeoFireSrv().getLocationLiveUpdates(context);
+//       }
+//     });
+//
+//   }
+ ///
+//   // this method if driver press cancel button
+//   Future<void> driverCancelOrder(BuildContext context) async {
+//
+//     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
+//
+//     final currentUseId =
+//         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
+//     _ref.child(currentUseId.userId).child("newRide").set("searching");
+//     const duration = Duration(seconds: 1);
+//     Timer.periodic(duration, (timer) async {
+//       rideRequestCanceld = rideRequestCanceld - 1;
+//       await Geofire.stopListener();
+//       await Geofire.removeLocation(currentUseId.userId);
+//       if (rideRequestCanceld <= 0) {
+//         timer.cancel();
+//         _ref.child(currentUseId.userId).child("offLine").set("Available");
+//         subscriptionNot1.resume();
+//         homeScreenStreamSubscription.resume();
+//         rideRequestCanceld = 120;
+//          GeoFireSrv().getLocationLiveUpdates(context);
+//       }
+//     });
+//   }
 }

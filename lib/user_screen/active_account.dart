@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../notificatons/push_notifications_srv.dart';
+import '../repo/dataBaseReal_sev.dart';
 import '../tools/url_lunched.dart';
 import '../widget/call_us_phone_whatApp.dart';
 
@@ -15,6 +16,7 @@ class _ActiveAccountState extends State<ActiveAccount> {
   @override
   void initState() {
     driverRef.child(userId).child("active").set("notactive");
+    DataBaseReal().listingForChangeInStatusActive(context);
     super.initState();
   }
 

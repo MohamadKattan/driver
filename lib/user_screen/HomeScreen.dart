@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -33,29 +34,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  late bool valueSwitchBottom = true;
+  bool valueSwitchBottom = true;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    _loadMapStyles();
     TurnOnGBS().turnOnGBSifNot();
     initializationLocal(context);
     PushNotificationsSrv().gotNotificationInBackground(context);
     requestPermissionsSystem();
-    // onForground();
     PlanDays().getDateTime();
     refreshApp();
+    DataBaseReal().listingForChangeInStatusPay(context);
     // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-    /// for fire base messaging will use in ios app
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-    ///system dailog alert 3 methodes
     // initPlatformState();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   @override
@@ -80,25 +74,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         Geofire.stopListener();
         break;
     }
-    // if (isBackGround)
-    // {
-    //   setState(() {
-    //     runLocale = true;
-    //     print('local');
-    //   });
-    // }
-    // else {
-    //   setState(() {
-    //     runLocale = false;
-    //     print('Nolocal');
-    //   });
-    // }
-    // //todo
-    // if (isdead) {
-    //   driverRef.child(userId).child("newRide").onDisconnect().remove();
-    //   Geofire.stopListener();
-    //   Geofire.removeLocation(userId).whenComplete(() =>   print('dead'));
-    // }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   // system over vlowy
@@ -162,11 +143,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   mapType: MapType.normal,
                                   initialCameraPosition:
                                       LogicGoogleMap().kGooglePlex,
-                                  myLocationButtonEnabled:
-                                      Platform.isAndroid ? true : false,
+                                  myLocationButtonEnabled:false,
                                   myLocationEnabled: true,
-                                  liteModeEnabled:
-                                      Platform.isAndroid ? true : false,
                                   onMapCreated:
                                       (GoogleMapController controller) async {
                                     LogicGoogleMap()
@@ -183,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     tostDriverAvailable();
                                     await DataBaseReal()
                                         .getDriverInfoFromDataBase(context);
+                                    LogicGoogleMap().darkOrwhite(newGoogleMapController!);
                                   },
                                 ),
                               ),
@@ -214,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           ? 0.0
                           : null,
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 30.0, left: 15.0),
+                        padding: const EdgeInsets.only(top: 50.0, left: 15.0),
                         child: CircleAvatar(
                           radius: 30,
                           backgroundColor: const Color(0xFF00A3E0),
@@ -263,18 +242,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     ),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: const Color(0xFF00A3E0),
-            onPressed: () async {
-              await TurnOnGBS().turnOnGBSifNot();
-              await LogicGoogleMap().locationPosition(context);
-              await GeoFireSrv().getLocationLiveUpdates(context);
-              getCountryName();
-            },
-            child: const Icon(
-              Icons.my_location,
-              color: Colors.white,
-              size: 25,
+          floatingActionButton: Padding(
+            padding:  EdgeInsets.only(left: 8.0,right:Platform.isAndroid? 40.0:8.0),
+            child: FloatingActionButton(
+              backgroundColor: const Color(0xFF00A3E0),
+              onPressed: () async {
+                await TurnOnGBS().turnOnGBSifNot();
+                await LogicGoogleMap().locationPosition(context);
+                await GeoFireSrv().getLocationLiveUpdates(context);
+                getCountryName();
+              },
+              child: const Icon(
+                Icons.my_location,
+                color: Colors.white,
+                size: 25,
+              ),
             ),
           ),
         ),
@@ -286,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget customSwitchBottom() => Transform.scale(
         scale: 1.5,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(right: 25.0,left: 8.0,top: 8.0,bottom: 8.0),
           child: SizedBox(
             width: 50.0,
             child: Switch.adaptive(
@@ -372,8 +354,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
-//todo new method last seen
+  //todo new method last seen
   void lastSeen() async {
     driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
   }
+
+  Future _loadMapStyles() async {
+    darkMapStyle =
+        await rootBundle.loadString('images/map_style/dark-mode.json');
+    lightMapStyle =
+        await rootBundle.loadString('images/map_style/lite-mode.json');
+  }
+
 }

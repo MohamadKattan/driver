@@ -22,9 +22,9 @@ class GeoFireSrv {
     if (defaultTargetPlatform == TargetPlatform.android) {
       locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
-          distanceFilter: 5,
+          distanceFilter: 100,
           forceLocationManager: false,
-          intervalDuration: const Duration(seconds: 2),
+          intervalDuration: const Duration(seconds: 10),
           foregroundNotificationConfig: ForegroundNotificationConfig(
             notificationText: AppLocalizations.of(context)!.locationBackground,
             notificationTitle: "Garanti taxi",
@@ -34,14 +34,14 @@ class GeoFireSrv {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.fitness,
-        distanceFilter: 5,
+        distanceFilter: 100,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
     } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 5,
+        distanceFilter: 100,
       );
     }
     // if (Platform.isAndroid) {

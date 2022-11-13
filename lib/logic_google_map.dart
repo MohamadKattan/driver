@@ -8,10 +8,6 @@ import 'package:provider/provider.dart';
 import 'my_provider/driver_currentPosition_provider.dart';
 
 class LogicGoogleMap {
-  // final ApiSrvGeo _apiMethods = ApiSrvGeo();
-  // var geolocator = Geolocator();
-
-  //instant current location on map before any request on map
   Completer<GoogleMapController> controllerGoogleMap = Completer();
 
   final CameraPosition kGooglePlex = const CameraPosition(
@@ -19,7 +15,6 @@ class LogicGoogleMap {
     zoom: 14.4746,
   );
 
-  // this method for user got his current location
 
   Future<dynamic> locationPosition(BuildContext context) async {
     bool serviceEnabled;
@@ -60,5 +55,15 @@ class LogicGoogleMap {
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
     return position;
+  }
+
+
+  Future<void> darkOrwhite(GoogleMapController controller) async {
+    final _controller = controller;
+    if (hourForDarkMode > 6 && hourForDarkMode < 18) {
+      _controller.setMapStyle(lightMapStyle);
+    } else {
+      _controller.setMapStyle(darkMapStyle);
+    }
   }
 }

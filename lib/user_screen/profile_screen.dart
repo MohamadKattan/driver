@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/driverInfo.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/indctor_profile_screen.dart';
-import '../repo/dataBaseReal_sev.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -139,7 +139,12 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () => DataBaseReal().deleteAccount(context),
+                        onTap: (){
+                          Provider.of<InductorProfileProvider>(context,
+                              listen: false)
+                              .updateState(true);
+                          fakeDelete(driverInfo,context);
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(8.0),
                           margin: const EdgeInsets.all(8.0),
@@ -206,6 +211,7 @@ class ProfileScreen extends StatelessWidget {
           );
   }
 
+// this method for update userProfile
   Future<void> startUpdateInfoUser(
       DriverInfo userInfo,
       TextEditingController name,
@@ -221,6 +227,22 @@ class ProfileScreen extends StatelessWidget {
     }).whenComplete(() {
       Provider.of<InductorProfileProvider>(context, listen: false)
           .updateState(false);
+    });
+  }
+
+// this method for fake delete userProfile
+  Future<void> fakeDelete(DriverInfo userInfo, BuildContext context) async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref().child("driver").child(userInfo.userId);
+    await ref.update({
+      "status": 'info',
+    }).whenComplete(() {
+      Provider.of<InductorProfileProvider>(context, listen: false)
+          .updateState(false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const SplashScreen()),
+          (route) => false);
     });
   }
 }

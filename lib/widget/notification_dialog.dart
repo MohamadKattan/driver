@@ -338,25 +338,22 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
     final currentUseId =
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-
-
-    ///todo new code
+        // subscriptionNot1.pause();
+        // homeScreenStreamSubscription.pause();
     _ref.child(currentUseId.userId).child("newRide").set("canceled");
     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
-
-///todo old code
-    // subscriptionNot1.pause();
-    // homeScreenStreamSubscription.pause();
-    // const duration = Duration(seconds: 1);
+    // await Geofire.stopListener();
+    // await Geofire.removeLocation(currentUseId.userId);
+    // const duration = Duration(minutes: 1);
     // Timer.periodic(duration, (timer) async {
-    //   rideRequestTimeOut = rideRequestTimeOut - 1;
-    //   if (rideRequestTimeOut <= 0) {
+    //   rideRequestCanceld = rideRequestCanceld - 1;
+    //   if (rideRequestCanceld <= 0) {
     //     timer.cancel();
-    //     subscriptionNot1.resume();
-    //     homeScreenStreamSubscription.resume();
     //     _ref.child(currentUseId.userId).child("newRide").set("searching");
     //     _ref.child(currentUseId.userId).child("offLine").set("Available");
-    //     rideRequestTimeOut = 240;
+    //     subscriptionNot1.resume();
+    //     homeScreenStreamSubscription.resume();
+    //     rideRequestCanceld = 1;
     //     await GeoFireSrv().getLocationLiveUpdates(context);
     //   }
     // });

@@ -340,7 +340,7 @@ Widget customDrawer(BuildContext context) {
                           ),
                         ],
                       ),
-                    const  SizedBox(width: 40),
+                    const  SizedBox(width: 20),
                       Center(
                         child: Padding(
                           padding: EdgeInsets.only(

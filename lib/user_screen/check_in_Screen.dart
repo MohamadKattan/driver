@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/icon_phone_value.dart';
 import '../repo/api_srv_geolocater.dart';
+import '../repo/dataBaseReal_sev.dart';
 import '../tools/url_lunched.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,6 +12,7 @@ class CheckInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DataBaseReal().listingForChangeInStatus(context);
     ApiSrvGeolocater().getCountry();
     final phoneIconValue = Provider.of<PhoneIconValue>(context).IconValue;
     return WillPopScope(

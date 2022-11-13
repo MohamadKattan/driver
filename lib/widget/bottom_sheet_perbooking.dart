@@ -85,44 +85,56 @@ class CustomBottomSheetPreBooking {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(AppLocalizations.of(context)!.carInside),
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Text(AppLocalizations.of(context)!.carInside,textAlign: TextAlign.center),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                            onPressed: () async {
-                              image1 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImagePreBook>(context,
-                                      listen: false)
-                                  .updateCarInside(image1!);
-                            },
-                            icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFBC408))),
-                        IconButton(
-                            onPressed: () async {
-                              image1 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImagePreBook>(context,
-                                      listen: false)
-                                  .updateCarInside(image1!);
-                            },
-                            icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFBC408))),
-                        showIconInsideCar(context, carInside)
-                      ],
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 0,
+                            child: IconButton(
+                                onPressed: () async {
+                                  image1 = await _picker.pickImage(
+                                    source: ImageSource.camera,
+                                    maxWidth: 500,
+                                    maxHeight: 500,
+                                    imageQuality: 100,
+                                  );
+                                  Provider.of<GetImagePreBook>(context,
+                                          listen: false)
+                                      .updateCarInside(image1!);
+                                },
+                                icon: const Icon(Icons.add_a_photo_outlined,
+                                    size: 35.0, color: Color(0xFFFBC408))),
+                          ),
+                          Expanded(
+                            flex: 0,
+                            child: IconButton(
+                                onPressed: () async {
+                                  image1 = await _picker.pickImage(
+                                    source: ImageSource.gallery,
+                                    maxWidth: 500,
+                                    maxHeight: 500,
+                                    imageQuality: 100,
+                                  );
+                                  Provider.of<GetImagePreBook>(context,
+                                          listen: false)
+                                      .updateCarInside(image1!);
+                                },
+                                icon: const Icon(Icons.image,
+                                    size: 35.0, color: Color(0xFFFBC408))),
+                          ),
+                          showIconInsideCar(context, carInside)
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -146,44 +158,50 @@ class CustomBottomSheetPreBooking {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(AppLocalizations.of(context)!.carOutside),
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Text(AppLocalizations.of(context)!.carOutside,textAlign: TextAlign.center,),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                            onPressed: () async {
-                              image2 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImagePreBook>(context,
-                                      listen: false)
-                                  .updateCarOutSide(image2!);
-                            },
-                            icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFBC408))),
-                        IconButton(
-                            onPressed: () async {
-                              image2 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImagePreBook>(context,
-                                      listen: false)
-                                  .updateCarOutSide(image2!);
-                            },
-                            icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFBC408))),
-                        showIconCarOutSide(context, carOutSide)
-                      ],
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          IconButton(
+                              onPressed: () async {
+                                image2 = await _picker.pickImage(
+                                  source: ImageSource.camera,
+                                  maxWidth: 500,
+                                  maxHeight: 500,
+                                  imageQuality: 100,
+                                );
+                                Provider.of<GetImagePreBook>(context,
+                                        listen: false)
+                                    .updateCarOutSide(image2!);
+                              },
+                              icon: const Icon(Icons.add_a_photo_outlined,
+                                  size: 35.0, color: Color(0xFFFBC408))),
+                          IconButton(
+                              onPressed: () async {
+                                image2 = await _picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  maxWidth: 500,
+                                  maxHeight: 500,
+                                  imageQuality: 100,
+                                );
+                                Provider.of<GetImagePreBook>(context,
+                                        listen: false)
+                                    .updateCarOutSide(image2!);
+                              },
+                              icon: const Icon(Icons.image,
+                                  size: 35.0, color: Color(0xFFFBC408))),
+                          showIconCarOutSide(context, carOutSide)
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -207,44 +225,50 @@ class CustomBottomSheetPreBooking {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(AppLocalizations.of(context)!.carOutside1),
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Text(AppLocalizations.of(context)!.carOutside1,textAlign: TextAlign.center,),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                            onPressed: () async {
-                              image3 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImagePreBook>(context,
-                                      listen: false)
-                                  .updateCarOutSide1(image3!);
-                            },
-                            icon: const Icon(Icons.add_a_photo_outlined,
-                                size: 35.0, color: Color(0xFFFBC408))),
-                        IconButton(
-                            onPressed: () async {
-                              image3 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImagePreBook>(context,
-                                      listen: false)
-                                  .updateCarOutSide1(image3!);
-                            },
-                            icon: const Icon(Icons.image,
-                                size: 35.0, color: Color(0xFFFBC408))),
-                        showIconCarOutSide1(context, carOutSide1)
-                      ],
+                  Expanded(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          IconButton(
+                              onPressed: () async {
+                                image3 = await _picker.pickImage(
+                                  source: ImageSource.camera,
+                                  maxWidth: 500,
+                                  maxHeight: 500,
+                                  imageQuality: 100,
+                                );
+                                Provider.of<GetImagePreBook>(context,
+                                        listen: false)
+                                    .updateCarOutSide1(image3!);
+                              },
+                              icon: const Icon(Icons.add_a_photo_outlined,
+                                  size: 35.0, color: Color(0xFFFBC408))),
+                          IconButton(
+                              onPressed: () async {
+                                image3 = await _picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  maxWidth: 500,
+                                  maxHeight: 500,
+                                  imageQuality: 100,
+                                );
+                                Provider.of<GetImagePreBook>(context,
+                                        listen: false)
+                                    .updateCarOutSide1(image3!);
+                              },
+                              icon: const Icon(Icons.image,
+                                  size: 35.0, color: Color(0xFFFBC408))),
+                          showIconCarOutSide1(context, carOutSide1)
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -299,11 +323,14 @@ class CustomBottomSheetPreBooking {
 
   showIconInsideCar(BuildContext context, XFile? carInside) {
     if (carInside != null) {
-      return Center(
-          child: Lottie.asset('images/72470-right-sign.json',
-              height: 40, width: 40));
+      return Expanded(
+        flex: 0,
+        child: Center(
+            child: Lottie.asset('images/72470-right-sign.json',
+                height: 40, width: 40)),
+      );
     } else {
-      return const Text("");
+      return const Expanded(flex: 0,child: Text(""));
     }
   }
 
