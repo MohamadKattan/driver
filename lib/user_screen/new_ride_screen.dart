@@ -1343,7 +1343,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     String _urlNavAndroid =
         'google.navigation:q=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}&key=$mapKey';
-    String _urlGoogleMap =
+    String _urlGoogleMapIos =
         'https://www.google.com/maps/search/?api=1&query=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}';
     // if (Platform.isIOS) {
     //   url =
@@ -1357,8 +1357,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
     //     "https://www.google.com/maps/dir/${_driver.latitude},${_driver.longitude}/${rideInfo.pickupAddress},+${rideInfo.pickupAddress}/@${rideInfo.pickup.latitude},${rideInfo.pickup.longitude},13z/";
     await canLaunch(_urlNavAndroid)
         ? launch(_urlNavAndroid)
-        : await canLaunch(_urlNavAndroid)
-            ? launch(_urlGoogleMap)
+        : await canLaunch(_urlGoogleMapIos)
+            ? launch(_urlGoogleMapIos)
             : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
   }
 

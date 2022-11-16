@@ -43,7 +43,6 @@ class ApiSrvDir {
           .updateDirectionDetails(directionDetails);
       return directionDetails;
     }
-
     /// new add
     return null;
   }
