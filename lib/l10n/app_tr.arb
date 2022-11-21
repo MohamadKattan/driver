@@ -85,10 +85,10 @@
   "paymentMethod": "Ödeme şekli :",
    "ok": "Kabul et",
   "approveImages": " istenen resimleri seçin",
-  "personnelImage": "şahsi Fotoğraf",
-   "driverLicense": "Ehliyet",
-   "carLicense": "Araba ruhsatı",
-   "carImage": "Arabanın önden çekilmiş resmi",
+  "personnelImage": "Bir kişisel fotoğraf",
+   "driverLicense": "Bir ehliyetin fotoğrafı",
+   "carLicense": "Araç ruhsatının\n bir fotoğrafı",
+   "carImage": "Arabanın bir ön resmi",
   "imageDrequired": "Sürücü Resmi gerekli",
   "licenseDrequired": "Sürücü ehliyeti gerekli",
    "licenseCrequired": "Araba ruhsatı gerekli",
@@ -178,5 +178,6 @@
   "forgetPassWord": "Şifremi Unuttum?",
   "exForgotPass":"Hesap şifrenizi unuttuysanız,\n aşağıdaki alana hesap e-postanızı yazın\n ve ardından yeni bir şifre yazmak için e-posta adresinize\n bir bağlantı göndermek için aşağıdaki düğmeyi tıklayın.",
   "send":"göndermek",
-  "emailCheck":"İşlem başarıyla tamamlandı.\n E-postanızı kontrol edin"
+  "emailCheck":"İşlem başarıyla tamamlandı.\n E-postanızı kontrol edin",
+  "errorImage":"Geçersiz resim formatı\n Başka bir fotoğraf çek"
 }

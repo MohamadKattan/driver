@@ -5,8 +5,8 @@ import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/check_in_Screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/bottom_sheet_value.dart';
 import '../my_provider/driverInfo_inductor.dart';
@@ -19,10 +19,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBottomSheet {
   final ImagePicker _picker = ImagePicker();
-  late final XFile? image1;
-  late final XFile? image2;
-  late final XFile? image3;
-  late final XFile? image4;
+  // late final XFile? image1;
+  // late final XFile? image2;
+  // late final XFile? image3;
+  // late final XFile? image4;
   User? currentUser = AuthSev().auth.currentUser;
   Widget customBottomSheet(
     BuildContext context,
@@ -105,29 +105,15 @@ class CustomBottomSheet {
                       children: [
                         IconButton(
                             onPressed: () async {
-                              image1 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updatePersonImage(image1!);
+                              await getImage(
+                                  ImageSource.camera, context, 'driverImage');
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
                                 size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
-                              image1 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updatePersonImage(image1!);
+                              await getImage(
+                                  ImageSource.gallery, context, 'driverImage');
                             },
                             icon: const Icon(Icons.image,
                                 size: 35.0, color: Color(0xFFFBC408))),
@@ -166,29 +152,15 @@ class CustomBottomSheet {
                       children: [
                         IconButton(
                             onPressed: () async {
-                              image2 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updateImageDriverLis(image2!);
+                              await getImage(
+                                  ImageSource.camera, context, 'driverLis');
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
                                 size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
-                              image2 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updateImageDriverLis(image2!);
+                              await getImage(
+                                  ImageSource.gallery, context,'driverLis');
                             },
                             icon: const Icon(Icons.image,
                                 size: 35.0, color: Color(0xFFFBC408))),
@@ -227,29 +199,15 @@ class CustomBottomSheet {
                       children: [
                         IconButton(
                             onPressed: () async {
-                              image3 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updateImageCarLis(image3!);
+                              await getImage(
+                                  ImageSource.camera, context, 'carLis');
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
                                 size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
-                              image3 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updateImageCarLis(image3!);
+                              await getImage(
+                                  ImageSource.gallery, context, 'carLis');
                             },
                             icon: const Icon(Icons.image,
                                 size: 35.0, color: Color(0xFFFBC408))),
@@ -291,29 +249,15 @@ class CustomBottomSheet {
                       children: [
                         IconButton(
                             onPressed: () async {
-                              image4 = await _picker.pickImage(
-                                source: ImageSource.camera,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updateImagePlatLis(image4!);
+                              await getImage(
+                                  ImageSource.camera, context, 'carImage');
                             },
                             icon: const Icon(Icons.add_a_photo_outlined,
                                 size: 35.0, color: Color(0xFFFBC408))),
                         IconButton(
                             onPressed: () async {
-                              image4 = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                maxWidth: 500,
-                                maxHeight: 500,
-                                imageQuality: 100,
-                              );
-                              Provider.of<GetImageProvider>(context,
-                                      listen: false)
-                                  .updateImagePlatLis(image4!);
+                              await getImage(
+                                  ImageSource.gallery, context, 'carImage');
                             },
                             icon: const Icon(Icons.image,
                                 size: 35.0, color: Color(0xFFFBC408))),
@@ -388,11 +332,52 @@ class CustomBottomSheet {
     );
   }
 
+  Future<void> getImage(
+      ImageSource source, BuildContext context, String status) async {
+    try {
+      XFile? _file = await _picker.pickImage(
+        source: source,
+        maxWidth: 500,
+        maxHeight: 500,
+        imageQuality: 100,
+      );
+      if (_file == null) return;
+      switch (status) {
+        case 'driverImage':
+          Provider.of<GetImageProvider>(context, listen: false)
+              .updatePersonImage(_file);
+          break;
+        case 'driverLis':
+          Provider.of<GetImageProvider>(context, listen: false)
+              .updateImageDriverLis(_file);
+          break;
+        case 'carLis':
+          Provider.of<GetImageProvider>(context, listen: false)
+              .updateImageCarLis(_file);
+          break;
+        case 'carImage':
+          Provider.of<GetImageProvider>(context, listen: false)
+              .updateImagePlatLis(_file);
+          break;
+        default:
+          null;
+          break;
+      }
+    } on PlatformException catch (ex) {
+      Tools().toastMsg(AppLocalizations.of(context)!.errorImage, Colors.red);
+    }
+  }
+
   showIconDriverImage(BuildContext context, XFile? driverImage) {
     if (driverImage != null) {
-      return Center(
-          child: Lottie.asset('images/72470-right-sign.json',
-              height: 40, width: 40));
+      // return Center(
+      //     child: Lottie.asset('images/72470-right-sign.json',
+      //         height: 40, width: 40));
+      return Image.file(
+        File(driverImage.path),
+        width: 30,
+        height: 30,
+      );
     } else {
       return const Text("");
     }
@@ -400,9 +385,10 @@ class CustomBottomSheet {
 
   showIconDriverLisImage(BuildContext context, XFile? driverLis) {
     if (driverLis != null) {
-      return Center(
-          child: Lottie.asset('images/72470-right-sign.json',
-              height: 40, width: 40));
+      // return Center(
+      //     child: Lottie.asset('images/72470-right-sign.json',
+      //         height: 40, width: 40));
+      return Image.file(File(driverLis.path), width: 30, height: 30);
     } else {
       return const Text("");
     }
@@ -410,9 +396,10 @@ class CustomBottomSheet {
 
   showIconCarLisImage(BuildContext context, XFile? carLisImage) {
     if (carLisImage != null) {
-      return Center(
-          child: Lottie.asset('images/72470-right-sign.json',
-              height: 40, width: 40));
+      return Image.file(File(carLisImage.path), width: 30, height: 30);
+      // return Center(
+      //     child: Lottie.asset('images/72470-right-sign.json',
+      //         height: 40, width: 40));
     } else {
       return const Text("");
     }
@@ -420,9 +407,10 @@ class CustomBottomSheet {
 
   showIconCarisImage(BuildContext context, XFile? carImage) {
     if (carImage != null) {
-      return Center(
-          child: Lottie.asset('images/72470-right-sign.json',
-              height: 40, width: 40));
+      // return Center(
+      //     child: Lottie.asset('images/72470-right-sign.json',
+      //         height: 40, width: 40));
+      return Image.file(File(carImage.path), width: 30, height: 30);
     } else {
       return const Text("");
     }

@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
+import '../my_provider/circle_indectorWeek.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../notificatons/push_notifications_srv.dart';
 import '../tools/tools.dart';
@@ -51,6 +52,7 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.addStatusListener((status) async {
       if (AuthSev().auth.currentUser?.uid != null) {
         await DataBaseReal().getDriverInfoFromDataBase(context);
+        await Future.delayed(const Duration(milliseconds: 500));
         tokenPhone = await firebaseMessaging.getToken();
       }
       if (status == AnimationStatus.completed) {
@@ -59,7 +61,8 @@ class _SplashScreenState extends State<SplashScreen>
               .toastMsg(AppLocalizations.of(context)!.noNet, Colors.redAccent);
           Tools().toastMsg(
               AppLocalizations.of(context)!.checkNet, Colors.redAccent);
-        } else {
+        }
+        else {
           final driverInfo =
               Provider.of<DriverInfoModelProvider>(context, listen: false)
                   .driverInfo;
@@ -94,6 +97,7 @@ class _SplashScreenState extends State<SplashScreen>
           } else if (AuthSev().auth.currentUser?.uid != null &&
               driverInfo.tok == "" &&
               driverInfo.status == "") {
+            Provider.of<IsNetWeek>(context, listen: false).updateState(true);
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const InterNetWeak()));
           } else if (AuthSev().auth.currentUser?.uid != null &&
@@ -160,6 +164,7 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> checkInternet() async {
     result = await InternetConnectionChecker().hasConnection;
     if (result == false) {
+      Provider.of<IsNetWeek>(context, listen: false).updateState(true);
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const InterNetWeak()));
     }

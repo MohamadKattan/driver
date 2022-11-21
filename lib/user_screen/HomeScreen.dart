@@ -54,10 +54,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    // final isBackGround = state == AppLifecycleState.paused;
-    // final isdead = state == AppLifecycleState.detached;
+
     super.didChangeAppLifecycleState(state);
-    // if ( state ==AppLifecycleState.inactive||state ==AppLifecycleState.detached) return;
 
     switch (state) {
       case AppLifecycleState.paused:
@@ -67,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         runLocale = false;
         break;
       case AppLifecycleState.inactive:
-        // TODO: Handle this case.
         break;
       case AppLifecycleState.detached:
         Geofire.removeLocation(userId);
@@ -143,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   mapType: MapType.normal,
                                   initialCameraPosition:
                                       LogicGoogleMap().kGooglePlex,
-                                  myLocationButtonEnabled:false,
+                                  myLocationButtonEnabled: false,
                                   myLocationEnabled: true,
                                   onMapCreated:
                                       (GoogleMapController controller) async {
@@ -161,7 +158,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     tostDriverAvailable();
                                     await DataBaseReal()
                                         .getDriverInfoFromDataBase(context);
-                                    LogicGoogleMap().darkOrwhite(newGoogleMapController!);
+                                    LogicGoogleMap()
+                                        .darkOrwhite(newGoogleMapController!);
                                   },
                                 ),
                               ),
@@ -243,7 +241,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ],
           ),
           floatingActionButton: Padding(
-            padding:  EdgeInsets.only(left: 8.0,right:Platform.isAndroid? 40.0:8.0),
+            padding: EdgeInsets.only(
+                left: 8.0, right: Platform.isAndroid ? 40.0 : 8.0),
             child: FloatingActionButton(
               backgroundColor: const Color(0xFF00A3E0),
               onPressed: () async {
@@ -268,7 +267,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget customSwitchBottom() => Transform.scale(
         scale: 1.5,
         child: Padding(
-          padding: const EdgeInsets.only(right: 25.0,left: 8.0,top: 8.0,bottom: 8.0),
+          padding: const EdgeInsets.only(
+              right: 25.0, left: 8.0, top: 8.0, bottom: 8.0),
           child: SizedBox(
             width: 50.0,
             child: Switch.adaptive(
@@ -295,6 +295,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           ),
         ),
       );
+
 // this method for show tost driver if he Available or not
   void tostDriverAvailable() {
     if (valueSwitchBottom == true) {
@@ -346,7 +347,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  //todo this method new under check for refresh app
   void refreshApp() {
     Timer.periodic(const Duration(seconds: 10), (timer) {
       if (!mounted) return;
@@ -354,7 +354,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
-  //todo new method last seen
   void lastSeen() async {
     driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
   }
@@ -365,5 +364,4 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     lightMapStyle =
         await rootBundle.loadString('images/map_style/lite-mode.json');
   }
-
 }

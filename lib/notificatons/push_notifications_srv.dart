@@ -212,12 +212,12 @@ class PushNotificationsSrv {
         if (_riderId == "searching") {
           return;
         } else if (_riderId == "canceled") {
-          Future.delayed(const Duration(seconds: 73)).whenComplete((){
+          Future.delayed(const Duration(seconds: 20)).whenComplete((){
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
         } else if (_riderId == "timeOut") {
-         Future.delayed(const Duration(seconds: 73)).whenComplete((){
+         Future.delayed(const Duration(seconds: 20)).whenComplete((){
            driverRef.child(userId).child("newRide").set("searching");
            driverRef.child(userId).child("offLine").set("Available");
          });

@@ -10,6 +10,7 @@ import 'my_provider/auth__inductor_provider.dart';
 import 'my_provider/bottom_sheet_preBook.dart';
 import 'my_provider/bottom_sheet_value.dart';
 import 'my_provider/change_color_bottom.dart';
+import 'my_provider/circle_indectorWeek.dart';
 import 'my_provider/color_arrived_button_provider.dart';
 import 'my_provider/direction_details_provider.dart';
 import 'my_provider/drawer_value_provider.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => InductorProfileProvider()),
         ChangeNotifierProvider(create: (context) => PaymentIndector()),
         ChangeNotifierProvider(create: (context) => PlaceName()),
+        ChangeNotifierProvider(create: (context) => IsNetWeek()),
         ChangeNotifierProvider(
             create: (context) => BottomSheetProviderPreBooking()),
         ChangeNotifierProvider(create: (context) => GetImagePreBook()),

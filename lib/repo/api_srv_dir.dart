@@ -43,8 +43,8 @@ class ApiSrvDir {
           .updateDirectionDetails(directionDetails);
       return directionDetails;
     }
-    /// new add
-    return null;
+    ///todo new add
+    // return null;
   }
 
   static int calculateFares1(DirectionDetails directionDetails,

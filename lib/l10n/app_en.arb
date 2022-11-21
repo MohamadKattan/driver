@@ -728,5 +728,9 @@
   "emailCheck":"The operation\n was completed successfully.\n Check your email",
   "@emailCheck": {
     "description": "send"
+  },
+  "errorImage":"Invalid image\n format Take another photo",
+  "@errorImage": {
+    "description": "Invalid image"
   }
 }

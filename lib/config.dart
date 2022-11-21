@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 // old key AIzaSyBt7etvZRY_OrzFcCsawNb22jqSzE2mRDg
 String mapKey = "AIzaSyDh5NNwfDJFU27Y_yMpVcWeeepBQBbewmM";
 String mapBox =
@@ -16,6 +17,7 @@ late StreamSubscription<DatabaseEvent> subscriptionNot1;
 late StreamSubscription<DatabaseEvent> listingForChangeStatus;
 late StreamSubscription<DatabaseEvent> listingForChangeStatusPay;
 late StreamSubscription<DatabaseEvent> listingForChangeStatusActive;
+late final StreamSubscription<InternetConnectionStatus> listener;
 User? currentUser = AuthSev().auth.currentUser;
 bool isLite = false;
 int rideRequestCanceld = 120;
