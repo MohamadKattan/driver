@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:country_list_pick/country_list_pick.dart';
 import 'package:driver/user_screen/splash_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../model/driverInfo.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/indctor_profile_screen.dart';
+import '../repo/auth_srv.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -13,7 +15,9 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
   static final TextEditingController name = TextEditingController();
   static final TextEditingController lastName = TextEditingController();
-  static final TextEditingController email = TextEditingController();
+  static final TextEditingController phoneNumber = TextEditingController();
+  static String? result;
+  static String? resultCodeCon = "+90";
   @override
   Widget build(BuildContext context) {
     final driverInfo = Provider.of<DriverInfoModelProvider>(context).driverInfo;
@@ -33,12 +37,12 @@ class ProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 20.0),
                   showImage(context),
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 20.0),
                   Container(
                     margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
                         border: Border.all(
@@ -57,10 +61,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10.0),
                   Container(
                     margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.0),
                         border: Border.all(
@@ -79,27 +82,58 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10.0),
-                  Container(
-                    margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(
-                            width: 2.0, color: const Color(0xFF00A3E0))),
-                    child: TextField(
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 16.0),
-                      controller: email,
-                      maxLines: 1,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.edit, size: 30.0),
-                        hintText: driverInfo.email,
-                        hintStyle: const TextStyle(
-                            color: Colors.black54, fontSize: 16),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CountryListPick(
+                          appBar: AppBar(
+                            backgroundColor: Colors.amber[200],
+                            title: Text(AppLocalizations.of(context)!.country),
+                          ),
+                          theme: CountryTheme(
+                            isShowFlag: true,
+                            isShowTitle: false,
+                            isShowCode: true,
+                            isDownIcon: true,
+                            showEnglishName: false,
+                            labelColor: Colors.black54,
+                            alphabetSelectedBackgroundColor:
+                                const Color(0xFFFFD54F),
+                            alphabetTextColor: Colors.deepOrange,
+                            alphabetSelectedTextColor: Colors.deepPurple,
+                          ),
+                          initialSelection: resultCodeCon,
+                          onChanged: (CountryCode? code) {
+                            resultCodeCon = code?.dialCode;
+                          },
+                          useUiOverlay: true,
+                          useSafeArea: false),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          margin: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              border: Border.all(
+                                  width: 2.0, color: const Color(0xFF00A3E0))),
+                          child: TextField(
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 16.0),
+                            controller: phoneNumber,
+                            maxLines: 1,
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.phone, size: 30.0),
+                              hintText: driverInfo.phoneNumber,
+                              hintStyle: const TextStyle(
+                                  color: Colors.black54, fontSize: 16),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(height: 10.0),
                   Row(
@@ -110,11 +144,11 @@ class ProfileScreen extends StatelessWidget {
                           Provider.of<InductorProfileProvider>(context,
                                   listen: false)
                               .updateState(true);
-                          startUpdateInfoUser(
-                              driverInfo, name, lastName, email, context);
+                          startUpdateInfoUser(driverInfo, name, lastName,
+                              phoneNumber, context, resultCodeCon!);
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
                           margin: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -122,7 +156,7 @@ class ProfileScreen extends StatelessWidget {
                                 width: 2.0, color: const Color(0xFF00A3E0)),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          height: 60,
+                          height: 50,
                           width: 160,
                           child: Center(
                             child: Text(
@@ -139,14 +173,14 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Provider.of<InductorProfileProvider>(context,
-                              listen: false)
+                                  listen: false)
                               .updateState(true);
-                          fakeDelete(driverInfo,context);
+                          fakeDelete(driverInfo, context);
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
                           margin: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -154,7 +188,7 @@ class ProfileScreen extends StatelessWidget {
                                 width: 2.0, color: Colors.redAccent.shade700),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          height: 60,
+                          height: 50,
                           width: 160,
                           child: Center(
                             child: Text(
@@ -216,14 +250,18 @@ class ProfileScreen extends StatelessWidget {
       DriverInfo userInfo,
       TextEditingController name,
       TextEditingController lastName,
-      TextEditingController email,
-      BuildContext context) async {
+      TextEditingController phoneNumber,
+      BuildContext context,
+      String resultCodeCon) async {
+    if (resultCodeCon.isNotEmpty && phoneNumber.text.isNotEmpty) {
+      result = resultCodeCon + phoneNumber.text.trim();
+    }
     DatabaseReference ref =
         FirebaseDatabase.instance.ref().child("driver").child(userInfo.userId);
     await ref.update({
       "firstName": name.text.isEmpty ? userInfo.firstName : name.text,
       "lastName": lastName.text.isEmpty ? userInfo.lastName : lastName.text,
-      "email": email.text.isEmpty ? userInfo.email : email.text.trim(),
+      "phoneNumber": result == null ? userInfo.phoneNumber : result!.trim(),
     }).whenComplete(() {
       Provider.of<InductorProfileProvider>(context, listen: false)
           .updateState(false);
@@ -236,9 +274,10 @@ class ProfileScreen extends StatelessWidget {
         FirebaseDatabase.instance.ref().child("driver").child(userInfo.userId);
     await ref.update({
       "status": 'info',
-    }).whenComplete(() {
+    }).whenComplete(() async {
       Provider.of<InductorProfileProvider>(context, listen: false)
           .updateState(false);
+     await AuthSev().auth.signOut();
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const SplashScreen()),

@@ -135,7 +135,7 @@ class ApiSrvDir {
         contryName == "United Arab Emirates") {
       culculFinal = fareAmont * 3.67 + 6.30 * 3.67;
     } else {
-      culculFinal = 0.0;
+      culculFinal = fareAmont * 13 + 0.70 * 14.00;
     }
     return culculFinal.truncate();
   }

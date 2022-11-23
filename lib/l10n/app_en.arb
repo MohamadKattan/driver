@@ -229,7 +229,7 @@
             "@too": {
                "description": "To : "
        },
- "toTrip": "To trip",
+ "toTrip": "Itinerary",
              "@toTrip": {
                 "description": "To trip"
         },
