@@ -187,7 +187,7 @@ class _SplashScreenState extends State<SplashScreen>
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         backgroundColor: Colors.transparent,
         child: Container(
-          height: MediaQuery.of(context).size.height * 50 / 100,
+          height: MediaQuery.of(context).size.height * 55 / 100,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.0),

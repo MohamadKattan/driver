@@ -161,8 +161,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                         left: 70.0,
                         right: 70.0,
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 50 / 100,
-                          height: 55,
+                          width: MediaQuery.of(context).size.width * 55 / 100,
+                          height: 60,
                           decoration: const BoxDecoration(
                               color: Colors.black26,
                               borderRadius: BorderRadius.only(
@@ -177,14 +177,13 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                 child: Container(
                               padding: const EdgeInsets.only(
                                   left: 12.0, right: 12, top: 8.0, bottom: 8.0),
-                              width: 140,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(3.0),
                                   color: Colors.greenAccent.shade700),
                               child: Text(
                                 buttonTitle,
+                                maxLines: 2,
                                 textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: buttonColor,
                                     fontSize: 16,
@@ -551,7 +550,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                             width: 180,
                             decoration: BoxDecoration(
                                 color: colorNavButton == true
-                                    ? Colors.greenAccent.shade700
+                                    ? const Color(0xFFFBC405)
                                     : const Color(0xFF00A3E0),
                                 borderRadius: BorderRadius.circular(12.0)),
                             duration: const Duration(milliseconds: 700),

@@ -102,7 +102,7 @@
   "rideRequest": "Yeni yolculuk",
   "beenCanceled": "Yolculuk iptal edildi",
    "timeOut": "Yolculuk Zaman aşımına uğradı ",
-  "arrived": "Yolcuyu Çağır",
+  "arrived": "Yolcuya\n yetışince çağır",
   "startTrip": "Yolculuğa başla",
   "endTrip": "Yolculuğu bitir",
   "avilbel": "Yeni Yolculuk için müsaitsiniz",

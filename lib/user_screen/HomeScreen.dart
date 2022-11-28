@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               onPressed: () async {
                 await TurnOnGBS().turnOnGBSifNot();
                 await LogicGoogleMap().locationPosition(context);
-                await GeoFireSrv().getLocationLiveUpdates(context);
+                // await GeoFireSrv().getLocationLiveUpdates(context);
                 getCountryName();
               },
               child: const Icon(

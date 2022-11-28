@@ -65,13 +65,13 @@ Widget callUs(
                 child: GestureDetector(
                   onTap:(){
                     Navigator.pop(context);
-                    ToUrlLunch().toUrlLunch(url:"https://wa.me/+905366034616");
+                    ToUrlLunch().toUrlLunch(url:"https://wa.me/+905057743644");
                   },
                   child: Row(
                     children: [
                       CircleAvatar(backgroundColor: Colors.green.shade700,radius: 15.0,child: const Icon(Icons.phone,size: 15.0,color: Colors.white)),
                       const SizedBox(width: 6.0),
-                      const Text(" What app  : +905366034616 ",
+                      const Text(" What app  : +905057743644 ",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           style:
