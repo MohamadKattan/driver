@@ -15,14 +15,16 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
     private val METHOD_CHANNEL = "com.garanti.driver/channel"
     private  var methodChannel:MethodChannel?=null
+
     private val METHOD_CHANNEL2 = "com.garanti.driverSound/channel"
     private  var methodChannel2:MethodChannel?=null
-//    private val METHOD_CHANNEL3 = "com.garanti.driverNot/channel"
-//    private  var methodChannel3:MethodChannel?=null
+
     private val METHOD_CHANNEL4 = "com.garanti.driverOld/channel"
     private  var methodChannel4:MethodChannel?=null
+
     private val METHOD_CHANNEL5 = "com.garanti.driverClearCash/channel"
     private  var methodChannel5:MethodChannel?=null
+
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
        super.configureFlutterEngine(flutterEngine)
 
@@ -54,7 +56,7 @@ class MainActivity: FlutterActivity() {
         }
     }
 
-    @Suppress("DEPRECATION")
+//    @Suppress("DEPRECATION")
     private  fun  openOld(context: Context, messenger: BinaryMessenger){
         methodChannel4 = MethodChannel(messenger,METHOD_CHANNEL4)
         methodChannel4!!.setMethodCallHandler { call, result ->
@@ -64,15 +66,15 @@ class MainActivity: FlutterActivity() {
                     val isScreenOn = pm.isInteractive
                     if (!isScreenOn) {
                         if( Build.VERSION.SDK_INT <= 24 ){
-                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:GarantiTaxi Driver")
-                            wl.acquire(10000)
-                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:Garanti Driver")
-                            wl_cpu.acquire(10000)
+//                          val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:GarantiTaxi Driver")
+//                            wl.acquire(10000)
+                            val wlCpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:Garanti Driver")
+                            wlCpu.acquire(10000)
                         }else{
-                            val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:GarantiTaxi Driver")
-                            wl.acquire(10000)
-                            val wl_cpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:Garanti Driver")
-                            wl_cpu.acquire(10000)
+//                         val wl: PowerManager.WakeLock = pm.newWakeLock(PowerManager. PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "myApp:GarantiTaxi Driver")
+//                            wl.acquire(10000)
+                            val wlCpu: PowerManager.WakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myApp:Garanti Driver")
+                            wlCpu.acquire(10000)
                         }
                     }
 
@@ -84,6 +86,7 @@ class MainActivity: FlutterActivity() {
 
         }
     }
+
 
     private fun playSound(context: Context,messenger: BinaryMessenger){
         methodChannel2 = MethodChannel(messenger,METHOD_CHANNEL2)

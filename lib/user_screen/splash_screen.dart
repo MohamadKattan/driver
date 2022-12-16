@@ -2,25 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
-import 'package:driver/user_screen/HomeScreen.dart';
-import 'package:driver/user_screen/check_in_Screen.dart';
 import 'package:driver/user_screen/page_view.dart';
-import 'package:driver/user_screen/refresh_after_active.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
-import '../config.dart';
 import '../my_provider/circle_indectorWeek.dart';
-import '../my_provider/driver_model_provider.dart';
-import '../notificatons/push_notifications_srv.dart';
-import '../tools/tools.dart';
 import '../tools/turn_GBS.dart';
-import '../tools/url_lunched.dart';
 import '../widget/custom_divider.dart';
-import 'auth_screen.dart';
-import 'driverInfo_screen.dart';
-import 'if_you_wanttopay.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'intrentet_week.dart';
 
@@ -37,105 +26,19 @@ class _SplashScreenState extends State<SplashScreen>
   bool result = false;
   @override
   void initState() {
-    checkInternet();
-    //todo old code
     // if (AuthSev().auth.currentUser?.uid != null) {
     //   DataBaseReal().getDriverInfoFromDataBase(context);
-    //   // PlanDays().getBackGroundBoolValue();
+    //   TurnOnGBS().turnOnGBSifNot();
     // }
     _animationController = AnimationController(
         vsync: this,
-        duration: const Duration(milliseconds: 800),
-        lowerBound: 0.6,
-        upperBound: 0.7);
+        duration: const Duration(milliseconds: 200),
+        lowerBound: 0.4,
+        upperBound: 0.5);
     _animationController.forward();
     _animationController.addStatusListener((status) async {
-      if (AuthSev().auth.currentUser?.uid != null) {
-        await DataBaseReal().getDriverInfoFromDataBase(context);
-        await Future.delayed(const Duration(milliseconds: 500));
-        tokenPhone = await firebaseMessaging.getToken();
-      }
       if (status == AnimationStatus.completed) {
-        if (result == false) {
-          Tools()
-              .toastMsg(AppLocalizations.of(context)!.noNet, Colors.redAccent);
-          Tools().toastMsg(
-              AppLocalizations.of(context)!.checkNet, Colors.redAccent);
-        }
-        else {
-          final driverInfo =
-              Provider.of<DriverInfoModelProvider>(context, listen: false)
-                  .driverInfo;
-          if (AuthSev().auth.currentUser?.uid == null) {
-            if (Platform.isAndroid) {
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) => showDialogPolicy(context));
-            } else {
-              TurnOnGBS().turnOnGBSifNot();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MyPageView()));
-            }
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.update == true) {
-            await ToUrlLunch().toPlayStore();
-            await driverRef.child(userId).child("update").set(false);
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const SplashScreen()),
-                (route) => false);
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok == "r") {
-            Tools().toastMsg(
-                AppLocalizations.of(context)!.active, Colors.greenAccent);
-            await getToken();
-            tokenPhone = await firebaseMessaging.getToken();
-            await driverRef.child(userId).child("active").set("active");
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const RefreshAfterActived()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok == "" &&
-              driverInfo.status == "") {
-            Provider.of<IsNetWeek>(context, listen: false).updateState(true);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const InterNetWeak()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.tok == "" &&
-              driverInfo.status == "info") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (_) => const DriverInfoScreen()));
-          }
-          // } else if (AuthSev().auth.currentUser?.uid != null &&
-          //     driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
-          //   Tools().toastMsg(
-          //       AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
-          //   Navigator.push(context,
-          //       MaterialPageRoute(builder: (_) => const ActiveAccount()));
-          // }
-          else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.status == "info") {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const DriverInfoScreen()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.status == "checkIn") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const CheckInScreen()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.status == "payTime") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const IfYouWantPay()));
-          } else if (AuthSev().auth.currentUser?.uid != null &&
-              driverInfo.status == "payed") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
-          } else {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const AuthScreen()));
-          }
-        }
+        await checkInternet();
       }
     });
     super.initState();
@@ -165,8 +68,34 @@ class _SplashScreenState extends State<SplashScreen>
     result = await InternetConnectionChecker().hasConnection;
     if (result == false) {
       Provider.of<IsNetWeek>(context, listen: false).updateState(true);
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const InterNetWeak()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const InterNetWeak(timeNet: 8)));
+    }
+    else {
+      if (AuthSev().auth.currentUser?.uid == null) {
+        if (Platform.isAndroid) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => showDialogPolicy(context));
+        } else {
+          TurnOnGBS().turnOnGBSifNot();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const MyPageView()));
+        }
+      } else {
+        if (AuthSev().auth.currentUser?.uid != null) {
+          await DataBaseReal()
+              .getDriverInfoFromDataBase(context)
+              .whenComplete(() async {
+            await Future.delayed(const Duration(seconds: 1));
+            await DataBaseReal().checkStatusUser(context);
+            TurnOnGBS().turnOnGBSifNot();
+          });
+        }
+      }
     }
   }
 

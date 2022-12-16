@@ -179,5 +179,14 @@
   "exForgotPass":"Hesap şifrenizi unuttuysanız,\n aşağıdaki alana hesap e-postanızı yazın\n ve ardından yeni bir şifre yazmak için e-posta adresinize\n bir bağlantı göndermek için aşağıdaki düğmeyi tıklayın.",
   "send":"göndermek",
   "emailCheck":"İşlem başarıyla tamamlandı.\n E-postanızı kontrol edin",
-  "errorImage":"Geçersiz resim formatı\n Başka bir fotoğraf çek"
+  "errorImage":"Geçersiz resim formatı\n Başka bir fotoğraf çek",
+  "driverCancelTrip":"Bu geziyi iptal etmek istiyor musunuz!!?",
+  "yes":"Evet",
+  "no":"Hayır",
+  "riderCancelTrip":"Binici Geziyi İptal Etti",
+  "locationServNot":"Konum servisleri devre dışı.",
+  "locationPrevNot":"Konum izinleri reddedildi",
+  "locationPrevNotAlwayes":"Konum izinleri kalıcı olarak reddedildi, izin isteyemiyoruz.",
+  "reOpen":"Konum hizmeti uyku aşamasında, tekrar etkinleştirmek için uygulamayı tamamen kapatın ve ardından uygulamayı tekrar açın.",
+  "locationUpdate":"Konum güncellemesi başladı"
 }

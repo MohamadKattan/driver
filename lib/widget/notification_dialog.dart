@@ -199,13 +199,12 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 children: [
                   GestureDetector(
                     onTap: () async {
+                      driverCancelOrder(context);
                       if (Platform.isAndroid) {
                         stopSound();
                       }
-
                       ///ios
                       _stopSound();
-                      driverCancelOrder(context);
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -227,11 +226,11 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   isHideButton == false
                       ? GestureDetector(
                           onTap: () async {
+                            checkAvailableOfRide(context, rideInfoProvider);
                             if (Platform.isAndroid) {
                               stopSound();
                             }
                             _stopSound();
-                            checkAvailableOfRide(context, rideInfoProvider);
                             setState(() {
                               isHideButton = true;
                             });
@@ -300,11 +299,15 @@ class _NotificationDialogState extends State<NotificationDialog> {
       }
       //id in newRide value = rider id from Ride Request collection
       if (newRideState == rideInfoProvider.userId) {
-        homeScreenStreamSubscription.pause();
+        // if (homeScreenStreamSubscription != null) {
+        //   homeScreenStreamSubscription!.cancel();
+        //   homeScreenStreamSubscription = null;
+        // }
+        serviceStatusStreamSubscription?.pause();
+        GeoFireSrv().cancelStreamLocation();
         subscriptionNot1.pause();
         Geofire.stopListener();
         await Geofire.removeLocation(currentUseId);
-        // await GeoFireSrv().displayLocationLiveUpdates();
         await rideRequestRef.set("accepted").whenComplete(() {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const NewRideScreen()));
@@ -312,10 +315,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
       } else if (newRideState == "canceled") {
         Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,
             Colors.redAccent.shade700);
-        // rideRequestRef.set("searching");
         Navigator.pop(context);
       } else if (newRideState == "timeOut") {
-        // rideRequestRef.set("searching");
         Tools().toastMsg(
             AppLocalizations.of(context)!.timeOut, Colors.redAccent.shade700);
         Navigator.pop(context);
@@ -332,31 +333,14 @@ class _NotificationDialogState extends State<NotificationDialog> {
   }
 
   // this method if driver press cancel button
-  Future<void> driverCancelOrder(BuildContext context) async {
+  Future<void> driverCancelOrder (BuildContext context) async {
 
     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
 
     final currentUseId =
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-        // subscriptionNot1.pause();
-        // homeScreenStreamSubscription.pause();
     _ref.child(currentUseId.userId).child("newRide").set("canceled");
     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
-    // await Geofire.stopListener();
-    // await Geofire.removeLocation(currentUseId.userId);
-    // const duration = Duration(minutes: 1);
-    // Timer.periodic(duration, (timer) async {
-    //   rideRequestCanceld = rideRequestCanceld - 1;
-    //   if (rideRequestCanceld <= 0) {
-    //     timer.cancel();
-    //     _ref.child(currentUseId.userId).child("newRide").set("searching");
-    //     _ref.child(currentUseId.userId).child("offLine").set("Available");
-    //     subscriptionNot1.resume();
-    //     homeScreenStreamSubscription.resume();
-    //     rideRequestCanceld = 1;
-    //     await GeoFireSrv().getLocationLiveUpdates(context);
-    //   }
-    // });
   }
 
   ///ios
@@ -366,6 +350,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   ///ios
   Future<void> _stopSound() async {
-    await audioPlayer.stop();
+    if(Platform.isIOS){
+      await audioPlayer.stop();
+    }else{
+      return;
+    }
   }
 }

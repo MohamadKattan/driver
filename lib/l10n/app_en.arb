@@ -732,5 +732,41 @@
   "errorImage":"Invalid image\n format Take another photo",
   "@errorImage": {
     "description": "Invalid image"
+  },
+  "driverCancelTrip":"Do you want to cancel this trip!!?",
+  "@driverCancelTrip": {
+    "description": "driver cancel"
+  },
+  "riderCancelTrip":"The Rider Canceled the Trip",
+  "@riderCancelTrip": {
+    "description": "The Rider Canceled the Trip"
+  },
+  "yes":"Yes",
+  "@yes": {
+    "description": "yes"
+  },
+  "no":"No",
+  "@no": {
+    "description": "No"
+  },
+  "locationServNot":"Location services are disabled.",
+  "@locationServNot": {
+    "description": "Location services are disabled."
+  },
+  "locationPrevNot":"Location permissions are denied",
+  "@locationPrevNot": {
+    "description": "Location permissions are denied"
+  },
+  "locationPrevNotAlwayes":"Location permissions are permanently denied, we cannot request permissions.",
+  "@locationPrevNotAlwayes": {
+    "description": "Location permissions are permanently denied, we cannot request permissions."
+  },
+  "reOpen":"The location service is in the sleep phase, in order to activate it again, close the application completely, then open the application again",
+  "@reOpen": {
+    "description": "reOpen"
+  },
+  "locationUpdate":"Location update stared",
+  "@locationUpdate": {
+    "description": "Location update stared"
   }
 }

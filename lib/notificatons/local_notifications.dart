@@ -6,7 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -68,7 +67,7 @@ Future<void> initializationLocal(BuildContext context) async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String? payload){
+      onSelectNotification: (String? payload) async {
     selectedNotificationPayload = payload;
     selectNotificationSubject.add(payload);
   });
@@ -136,5 +135,39 @@ Future<void> showNotification(BuildContext context) async {
     AppLocalizations.of(context)!.clickHere,
     platform,
     payload: 'item x',
+  );
+}
+
+Future<void> showNotificationNoLocation(BuildContext context) async {
+  AndroidNotificationDetails androidPlatformChannelSpecifics =
+  const AndroidNotificationDetails(
+    'your channel id6',
+    'no GPS',
+    channelDescription: 'No Gps service',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+    enableLights: true,
+    enableVibration: true,
+    playSound: true,
+    sound:  RawResourceAndroidNotificationSound("no_gps"),
+  );
+  IOSNotificationDetails iOSPlatformChannelSpecifics =
+  const IOSNotificationDetails(
+    presentBadge: true,
+    sound: 'no_gps.mp3',
+    presentAlert: true,
+    presentSound: true,
+  );
+
+  final NotificationDetails platform = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    AppLocalizations.of(context)!.locationServNot,
+    'Garanti taxi',
+    platform,
+    payload: 'Location',
   );
 }

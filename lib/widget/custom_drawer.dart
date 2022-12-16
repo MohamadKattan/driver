@@ -340,7 +340,7 @@ Widget customDrawer(BuildContext context) {
                           ),
                         ],
                       ),
-                    const  SizedBox(width: 20),
+                    const  SizedBox(width: 6),
                       Center(
                         child: Padding(
                           padding: EdgeInsets.only(
@@ -354,8 +354,8 @@ Widget customDrawer(BuildContext context) {
                                   const BoxDecoration(shape: BoxShape.circle),
                               child: Image.asset(
                                 "images/credit.png",
-                                width: 40,
-                                height: 40,
+                                width: 30,
+                                height: 30,
                                 fit: BoxFit.cover,
                               )),
                         ),
@@ -434,15 +434,16 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (Platform.isAndroid) {
                     SystemNavigator.pop();
                   }
-                  Provider.of<DrawerValueChange>(context, listen: false)
-                      .updateValue(0);
-                  Provider.of<ChangeColorBottomDrawer>(context, listen: false)
-                      .updateColorBottom(false);
-                  // exit(0);
+                  else{
+                    Provider.of<DrawerValueChange>(context, listen: false)
+                        .updateValue(0);
+                    Provider.of<ChangeColorBottomDrawer>(context, listen: false)
+                        .updateColorBottom(false);
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

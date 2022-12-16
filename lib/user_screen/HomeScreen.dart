@@ -20,7 +20,6 @@ import '../payment/couut_plan_days.dart';
 import '../repo/api_srv_geolocater.dart';
 import '../repo/auth_srv.dart';
 import '../repo/dataBaseReal_sev.dart';
-import '../tools/turn_GBS.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -38,14 +37,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    _loadMapStyles();
-    TurnOnGBS().turnOnGBSifNot();
-    initializationLocal(context);
-    PushNotificationsSrv().gotNotificationInBackground(context);
     requestPermissionsSystem();
+    _loadMapStyles();
+    initializationLocal(context);
     PlanDays().getDateTime();
-    refreshApp();
-    DataBaseReal().listingForChangeInStatusPay(context);
+    lastSeen();
+     GeoFireSrv().serviceStatusStream(context);
+    PushNotificationsSrv().gotNotificationInBackground(context);
+    // DataBaseReal().listingForChangeInStatusPay(context);
     // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
     // initPlatformState();
@@ -54,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-
     super.didChangeAppLifecycleState(state);
 
     switch (state) {
@@ -76,32 +74,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    GeoFireSrv().cancelStreamLocation();
     super.dispose();
   }
 
-  // system over vlowy
-  // Future<void> initPlatformState() async {
-  //   await SystemAlertWindow.enableLogs(true);
-  //   String? platformVersion;
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     platformVersion = await SystemAlertWindow.platformVersion;
-  //   } on PlatformException {
-  //     platformVersion = 'Failed to get platform version.';
-  //   }
-  //   if (!mounted) return;
-  //
-  //   setState(() {
-  //     _platformVersion = platformVersion!;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final drawerValue = Provider.of<DrawerValueChange>(context).value;
-    final changeColorBottom =
-        Provider.of<ChangeColorBottomDrawer>(context).isTrue;
-
+    // final drawerValue = Provider.of<DrawerValueChange>(context).value;
+    // final changeColorBottom =
+    //     Provider.of<ChangeColorBottomDrawer>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -111,133 +92,108 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           body: Stack(
             children: [
               customDrawer(context),
-              GestureDetector(
-                onTap: () async {
-                  Provider.of<DrawerValueChange>(context, listen: false)
-                      .updateValue(0);
-                  Provider.of<ChangeColorBottomDrawer>(context, listen: false)
-                      .updateColorBottom(false);
-                },
-                child: TweenAnimationBuilder(
-                  tween: Tween<double>(begin: 0.0, end: drawerValue),
+              Consumer<DrawerValueChange>(
+                builder: (context,drawerValue,child)=>
+                    TweenAnimationBuilder(
+                  tween: Tween<double>(begin: 0.0, end: drawerValue.value),
                   duration: const Duration(milliseconds: 150),
                   builder: (_, double val, __) {
                     return Transform(
                         transform: Matrix4.identity()
                           ..setEntry(3, 2, 0.001)
                           ..setEntry(0, 3, 300 * val)
-                          ..rotateY((pi / 3) * val),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          color: Colors.white,
-                          child: Stack(
-                            children: [
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height,
-                                child: GoogleMap(
-                                  padding: const EdgeInsets.only(top: 25.0),
-                                  mapType: MapType.normal,
-                                  initialCameraPosition:
-                                      LogicGoogleMap().kGooglePlex,
-                                  myLocationButtonEnabled: false,
-                                  myLocationEnabled: true,
-                                  onMapCreated:
-                                      (GoogleMapController controller) async {
-                                    LogicGoogleMap()
-                                        .controllerGoogleMap
-                                        .complete(controller);
-                                    newGoogleMapController = controller;
-                                    await LogicGoogleMap()
-                                        .locationPosition(context);
-                                    await GeoFireSrv()
-                                        .getLocationLiveUpdates(context);
-                                    await checkToken();
+                          ..rotateY((pi / 2) * val),
+                        child:
+                        Stack(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height,
+                              width:MediaQuery.of(context).size.width ,
+                              color: Colors.white,
+                              child: GoogleMap(
+                                padding: const EdgeInsets.only(top: 25.0),
+                                mapType: MapType.normal,
+                                initialCameraPosition:
+                                LogicGoogleMap().kGooglePlex,
+                                myLocationButtonEnabled: false,
+                                myLocationEnabled: true,
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  LogicGoogleMap().controllerGoogleMap.complete(controller);
+                                  newGoogleMapController = controller;
+                                  LogicGoogleMap().darkOrwhite(newGoogleMapController!);
+                                  await LogicGoogleMap().locationPosition(context).whenComplete(() async {
+                                    await GeoFireSrv().getLocationLiveUpdates(context);
                                     getCountryName();
-                                    lastSeen();
+                                    await DataBaseReal().getDriverInfoFromDataBase(context);
+                                    await checkToken();
                                     tostDriverAvailable();
-                                    await DataBaseReal()
-                                        .getDriverInfoFromDataBase(context);
-                                    LogicGoogleMap()
-                                        .darkOrwhite(newGoogleMapController!);
-                                  },
-                                ),
+                                  });
+                                },
                               ),
-                              //widget
-                              valueSwitchBottom == false
-                                  ? customContainerOffLineDriver(context)
-                                  : const Text(""),
-                              //widget
-                              Positioned(
-                                  right:
-                                      AppLocalizations.of(context)!.day == "يوم"
-                                          ? 25.0
-                                          : null,
-                                  left:
-                                      AppLocalizations.of(context)!.day == "يوم"
-                                          ? null
-                                          : 25.0,
-                                  bottom: 10.0,
-                                  child: customSwitchBottom())
-                            ],
-                          ),
-                        ));
+                            ),
+                            //widget
+                            valueSwitchBottom == false
+                                ? customContainerOffLineDriver(context)
+                                : const SizedBox(),
+                            //widget
+                            Positioned(
+                                right: AppLocalizations.of(context)!.day == "يوم"
+                                    ? 25.0
+                                    : null,
+                                left: AppLocalizations.of(context)!.day == "يوم"
+                                    ? null
+                                    : 25.0,
+                                bottom: 10.0,
+                                child: customSwitchBottom())
+                          ],
+                        )
+                    );
                   },
                 ),
               ),
-              changeColorBottom == false
-                  ? Positioned(
-                      left: AppLocalizations.of(context)!.day == "يوم"
-                          ? 0.0
-                          : null,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 50.0, left: 15.0),
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: const Color(0xFF00A3E0),
-                          child: IconButton(
-                              onPressed: () {
-                                Provider.of<DrawerValueChange>(context,
-                                        listen: false)
-                                    .updateValue(1);
-                                Provider.of<ChangeColorBottomDrawer>(context,
-                                        listen: false)
-                                    .updateColorBottom(true);
-                              },
-                              icon: const Icon(
-                                Icons.format_list_numbered_rtl_rounded,
-                                color: Colors.white,
-                                size: 25,
-                              )),
-                        ),
-                      ),
-                    )
-                  : Positioned(
-                      left: AppLocalizations.of(context)!.day == "يوم"
-                          ? 0.0
-                          : null,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 30.0, left: 15.0),
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: const Color(0xFFFBC408),
-                          child: IconButton(
-                              onPressed: () async {
-                                Provider.of<DrawerValueChange>(context,
-                                        listen: false)
-                                    .updateValue(0);
-                                Provider.of<ChangeColorBottomDrawer>(context,
-                                        listen: false)
-                                    .updateColorBottom(false);
-                              },
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 25,
-                              )),
-                        ),
-                      ),
+              Consumer<ChangeColorBottomDrawer>(
+                builder: (context, _val, child) => Positioned(
+                  left: AppLocalizations.of(context)!.day == "يوم" ? 0.0 : null,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 50.0, left: 15.0),
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: const Color(0xFF00A3E0),
+                      child: IconButton(
+                          onPressed: () {
+                            if (_val.isTrue == false) {
+                              Provider.of<DrawerValueChange>(context,
+                                      listen: false)
+                                  .updateValue(1);
+                              Provider.of<ChangeColorBottomDrawer>(context,
+                                      listen: false)
+                                  .updateColorBottom(true);
+                            }
+                            else {
+                              Provider.of<DrawerValueChange>(context,
+                                      listen: false)
+                                  .updateValue(0);
+                              Provider.of<ChangeColorBottomDrawer>(context,
+                                      listen: false)
+                                  .updateColorBottom(false);
+                            }
+                          },
+                          icon: _val.isTrue == false
+                              ? const Icon(
+                                  Icons.format_list_numbered_rtl_rounded,
+                                  color: Colors.white,
+                                  size: 25,
+                                )
+                              : const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 25,
+                                )),
                     ),
+                  ),
+                ),
+              )
             ],
           ),
           floatingActionButton: Padding(
@@ -246,10 +202,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             child: FloatingActionButton(
               backgroundColor: const Color(0xFF00A3E0),
               onPressed: () async {
-                await TurnOnGBS().turnOnGBSifNot();
                 await LogicGoogleMap().locationPosition(context);
-                // await GeoFireSrv().getLocationLiveUpdates(context);
-                getCountryName();
+                await GeoFireSrv().getLocationLiveUpdates(context);
               },
               child: const Icon(
                 Icons.my_location,
@@ -285,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 if (valueSwitchBottom == true) {
                   // GeoFireSrv().makeDriverOnlineNow(context);
                   tostDriverAvailable();
+                  await LogicGoogleMap().locationPosition(context);
                   await GeoFireSrv().getLocationLiveUpdates(context);
                 } else if (valueSwitchBottom == false) {
                   GeoFireSrv().makeDriverOffLine();
@@ -307,22 +262,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  // todo new if country name came null this method it will work
   Future<void> getCountryName() async {
     await ApiSrvGeolocater().searchCoordinatesAddress(context);
-    //  var _country =
-    //      Provider.of<DriverInfoModelProvider>(context, listen: false)
-    //          .driverInfo
-    //          .country;
-    // final _result = Provider.of<PlaceName>(context, listen: false).placeName;
-    //  setState(() {
-    //    _country=_result;
-    //  });
-  }
-
-// this method for stop local Notification
-  void onForground() {
-    driverRef.child(userId).child("service").set("not");
   }
 
 // this method for check token after map loading
@@ -338,6 +279,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
         Tools().toastMsg(
             AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+        subscriptionNot1.cancel();
+        serviceStatusStreamSubscription?.cancel();
+        // listingForChangeStatusPay.cancel();
         await GeoFireSrv().makeDriverOffLine();
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
@@ -345,13 +289,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         getToken();
       }
     }
-  }
-
-  void refreshApp() {
-    Timer.periodic(const Duration(seconds: 10), (timer) {
-      if (!mounted) return;
-      setState(() {});
-    });
   }
 
   void lastSeen() async {

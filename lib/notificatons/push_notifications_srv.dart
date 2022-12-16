@@ -124,7 +124,7 @@ class PushNotificationsSrv {
 
   // this method for got Notification in back ground
 
-  String getRideRequestId(RemoteMessage message) {
+  String getRideRequestId (RemoteMessage message) {
     String rideId = "";
     if (Platform.isAndroid) {
       rideId = message.data["ride_id"];
@@ -197,9 +197,8 @@ class PushNotificationsSrv {
         stopSound();
       }
     } catch (ex) {
-      Tools().toastMsg("push.Loading...", Colors.redAccent.shade700);
+      Tools().toastMsg("push.Loading catch...", Colors.redAccent.shade700);
       driverRef.child(userId).child("newRide").set("searching");
-      Tools().toastMsg("Not.exists", Colors.redAccent.shade700);
       stopSound();
     }
   }
@@ -211,19 +210,23 @@ class PushNotificationsSrv {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
           return;
-        } else if (_riderId == "canceled") {
-          Future.delayed(const Duration(seconds: 30)).whenComplete((){
+        }
+        else if (_riderId == "canceled") {
+          Future.delayed(const Duration(seconds: 1)).whenComplete((){
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        } else if (_riderId == "timeOut") {
-         Future.delayed(const Duration(seconds: 30)).whenComplete((){
-           driverRef.child(userId).child("newRide").set("searching");
-           driverRef.child(userId).child("offLine").set("Available");
-         });
-        } else if (_riderId == "accepted") {
+        }
+        else if (_riderId == "timeOut") {
+          Future.delayed(const Duration(seconds: 1)).whenComplete((){
+            driverRef.child(userId).child("newRide").set("searching");
+            driverRef.child(userId).child("offLine").set("Available");
+          });
+        }
+        else if (_riderId == "accepted") {
           return;
-        } else {
+        }
+        else {
           if (Platform.isAndroid) {
             openDailog();
             playSound();
@@ -239,52 +242,4 @@ class PushNotificationsSrv {
       }
     });
   }
-
-//   Future<void> driverTimeOut(BuildContext context) async {
-//     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
-//     final currentUseId = Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-//     _ref.child(currentUseId.userId).child("newRide").set("searching");
-//     _ref.child(currentUseId.userId).child("offLine").set("notAvailable");
-//     const duration = Duration(seconds: 1);
-//     Timer.periodic(duration, (timer) async {
-//       rideRequestTimeOut = rideRequestTimeOut - 1;
-//       await Geofire.stopListener();
-//       await Geofire.removeLocation(currentUseId.userId);
-//       if (rideRequestTimeOut <= 0) {
-//         print('count$rideRequestTimeOut');
-//         timer.cancel();
-//         subscriptionNot1.resume();
-//         homeScreenStreamSubscription.resume();
-//         rideRequestTimeOut = 120;
-//         print('tttttt$rideRequestTimeOut');
-//         _ref.child(currentUseId.userId).child("offLine").set("Available");
-//          GeoFireSrv().getLocationLiveUpdates(context);
-//       }
-//     });
-//
-//   }
- ///
-//   // this method if driver press cancel button
-//   Future<void> driverCancelOrder(BuildContext context) async {
-//
-//     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
-//
-//     final currentUseId =
-//         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-//     _ref.child(currentUseId.userId).child("newRide").set("searching");
-//     const duration = Duration(seconds: 1);
-//     Timer.periodic(duration, (timer) async {
-//       rideRequestCanceld = rideRequestCanceld - 1;
-//       await Geofire.stopListener();
-//       await Geofire.removeLocation(currentUseId.userId);
-//       if (rideRequestCanceld <= 0) {
-//         timer.cancel();
-//         _ref.child(currentUseId.userId).child("offLine").set("Available");
-//         subscriptionNot1.resume();
-//         homeScreenStreamSubscription.resume();
-//         rideRequestCanceld = 120;
-//          GeoFireSrv().getLocationLiveUpdates(context);
-//       }
-//     });
-//   }
 }

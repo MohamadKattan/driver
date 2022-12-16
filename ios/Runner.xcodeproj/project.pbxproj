@@ -15,6 +15,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		D137017B2885AC9F00038FE4 /* new_order.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D137017A2885AC9F00038FE4 /* new_order.mp3 */; };
+		D157F7EB2948A697000AC7ED /* no_gps.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D157F7EA2948A697000AC7ED /* no_gps.mp3 */; };
 		D1882C4B28ABACF600DCBAA8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1882C4D28ABACF600DCBAA8 /* InfoPlist.strings */; };
 		D1E7A60E29029F2B0053C466 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D1E7A60D29029F2B0053C466 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D137017A2885AC9F00038FE4 /* new_order.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = new_order.mp3; sourceTree = "<group>"; };
 		D137017C2885AFD300038FE4 /* Runner.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		D157F7EA2948A697000AC7ED /* no_gps.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = no_gps.mp3; sourceTree = "<group>"; };
 		D1882C4C28ABACF600DCBAA8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D1882C4E28ABAD2400DCBAA8 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D1E7A60D29029F2B0053C466 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				D157F7EA2948A697000AC7ED /* no_gps.mp3 */,
 				D1E7A60D29029F2B0053C466 /* GoogleService-Info.plist */,
 				D137017C2885AFD300038FE4 /* Runner.entitlements */,
 				D137017A2885AC9F00038FE4 /* new_order.mp3 */,
@@ -207,6 +210,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				D137017B2885AC9F00038FE4 /* new_order.mp3 in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				D157F7EB2948A697000AC7ED /* no_gps.mp3 in Resources */,
 				D1E7A60E29029F2B0053C466 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

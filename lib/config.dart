@@ -11,7 +11,8 @@ String mapKey = "AIzaSyDh5NNwfDJFU27Y_yMpVcWeeepBQBbewmM";
 String mapBox =
     "pk.eyJ1Ijoibml6YW04NCIsImEiOiJjbDR3c3FhdDUxbHM5M2NzM2kydjR0Zzl0In0.24gmrxZ6tyh636f7bkV3og";
 GoogleMapController? newGoogleMapController;
-late StreamSubscription<Position> homeScreenStreamSubscription;
+StreamSubscription<Position>? homeScreenStreamSubscription;
+StreamSubscription<ServiceStatus>? serviceStatusStreamSubscription;
 StreamSubscription<Position>? newRideScreenStreamSubscription;
 late StreamSubscription<DatabaseEvent> subscriptionNot1;
 late StreamSubscription<DatabaseEvent> listingForChangeStatus;
@@ -36,3 +37,6 @@ String? dekontId;
 int hourForDarkMode = DateTime.now().hour;
 late String darkMapStyle;
 late String lightMapStyle;
+late Timer timerStop1;
+late Timer timerStop2;
+late Timer timerStop3;
