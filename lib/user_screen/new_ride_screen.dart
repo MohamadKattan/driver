@@ -575,8 +575,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
     newRideControllerGoogleMap
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-    isInductor = false;
-
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> decodedPolylineResult =
         polylinePoints.decodePolyline(details!.enCodingPoints);
@@ -600,6 +598,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
           jointType: JointType.round,
           points: polylineCoordinates);
       polylineSet.add(polyline);
+      isInductor = false;
     });
     Marker markerPickUpLocation = Marker(
         icon: pickUpIcon,
@@ -954,10 +953,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 ? "images/100currentlocationicon.png"
                 : "images/100currentlocationiconAn.png")
         .then((value) {
-      pickUpIcon = value;
-      // setState(() {
-      //   pickUpIcon = value;
-      // });
+      setState(() {
+        pickUpIcon = value;
+      });
     });
   }
 
@@ -975,10 +973,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                     ? "images/100flagblackwhite.png"
                     : "images/100flagblackwhiteAn.png")
         .then((value) {
-      dropOffIcon = value;
-      // setState(() {
-      //   dropOffIcon = value;
-      // });
+      setState(() {
+        dropOffIcon = value;
+      });
     });
   }
 
@@ -992,10 +989,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 ? "images/100navigation.png"
                 : "images/100navigationAn.png")
         .then((value) {
-      anmiatedMarkerIcon = value;
-      // setState(() {
-      //   anmiatedMarkerIcon = value;
-      // });
+      setState(() {
+        anmiatedMarkerIcon = value;
+      });
     });
   }
 

@@ -1,5 +1,6 @@
 /// this class for localNoitifction we will use with ios just
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -36,41 +37,50 @@ String? selectedNotificationPayload;
 
 Future<void> initializationLocal(BuildContext context) async {
 
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
+  try{
+    if (kDebugMode) {
+      print('intLocal start');
+    }
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('app_icon');
 
-  final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-          requestAlertPermission: false,
-          requestBadgePermission: false,
-          requestSoundPermission: false,
-          onDidReceiveLocalNotification: (
+    final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+        onDidReceiveLocalNotification: (
             int id,
             String? title,
             String? body,
             String? payload,
-          ) async {
-            didReceiveLocalNotificationSubject.add(
-              ReceivedNotification(
-                id: id,
-                title: title,
-                body: body,
-                payload: payload,
-              ),
-            );
-          });
+            ) async {
+          didReceiveLocalNotificationSubject.add(
+            ReceivedNotification(
+              id: id,
+              title: title,
+              body: body,
+              payload: payload,
+            ),
+          );
+        });
 
-  final InitializationSettings initializationSettings=
-  InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
+    final InitializationSettings initializationSettings=
+    InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String? payload) async {
-    selectedNotificationPayload = payload;
-    selectNotificationSubject.add(payload);
-  });
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+          selectedNotificationPayload = payload;
+          selectNotificationSubject.add(payload);
+        });
+  }catch(ex){
+    if (kDebugMode) {
+      print('intLocal${ex.toString()}');
+    }
+  }
 }
 
 void requestPermissions() {
@@ -90,6 +100,9 @@ void requestPermissions() {
         badge: true,
         sound: true,
       );
+  ///todo stop for now till update plugin
+  // flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+  //     AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
 }
 
 Future<void> showNotification(BuildContext context) async {
@@ -139,35 +152,45 @@ Future<void> showNotification(BuildContext context) async {
 }
 
 Future<void> showNotificationNoLocation(BuildContext context) async {
-  AndroidNotificationDetails androidPlatformChannelSpecifics =
-  const AndroidNotificationDetails(
-    'your channel id6',
-    'no GPS',
-    channelDescription: 'No Gps service',
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'ticker',
-    enableLights: true,
-    enableVibration: true,
-    playSound: true,
-    sound:  RawResourceAndroidNotificationSound("no_gps"),
-  );
-  IOSNotificationDetails iOSPlatformChannelSpecifics =
-  const IOSNotificationDetails(
-    presentBadge: true,
-    sound: 'no_gps.mp3',
-    presentAlert: true,
-    presentSound: true,
-  );
+  try{
+    if (kDebugMode) {
+      print('start showNotificationNoLocation');
+    }
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+    const AndroidNotificationDetails(
+      'your channel id6',
+      'no GPS',
+      channelDescription: 'No Gps service',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      enableLights: true,
+      enableVibration: true,
+      playSound: true,
+      sound:  RawResourceAndroidNotificationSound("no_gps"),
+    );
+    IOSNotificationDetails iOSPlatformChannelSpecifics =
+    const IOSNotificationDetails(
+      presentBadge: true,
+      sound: 'no_gps.mp3',
+      presentAlert: true,
+      presentSound: true,
+    );
 
-  final NotificationDetails platform = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics);
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    AppLocalizations.of(context)!.locationServNot,
-    'Garanti taxi',
-    platform,
-    payload: 'Location',
-  );
+    final NotificationDetails platform = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      AppLocalizations.of(context)!.locationServNot,
+      'Garanti taxi',
+      platform,
+      payload: 'item x',
+    );
+  }catch(ex){
+    if (kDebugMode) {
+      print('loc:::${ex.toString()}');
+    }
+  }
 }

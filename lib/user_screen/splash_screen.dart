@@ -26,19 +26,20 @@ class _SplashScreenState extends State<SplashScreen>
   bool result = false;
   @override
   void initState() {
+    checkInternet();
     // if (AuthSev().auth.currentUser?.uid != null) {
     //   DataBaseReal().getDriverInfoFromDataBase(context);
     //   TurnOnGBS().turnOnGBSifNot();
     // }
     _animationController = AnimationController(
         vsync: this,
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 3000),
         lowerBound: 0.4,
         upperBound: 0.5);
     _animationController.forward();
     _animationController.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
-        await checkInternet();
+        // await checkInternet();
       }
     });
     super.initState();

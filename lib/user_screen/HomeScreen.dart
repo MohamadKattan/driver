@@ -37,9 +37,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    initializationLocal(context);
     requestPermissionsSystem();
     _loadMapStyles();
-    initializationLocal(context);
     PlanDays().getDateTime();
     lastSeen();
      GeoFireSrv().serviceStatusStream(context);
@@ -277,14 +277,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       requestPermissions();
       if (_user?.uid != null &&
           driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
-        Tools().toastMsg(
-            AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+        Tools().toastMsg(AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
         subscriptionNot1.cancel();
         serviceStatusStreamSubscription?.cancel();
         // listingForChangeStatusPay.cancel();
         await GeoFireSrv().makeDriverOffLine();
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
       } else {
         getToken();
       }
