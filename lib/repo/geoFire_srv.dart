@@ -17,7 +17,7 @@ import '../notificatons/local_notifications.dart';
 class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;
   late LocationSettings locationSettings;
-
+// this method for stream check if gps service denied or has error
   void serviceStatusStream(BuildContext context)  {
     if (serviceStatusStreamSubscription == null) {
       final serviceStatusStream = Geolocator.getServiceStatusStream();
@@ -32,12 +32,13 @@ class GeoFireSrv {
             builder: (_) => locationStoped(context));
       }).listen((serviceStatus) async {
         if (serviceStatus == ServiceStatus.enabled) {
-          Tools().toastMsg('.................0..................',
+          Tools().toastMsg('...................................',
               Colors.orangeAccent.shade100);
-          Tools().toastMsg('.................1.................',
+          Tools().toastMsg('..................................',
               Colors.orangeAccent.shade700);
           await getLocationLiveUpdates(context);
-        } else {
+        }
+        else {
           if (homeScreenStreamSubscription != null) {
             homeScreenStreamSubscription?.cancel();
             homeScreenStreamSubscription = null;
@@ -51,7 +52,7 @@ class GeoFireSrv {
       });
     }
   }
-
+// this method for stream update location
   Future<void> getLocationLiveUpdates(BuildContext context) async {
     Geofire.initialize("availableDrivers");
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -105,10 +106,6 @@ class GeoFireSrv {
 
   // this method for delete driver from live location if switch offLine bottom
   Future<void> makeDriverOffLine() async {
-    // if (homeScreenStreamSubscription != null) {
-    //   homeScreenStreamSubscription!.cancel();
-    //   homeScreenStreamSubscription = null;
-    // }
     cancelStreamLocation();
     DatabaseReference? rideRequestRef = FirebaseDatabase.instance
         .ref()
@@ -123,8 +120,6 @@ class GeoFireSrv {
   // this method for cancel stream on location if error or disabled
   void cancelStreamLocation() {
     if (homeScreenStreamSubscription != null) {
-      // serviceStatusStreamSubscription?.cancel();
-      // serviceStatusStreamSubscription = null;
       homeScreenStreamSubscription?.cancel();
       homeScreenStreamSubscription = null;
     }

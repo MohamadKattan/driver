@@ -761,12 +761,16 @@
   "@locationPrevNotAlwayes": {
     "description": "Location permissions are permanently denied, we cannot request permissions."
   },
-  "reOpen":"The location service is in the sleep phase, in order to activate it again, close the application completely, then open the application again",
+  "reOpen":"The GPS in your mobile device enters into a sleep phase when the application is running in the background for 30 minutes in order to activate it, press OK, or close the application and open it again",
   "@reOpen": {
     "description": "reOpen"
   },
   "locationUpdate":"Location update stared",
   "@locationUpdate": {
     "description": "Location update stared"
+  },
+  "paymentProcess":"This process is encrypted with 3D technology in order to complete the process successfully. Do not close the process until the message of the end of the process appears",
+  "@paymentProcess": {
+    "description": "payment Process"
   }
 }

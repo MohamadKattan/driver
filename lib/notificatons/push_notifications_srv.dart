@@ -235,7 +235,7 @@ class PushNotificationsSrv {
           } else {
             retrieveRideRequestInfo(_riderId, context);
             if (runLocale) {
-              showNotification(context);
+              showNotificationNewOrder(context);
             }
           }
         }

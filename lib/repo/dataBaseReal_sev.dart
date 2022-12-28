@@ -73,6 +73,24 @@ class DataBaseReal {
     }
   }
 
+  // this method for get exPlan and update Status in drawer
+  Future<void> updateExPlan(BuildContext context) async {
+    final ref = FirebaseDatabase.instance
+        .ref()
+        .child("driver")
+        .child(currentUser!.uid)
+        .child("exPlan");
+    await ref.once().then((value) {
+      if (value.snapshot.value != null) {
+        var val = int.parse(value.snapshot.value.toString());
+        Provider.of<DriverInfoModelProvider>(context, listen: false)
+            .updateExPlan(val);
+      } else {
+        return;
+      }
+    });
+  }
+
   // this method for delete account user
   Future<void> deleteAccount(BuildContext context) async {
     try {
@@ -106,10 +124,12 @@ class DataBaseReal {
             if (kDebugMode) {
               print("listingForChangeInStatus canceled");
             }
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => const SplashScreen()),
-                (route) => false);
+            Navigator.of(context)
+                .push(Tools().createRoute(context, const HomeScreen()));
+            // Navigator.pushAndRemoveUntil(
+            //     context,
+            //     MaterialPageRoute(builder: (_) => const SplashScreen()),
+            //     (route) => false);
           } else {
             if (kDebugMode) {
               print("listingForChangeInStatus null");
@@ -224,8 +244,7 @@ class DataBaseReal {
           context,
           MaterialPageRoute(builder: (_) => const SplashScreen()),
           (route) => false);
-    }
-    else if (driverInfo.tok == "r") {
+    } else if (driverInfo.tok == "r") {
       Tools()
           .toastMsg(AppLocalizations.of(context)!.active, Colors.greenAccent);
       await getToken();
@@ -233,8 +252,7 @@ class DataBaseReal {
       await driverRef.child(userId).child("active").set("active");
       Navigator.push(context,
           MaterialPageRoute(builder: (_) => const RefreshAfterActived()));
-    }
-    else if (driverInfo.tok == "" && driverInfo.status == "") {
+    } else if (driverInfo.tok == "" && driverInfo.status == "") {
       Provider.of<IsNetWeek>(context, listen: false).updateState(true);
       Navigator.push(
           context,
@@ -242,8 +260,7 @@ class DataBaseReal {
               builder: (_) => const InterNetWeak(
                     timeNet: 1,
                   )));
-    }
-    else {
+    } else {
       switch (driverInfo.status) {
         case 'info':
           Navigator.push(

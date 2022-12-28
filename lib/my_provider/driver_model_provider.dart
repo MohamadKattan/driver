@@ -9,4 +9,8 @@ class DriverInfoModelProvider extends ChangeNotifier {
     driverInfo = driver;
     notifyListeners();
   }
+  void updateExPlan(int status){
+    driverInfo.exPlan = status;
+    notifyListeners();
+  }
 }

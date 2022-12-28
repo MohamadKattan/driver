@@ -15,7 +15,7 @@ class PlanDays {
     await driverRef.child(userId).child("backbool").set(isTrue);
   }
 
-// this method for set date time explan date
+// this method for set dateTime in data base planeDate section for calc exPlan
   Future<void> setDateTime() async {
     int _day;
     int _month;

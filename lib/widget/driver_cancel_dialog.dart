@@ -85,6 +85,7 @@ void driverCanceldTrip(BuildContext context) async {
   newRideScreenStreamSubscription?.cancel();
   subscriptionNot1.resume();
   serviceStatusStreamSubscription?.resume();
+  showGpsDailog = true;
   Navigator.pop(context);
   await LogicGoogleMap().locationPosition(context);
   GeoFireSrv().getLocationLiveUpdates(context);

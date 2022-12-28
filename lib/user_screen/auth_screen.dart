@@ -217,7 +217,6 @@ class AuthScreen extends StatelessWidget {
                             FocusScope.of(context).requestFocus(FocusNode());
                             await authSev.createOrLoginWithEmail(
                                 email, context, passWord);
-                            // await authSev.signUpWithPhone(result, context);
                             FocusScope.of(context).requestFocus(FocusNode());
                           }
                         },

@@ -1,6 +1,7 @@
 // this class for custom drawer
 
 import 'dart:io';
+import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/book_screen.dart';
 import 'package:driver/user_screen/earn_screen.dart';
 import 'package:driver/user_screen/plan_screen.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../config.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
 import '../my_provider/driver_model_provider.dart';
@@ -24,8 +26,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Widget customDrawer(BuildContext context) {
   final planProvider =
       Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
-  double day = planProvider / 60 / 24;
-  int newDay = day.floor();
+   int day =planProvider~/60~/24;
+  // int newDay = day.floor();
   return Container(
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.height,
@@ -74,8 +76,7 @@ Widget customDrawer(BuildContext context) {
                                 style: const TextStyle(
                                     color: Colors.black45, fontSize: 16.0)),
                             Text(
-                                newDay.toString() +
-                                    AppLocalizations.of(context)!.day,
+                                "$day ${AppLocalizations.of(context)!.day}",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     color: planProvider <= 7200
@@ -92,14 +93,12 @@ Widget customDrawer(BuildContext context) {
           ),
           Column(
             children: [
-              const SizedBox(
-                height: 4.0,
-              ),
+              const SizedBox(height: 4.0),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BookingScreen())),
+                onTap: () {
+                  Navigator.of(context).push(
+                      Tools().createRoute(context, const BookingScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(mainAxisSize: MainAxisSize.max, children: [
@@ -131,10 +130,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SettingScreen())),
+                onTap: () {
+                  Navigator.of(context).push(
+                      Tools().createRoute(context, const SettingScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(mainAxisSize: MainAxisSize.max, children: [
@@ -166,10 +165,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PreBooking())),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(Tools().createRoute(context, const PreBooking()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(mainAxisSize: MainAxisSize.max, children: [
@@ -201,10 +200,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EarningScreen())),
+                onTap: () {
+                  Navigator.of(context).push(
+                      Tools().createRoute(context, const EarningScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -236,10 +235,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileScreen())),
+                onTap: () {
+                  Navigator.of(context).push(
+                      Tools().createRoute(context, const ProfileScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -272,8 +271,8 @@ Widget customDrawer(BuildContext context) {
               CustomDivider().customDivider(),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const RatingScreen()));
+                  Navigator.of(context)
+                      .push(Tools().createRoute(context, const RatingScreen()));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -309,10 +308,11 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PlanScreen())),
+                onTap: () {
+                  isHomeScreenStartPay = true;
+                  Navigator.of(context)
+                      .push(Tools().createRoute(context, const PlanScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -340,7 +340,7 @@ Widget customDrawer(BuildContext context) {
                           ),
                         ],
                       ),
-                    const  SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       Center(
                         child: Padding(
                           padding: EdgeInsets.only(
@@ -369,10 +369,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PolicyScreen())),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(Tools().createRoute(context, const PolicyScreen()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(mainAxisSize: MainAxisSize.max, children: [
@@ -401,8 +401,10 @@ Widget customDrawer(BuildContext context) {
               ),
               CustomDivider().customDivider(),
               GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ContactUs())),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(Tools().createRoute(context, const ContactUs()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(mainAxisSize: MainAxisSize.max, children: [
@@ -437,8 +439,7 @@ Widget customDrawer(BuildContext context) {
                 onTap: () async {
                   if (Platform.isAndroid) {
                     SystemNavigator.pop();
-                  }
-                  else{
+                  } else {
                     Provider.of<DrawerValueChange>(context, listen: false)
                         .updateValue(0);
                     Provider.of<ChangeColorBottomDrawer>(context, listen: false)
@@ -572,7 +573,7 @@ double valueIconPadding(BuildContext context) {
   return val.toDouble();
 }
 
-double valueIconPadding1 (BuildContext context) {
+double valueIconPadding1(BuildContext context) {
   late double val;
   if (AppLocalizations.of(context)!.day == "Day" ||
       AppLocalizations.of(context)!.day == "Gun") {

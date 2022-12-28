@@ -56,7 +56,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
   PolylinePoints polylinePoints = PolylinePoints();
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
-  // final geolocator = Geolocator();
   late BitmapDescriptor anmiatedMarkerIcon;
   late BitmapDescriptor pickUpIcon;
   late BitmapDescriptor dropOffIcon;
@@ -66,8 +65,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
   late Timer timer;
   int durationContour = 0;
   bool isInductor = false;
-
-  /// mapBox
   late MapBoxNavigation directions;
   late final MapBoxNavigationViewController _controller;
   // String _platformVersion = 'Unknown';
@@ -77,9 +74,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
   bool isNavigating = false;
   bool isMultipleStop = false;
   bool buttomPostion = false;
+  bool isDriverCollectMoney = false;
 
   @override
   void initState() {
+    showGpsDailog = false;
     acceptedRideRequest();
     inTailiz();
     isInductor = true;
@@ -91,8 +90,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
     createPickUpRideIcon();
     createDropOffIcon();
     createDriverNearIcon();
-    final rideInfoProvider = Provider.of<RideRequestInfoProvider>(context).rideDetails;
-    final initialPos = Provider.of<DriverCurrentPosition>(context).currentPosition;
+    final rideInfoProvider =
+        Provider.of<RideRequestInfoProvider>(context).rideDetails;
+    final initialPos =
+        Provider.of<DriverCurrentPosition>(context).currentPosition;
     // final directionDetails = Provider.of<DirectionDetailsPro>(context).directionDetails;
     // final buttonTitle = Provider.of<TitleArrived>(context).titleButton;
     // final buttonColor = Provider.of<ColorButtonArrived>(context).colorButton;
@@ -150,7 +151,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                                           .arrived);
                                   timer1(context);
                                   LogicGoogleMap()
-                                      .darkOrwhite(newRideControllerGoogleMap);
+                                      .darkOrWhite(newRideControllerGoogleMap);
                                 },
                               ),
                               buttomPostion == false
@@ -539,10 +540,14 @@ class _NewRideScreenState extends State<NewRideScreen> {
     _rideRequestRef.onValue.listen((event) {
       if (!event.snapshot.exists) {
         if (!mounted) return;
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => riderCancelTrip(context));
+        if (!isDriverCollectMoney) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => riderCancelTrip(context));
+        } else {
+          return;
+        }
         if (kDebugMode) {
           print('rider cancel');
         }
@@ -1073,6 +1078,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     newRideScreenStreamSubscription?.cancel();
     saveEarning(totalAmount);
     saveTripHistory(rideInfoProvider, totalAmount);
+    isDriverCollectMoney=true;
     showDialog(
         context: context,
         barrierDismissible: false,

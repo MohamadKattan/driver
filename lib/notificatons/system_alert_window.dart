@@ -11,10 +11,10 @@ import 'package:system_alert_window/system_alert_window.dart';
 // bool _isShowingWindow = false;
 SystemWindowPrefMode prefMode = SystemWindowPrefMode.OVERLAY;
 ///not method initPlatformState
-// // this method connect with dailog overlay init Platform if want move this void to home screen
+// // this method connect with dialog overlay init Platform if want move this void to home screen
 
-// this method connect with dailog overlay permission
-Future<void> requestPermissionsSystem() async {
+// this method connect with  overlay permission
+Future<void> requestPermissionsOverlaySystem() async {
   if(Platform.isAndroid){
     await SystemAlertWindow.requestPermissions(prefMode: prefMode);
   }

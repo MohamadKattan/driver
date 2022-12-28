@@ -23,6 +23,7 @@ import '../repo/dataBaseReal_sev.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../widget/location_stoped.dart';
 import 'active_account.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,39 +35,48 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   bool valueSwitchBottom = true;
+  // this method for init some methods
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    initializationLocal(context);
-    requestPermissionsSystem();
+    initializationLocalNotifications(context);
+    requestPermissionsOverlaySystem();
     _loadMapStyles();
     PlanDays().getDateTime();
     lastSeen();
-     GeoFireSrv().serviceStatusStream(context);
+    GeoFireSrv().serviceStatusStream(context);
     PushNotificationsSrv().gotNotificationInBackground(context);
-    // DataBaseReal().listingForChangeInStatusPay(context);
-    // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-    // PushNotificationsSrv().getCurrentInfoDriverForNotification(context);
-    // initPlatformState();
     super.initState();
   }
 
+// this method for check if app in backGround or else for do some functions
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
 
     switch (state) {
+      case AppLifecycleState.detached:
+        Geofire.removeLocation(userId);
+        break;
       case AppLifecycleState.paused:
         runLocale = true;
+        if (Platform.isIOS) {
+          await Future.delayed(const Duration(minutes: 30));
+          if (runLocale) {
+            if (showGpsDailog) {
+              showNotificationNoLocation(context);
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => locationStoped(context));
+            }
+          }
+        }
         break;
       case AppLifecycleState.resumed:
         runLocale = false;
         break;
       case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.detached:
-        Geofire.removeLocation(userId);
-        Geofire.stopListener();
         break;
     }
   }
@@ -80,9 +90,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // final drawerValue = Provider.of<DrawerValueChange>(context).value;
-    // final changeColorBottom =
-    //     Provider.of<ChangeColorBottomDrawer>(context).isTrue;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -93,8 +100,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             children: [
               customDrawer(context),
               Consumer<DrawerValueChange>(
-                builder: (context,drawerValue,child)=>
-                    TweenAnimationBuilder(
+                builder: (context, drawerValue, child) => TweenAnimationBuilder(
                   tween: Tween<double>(begin: 0.0, end: drawerValue.value),
                   duration: const Duration(milliseconds: 150),
                   builder: (_, double val, __) {
@@ -103,29 +109,35 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           ..setEntry(3, 2, 0.001)
                           ..setEntry(0, 3, 300 * val)
                           ..rotateY((pi / 2) * val),
-                        child:
-                        Stack(
+                        child: Stack(
                           children: [
                             Container(
                               height: MediaQuery.of(context).size.height,
-                              width:MediaQuery.of(context).size.width ,
+                              width: MediaQuery.of(context).size.width,
                               color: Colors.white,
                               child: GoogleMap(
                                 padding: const EdgeInsets.only(top: 25.0),
                                 mapType: MapType.normal,
                                 initialCameraPosition:
-                                LogicGoogleMap().kGooglePlex,
+                                    LogicGoogleMap().kGooglePlex,
                                 myLocationButtonEnabled: false,
                                 myLocationEnabled: true,
                                 onMapCreated:
                                     (GoogleMapController controller) async {
-                                  LogicGoogleMap().controllerGoogleMap.complete(controller);
+                                  LogicGoogleMap()
+                                      .controllerGoogleMap
+                                      .complete(controller);
                                   newGoogleMapController = controller;
-                                  LogicGoogleMap().darkOrwhite(newGoogleMapController!);
-                                  await LogicGoogleMap().locationPosition(context).whenComplete(() async {
-                                    await GeoFireSrv().getLocationLiveUpdates(context);
+                                  LogicGoogleMap()
+                                      .darkOrWhite(newGoogleMapController!);
+                                  await LogicGoogleMap()
+                                      .locationPosition(context)
+                                      .whenComplete(() async {
+                                    await GeoFireSrv()
+                                        .getLocationLiveUpdates(context);
                                     getCountryName();
-                                    await DataBaseReal().getDriverInfoFromDataBase(context);
+                                    await DataBaseReal()
+                                        .getDriverInfoFromDataBase(context);
                                     await checkToken();
                                     tostDriverAvailable();
                                   });
@@ -138,17 +150,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 : const SizedBox(),
                             //widget
                             Positioned(
-                                right: AppLocalizations.of(context)!.day == "يوم"
-                                    ? 25.0
-                                    : null,
+                                right:
+                                    AppLocalizations.of(context)!.day == "يوم"
+                                        ? 25.0
+                                        : null,
                                 left: AppLocalizations.of(context)!.day == "يوم"
                                     ? null
                                     : 25.0,
                                 bottom: 10.0,
                                 child: customSwitchBottom())
                           ],
-                        )
-                    );
+                        ));
                   },
                 ),
               ),
@@ -163,14 +175,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       child: IconButton(
                           onPressed: () {
                             if (_val.isTrue == false) {
+                              DataBaseReal().updateExPlan(context);
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(1);
                               Provider.of<ChangeColorBottomDrawer>(context,
                                       listen: false)
                                   .updateColorBottom(true);
-                            }
-                            else {
+                            } else {
                               Provider.of<DrawerValueChange>(context,
                                       listen: false)
                                   .updateValue(0);
@@ -204,6 +216,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               onPressed: () async {
                 await LogicGoogleMap().locationPosition(context);
                 await GeoFireSrv().getLocationLiveUpdates(context);
+                // ParamPayment().sorgulama();
               },
               child: const Icon(
                 Icons.my_location,
@@ -217,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  // of line on line
+  //this widget ofLine or  onLine driver as switch button
   Widget customSwitchBottom() => Transform.scale(
         scale: 1.5,
         child: Padding(
@@ -237,7 +250,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   valueSwitchBottom = val;
                 });
                 if (valueSwitchBottom == true) {
-                  // GeoFireSrv().makeDriverOnlineNow(context);
                   tostDriverAvailable();
                   await LogicGoogleMap().locationPosition(context);
                   await GeoFireSrv().getLocationLiveUpdates(context);
@@ -262,6 +274,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
+// this method for set last seen to user connect with dash bord
+  void lastSeen() {
+    driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
+  }
+
+// this method for set country name from google api
   Future<void> getCountryName() async {
     await ApiSrvGeolocater().searchCoordinatesAddress(context);
   }
@@ -274,25 +292,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (_user?.email == "test036@gmail.com") {
       await getToken();
     } else {
-      requestPermissions();
+      requestPermissionsLocalNotifications();
       if (_user?.uid != null &&
           driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
-        Tools().toastMsg(AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+        Tools().toastMsg(
+            AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
         subscriptionNot1.cancel();
         serviceStatusStreamSubscription?.cancel();
         // listingForChangeStatusPay.cancel();
         await GeoFireSrv().makeDriverOffLine();
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
       } else {
         getToken();
       }
     }
   }
 
-  void lastSeen() async {
-    driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
-  }
-
+// this method for set map assets json in root bundle
   Future _loadMapStyles() async {
     darkMapStyle =
         await rootBundle.loadString('images/map_style/dark-mode.json');

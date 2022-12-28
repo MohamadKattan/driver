@@ -309,8 +309,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         Geofire.stopListener();
         await Geofire.removeLocation(currentUseId);
         await rideRequestRef.set("accepted").whenComplete(() {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => const NewRideScreen()));
+          Navigator.of(context).push(Tools().createRoute(context,const NewRideScreen()));
         });
       } else if (newRideState == "canceled") {
         Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,

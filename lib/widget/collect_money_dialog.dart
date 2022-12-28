@@ -62,6 +62,7 @@ Widget collectMoney(
             ),
             GestureDetector(
               onTap: () async {
+                showGpsDailog=true;
                 restNewRide(context);
                 subscriptionNot1.resume();
                 serviceStatusStreamSubscription?.resume();

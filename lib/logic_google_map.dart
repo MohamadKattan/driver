@@ -10,14 +10,16 @@ import 'my_provider/driver_currentPosition_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LogicGoogleMap {
+  // GoogleMapController init
   Completer<GoogleMapController> controllerGoogleMap = Completer();
 
+// default position value for avoid null value
   final CameraPosition kGooglePlex = const CameraPosition(
     target: LatLng(41.084253576036936,28.89201922194848),
     zoom: 14.4746,
   );
 
-
+// this method for got current position when app started
   Future<dynamic> locationPosition(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -52,8 +54,8 @@ class LogicGoogleMap {
     return position;
   }
 
-
-  Future<void> darkOrwhite(GoogleMapController controller) async {
+// this method for display  dark mode or light mode map called on time
+  Future<void> darkOrWhite(GoogleMapController controller) async {
     final _controller = controller;
     if (hourForDarkMode > 6 && hourForDarkMode < 18) {
       _controller.setMapStyle(lightMapStyle);
