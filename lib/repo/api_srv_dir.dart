@@ -50,6 +50,7 @@ class ApiSrvDir {
     }
     return directionDetails;
   }
+
 // this method for calc amount after check Country + carType
   static int calculateFares1(DirectionDetails directionDetails,
       String carTypePro, BuildContext context) {

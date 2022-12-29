@@ -9,7 +9,7 @@ class GetUrl {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var jsonResponse =
-        convert.jsonDecode(response.body) as Map<String, dynamic>;
+            convert.jsonDecode(response.body) as Map<String, dynamic>;
         var itemCount = jsonResponse;
         return itemCount;
       } else {

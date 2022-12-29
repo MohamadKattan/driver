@@ -11,7 +11,7 @@ Widget afterPayment(BuildContext context) {
       width: double.infinity,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
-          color:const Color(0xFF00A3E0)),
+          color: const Color(0xFF00A3E0)),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -21,8 +21,7 @@ Widget afterPayment(BuildContext context) {
               padding: const EdgeInsets.all(8.0),
               child: Text(AppLocalizations.of(context)!.checkBank,
                   textAlign: TextAlign.center,
-                  style:
-                      const TextStyle(color: Colors.white, fontSize: 16.0)),
+                  style: const TextStyle(color: Colors.white, fontSize: 16.0)),
             ),
             const SizedBox(height: 6),
             Padding(
@@ -38,7 +37,7 @@ Widget afterPayment(BuildContext context) {
                     height: 40,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4.0),
-                        color:const Color(0xFFFBC408)),
+                        color: const Color(0xFFFBC408)),
                     child: Center(
                         child: Text(
                       AppLocalizations.of(context)!.ok,

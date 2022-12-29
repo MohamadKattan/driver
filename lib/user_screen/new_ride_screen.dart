@@ -1078,7 +1078,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     newRideScreenStreamSubscription?.cancel();
     saveEarning(totalAmount);
     saveTripHistory(rideInfoProvider, totalAmount);
-    isDriverCollectMoney=true;
+    isDriverCollectMoney = true;
     showDialog(
         context: context,
         barrierDismissible: false,

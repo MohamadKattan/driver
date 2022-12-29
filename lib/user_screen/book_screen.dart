@@ -29,7 +29,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.white,
+            backgroundColor: Colors.white,
             appBar: AppBar(
               actions: [
                 IconButton(
@@ -37,7 +37,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   icon: const Icon(Icons.delete),
                 )
               ],
-              backgroundColor:const  Color(0xFFFBC408),
+              backgroundColor: const Color(0xFFFBC408),
               automaticallyImplyLeading: true,
               title: Text(AppLocalizations.of(context)!.booking,
                   style: const TextStyle(color: Colors.white, fontSize: 16.0)),
@@ -88,13 +88,15 @@ class _BookingScreenState extends State<BookingScreen> {
       margin: const EdgeInsets.all(8.0),
       height: MediaQuery.of(context).size.height * 15 / 100,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(boxShadow: const [
-        BoxShadow(
-            color: Colors.black26,
-            blurRadius: 0.7,
-            spreadRadius: 3.0,
-            offset: Offset(0.7, 0.7)),
-      ], color:const Color(0xFF00A3E0),
+      decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black26,
+                blurRadius: 0.7,
+                spreadRadius: 3.0,
+                offset: Offset(0.7, 0.7)),
+          ],
+          color: const Color(0xFF00A3E0),
           borderRadius: BorderRadius.circular(8.0)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,9 +107,10 @@ class _BookingScreenState extends State<BookingScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Text(tripList[index].pickAddress,style: const TextStyle(
-                  color: Colors.white
-                ),),
+                child: Text(
+                  tripList[index].pickAddress,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -127,9 +130,10 @@ class _BookingScreenState extends State<BookingScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Text("\$${tripList[index].total}",style: const TextStyle(
-                  color: Colors.white
-                ),),
+                child: Text(
+                  "\$${tripList[index].total}",
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(4.0),

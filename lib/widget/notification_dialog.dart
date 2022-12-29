@@ -67,7 +67,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.0),
-            border: Border.all(width: 2.0,color:  Colors.white),
+            border: Border.all(width: 2.0, color: Colors.white),
             color: const Color(0xFF00A3E0)),
         child: SingleChildScrollView(
           child: Column(
@@ -104,7 +104,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     ),
                     Text(AppLocalizations.of(context)!.from + " ",
                         overflow: TextOverflow.ellipsis,
-                        style:const TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 14)),
@@ -131,8 +131,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               width: 20)),
                     ),
                     Text(AppLocalizations.of(context)!.too + " ",
-                        style:const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold,fontSize: 14)),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14)),
                     Expanded(
                       child: Text(rideInfoProvider.dropoffAddress,
                           overflow: TextOverflow.ellipsis,
@@ -150,13 +152,17 @@ class _NotificationDialogState extends State<NotificationDialog> {
                 children: [
                   Text("Km : ${rideInfoProvider.km}",
                       style: const TextStyle(
-                          color: Colors.white,fontWeight: FontWeight.bold, fontSize: 16.0)),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0)),
                   Text(
                       AppLocalizations.of(context)!.fare +
-                          rideInfoProvider.amount+
+                          rideInfoProvider.amount +
                           currencyTypeCheck(context),
-                      style:const TextStyle(
-                          color: Colors.white,fontWeight: FontWeight.bold, fontSize: 20.0))
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0))
                 ],
               ),
               rideInfoProvider.tourismCityName != ""
@@ -184,7 +190,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                               " : ${rideInfoProvider.tourismCityName}",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style:const TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold)),
@@ -203,6 +209,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       if (Platform.isAndroid) {
                         stopSound();
                       }
+
                       ///ios
                       _stopSound();
                       Navigator.pop(context);
@@ -309,7 +316,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
         Geofire.stopListener();
         await Geofire.removeLocation(currentUseId);
         await rideRequestRef.set("accepted").whenComplete(() {
-          Navigator.of(context).push(Tools().createRoute(context,const NewRideScreen()));
+          Navigator.of(context)
+              .push(Tools().createRoute(context, const NewRideScreen()));
         });
       } else if (newRideState == "canceled") {
         Tools().toastMsg(AppLocalizations.of(context)!.beenCanceled,
@@ -332,8 +340,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
   }
 
   // this method if driver press cancel button
-  Future<void> driverCancelOrder (BuildContext context) async {
-
+  Future<void> driverCancelOrder(BuildContext context) async {
     DatabaseReference _ref = FirebaseDatabase.instance.ref().child("driver");
 
     final currentUseId =
@@ -349,9 +356,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   ///ios
   Future<void> _stopSound() async {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       await audioPlayer.stop();
-    }else{
+    } else {
       return;
     }
   }

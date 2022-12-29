@@ -16,13 +16,17 @@ class ToUrlLunch {
 
   Future<void> toPlayStore() async {
     // if (!await launch(url)) throw 'Could not launch $url';
-    if(Platform.isAndroid){
-      await canLaunch("https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
-          ? launch("https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
+    if (Platform.isAndroid) {
+      await canLaunch(
+              "https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
+          ? launch(
+              "https://play.google.com/store/apps/details?id=com.garanti.garantitaxidriver&hl=tr")
           : Tools().toastMsg('Could not launch ', Colors.redAccent.shade700);
-    }else{
-      await canLaunch("https://apps.apple.com/tr/app/garantitaxi-driver/id1635534414")
-          ? launch("https://apps.apple.com/tr/app/garantitaxi-driver/id1635534414")
+    } else {
+      await canLaunch(
+              "https://apps.apple.com/tr/app/garantitaxi-driver/id1635534414")
+          ? launch(
+              "https://apps.apple.com/tr/app/garantitaxi-driver/id1635534414")
           : Tools().toastMsg('Could not launch ', Colors.redAccent.shade700);
     }
   }
@@ -47,7 +51,7 @@ class ToUrlLunch {
     // if (!await launch(url)) throw 'Could not launch $url';
     await canLaunch("https://garantitaxi.com")
         ? launch("https://garantitaxi.com")
-        : Tools()
-        .toastMsg('Could not launch webSite now ', Colors.redAccent.shade700);
+        : Tools().toastMsg(
+            'Could not launch webSite now ', Colors.redAccent.shade700);
   }
 }

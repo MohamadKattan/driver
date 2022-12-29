@@ -171,7 +171,7 @@ class ParamPayment {
                   // "status": "payed",
                 });
                 if (isHomeScreenStartPay) {
-                  isHomeScreenStartPay=false;
+                  isHomeScreenStartPay = false;
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Provider.of<DrawerValueChange>(context, listen: false)
@@ -186,12 +186,12 @@ class ParamPayment {
       } else {
         Provider.of<PaymentIndector>(context, listen: false).updateState(false);
         final errorMessage = document.findAllElements('Sonuc_Str').single.text;
-        Tools().toastMsg(AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
+        Tools().toastMsg(
+            AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);
         Tools().toastMsg(errorMessage, Colors.redAccent);
         Tools().toastMsg(errorMessage, Colors.redAccent);
       }
-    }
-    else {
+    } else {
       Provider.of<PaymentIndector>(context, listen: false).updateState(false);
       Tools().toastMsg(
           AppLocalizations.of(context)!.paymentFailed, Colors.redAccent);

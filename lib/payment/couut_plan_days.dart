@@ -119,8 +119,8 @@ class PlanDays {
           if (_status == "checkIn" || _status == "") {
             return;
           }
-        await  driverRef.child(userId).child("status").set("payTime");
-         await GeoFireSrv().makeDriverOffLine();
+          await driverRef.child(userId).child("status").set("payTime");
+          await GeoFireSrv().makeDriverOffLine();
         }
       });
     } else if (exPlan! >= 1400) {

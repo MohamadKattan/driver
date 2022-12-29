@@ -8,7 +8,6 @@ import '../tools/tools.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 GlobalKey globalKey = GlobalKey();
 
 class AuthScreen extends StatelessWidget {

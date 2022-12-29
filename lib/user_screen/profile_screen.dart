@@ -277,7 +277,7 @@ class ProfileScreen extends StatelessWidget {
     }).whenComplete(() async {
       Provider.of<InductorProfileProvider>(context, listen: false)
           .updateState(false);
-     await AuthSev().auth.signOut();
+      await AuthSev().auth.signOut();
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const SplashScreen()),

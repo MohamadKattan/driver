@@ -18,7 +18,7 @@ class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;
   late LocationSettings locationSettings;
 // this method for stream check if gps service denied or has error
-  void serviceStatusStream(BuildContext context)  {
+  void serviceStatusStream(BuildContext context) {
     if (serviceStatusStreamSubscription == null) {
       final serviceStatusStream = Geolocator.getServiceStatusStream();
       serviceStatusStreamSubscription =
@@ -37,8 +37,7 @@ class GeoFireSrv {
           Tools().toastMsg('..................................',
               Colors.orangeAccent.shade700);
           await getLocationLiveUpdates(context);
-        }
-        else {
+        } else {
           if (homeScreenStreamSubscription != null) {
             homeScreenStreamSubscription?.cancel();
             homeScreenStreamSubscription = null;
@@ -52,6 +51,7 @@ class GeoFireSrv {
       });
     }
   }
+
 // this method for stream update location
   Future<void> getLocationLiveUpdates(BuildContext context) async {
     Geofire.initialize("availableDrivers");
@@ -66,8 +66,7 @@ class GeoFireSrv {
             notificationTitle: "Garanti taxi",
             enableWakeLock: true,
           ));
-    }
-    else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.automotiveNavigation,
@@ -75,8 +74,7 @@ class GeoFireSrv {
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
-    }
-    else {
+    } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 10,
@@ -85,15 +83,15 @@ class GeoFireSrv {
     homeScreenStreamSubscription =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) async {
-          await Geofire.setLocation(
-              currentUseId!.uid, position.latitude, position.longitude);
-          LatLng latLng = LatLng(position.latitude, position.longitude);
-          CameraPosition cameraPosition = CameraPosition(
-              target: latLng, zoom: 13.50, tilt: 80.0, bearing: 35.0);
-          newGoogleMapController
-              ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-          // newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
-        });
+      await Geofire.setLocation(
+          currentUseId!.uid, position.latitude, position.longitude);
+      LatLng latLng = LatLng(position.latitude, position.longitude);
+      CameraPosition cameraPosition = CameraPosition(
+          target: latLng, zoom: 13.50, tilt: 80.0, bearing: 35.0);
+      newGoogleMapController
+          ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+      // newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
     Tools().toastMsg(AppLocalizations.of(context)!.locationUpdate,
         Colors.greenAccent.shade700);
     DatabaseReference rideRequestRef = FirebaseDatabase.instance

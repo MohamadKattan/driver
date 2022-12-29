@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/payment_indector_provider.dart';
 import '../notificatons/push_notifications_srv.dart';
-import '../payment/param_payment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widget/custom_circuler.dart';
 import 'card_payment_screen.dart';
@@ -70,12 +69,12 @@ class _PlanScreenState extends State<PlanScreen> {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        margin:const EdgeInsets.all(14.0),
+                        margin: const EdgeInsets.all(14.0),
                         height: 200,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            color:const Color(0xFF5CAFE5),
-                            borderRadius: BorderRadius.circular(12.0),
+                          color: const Color(0xFF5CAFE5),
+                          borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,8 +96,7 @@ class _PlanScreenState extends State<PlanScreen> {
                               children: [
                                 Text(AppLocalizations.of(context)!.cost,
                                     style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0)),
+                                        color: Colors.white, fontSize: 20.0)),
                                 info.country == "Turkey"
                                     ? Text(
                                         info.carType == "Taxi-4 seats"
@@ -112,7 +110,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                         info.carType == "Taxi-4 seats"
                                             ? "10\$"
                                             : "20\$",
-                                        style:const TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.bold))
@@ -127,11 +125,11 @@ class _PlanScreenState extends State<PlanScreen> {
                           checkAmount2(info.carType, context, info.country),
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        margin:const EdgeInsets.all(14.0),
+                        margin: const EdgeInsets.all(14.0),
                         height: 200,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color:const Color(0xFF00A3E0),
+                          color: const Color(0xFF00A3E0),
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Column(
@@ -140,7 +138,7 @@ class _PlanScreenState extends State<PlanScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(AppLocalizations.of(context)!.plan2,
-                                  style:const TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold)),
@@ -154,25 +152,22 @@ class _PlanScreenState extends State<PlanScreen> {
                                 children: [
                                   Text(AppLocalizations.of(context)!.cost,
                                       style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20.0)),
+                                          color: Colors.white, fontSize: 20.0)),
                                   info.country == "Turkey"
                                       ? Text(
                                           info.carType == "Taxi-4 seats"
                                               ? "470 TL"
                                               : "800 TL",
-                                          style:const TextStyle(
-                                              color:
-                                                  Colors.white,
+                                          style: const TextStyle(
+                                              color: Colors.white,
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.bold))
                                       : Text(
                                           info.carType == "Taxi-4 seats"
                                               ? " 30\$"
                                               : "55\$",
-                                          style:const TextStyle(
-                                              color:
-                                                  Colors.white,
+                                          style: const TextStyle(
+                                              color: Colors.white,
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.bold))
                                 ])
@@ -185,11 +180,11 @@ class _PlanScreenState extends State<PlanScreen> {
                           checkAmount3(info.carType, context, info.country),
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
-                        margin:const EdgeInsets.all(14.0),
+                        margin: const EdgeInsets.all(14.0),
                         height: 200,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          color:const Color(0xFFFBC408),
+                          color: const Color(0xFFFBC408),
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: Column(
@@ -212,8 +207,7 @@ class _PlanScreenState extends State<PlanScreen> {
                               children: [
                                 Text(AppLocalizations.of(context)!.cost,
                                     style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0)),
+                                        color: Colors.white, fontSize: 20.0)),
                                 info.country == "Turkey"
                                     ? Text(
                                         info.carType == "Taxi-4 seats"
@@ -274,7 +268,7 @@ class _PlanScreenState extends State<PlanScreen> {
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value.toString();
-      oldExPlan = int.parse(snap);
+        oldExPlan = int.parse(snap);
         if (oldExPlan > 0) {
           int updateExPlan = oldExPlan + 43200;
           endExPlan = updateExPlan;
@@ -291,11 +285,11 @@ class _PlanScreenState extends State<PlanScreen> {
         context,
         MaterialPageRoute(
             builder: (_) => CardPaymentScreen(
-                amount: amountPlan,
-                planDay: endExPlan,
-                currencyType: currencyType,
-              oldExplan: oldExPlan,
-            )));
+                  amount: amountPlan,
+                  planDay: endExPlan,
+                  currencyType: currencyType,
+                  oldExplan: oldExPlan,
+                )));
   }
 
   checkAmount2(String carType, BuildContext context, String countryName) async {
@@ -323,7 +317,7 @@ class _PlanScreenState extends State<PlanScreen> {
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value.toString();
-         oldExPlan = int.parse(snap);
+        oldExPlan = int.parse(snap);
         if (oldExPlan > 0) {
           int updateExPlan = oldExPlan + 129600;
           endExPlan = updateExPlan;
@@ -340,11 +334,11 @@ class _PlanScreenState extends State<PlanScreen> {
         context,
         MaterialPageRoute(
             builder: (_) => CardPaymentScreen(
-              amount: amountPlan,
-              planDay: endExPlan,
-              currencyType: currencyType,
-              oldExplan: oldExPlan,
-            )));
+                  amount: amountPlan,
+                  planDay: endExPlan,
+                  currencyType: currencyType,
+                  oldExplan: oldExPlan,
+                )));
   }
 
   checkAmount3(String carType, BuildContext context, String countryName) async {
@@ -372,7 +366,7 @@ class _PlanScreenState extends State<PlanScreen> {
     await driverRef.child(userId).child("exPlan").once().then((value) async {
       if (value.snapshot.exists && value.snapshot.value != null) {
         final snap = value.snapshot.value.toString();
-         oldExPlan = int.parse(snap);
+        oldExPlan = int.parse(snap);
         if (oldExPlan > 0) {
           int updateExPlan = oldExPlan + 259200;
           endExPlan = updateExPlan;
@@ -389,10 +383,10 @@ class _PlanScreenState extends State<PlanScreen> {
         context,
         MaterialPageRoute(
             builder: (_) => CardPaymentScreen(
-              amount: amountPlan,
-              planDay: endExPlan,
-              currencyType: currencyType,
-              oldExplan: oldExPlan,
-            )));
+                  amount: amountPlan,
+                  planDay: endExPlan,
+                  currencyType: currencyType,
+                  oldExplan: oldExPlan,
+                )));
   }
 }

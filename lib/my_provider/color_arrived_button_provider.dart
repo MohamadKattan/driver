@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-class ColorButtonArrived extends ChangeNotifier{
+class ColorButtonArrived extends ChangeNotifier {
   Color colorButton = Colors.white;
 
-  void updateState(Color state){
+  void updateState(Color state) {
     colorButton = state;
     notifyListeners();
   }

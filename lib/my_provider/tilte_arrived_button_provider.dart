@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 class TitleArrived extends ChangeNotifier {
   String titleButton = "";
 
-  void updateState(String state){
+  void updateState(String state) {
     titleButton = state;
     notifyListeners();
   }

@@ -69,7 +69,8 @@ class _PreBookingState extends State<PreBooking>
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 18.0,left: 6.0,right: 6.0),
+                  padding:
+                      const EdgeInsets.only(top: 18.0, left: 6.0, right: 6.0),
                   child: Center(
                     child: Text(
                       AppLocalizations.of(context)!.doReservation,
@@ -100,7 +101,8 @@ class _PreBookingState extends State<PreBooking>
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Provider.of<BottomSheetProviderPreBooking>(context,
+                  onTap: () => Provider.of<BottomSheetProviderPreBooking>(
+                          context,
                           listen: false)
                       .updateState(0.0),
                   child: Center(
@@ -136,14 +138,14 @@ class _PreBookingState extends State<PreBooking>
               duration: const Duration(milliseconds: 600)),
           indector == true
               ? Opacity(
-            opacity: 0.9,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              color: Colors.black,
-              child: CircularInductorCostem()
-                  .circularInductorCostem(context),
-            ),
-          )
+                  opacity: 0.9,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.black,
+                    child: CircularInductorCostem()
+                        .circularInductorCostem(context),
+                  ),
+                )
               : const Text("")
         ],
       ),

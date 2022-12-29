@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
             create: (context) => BottomSheetProviderPreBooking()),
         ChangeNotifierProvider(create: (context) => GetImagePreBook()),
       ],
-      child:  const MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Garanti driver',
         localizationsDelegates: [

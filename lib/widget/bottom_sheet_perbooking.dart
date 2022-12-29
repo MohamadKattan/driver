@@ -89,7 +89,8 @@ class CustomBottomSheetPreBooking {
                     flex: 0,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Text(AppLocalizations.of(context)!.carInside,textAlign: TextAlign.center),
+                      child: Text(AppLocalizations.of(context)!.carInside,
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   Expanded(
@@ -162,7 +163,10 @@ class CustomBottomSheetPreBooking {
                     flex: 0,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Text(AppLocalizations.of(context)!.carOutside,textAlign: TextAlign.center,),
+                      child: Text(
+                        AppLocalizations.of(context)!.carOutside,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -229,7 +233,10 @@ class CustomBottomSheetPreBooking {
                     flex: 0,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Text(AppLocalizations.of(context)!.carOutside1,textAlign: TextAlign.center,),
+                      child: Text(
+                        AppLocalizations.of(context)!.carOutside1,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -330,7 +337,7 @@ class CustomBottomSheetPreBooking {
                 height: 40, width: 40)),
       );
     } else {
-      return const Expanded(flex: 0,child: Text(""));
+      return const Expanded(flex: 0, child: Text(""));
     }
   }
 
@@ -399,8 +406,8 @@ class CustomBottomSheetPreBooking {
       await preBookRef.set({
         "userId": currentUser!.uid,
         "phoneNumber": _driverInfo.phoneNumber,
-        "country":_driverInfo.country,
-        "city":_driverInfo.city,
+        "country": _driverInfo.country,
+        "city": _driverInfo.city,
         "firstName": _driverInfo.firstName,
         "lastName": _driverInfo.lastName,
         "idNo": _driverInfo.idNo,

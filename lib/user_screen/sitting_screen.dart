@@ -31,42 +31,43 @@ class SettingScreen extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.appSettingDs,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
+                      color: Colors.white,
+                      fontSize: 16.0,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const    SizedBox(height: 30,),
-                      GestureDetector(
-                        onTap: () async {
-                          Map<Permission, PermissionStatus> statuses = await [
-                            Permission.locationWhenInUse,
-                            Permission.locationAlways,
-                          ].request();
-                         await Wakelock.enable();
-                          openAppSettings();
-                        },
-                        child: Container(
-                          height: 60,
-                          width: 160,
-                          padding:const EdgeInsets.all(8.0),
-                          margin: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFBC408),
-                            borderRadius: BorderRadius.circular(12.0)
-                          ),
-                          child:  Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.checkSetting,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      Map<Permission, PermissionStatus> statuses = await [
+                        Permission.locationWhenInUse,
+                        Permission.locationAlways,
+                      ].request();
+                      await Wakelock.enable();
+                      openAppSettings();
+                    },
+                    child: Container(
+                      height: 60,
+                      width: 160,
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFFBC408),
+                          borderRadius: BorderRadius.circular(12.0)),
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.checkSetting,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
                         ),
-                      )
+                      ),
+                    ),
+                  )
                 ])))));
   }
 }

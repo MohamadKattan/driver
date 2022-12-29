@@ -167,7 +167,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            minimumSize:const Size(120, 40),
+                              minimumSize: const Size(120, 40),
                               backgroundColor: Colors.greenAccent[700]),
                           child: Padding(
                               padding: const EdgeInsets.all(12),
@@ -177,7 +177,8 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                                     fontSize: 14, color: Colors.white),
                               )),
                           onPressed: () async {
-                            Provider.of<PaymentIndector>(context,listen: false).updateState(true);
+                            Provider.of<PaymentIndector>(context, listen: false)
+                                .updateState(true);
                             CardPayment card = CardPayment(
                                 cvv: cvv,
                                 expiryDateYear: expiryDateYear,
@@ -202,7 +203,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                           }),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              minimumSize:const Size(120, 40),
+                              minimumSize: const Size(120, 40),
                               backgroundColor: Colors.red[700]),
                           child: Padding(
                               padding: const EdgeInsets.all(12),

@@ -26,7 +26,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 Widget customDrawer(BuildContext context) {
   final planProvider =
       Provider.of<DriverInfoModelProvider>(context).driverInfo.exPlan;
-   int day =planProvider~/60~/24;
+  int day = planProvider ~/ 60 ~/ 24;
   // int newDay = day.floor();
   return Container(
     width: MediaQuery.of(context).size.width,
@@ -75,8 +75,7 @@ Widget customDrawer(BuildContext context) {
                                     : AppLocalizations.of(context)!.yPlan,
                                 style: const TextStyle(
                                     color: Colors.black45, fontSize: 16.0)),
-                            Text(
-                                "$day ${AppLocalizations.of(context)!.day}",
+                            Text("$day ${AppLocalizations.of(context)!.day}",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     color: planProvider <= 7200

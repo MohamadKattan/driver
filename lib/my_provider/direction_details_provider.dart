@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import '../model/direction_details.dart';
 
-
 class DirectionDetailsPro extends ChangeNotifier {
   DirectionDetails directionDetails = DirectionDetails(
       distanceText: "",

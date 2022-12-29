@@ -39,12 +39,14 @@ class AuthSev {
           DriverInfo driverInfo = DriverInfo.fromMap(map);
           if (driverInfo.status == "info" && driverInfo.tok == "") {
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
-            Navigator.of(context).push(Tools().createRoute(context,const DriverInfoScreen()));
+            Navigator.of(context)
+                .push(Tools().createRoute(context, const DriverInfoScreen()));
           } else {
             Provider.of<DriverInfoModelProvider>(context, listen: false)
                 .updateDriverInfo(driverInfo);
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
-            Navigator.of(context).push(Tools().createRoute(context,const SplashScreen()));
+            Navigator.of(context)
+                .push(Tools().createRoute(context, const SplashScreen()));
           }
         } else if (!snapshot.exists || snapshot.key!.isEmpty) {
           driverRef.child(currentUser!.uid).set({
@@ -80,7 +82,8 @@ class AuthSev {
             });
           });
           Provider.of<TrueFalse>(context, listen: false).updateState(false);
-          Navigator.of(context).push(Tools().createRoute(context,const DriverInfoScreen()));
+          Navigator.of(context)
+              .push(Tools().createRoute(context, const DriverInfoScreen()));
         }
       }
       getCurrentUserId(context);
@@ -129,7 +132,8 @@ class AuthSev {
               });
             });
             Provider.of<TrueFalse>(context, listen: false).updateState(false);
-            Navigator.of(context).push(Tools().createRoute(context,const DriverInfoScreen()));
+            Navigator.of(context)
+                .push(Tools().createRoute(context, const DriverInfoScreen()));
             getCurrentUserId(context);
           }
         } on FirebaseAuthException catch (e) {

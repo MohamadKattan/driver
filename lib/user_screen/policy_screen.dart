@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widget/custom_divider.dart';
 
@@ -12,7 +11,7 @@ class PolicyScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFBC408),
         automaticallyImplyLeading: true,
-        title:  Text(AppLocalizations.of(context)!.policy,
+        title: Text(AppLocalizations.of(context)!.policy,
             style: const TextStyle(color: Colors.white, fontSize: 16.0)),
       ),
       body: SingleChildScrollView(

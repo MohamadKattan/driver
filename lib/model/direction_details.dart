@@ -9,9 +9,8 @@ class DirectionDetails {
 
   DirectionDetails(
       {required this.distanceText,
-        required this.durationText,
-        required this.distanceVale,
-        required this.durationVale,
-        required this.enCodingPoints
-      });
+      required this.durationText,
+      required this.distanceVale,
+      required this.durationVale,
+      required this.enCodingPoints});
 }

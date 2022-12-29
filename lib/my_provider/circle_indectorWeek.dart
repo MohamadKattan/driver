@@ -2,10 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 
-class IsNetWeek extends ChangeNotifier{
+class IsNetWeek extends ChangeNotifier {
   bool netWeek = false;
-  void updateState(bool state){
-    netWeek=state;
+  void updateState(bool state) {
+    netWeek = state;
     notifyListeners();
   }
 }

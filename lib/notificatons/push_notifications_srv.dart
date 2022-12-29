@@ -45,7 +45,6 @@ Future<String?> getToken() async {
 // }
 
 class PushNotificationsSrv {
-
   // THIS method for ios permission
   ///for ios code
   // Future<AppleNotificationSetting> iosPermission() async {
@@ -124,7 +123,7 @@ class PushNotificationsSrv {
 
   // this method for got Notification in back ground
 
-  String getRideRequestId (RemoteMessage message) {
+  String getRideRequestId(RemoteMessage message) {
     String rideId = "";
     if (Platform.isAndroid) {
       rideId = message.data["ride_id"];
@@ -210,23 +209,19 @@ class PushNotificationsSrv {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
           return;
-        }
-        else if (_riderId == "canceled") {
-          Future.delayed(const Duration(seconds: 1)).whenComplete((){
+        } else if (_riderId == "canceled") {
+          Future.delayed(const Duration(seconds: 1)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        }
-        else if (_riderId == "timeOut") {
-          Future.delayed(const Duration(seconds: 1)).whenComplete((){
+        } else if (_riderId == "timeOut") {
+          Future.delayed(const Duration(seconds: 1)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        }
-        else if (_riderId == "accepted") {
+        } else if (_riderId == "accepted") {
           return;
-        }
-        else {
+        } else {
           if (Platform.isAndroid) {
             openDailog();
             playSound();

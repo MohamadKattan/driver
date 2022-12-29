@@ -2,10 +2,10 @@
 
 import 'package:flutter/foundation.dart';
 
-class PlaceName extends ChangeNotifier{
+class PlaceName extends ChangeNotifier {
   String placeName = "";
 
-  void updateState(String name){
+  void updateState(String name) {
     placeName = name;
     notifyListeners();
   }

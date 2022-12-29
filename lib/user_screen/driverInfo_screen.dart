@@ -1,4 +1,3 @@
-
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:driver/widget/custom_bottom_sheet.dart';
@@ -11,7 +10,6 @@ import '../my_provider/dropBottom_value_provider.dart';
 import '../widget/custom_TextField.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 GlobalKey globalKey = GlobalKey();
 
@@ -34,7 +32,6 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
   static String result = "";
   static String? resultCodeCon = "+90";
   late String newVal = "Select a car class";
-
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +236,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                     right: 0.0,
                     left: 0.0,
                     bottom: bottomSheetValue,
-                    child:CustomBottomSheet().customBottomSheet(
+                    child: CustomBottomSheet().customBottomSheet(
                         context,
                         bottomSheetValue,
                         DriverInfoScreen.name,
@@ -384,5 +381,4 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
       ),
     );
   }
-
 }

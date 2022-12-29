@@ -73,8 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
           context,
           MaterialPageRoute(
               builder: (context) => const InterNetWeak(timeNet: 8)));
-    }
-    else {
+    } else {
       if (AuthSev().auth.currentUser?.uid == null) {
         if (Platform.isAndroid) {
           showDialog(

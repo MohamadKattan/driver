@@ -15,7 +15,7 @@ class LogicGoogleMap {
 
 // default position value for avoid null value
   final CameraPosition kGooglePlex = const CameraPosition(
-    target: LatLng(41.084253576036936,28.89201922194848),
+    target: LatLng(41.084253576036936, 28.89201922194848),
     zoom: 14.4746,
   );
 
@@ -26,20 +26,24 @@ class LogicGoogleMap {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      Tools().toastMsg(AppLocalizations.of(context)!.locationServNot,Colors.red);
+      Tools()
+          .toastMsg(AppLocalizations.of(context)!.locationServNot, Colors.red);
       return Future.error('Location services are disabled.');
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        Tools().toastMsg(AppLocalizations.of(context)!.locationPrevNot,Colors.red);
+        Tools().toastMsg(
+            AppLocalizations.of(context)!.locationPrevNot, Colors.red);
         return Future.error('Location permissions are denied');
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      Tools().toastMsg(AppLocalizations.of(context)!.locationPrevNotAlwayes,Colors.red);
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.locationPrevNotAlwayes, Colors.red);
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
 
     Position position = await Geolocator.getCurrentPosition(

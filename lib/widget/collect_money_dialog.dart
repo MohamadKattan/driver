@@ -62,14 +62,14 @@ Widget collectMoney(
             ),
             GestureDetector(
               onTap: () async {
-                showGpsDailog=true;
+                showGpsDailog = true;
                 restNewRide(context);
                 subscriptionNot1.resume();
                 serviceStatusStreamSubscription?.resume();
                 Navigator.pop(context);
-             await LogicGoogleMap().locationPosition(context);
-              GeoFireSrv().getLocationLiveUpdates(context);
-                if (Platform.isAndroid)clearCash();
+                await LogicGoogleMap().locationPosition(context);
+                GeoFireSrv().getLocationLiveUpdates(context);
+                if (Platform.isAndroid) clearCash();
                 Navigator.pop(context);
                 Navigator.pop(context);
               },

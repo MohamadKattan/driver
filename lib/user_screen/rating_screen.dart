@@ -28,7 +28,7 @@ class _RatingScreenState extends State<RatingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xFFFBC408),
         title: Text(AppLocalizations.of(context)!.myRating,
@@ -43,7 +43,7 @@ class _RatingScreenState extends State<RatingScreen> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      color:const Color(0xFF00A3E0),
+      color: const Color(0xFF00A3E0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -104,6 +104,7 @@ class _RatingScreenState extends State<RatingScreen> {
       ),
     );
   }
+
   // get rating
   getRating() async {
     DatabaseReference ref =
@@ -116,7 +117,7 @@ class _RatingScreenState extends State<RatingScreen> {
         setState(() {
           myRating = double.parse(map["rating"].toString());
         });
-      }else{
+      } else {
         return;
       }
     });

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../tools/tools.dart';
@@ -63,7 +62,8 @@ Widget pageViewContent(BuildContext context, String image, String title,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
-                onPressed: ()=>Navigator.of(context).push(Tools().createRoute(context,const AuthScreen())),
+                onPressed: () => Navigator.of(context)
+                    .push(Tools().createRoute(context, const AuthScreen())),
                 child: Text(AppLocalizations.of(context)!.skip,
                     style: const TextStyle(
                         color: Color(0xFF00A3E0),

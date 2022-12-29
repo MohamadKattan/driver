@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../config.dart';
 import '../notificatons/push_notifications_srv.dart';
 
 class SwitchBottomDrawer extends StatefulWidget {

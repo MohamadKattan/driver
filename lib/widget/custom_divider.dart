@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class CustomDivider{
+class CustomDivider {
   // divider
   Widget customDivider() {
     return Container(
