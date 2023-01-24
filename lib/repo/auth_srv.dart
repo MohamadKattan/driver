@@ -72,6 +72,7 @@ class AuthSev {
             "lastseen": DateTime.now().toString(),
             "active": "active",
             "map": "googleMap",
+            "imei": ""
           }).whenComplete(() async {
             await driverRef.child(currentUser!.uid).child("carInfo").set({
               "carBrand": "",
@@ -122,6 +123,7 @@ class AuthSev {
               "lastseen": DateTime.now().toString(),
               "active": "active",
               "map": "googleMap",
+              "imei": ""
             }).whenComplete(() async {
               await driverRef.child(currentUser!.uid).child("carInfo").set({
                 "carBrand": "",

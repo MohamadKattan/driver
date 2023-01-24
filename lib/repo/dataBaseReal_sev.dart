@@ -1,5 +1,8 @@
 // this class will include method dataBase Real time
 
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:driver/model/driverInfo.dart';
 import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/repo/auth_srv.dart';
@@ -165,7 +168,6 @@ class DataBaseReal {
           if (_snap == 'payTime') {
             listingForChangeStatusPay.cancel();
             subscriptionNot1.cancel();
-            serviceStatusStreamSubscription?.cancel();
             GeoFireSrv().cancelStreamLocation();
             if (kDebugMode) {
               print("listingForChangeInStatusPay canceled");
@@ -201,7 +203,7 @@ class DataBaseReal {
       listingForChangeStatusActive = _ref
           .child('driver')
           .child(currentUser!.uid)
-          .child('token')
+          .child('imei')
           .onValue
           .listen((event) {
         final _snap = event.snapshot.value;
@@ -236,7 +238,7 @@ class DataBaseReal {
   Future<void> checkStatusUser(BuildContext context) async {
     final driverInfo =
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-    tokenPhone = await firebaseMessaging.getToken();
+    // tokenPhone = await firebaseMessaging.getToken();
     if (driverInfo.update == true) {
       await ToUrlLunch().toPlayStore();
       await driverRef.child(userId).child("update").set(false);
@@ -244,15 +246,16 @@ class DataBaseReal {
           context,
           MaterialPageRoute(builder: (_) => const SplashScreen()),
           (route) => false);
-    } else if (driverInfo.tok == "r") {
-      Tools()
-          .toastMsg(AppLocalizations.of(context)!.active, Colors.greenAccent);
-      await getToken();
-      tokenPhone = await firebaseMessaging.getToken();
+    } else if (driverInfo.imei == "r") {
+      Tools().toastMsg(AppLocalizations.of(context)!.active, Colors.greenAccent);
+      // await getToken();
+      // tokenPhone = await firebaseMessaging.getToken();
+      await setImeiDevice();
       await driverRef.child(userId).child("active").set("active");
+      await driverRef.child(userId).child("imei").set(identifier);
       Navigator.push(context,
           MaterialPageRoute(builder: (_) => const RefreshAfterActived()));
-    } else if (driverInfo.tok == "" && driverInfo.status == "") {
+    } else if (driverInfo.status == "") {
       Provider.of<IsNetWeek>(context, listen: false).updateState(true);
       Navigator.push(
           context,
@@ -284,27 +287,16 @@ class DataBaseReal {
           break;
       }
     }
-    // else if (driverInfo.status == "info") {
-    //   Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => const DriverInfoScreen()));
-    // }
-    // else if (driverInfo.status == "checkIn") {
-    //   Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => const CheckInScreen()));
-    // }
-    // else if (driverInfo.status == "payTime") {
-    //   Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => const IfYouWantPay()));
-    // }
-    // else if (driverInfo.status == "payed") {
-    //   Navigator.push(context,
-    //       MaterialPageRoute(builder: (context) => const HomeScreen()));
-    // }
+  }
+
+Future<void> setImeiDevice() async {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      var data = await deviceInfoPlugin.iosInfo;
+      identifier = data.identifierForVendor;
+    } else {
+      var data = await deviceInfoPlugin.androidInfo;
+      identifier = data.id;
+    }
   }
 }

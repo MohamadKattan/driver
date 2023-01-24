@@ -65,10 +65,10 @@ Widget collectMoney(
                 showGpsDailog = true;
                 restNewRide(context);
                 subscriptionNot1.resume();
-                serviceStatusStreamSubscription?.resume();
                 Navigator.pop(context);
-                await LogicGoogleMap().locationPosition(context);
-                GeoFireSrv().getLocationLiveUpdates(context);
+                await LogicGoogleMap().locationPosition(context).whenComplete((){
+                  GeoFireSrv().getLocationLiveUpdates(context);
+                });
                 if (Platform.isAndroid) clearCash();
                 Navigator.pop(context);
                 Navigator.pop(context);

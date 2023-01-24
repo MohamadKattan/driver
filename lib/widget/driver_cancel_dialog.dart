@@ -6,11 +6,13 @@ import '../config.dart';
 import '../logic_google_map.dart';
 import '../my_provider/new_ride_indector.dart';
 import '../my_provider/ride_request_info.dart';
+import '../notificatons/push_notifications_srv.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/background_serv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget cancelTrip(BuildContext context) {
+  bool isClicked = true;
   return Dialog(
     elevation: 1.0,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
@@ -42,7 +44,12 @@ Widget cancelTrip(BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () {
+                      if (isClicked) {
+                        Navigator.pop(context);
+                      }
+                      isClicked = false;
+                    },
                     child: Container(
                       height: 40,
                       width: 120,
@@ -57,7 +64,12 @@ Widget cancelTrip(BuildContext context) {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => driverCanceldTrip(context),
+                    onTap: () {
+                      if (isClicked) {
+                        driverCanceldTrip(context);
+                      }
+                      isClicked = false;
+                    },
                     child: Container(
                       height: 40,
                       width: 120,
@@ -90,11 +102,12 @@ void driverCanceldTrip(BuildContext context) async {
   Provider.of<NewRideScreenIndector>(context, listen: false).updateState(true);
   newRideScreenStreamSubscription?.cancel();
   subscriptionNot1.resume();
-  serviceStatusStreamSubscription?.resume();
+  driverRef.child(userId).child("newRide").set("searching");
   showGpsDailog = true;
   Navigator.pop(context);
-  await LogicGoogleMap().locationPosition(context);
-  GeoFireSrv().getLocationLiveUpdates(context);
+  await LogicGoogleMap().locationPosition(context).whenComplete(() {
+    GeoFireSrv().getLocationLiveUpdates(context);
+  });
   if (Platform.isAndroid) clearCash();
   Provider.of<NewRideScreenIndector>(context, listen: false).updateState(false);
   Navigator.pop(context);

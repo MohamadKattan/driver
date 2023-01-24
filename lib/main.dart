@@ -34,8 +34,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Wakelock.enable();
   await Firebase.initializeApp();
+  Wakelock.enable();
   if (defaultTargetPlatform == TargetPlatform.android) {
     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   }
@@ -79,7 +79,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => GetImagePreBook()),
       ],
       child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'Garanti driver',
         localizationsDelegates: [
           AppLocalizations.delegate,

@@ -266,7 +266,7 @@ class _DriverInfoScreenState extends State<DriverInfoScreen> {
                           ),
                         ),
                       )
-                    : const Text("")
+                    : const SizedBox()
               ],
             ),
           ),

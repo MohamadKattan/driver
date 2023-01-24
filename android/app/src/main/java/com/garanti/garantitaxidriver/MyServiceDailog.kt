@@ -24,7 +24,7 @@ private var mMediaPlayer: MediaPlayer? = null
 //        }
 
         if (mMediaPlayer == null) {
-            mMediaPlayer = MediaPlayer.create(this, R.raw.new_order1)
+            mMediaPlayer = MediaPlayer.create(this, R.raw.notify)
             mMediaPlayer!!.isLooping = true
             mMediaPlayer!!.start()
         } else mMediaPlayer!!.start()

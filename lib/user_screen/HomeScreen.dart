@@ -38,38 +38,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // this method for init some methods
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addObserver(this);
+    ApiSrvGeolocater().searchCoordinatesAddress(context);
     initializationLocalNotifications(context);
     requestPermissionsOverlaySystem();
     _loadMapStyles();
     PlanDays().getDateTime();
     lastSeen();
-    GeoFireSrv().serviceStatusStream(context);
-    PushNotificationsSrv().gotNotificationInBackground(context);
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
+
+  Future<void> _asyncMethod() async {
+    await Geofire.initialize("availableDrivers");
+    await LogicGoogleMap().locationPosition(context).whenComplete(() async {
+      await GeoFireSrv().getLocationLiveUpdates(context);
+      // getCountryName();
+      PushNotificationsSrv().gotNotificationInBackground(context);
+      await DataBaseReal().getDriverInfoFromDataBase(context);
+      await checkToken();
+      tostDriverAvailable();
+    });
   }
 
 // this method for check if app in backGround or else for do some functions
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-
     switch (state) {
       case AppLifecycleState.detached:
-        Geofire.removeLocation(userId);
         break;
       case AppLifecycleState.paused:
         runLocale = true;
-        if (Platform.isIOS) {
-          await Future.delayed(const Duration(minutes: 30));
-          if (runLocale) {
-            if (showGpsDailog) {
-              showNotificationNoLocation(context);
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) => locationStoped(context));
-            }
+        if (runLocale) {
+          GeoFireSrv().updateLocationIfGpsSleepy(context);
+          await Future.delayed(const Duration(minutes: 59));
+          if (showGpsDailog) {
+            showNotificationNoLocation(context);
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => locationStoped(context));
           }
         }
         break;
@@ -130,17 +141,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   newGoogleMapController = controller;
                                   LogicGoogleMap()
                                       .darkOrWhite(newGoogleMapController!);
-                                  await LogicGoogleMap()
-                                      .locationPosition(context)
-                                      .whenComplete(() async {
-                                    await GeoFireSrv()
-                                        .getLocationLiveUpdates(context);
-                                    getCountryName();
-                                    await DataBaseReal()
-                                        .getDriverInfoFromDataBase(context);
-                                    await checkToken();
-                                    tostDriverAvailable();
-                                  });
                                 },
                               ),
                             ),
@@ -214,9 +214,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             child: FloatingActionButton(
               backgroundColor: const Color(0xFF00A3E0),
               onPressed: () async {
-                await LogicGoogleMap().locationPosition(context);
-                await GeoFireSrv().getLocationLiveUpdates(context);
-                // ParamPayment().sorgulama();
+                await LogicGoogleMap()
+                    .locationPosition(context)
+                    .whenComplete(() async {
+                  await GeoFireSrv().getLocationLiveUpdates(context);
+                });
               },
               child: const Icon(
                 Icons.my_location,
@@ -250,10 +252,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   valueSwitchBottom = val;
                 });
                 if (valueSwitchBottom == true) {
-                  tostDriverAvailable();
-                  await LogicGoogleMap().locationPosition(context);
-                  await GeoFireSrv().getLocationLiveUpdates(context);
+                  subscriptionNot1.resume();
+                  await LogicGoogleMap()
+                      .locationPosition(context)
+                      .whenComplete(() async {
+                    await GeoFireSrv().getLocationLiveUpdates(context);
+                    tostDriverAvailable();
+                  });
                 } else if (valueSwitchBottom == false) {
+                  subscriptionNot1.pause();
                   GeoFireSrv().makeDriverOffLine();
                   tostDriverAvailable();
                 }
@@ -279,32 +286,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     driverRef.child(userId).child('lastseen').set(DateTime.now().toString());
   }
 
-// this method for set country name from google api
-  Future<void> getCountryName() async {
-    await ApiSrvGeolocater().searchCoordinatesAddress(context);
-  }
-
 // this method for check token after map loading
   Future<void> checkToken() async {
-    final driverInfo =
+    await getToken();
+    var _user = AuthSev().auth.currentUser;
+    var driverInfo =
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
-    final _user = AuthSev().auth.currentUser;
-    if (_user?.email == "test036@gmail.com") {
-      await getToken();
-    } else {
+    if (_user?.email != "test036@gmail.com") {
       requestPermissionsLocalNotifications();
-      if (_user?.uid != null &&
-          driverInfo.tok.substring(0, 5) != tokenPhone?.substring(0, 5)) {
-        Tools().toastMsg(
-            AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
-        subscriptionNot1.cancel();
-        serviceStatusStreamSubscription?.cancel();
-        // listingForChangeStatusPay.cancel();
-        await GeoFireSrv().makeDriverOffLine();
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const ActiveAccount()));
-      } else {
-        getToken();
+      if (userId.isNotEmpty) {
+        if (driverInfo.imei == "") {
+          await DataBaseReal().setImeiDevice();
+          driverRef.child(userId).child("imei").set(identifier);
+        } else if (driverInfo.imei != identifier) {
+          Tools().toastMsg(
+              AppLocalizations.of(context)!.tokenUesd, Colors.redAccent);
+          subscriptionNot1.cancel();
+          await GeoFireSrv().makeDriverOffLine();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (_) => const ActiveAccount()));
+        }
       }
     }
   }
@@ -317,3 +318,4 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         await rootBundle.loadString('images/map_style/lite-mode.json');
   }
 }
+// F9B5EF59-F2CE-4B16-95DC-36579DE69797

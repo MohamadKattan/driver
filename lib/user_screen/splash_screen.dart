@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:driver/logic_google_map.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/repo/dataBaseReal_sev.dart';
 import 'package:driver/user_screen/page_view.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/circle_indectorWeek.dart';
-import '../tools/turn_GBS.dart';
 import '../widget/custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'intrentet_week.dart';
@@ -26,23 +26,21 @@ class _SplashScreenState extends State<SplashScreen>
   bool result = false;
   @override
   void initState() {
-    checkInternet();
-    // if (AuthSev().auth.currentUser?.uid != null) {
-    //   DataBaseReal().getDriverInfoFromDataBase(context);
-    //   TurnOnGBS().turnOnGBSifNot();
-    // }
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
     _animationController = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 3000),
         lowerBound: 0.4,
         upperBound: 0.5);
     _animationController.forward();
-    _animationController.addStatusListener((status) async {
-      if (status == AnimationStatus.completed) {
-        // await checkInternet();
-      }
-    });
-    super.initState();
+  }
+
+  Future<void> _asyncMethod() async {
+   await  checkInternet();
+   await DataBaseReal().setImeiDevice();
   }
 
   @override
@@ -81,7 +79,8 @@ class _SplashScreenState extends State<SplashScreen>
               barrierDismissible: false,
               builder: (_) => showDialogPolicy(context));
         } else {
-          TurnOnGBS().turnOnGBSifNot();
+          LogicGoogleMap().locationPosition(context);
+          // TurnOnGBS().turnOnGBSifNot();
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const MyPageView()));
         }
@@ -92,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen>
               .whenComplete(() async {
             await Future.delayed(const Duration(seconds: 1));
             await DataBaseReal().checkStatusUser(context);
-            TurnOnGBS().turnOnGBSifNot();
+            LogicGoogleMap().locationPosition(context);
           });
         }
       }
@@ -188,7 +187,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       GestureDetector(
                         onTap: () {
-                          TurnOnGBS().turnOnGBSifNot();
+                       LogicGoogleMap().locationPosition(context);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -97,7 +97,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                 Text(AppLocalizations.of(context)!.cost,
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 20.0)),
-                                info.country == "Turkey"
+                                info.country.contains("T")
                                     ? Text(
                                         info.carType == "Taxi-4 seats"
                                             ? "180 TL"
@@ -153,7 +153,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                   Text(AppLocalizations.of(context)!.cost,
                                       style: const TextStyle(
                                           color: Colors.white, fontSize: 20.0)),
-                                  info.country == "Turkey"
+                                  info.country.contains("T")
                                       ? Text(
                                           info.carType == "Taxi-4 seats"
                                               ? "470 TL"
@@ -208,7 +208,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                 Text(AppLocalizations.of(context)!.cost,
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 20.0)),
-                                info.country == "Turkey"
+                                info.country.contains("T")
                                     ? Text(
                                         info.carType == "Taxi-4 seats"
                                             ? "800TL"
@@ -235,7 +235,7 @@ class _PlanScreenState extends State<PlanScreen> {
                 )),
                 isLoadingPayment
                     ? CircularInductorCostem().circularInductorCostem(context)
-                    : const Text(""),
+                    : const SizedBox(),
               ],
             )),
       ),
@@ -244,7 +244,7 @@ class _PlanScreenState extends State<PlanScreen> {
 
   Future<void> checkamout1(
       String carType, BuildContext context, String countryName) async {
-    if (countryName == "Turkey") {
+    if (countryName.contains("T")) {
       currencyType = 1000;
       if (carType == "Taxi-4 seats") {
         // amountPlan1 =180;
@@ -293,7 +293,7 @@ class _PlanScreenState extends State<PlanScreen> {
   }
 
   checkAmount2(String carType, BuildContext context, String countryName) async {
-    if (countryName == "Turkey") {
+    if (countryName.contains("T")) {
       currencyType = 1000;
       if (carType == "Taxi-4 seats") {
         // amountPlan2 =47000;
@@ -342,7 +342,7 @@ class _PlanScreenState extends State<PlanScreen> {
   }
 
   checkAmount3(String carType, BuildContext context, String countryName) async {
-    if (countryName == "Turkey") {
+    if (countryName.contains("T")) {
       currencyType = 1000;
       if (carType == "Taxi-4 seats") {
         // amountPlan3 =80000;

@@ -13,7 +13,6 @@ String mapBox =
     "pk.eyJ1Ijoibml6YW04NCIsImEiOiJjbDR3c3FhdDUxbHM5M2NzM2kydjR0Zzl0In0.24gmrxZ6tyh636f7bkV3og";
 GoogleMapController? newGoogleMapController;
 StreamSubscription<Position>? homeScreenStreamSubscription;
-StreamSubscription<ServiceStatus>? serviceStatusStreamSubscription;
 StreamSubscription<Position>? newRideScreenStreamSubscription;
 late StreamSubscription<DatabaseEvent> subscriptionNot1;
 late StreamSubscription<DatabaseEvent> listingForChangeStatus;
@@ -25,6 +24,7 @@ bool isLite = false;
 int rideRequestCanceld = 120;
 int rideRequestTimeOut = 120;
 String riderName = "";
+String? identifier = "";
 final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
 int? exPlan;
 DateTime? valDateTime;

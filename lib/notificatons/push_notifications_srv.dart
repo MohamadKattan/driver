@@ -14,7 +14,7 @@ import '../model/rideDetails.dart';
 import '../my_provider/ride_request_info.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
-import 'local_notifications.dart';
+
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
@@ -123,21 +123,21 @@ class PushNotificationsSrv {
 
   // this method for got Notification in back ground
 
-  String getRideRequestId(RemoteMessage message) {
-    String rideId = "";
-    if (Platform.isAndroid) {
-      rideId = message.data["ride_id"];
-      if (kDebugMode) {
-        print("this is notRideId$rideId");
-      }
-    } else {
-      rideId = message.data["ride_id"];
-      if (kDebugMode) {
-        print("this is notRideId$rideId");
-      }
-    }
-    return rideId;
-  }
+  // String getRideRequestId(RemoteMessage message) {
+  //   String rideId = "";
+  //   if (Platform.isAndroid) {
+  //     rideId = message.data["ride_id"];
+  //     if (kDebugMode) {
+  //       print("this is notRideId$rideId");
+  //     }
+  //   } else {
+  //     rideId = message.data["ride_id"];
+  //     if (kDebugMode) {
+  //       print("this is notRideId$rideId");
+  //     }
+  //   }
+  //   return rideId;
+  // }
 
   //this method for retrieve rider info from Ride Request collection when rider do order
   Future<void> retrieveRideRequestInfo(
@@ -209,19 +209,23 @@ class PushNotificationsSrv {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
           return;
-        } else if (_riderId == "canceled") {
+        }
+        else if (_riderId == "canceled") {
           Future.delayed(const Duration(seconds: 1)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        } else if (_riderId == "timeOut") {
+        }
+        else if (_riderId == "timeOut") {
           Future.delayed(const Duration(seconds: 1)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        } else if (_riderId == "accepted") {
+        }
+        else if (_riderId == "accepted") {
           return;
-        } else {
+        }
+        else {
           if (Platform.isAndroid) {
             openDailog();
             playSound();
@@ -229,12 +233,14 @@ class PushNotificationsSrv {
             retrieveRideRequestInfo(_riderId, context);
           } else {
             retrieveRideRequestInfo(_riderId, context);
-            if (runLocale) {
-              showNotificationNewOrder(context);
-            }
+            /// stop locale notification on ios
+            // if (runLocale) {
+            //   showNotificationNewOrder(context);
+            // }
           }
         }
       }
+      else{ driverRef.child(userId).child("newRide").set("searching");}
     });
   }
 }

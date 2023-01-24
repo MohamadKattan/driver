@@ -63,9 +63,6 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
         key: formKey,
         body: Stack(
           children: [
-            isLoadingPayment
-                ? CircularInductorCostem().circularInductorCostem(context)
-                : const Text(""),
             SingleChildScrollView(
               child: Column(
                 children: [
@@ -219,7 +216,10 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                   ),
                 ],
               ),
-            )
+            ),
+            isLoadingPayment
+                ? CircularInductorCostem().circularInductorCostem(context)
+                : const SizedBox(),
           ],
         ),
       )),

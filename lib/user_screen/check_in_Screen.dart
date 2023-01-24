@@ -13,7 +13,8 @@ class CheckInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DataBaseReal().listingForChangeInStatus(context);
-    ApiSrvGeolocater().getCountry();
+    ApiSrvGeolocater().searchCoordinatesAddress(context);
+    // ApiSrvGeolocater().getCountry();
     final phoneIconValue = Provider.of<PhoneIconValue>(context).IconValue;
     return WillPopScope(
       onWillPop: () async => false,

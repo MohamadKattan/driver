@@ -28,6 +28,24 @@ class ParamPayment {
       FirebaseDatabase.instance.ref().child("paidcheck");
   DatabaseReference paidRef = FirebaseDatabase.instance.ref().child("paid");
 
+
+  // Future<void> testFack() async {
+  //   await paidRef.child(userId).set({
+  //     "userid": userId,
+  //     "plan": 80000,
+  //   });
+  //   await paidCheckRef.child(userId).set({
+  //     "userid": userId,
+  //     "plan": 800000,
+  //     "cardNo": '00000000000',
+  //     "cardHolder": '000000000',
+  //     "phoneNo": '0000000000',
+  //     "amount": '200',
+  //     "token": tokenPhone,
+  //     "time": DateTime.now().toString()
+  //   });
+  // }
+
   // this method for set data when driver paid
   DateTime _setDateTime() {
     int _day;

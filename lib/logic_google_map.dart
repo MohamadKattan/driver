@@ -19,16 +19,15 @@ class LogicGoogleMap {
     zoom: 14.4746,
   );
 
-// this method for got current position when app started
-  Future<dynamic> locationPosition(BuildContext context) async {
+  // this method for request Location Permission if service not Enabled
+  Future<void> requestLocationPermission(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       Tools()
           .toastMsg(AppLocalizations.of(context)!.locationServNot, Colors.red);
-      return Future.error('Location services are disabled.');
+      permission = await Geolocator.requestPermission();
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -45,9 +44,34 @@ class LogicGoogleMap {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+  }
+
+// this method for got current position when app started
+  Future<dynamic> locationPosition(BuildContext context) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Tools()
+          .toastMsg(AppLocalizations.of(context)!.locationServNot, Colors.red);
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Tools().toastMsg(
+            AppLocalizations.of(context)!.locationPrevNot, Colors.red);
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.locationPrevNotAlwayes, Colors.red);
+    }
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+
     Provider.of<DriverCurrentPosition>(context, listen: false)
         .updateSate(position);
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);

@@ -19,28 +19,30 @@ class DriverInfo {
   late int exPlan;
   late bool update;
   late String tok;
+  late String imei;
   DriverInfo(
-    this.userId,
-    this.country,
-    this.city,
-    this.status,
-    this.firstName,
-    this.lastName,
-    this.idNo,
-    this.phoneNumber,
-    this.email,
-    this.personImage,
-    this.carBrand,
-    this.carColor,
-    this.carModel,
-    this.carType,
-    this.earning,
-    this.exPlan,
-    this.update,
-    this.tok,
-  );
+      this.userId,
+      this.country,
+      this.city,
+      this.status,
+      this.firstName,
+      this.lastName,
+      this.idNo,
+      this.phoneNumber,
+      this.email,
+      this.personImage,
+      this.carBrand,
+      this.carColor,
+      this.carModel,
+      this.carType,
+      this.earning,
+      this.exPlan,
+      this.update,
+      this.tok,
+      this.imei);
   DriverInfo.fromMap(Map<String, dynamic> map) {
     userId = map["userId"];
+    imei = map ["imei"];
     status = map["status"];
     country = map["country"];
     city = map["city"];

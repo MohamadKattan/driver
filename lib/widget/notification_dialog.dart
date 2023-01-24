@@ -29,7 +29,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
   bool buttonAccepted = false;
   AudioPlayer audioPlayer = AudioPlayer();
   late AudioCache audioCache;
-  String path = "new_order.mp3";
+  // String path = "new_order.mp3";
+  String path = "notify.wav";
   bool isHideButton = false;
 
   @override
@@ -209,7 +210,6 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       if (Platform.isAndroid) {
                         stopSound();
                       }
-
                       ///ios
                       _stopSound();
                       Navigator.pop(context);
@@ -306,11 +306,6 @@ class _NotificationDialogState extends State<NotificationDialog> {
       }
       //id in newRide value = rider id from Ride Request collection
       if (newRideState == rideInfoProvider.userId) {
-        // if (homeScreenStreamSubscription != null) {
-        //   homeScreenStreamSubscription!.cancel();
-        //   homeScreenStreamSubscription = null;
-        // }
-        serviceStatusStreamSubscription?.pause();
         GeoFireSrv().cancelStreamLocation();
         subscriptionNot1.pause();
         Geofire.stopListener();

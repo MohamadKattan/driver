@@ -30,8 +30,9 @@ Widget locationStoped(BuildContext context) {
               const SizedBox(height: 25),
               GestureDetector(
                 onTap: () async {
-                  await LogicGoogleMap().locationPosition(context);
-                  GeoFireSrv().getLocationLiveUpdates(context);
+                  await LogicGoogleMap().locationPosition(context).whenComplete((){
+                    GeoFireSrv().getLocationLiveUpdates(context);
+                  });
                   Navigator.pop(context);
                 },
                 child: Container(

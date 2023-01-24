@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:driver/config.dart';
 import 'package:driver/repo/auth_srv.dart';
 import 'package:driver/tools/tools.dart';
-import 'package:driver/widget/location_stoped.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
@@ -12,49 +11,13 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../notificatons/local_notifications.dart';
 
 class GeoFireSrv {
   final currentUseId = AuthSev().auth.currentUser;
   late LocationSettings locationSettings;
-// this method for stream check if gps service denied or has error
-  void serviceStatusStream(BuildContext context) {
-    if (serviceStatusStreamSubscription == null) {
-      final serviceStatusStream = Geolocator.getServiceStatusStream();
-      serviceStatusStreamSubscription =
-          serviceStatusStream.handleError((error) {
-        serviceStatusStreamSubscription?.cancel();
-        serviceStatusStreamSubscription = null;
-        showNotificationNoLocation(context);
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => locationStoped(context));
-      }).listen((serviceStatus) async {
-        if (serviceStatus == ServiceStatus.enabled) {
-          Tools().toastMsg('...................................',
-              Colors.orangeAccent.shade100);
-          Tools().toastMsg('..................................',
-              Colors.orangeAccent.shade700);
-          await getLocationLiveUpdates(context);
-        } else {
-          if (homeScreenStreamSubscription != null) {
-            homeScreenStreamSubscription?.cancel();
-            homeScreenStreamSubscription = null;
-          }
-          showNotificationNoLocation(context);
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => locationStoped(context));
-        }
-      });
-    }
-  }
 
 // this method for stream update location
   Future<void> getLocationLiveUpdates(BuildContext context) async {
-    Geofire.initialize("availableDrivers");
     if (defaultTargetPlatform == TargetPlatform.android) {
       locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
@@ -70,14 +33,14 @@ class GeoFireSrv {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.automotiveNavigation,
-        distanceFilter: 10,
+        distanceFilter: 2,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
     } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
+        distanceFilter: 2,
       );
     }
     homeScreenStreamSubscription =
@@ -94,12 +57,29 @@ class GeoFireSrv {
     });
     Tools().toastMsg(AppLocalizations.of(context)!.locationUpdate,
         Colors.greenAccent.shade700);
-    DatabaseReference rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("driver")
-        .child(currentUseId!.uid)
-        .child("newRide");
-    rideRequestRef.set("searching");
+    // DatabaseReference rideRequestRef = FirebaseDatabase.instance
+    //     .ref()
+    //     .child("driver")
+    //     .child(currentUseId!.uid)
+    //     .child("newRide");
+    // rideRequestRef.set("searching");
+  }
+
+/*this method it will work just in backGround because stream in backGround
+ it will disconnect after 30 min on ios 4 hour on android*/
+  Future<void> updateLocationIfGpsSleepy(BuildContext context) async {
+    Timer.periodic(const Duration(minutes: 5), (timer) async {
+      if (runLocale) {
+        if (showGpsDailog) {
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.medium);
+          await Geofire.setLocation(
+              currentUseId!.uid, position.latitude, position.longitude);
+        }
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   // this method for delete driver from live location if switch offLine bottom
