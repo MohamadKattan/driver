@@ -108,7 +108,7 @@ class _BookingScreenState extends State<BookingScreen> {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                  tripList[index].pickAddress,
+                  tripList[index].pickAddress.substring(0,10),
                   style: const TextStyle(color: Colors.white),
                 ),
               ),

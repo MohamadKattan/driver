@@ -60,8 +60,7 @@ class ApiSrvDir {
             .country;
     final rideInfoProvider =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
-            .rideDetails
-            .amount;
+            .rideDetails;
     double culculFinal = 0.0;
     double timeTravelFare = (directionDetails.durationVale / 60) * 0.20;
     double distanceTravelFare = (directionDetails.distanceVale / 1000) * 0.60;
@@ -91,7 +90,11 @@ class ApiSrvDir {
     }
     else if (carTypePro.contains("Medium commercial-6-10 seats")) {
     if (countryName.contains('T')) {
-      culculFinal = double.parse(rideInfoProvider);
+      if(rideInfoProvider.tourismCityName==""){
+        culculFinal = fareAmont *  15 + 0.70 * 13.00;
+      }else{
+        culculFinal = double.parse(rideInfoProvider.amount);
+      }
     } else if (countryName.contains("Morocco")) {
     culculFinal = fareAmont + 0.20 * 10 + 1.50 * 10.00;
     } else if (countryName.contains("Sudan")) {
@@ -114,7 +117,11 @@ class ApiSrvDir {
     }
     else if (carTypePro.contains("Big commercial-11-19 seats")) {
     if (countryName.contains("T")) {
-      culculFinal = double.parse(rideInfoProvider);
+      if(rideInfoProvider.tourismCityName==""){
+        culculFinal = fareAmont * 19 + 0.70 * 16.00;
+      }else{
+        culculFinal = double.parse(rideInfoProvider.amount);
+      }
     } else if (countryName.contains("Morocco")) {
     culculFinal = fareAmont + 0.20 * 10 + 2 * 10.00;
     } else if (countryName.contains("Sudan")) {

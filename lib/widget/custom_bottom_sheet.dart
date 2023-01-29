@@ -554,10 +554,8 @@ class CustomBottomSheet {
         await getToken();
         Provider.of<DriverInfoInductor>(context, listen: false)
             .updateState(false);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const CheckInScreen()),
-            (route) => false);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => const CheckInScreen()));
       });
     }
   }

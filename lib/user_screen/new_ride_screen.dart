@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driver/model/rideDetails.dart';
 import 'package:driver/notificatons/push_notifications_srv.dart';
-import 'package:driver/repo/auth_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +74,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   bool isMultipleStop = false;
   bool buttomPostion = false;
   bool isDriverCollectMoney = false;
+  DatabaseReference rideRequestRef =
+      FirebaseDatabase.instance.ref().child("Ride Request");
 
   @override
   void initState() {
@@ -94,9 +95,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
         Provider.of<RideRequestInfoProvider>(context).rideDetails;
     final initialPos =
         Provider.of<DriverCurrentPosition>(context).currentPosition;
-    // final directionDetails = Provider.of<DirectionDetailsPro>(context).directionDetails;
-    // final buttonTitle = Provider.of<TitleArrived>(context).titleButton;
-    // final buttonColor = Provider.of<ColorButtonArrived>(context).colorButton;
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -510,11 +508,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
       "longitude": dCurrentPosition.longitude.toString(),
     };
 
-    DatabaseReference rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("Ride Request")
-        .child(riderInfo.userId);
-    rideRequestRef.update({
+    final _ref = rideRequestRef.child(riderInfo.userId);
+    _ref.update({
       "status": "accepted",
       "driverId": driverInfo.userId,
       "carPlack": driverInfo.idNo,
@@ -532,12 +527,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails
             .userId;
-    DatabaseReference _rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("Ride Request")
-        .child(_riderId)
-        .child('riderName');
-    _rideRequestRef.onValue.listen((event) {
+    final _ref = rideRequestRef.child(_riderId).child('riderName');
+    _ref.onValue.listen((event) {
       if (!event.snapshot.exists) {
         if (!mounted) return;
         if (!isDriverCollectMoney) {
@@ -547,9 +538,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
               builder: (_) => riderCancelTrip(context));
         } else {
           return;
-        }
-        if (kDebugMode) {
-          print('rider cancel');
         }
       } else {
         return;
@@ -575,7 +563,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     final details = await ApiSrvDir.obtainPlaceDirectionDetails(
         pickUpLatling, dropOfLatling, context);
     CameraPosition cameraPosition = CameraPosition(
-        target: startPontLoc, zoom: 15.0, tilt: 0.0, bearing: 0.0);
+        target: startPontLoc, zoom: 16.5, tilt: 80.0, bearing: 0.0);
 
     newRideControllerGoogleMap
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
@@ -592,19 +580,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
     }
     polylineSet.clear();
-    setState(() {
-      Polyline polyline = Polyline(
-          polylineId: const PolylineId("polylineId"),
-          color: Colors.greenAccent.shade700,
-          width: 5,
-          geodesic: true,
-          startCap: Cap.roundCap,
-          endCap: Cap.roundCap,
-          jointType: JointType.round,
-          points: polylineCoordinates);
-      polylineSet.add(polyline);
-      isInductor = false;
-    });
+    Polyline polyline = Polyline(
+        polylineId: const PolylineId("polylineId"),
+        color: Colors.greenAccent.shade700,
+        width: 5,
+        geodesic: true,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        jointType: JointType.round,
+        points: polylineCoordinates);
+    polylineSet.add(polyline);
+    isInductor = false;
+
     Marker markerPickUpLocation = Marker(
         icon: pickUpIcon,
         position: LatLng(pickUpLatling.latitude, pickUpLatling.longitude),
@@ -620,10 +607,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 ? "Rider Name : $riderName"
                 : "Target : Rider dropOff location"));
 
-    setState(() {
-      markersSet.add(markerPickUpLocation);
-      markersSet.add(markerDropOfLocation);
-    });
+    markersSet.add(markerPickUpLocation);
+    markersSet.add(markerDropOfLocation);
 
     Circle pickUpLocCircle = Circle(
         fillColor: Colors.white,
@@ -640,20 +625,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
         strokeWidth: 1,
         strokeColor: Colors.grey,
         circleId: const CircleId("dropOfId"));
-    setState(() {
-      circlesSet.add(pickUpLocCircle);
-      circlesSet.add(dropOffLocCircle);
-    });
-    // const _timer = Duration(seconds: 1);
-    // int count = 4;
-    // Timer.periodic(_timer, (timer) {
-    //   count = count - 1;
-    //   if (count == 0) {
-    //     timer.cancel();
-    //     count = 4;
-    //     isInductor = false;
-    //   }
-    // });
+    circlesSet.add(pickUpLocCircle);
+    circlesSet.add(dropOffLocCircle);
 
     double nLat, nLon, sLat, sLon;
 
@@ -678,6 +651,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+    setState(() {});
   }
 
   //3..this method for live location when updating on map and set to realtime
@@ -699,7 +673,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       _locationSettings = AppleSettings(
         accuracy: LocationAccuracy.best,
-        activityType: ActivityType.fitness,
+        activityType: ActivityType.automotiveNavigation,
         distanceFilter: 2,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
@@ -710,169 +684,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         distanceFilter: 2,
       );
     }
-    // if (Platform.isAndroid) {
-    //   var androidInfo = await DeviceInfoPlugin().androidInfo;
-    //   var sdkInt = androidInfo.version.sdkInt;
-    //   if (sdkInt! <= 27) {
-    //     newRideScreenStreamSubscription =
-    //         Geolocator.getPositionStream().listen((Position position) async {
-    //       LatLng oldLat = const LatLng(0, 0);
-    //       setState(() {
-    //         myPosition = position;
-    //       });
-    //       print("hhhhh$position");
-    //       LatLng mPosition =
-    //           LatLng(myPosition!.latitude, myPosition!.longitude);
-    //
-    //       ///...
-    //       final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-    //           oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-    //       Marker anmiatedMarker = Marker(
-    //         markerId: const MarkerId("animating"),
-    //         infoWindow: const InfoWindow(title: "Current Location"),
-    //         position: mPosition,
-    //         icon: anmiatedMarkerIcon,
-    //         rotation: rot,
-    //       );
-    //
-    //       ///...
-    //       setState(() {
-    //         CameraPosition cameraPosition = CameraPosition(
-    //             target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
-    //         newRideControllerGoogleMap
-    //             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    //         markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-    //         markersSet.add(anmiatedMarker);
-    //       });
-    //
-    //       ///...
-    //       oldLat = mPosition;
-    //       updateRideDetails();
-    //
-    //       ///...
-    //       final riderInfo =
-    //           Provider.of<RideRequestInfoProvider>(context, listen: false)
-    //               .rideDetails;
-    //
-    //       Map driveLoc = {
-    //         "latitude": myPosition?.latitude.toString(),
-    //         "longitude": myPosition?.longitude.toString(),
-    //       };
-    //
-    //       DatabaseReference rideRequestRef = FirebaseDatabase.instance
-    //           .ref()
-    //           .child("Ride Request")
-    //           .child(riderInfo.userId);
-    //       rideRequestRef.child("driverLocation").set(driveLoc);
-    //     });
-    //   } else {
-    //     newRideScreenStreamSubscription =
-    //         Geolocator.getPositionStream(locationSettings: _locationSettings)
-    //             .listen((Position position) async {
-    //       LatLng oldLat = const LatLng(0, 0);
-    //       setState(() {
-    //         myPosition = position;
-    //       });
-    //       print("hhhhh$position");
-    //       LatLng mPosition =
-    //           LatLng(myPosition!.latitude, myPosition!.longitude);
-    //
-    //       ///...
-    //       final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-    //           oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-    //       Marker anmiatedMarker = Marker(
-    //         markerId: const MarkerId("animating"),
-    //         infoWindow: const InfoWindow(title: "Current Location"),
-    //         position: mPosition,
-    //         icon: anmiatedMarkerIcon,
-    //         rotation: rot,
-    //       );
-    //
-    //       ///...
-    //       setState(() {
-    //         CameraPosition cameraPosition = CameraPosition(
-    //             target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
-    //         newRideControllerGoogleMap
-    //             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    //         markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-    //         markersSet.add(anmiatedMarker);
-    //       });
-    //
-    //       ///...
-    //       oldLat = mPosition;
-    //       updateRideDetails();
-    //
-    //       ///...
-    //       final riderInfo =
-    //           Provider.of<RideRequestInfoProvider>(context, listen: false)
-    //               .rideDetails;
-    //
-    //       Map driveLoc = {
-    //         "latitude": myPosition?.latitude.toString(),
-    //         "longitude": myPosition?.longitude.toString(),
-    //       };
-    //
-    //       DatabaseReference rideRequestRef = FirebaseDatabase.instance
-    //           .ref()
-    //           .child("Ride Request")
-    //           .child(riderInfo.userId);
-    //       rideRequestRef.child("driverLocation").set(driveLoc);
-    //     });
-    //   }
-    // }
-    // else {
-    //   newRideScreenStreamSubscription =
-    //       Geolocator.getPositionStream(locationSettings: _locationSettings)
-    //           .listen((Position position) async {
-    //     LatLng oldLat = const LatLng(0, 0);
-    //     setState(() {
-    //       myPosition = position;
-    //     });
-    //     print("hhhhh$position");
-    //     LatLng mPosition = LatLng(myPosition!.latitude, myPosition!.longitude);
-    //
-    //     ///...
-    //     final rot = MapToolKit.getMarkerRotation(oldLat.latitude,
-    //         oldLat.longitude, myPosition?.latitude, myPosition?.longitude);
-    //     Marker anmiatedMarker = Marker(
-    //       markerId: const MarkerId("animating"),
-    //       infoWindow: const InfoWindow(title: "Current Location"),
-    //       position: mPosition,
-    //       icon: anmiatedMarkerIcon,
-    //       rotation: rot,
-    //     );
-    //
-    //     ///...
-    //     setState(() {
-    //       CameraPosition cameraPosition = CameraPosition(
-    //           target: mPosition, zoom: 16.90, tilt: 80.0, bearing: 15.0);
-    //       newRideControllerGoogleMap
-    //           .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    //       markersSet.removeWhere((ele) => ele.markerId.value == "animating");
-    //       markersSet.add(anmiatedMarker);
-    //     });
-    //
-    //     ///...
-    //     oldLat = mPosition;
-    //     updateRideDetails();
-    //
-    //     ///...
-    //     final riderInfo =
-    //         Provider.of<RideRequestInfoProvider>(context, listen: false)
-    //             .rideDetails;
-    //
-    //     Map driveLoc = {
-    //       "latitude": myPosition?.latitude.toString(),
-    //       "longitude": myPosition?.longitude.toString(),
-    //     };
-    //
-    //     DatabaseReference rideRequestRef = FirebaseDatabase.instance
-    //         .ref()
-    //         .child("Ride Request")
-    //         .child(riderInfo.userId);
-    //     rideRequestRef.child("driverLocation").set(driveLoc);
-    //   });
-    // }
+
     newRideScreenStreamSubscription =
         Geolocator.getPositionStream(locationSettings: _locationSettings)
             .listen((Position position) async {
@@ -891,12 +703,16 @@ class _NewRideScreenState extends State<NewRideScreen> {
         position: mPosition,
         icon: anmiatedMarkerIcon,
         rotation: rot,
+        flat: true
       );
 
       ///...
       setState(() {
         CameraPosition cameraPosition = CameraPosition(
-            target: mPosition, zoom: 15.0, tilt: 0.0, bearing: 0.0);
+            target: mPosition,
+            zoom: 16.50,
+            tilt: 80.0,
+            bearing: myPosition?.heading??0.0);
         newRideControllerGoogleMap
             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
         markersSet.removeWhere((ele) => ele.markerId.value == "animating");
@@ -906,20 +722,17 @@ class _NewRideScreenState extends State<NewRideScreen> {
       oldLat = mPosition;
       updateRideDetails();
 
-      final riderInfo =
+      final riderId =
           Provider.of<RideRequestInfoProvider>(context, listen: false)
-              .rideDetails;
+              .rideDetails
+              .userId;
 
       Map driveLoc = {
         "latitude": myPosition?.latitude.toString(),
         "longitude": myPosition?.longitude.toString(),
       };
-
-      DatabaseReference rideRequestRef = FirebaseDatabase.instance
-          .ref()
-          .child("Ride Request")
-          .child(riderInfo.userId);
-      rideRequestRef.child("driverLocation").set(driveLoc);
+      final _ref = rideRequestRef.child(riderId).child("driverLocation");
+      _ref.set(driveLoc);
     });
   }
 
@@ -958,9 +771,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 ? "images/100currentlocationicon.png"
                 : "images/100currentlocationiconAn.png")
         .then((value) {
-      setState(() {
-        pickUpIcon = value;
-      });
+      pickUpIcon = value;
     });
   }
 
@@ -978,9 +789,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                     ? "images/100flagblackwhite.png"
                     : "images/100flagblackwhiteAn.png")
         .then((value) {
-      setState(() {
-        dropOffIcon = value;
-      });
+      dropOffIcon = value;
     });
   }
 
@@ -994,9 +803,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
                 ? "images/100navigation.png"
                 : "images/100navigationAn.png")
         .then((value) {
-      setState(() {
-        anmiatedMarkerIcon = value;
-      });
+      anmiatedMarkerIcon = value;
     });
   }
 
@@ -1006,38 +813,31 @@ class _NewRideScreenState extends State<NewRideScreen> {
   */
   Future<void> changeColorArrivedAndTileButton(
       BuildContext context, RideDetails rideInfoProvider) async {
-    DatabaseReference rideRequestRef = FirebaseDatabase.instance
-        .ref()
-        .child("Ride Request")
-        .child(rideInfoProvider.userId);
+    final _ref = rideRequestRef.child(rideInfoProvider.userId).child("status");
 
     if (status == "accepted") {
-      setState(() {
-        status = "arrived";
-      });
+      status = "arrived";
       Provider.of<TitleArrived>(context, listen: false)
           .updateState(AppLocalizations.of(context)!.startTrip);
       Provider.of<ColorButtonArrived>(context, listen: false)
           .updateState(Colors.yellowAccent.shade700);
       timerStop1.cancel();
-      rideRequestRef.child("status").set(status);
+      _ref.set(status);
       timer2();
       getPlaceDirection(
           context, rideInfoProvider.pickup, rideInfoProvider.dropoff);
     } else if (status == "arrived") {
-      setState(() {
-        status = "onride";
-      });
+      status = "onride";
       Provider.of<TitleArrived>(context, listen: false)
           .updateState(AppLocalizations.of(context)!.endTrip);
       Provider.of<ColorButtonArrived>(context, listen: false)
           .updateState(Colors.redAccent.shade700);
-      rideRequestRef.child("status").set(status);
+      _ref.set(status);
       timerStop2.cancel();
       time3(context, myPosition!, rideInfoProvider.dropoff);
       initTimer();
     } else if (status == "onride") {
-      endTrip(rideInfoProvider, rideRequestRef, context);
+      endTrip(rideInfoProvider, context);
     }
   }
 
@@ -1050,20 +850,18 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
 // this method when trip don for repack all Sitting to default and calc amont
-  void endTrip(RideDetails rideInfoProvider, DatabaseReference rideRequestRef,
-      BuildContext context) async {
+  void endTrip(RideDetails rideInfoProvider, BuildContext context) async {
+    final _ref = rideRequestRef.child(rideInfoProvider.userId);
     timer.cancel();
     timerStop3.cancel();
     Provider.of<NewRideScreenIndector>(context, listen: false)
         .updateState(true);
-    setState(() {
-      status = "ended";
-    });
+    status = "ended";
     Provider.of<TitleArrived>(context, listen: false)
         .updateState(AppLocalizations.of(context)!.arrived);
     Provider.of<ColorButtonArrived>(context, listen: false)
         .updateState(Colors.white);
-    rideRequestRef.child("status").set(status);
+    _ref.child("status").set(status);
     final driverCurrentLoc =
         LatLng(myPosition!.latitude, myPosition!.longitude);
     final riderFirstPickUp = LatLng(
@@ -1074,11 +872,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
         riderFirstPickUp, driverCurrentLoc, context);
     int totalAmount = ApiSrvDir.calculateFares1(
         directionDetails!, rideInfoProvider.vehicleTypeId, context);
-    rideRequestRef.child("total").set(totalAmount.toString());
+    _ref.child("total").set(totalAmount.toString());
     newRideScreenStreamSubscription?.cancel();
-    saveEarning(totalAmount);
-    saveTripHistory(rideInfoProvider, totalAmount);
     isDriverCollectMoney = true;
+    await saveEarning(totalAmount);
+    await saveTripHistory(rideInfoProvider, totalAmount);
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -1086,13 +884,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   // this method for save earning money in database
-  void saveEarning(int totalAmount) async {
-    final currentUserId = AuthSev().auth.currentUser?.uid;
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref()
-        .child("driver")
-        .child(currentUserId!)
-        .child("earning");
+  Future<void> saveEarning(int totalAmount) async {
+    final ref = driverRef.child(userId).child("earning");
     await ref.once().then((value) {
       if (value.snapshot.value != null || value.snapshot.value != "0.0") {
         double oldEarn = double.parse(value.snapshot.value.toString());
@@ -1106,14 +899,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   // this method for save history trip in driver collection after finished
-  void saveTripHistory(RideDetails rideInfoProvider, int totalAmount) {
-    final currentUserId = AuthSev().auth.currentUser?.uid;
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref()
-        .child("driver")
-        .child(currentUserId!)
-        .child("history");
-    ref.child(rideInfoProvider.userId).set({
+  Future<void> saveTripHistory(
+      RideDetails rideInfoProvider, int totalAmount) async {
+    final ref = driverRef.child(userId).child("history");
+    await ref.child(rideInfoProvider.userId).set({
       "pickAddress": rideInfoProvider.pickupAddress,
       "dropAddress": rideInfoProvider.dropoffAddress,
       "total": totalAmount.toStringAsFixed(2),
@@ -1274,22 +1063,24 @@ class _NewRideScreenState extends State<NewRideScreen> {
   ///
   //this method for open google Map trip rider
   Future<void> openGoogleMap(BuildContext context) async {
-    String url;
     final rideInfo =
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
+    var androidUrl = Uri.parse(
+        'https://www.google.com/maps/dir/${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}/${rideInfo.dropoffAddress},+${rideInfo.dropoffAddress}/@${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude},13z/');
+    var iosUrl = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude}");
     if (Platform.isIOS) {
-      url =
-          "https://www.google.com/maps/search/?api=1&query=${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude}";
-    } else {
-      url =
-          'https://www.google.com/maps/dir/${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}/${rideInfo.dropoffAddress},+${rideInfo.dropoffAddress}/@${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude},13z/';
+      await canLaunchUrl(iosUrl)
+          ? launchUrl(iosUrl, mode: LaunchMode.externalApplication)
+          : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
+    } else if (Platform.isAndroid) {
+      await canLaunchUrl(androidUrl)
+          ? launchUrl(androidUrl, mode: LaunchMode.externalApplication)
+          : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
     }
     // String url =
     //     "https://www.google.com/maps/dir/${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}/${rideInfo.dropoffAddress},+${rideInfo.dropoffAddress}/@${rideInfo.dropoff.latitude},${rideInfo.dropoff.longitude},13z/";
-    await canLaunch(url)
-        ? launch(url)
-        : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
   }
 
   //this method for open google Map driver to rider nav
@@ -1301,10 +1092,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
         Provider.of<RideRequestInfoProvider>(context, listen: false)
             .rideDetails;
 
-    String _urlNavAndroid =
-        'google.navigation:q=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}&key=$mapKey';
-    String _urlGoogleMapIos =
-        'https://www.google.com/maps/search/?api=1&query=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}';
+    var _urlNavAndroid = Uri.parse(
+        'google.navigation:q=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}&key=$mapKey');
+    var _urlGoogleMapIos = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}');
     // if (Platform.isIOS) {
     //   url =
     //       'https://www.google.com/maps/search/?api=1&query=${rideInfo.pickup.latitude},${rideInfo.pickup.longitude}';
@@ -1315,11 +1106,15 @@ class _NewRideScreenState extends State<NewRideScreen> {
     // }
     // String url =
     //     "https://www.google.com/maps/dir/${_driver.latitude},${_driver.longitude}/${rideInfo.pickupAddress},+${rideInfo.pickupAddress}/@${rideInfo.pickup.latitude},${rideInfo.pickup.longitude},13z/";
-    await canLaunch(_urlNavAndroid)
-        ? launch(_urlNavAndroid)
-        : await canLaunch(_urlGoogleMapIos)
-            ? launch(_urlGoogleMapIos)
-            : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
+    if (Platform.isAndroid) {
+      await canLaunchUrl(_urlNavAndroid)
+          ? launchUrl(_urlNavAndroid, mode: LaunchMode.externalApplication)
+          : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
+    } else if (Platform.isIOS) {
+      await canLaunchUrl(_urlGoogleMapIos)
+          ? launchUrl(_urlGoogleMapIos, mode: LaunchMode.externalApplication)
+          : Tools().toastMsg(AppLocalizations.of(context)!.wrong, Colors.red);
+    }
   }
 
   // this method for switch any nav connect to status ride

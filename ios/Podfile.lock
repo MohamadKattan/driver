@@ -7,73 +7,77 @@ PODS:
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
-  - Firebase/Auth (8.11.0):
+  - Firebase/Auth (10.3.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 8.11.0)
-  - Firebase/CoreOnly (8.11.0):
-    - FirebaseCore (= 8.11.0)
-  - Firebase/Database (8.11.0):
+    - FirebaseAuth (~> 10.3.0)
+  - Firebase/CoreOnly (10.3.0):
+    - FirebaseCore (= 10.3.0)
+  - Firebase/Database (10.3.0):
     - Firebase/CoreOnly
-    - FirebaseDatabase (~> 8.11.0)
-  - Firebase/Messaging (8.11.0):
+    - FirebaseDatabase (~> 10.3.0)
+  - Firebase/Messaging (10.3.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 8.11.0)
-  - Firebase/Storage (8.11.0):
+    - FirebaseMessaging (~> 10.3.0)
+  - Firebase/Storage (10.3.0):
     - Firebase/CoreOnly
-    - FirebaseStorage (~> 8.11.0)
-  - firebase_auth (3.3.11):
-    - Firebase/Auth (= 8.11.0)
+    - FirebaseStorage (~> 10.3.0)
+  - firebase_auth (4.2.5):
+    - Firebase/Auth (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.13.1):
-    - Firebase/CoreOnly (= 8.11.0)
+  - firebase_core (2.4.1):
+    - Firebase/CoreOnly (= 10.3.0)
     - Flutter
-  - firebase_database (9.0.8):
-    - Firebase/Database (= 8.11.0)
+  - firebase_database (10.0.9):
+    - Firebase/Database (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (11.2.11):
-    - Firebase/Messaging (= 8.11.0)
+  - firebase_messaging (14.2.1):
+    - Firebase/Messaging (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_storage (10.2.9):
-    - Firebase/Storage (= 8.11.0)
+  - firebase_storage (11.0.10):
+    - Firebase/Storage (= 10.3.0)
     - firebase_core
     - Flutter
-  - FirebaseAuth (8.11.0):
-    - FirebaseCore (~> 8.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GTMSessionFetcher/Core (~> 1.5)
-  - FirebaseCore (8.11.0):
-    - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.15.0):
-    - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/Logger (~> 7.7)
-    - nanopb (~> 2.30908.0)
-  - FirebaseDatabase (8.11.0):
-    - FirebaseCore (~> 8.0)
+  - FirebaseAppCheckInterop (10.4.0)
+  - FirebaseAuth (10.3.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+  - FirebaseAuthInterop (10.4.0)
+  - FirebaseCore (10.3.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreExtension (10.4.0):
+    - FirebaseCore (~> 10.0)
+  - FirebaseCoreInternal (10.4.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseDatabase (10.3.0):
+    - FirebaseCore (~> 10.0)
     - leveldb-library (~> 1.22)
-  - FirebaseInstallations (8.15.0):
-    - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/UserDefaults (~> 7.7)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseMessaging (8.11.0):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/Reachability (~> 7.7)
-    - GoogleUtilities/UserDefaults (~> 7.7)
-    - nanopb (~> 2.30908.0)
-  - FirebaseStorage (8.11.0):
-    - FirebaseCore (~> 8.0)
-    - GTMSessionFetcher/Core (~> 1.5)
+  - FirebaseInstallations (10.4.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.3.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseStorage (10.3.0):
+    - FirebaseAppCheckInterop (~> 10.0)
+    - FirebaseAuthInterop (~> 10.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseCoreExtension (~> 10.0)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - Flutter (1.0.0)
   - flutter_geofire (0.0.1):
     - Flutter
@@ -92,15 +96,15 @@ PODS:
   - GeoFire (4.3.0):
     - GeoFire/Database (= 4.3.0)
   - GeoFire/Database (4.3.0):
-    - Firebase/Database (< 9.0.0, > 7.0.0)
+    - Firebase/Database (~> 10.1)
     - GeoFire/Utils
   - GeoFire/Utils (4.3.0)
   - geolocator_apple (1.2.0):
     - Flutter
-  - google_maps_flutter (0.0.1):
+  - google_maps_flutter_ios (0.0.1):
     - Flutter
     - GoogleMaps
-  - GoogleDataTransport (9.1.4):
+  - GoogleDataTransport (9.2.1):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -109,25 +113,25 @@ PODS:
   - GoogleMaps/Base (6.2.1)
   - GoogleMaps/Maps (6.2.1):
     - GoogleMaps/Base
-  - GoogleUtilities/AppDelegateSwizzler (7.7.0):
+  - GoogleUtilities/AppDelegateSwizzler (7.11.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.7.0):
+  - GoogleUtilities/Environment (7.11.0):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.7.0):
+  - GoogleUtilities/Logger (7.11.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (7.7.0):
+  - GoogleUtilities/Network (7.11.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.7.0)"
-  - GoogleUtilities/Reachability (7.7.0):
+  - "GoogleUtilities/NSData+zlib (7.11.0)"
+  - GoogleUtilities/Reachability (7.11.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.7.0):
+  - GoogleUtilities/UserDefaults (7.11.0):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.7.2)
-  - image_picker (0.0.1):
+  - GTMSessionFetcher/Core (3.1.0)
+  - image_picker_ios (0.0.1):
     - Flutter
   - leveldb-library (1.22.1)
   - Mapbox-iOS-SDK (6.4.1):
@@ -153,16 +157,16 @@ PODS:
   - MapboxNavigationNative (32.0.0):
     - MapboxCommon (= 9.2.0)
   - MapboxSpeech (1.0.0)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
   - path_provider_ios (0.0.1):
     - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
-  - Polyline (5.0.2)
+  - Polyline (5.1.0)
   - PromisesObjC (2.1.1)
   - Solar (2.1.0)
   - sqflite (0.0.2):
@@ -192,9 +196,10 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_mapbox_navigation (from `.symlinks/plugins/flutter_mapbox_navigation/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - GeoFire (from `https://github.com/mrdishant/geofire-objc`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
-  - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
-  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -205,15 +210,17 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Firebase
+    - FirebaseAppCheckInterop
     - FirebaseAuth
+    - FirebaseAuthInterop
     - FirebaseCore
-    - FirebaseCoreDiagnostics
+    - FirebaseCoreExtension
+    - FirebaseCoreInternal
     - FirebaseDatabase
     - FirebaseInstallations
     - FirebaseMessaging
     - FirebaseStorage
     - FMDB
-    - GeoFire
     - GoogleDataTransport
     - GoogleMaps
     - GoogleUtilities
@@ -264,12 +271,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_mapbox_navigation/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  GeoFire:
+    :git: https://github.com/mrdishant/geofire-objc
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
-  google_maps_flutter:
-    :path: ".symlinks/plugins/google_maps_flutter/ios"
-  image_picker:
-    :path: ".symlinks/plugins/image_picker/ios"
+  google_maps_flutter_ios:
+    :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler_apple:
@@ -283,38 +292,46 @@ EXTERNAL SOURCES:
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
 
+CHECKOUT OPTIONS:
+  GeoFire:
+    :commit: 5054b6cfe35486a23111df37b37df67102243958
+    :git: https://github.com/mrdishant/geofire-objc
+
 SPEC CHECKSUMS:
   assets_audio_player: edee322b9cb625571b830b35872ead1a295fd917
   assets_audio_player_web: 19826380c44375761aa0b9053665c1e3fbc3b86b
   audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
-  Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
-  firebase_auth: bdfbd5b10da1db6d5eb6ae7dbda5d81365b9cc9d
-  firebase_core: 08f6a85f62060111de5e98d6a214810d11365de9
-  firebase_database: f735e06aef66f3513ef49ce82c2748d6e30f524d
-  firebase_messaging: 4a993bb4aa1a83349988d853c637fbb0494dab15
-  firebase_storage: 5b964cad5f351e9c35f8b0e0b878cdd095f30d09
-  FirebaseAuth: d96d73aba85d192d7a7aa0b86dd6d7f8ec170b4b
-  FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
-  FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
-  FirebaseDatabase: ff9b4c7bee14d9f561f26c64a28ac083989f03d5
-  FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
-  FirebaseMessaging: 02e248e8997f71fa8cc9d78e9d49ec1a701ba14a
-  FirebaseStorage: 4d05cb1112ff8822a0f9f5090da8bd6d550602ec
+  Firebase: f92fc551ead69c94168d36c2b26188263860acd9
+  firebase_auth: 3bab991fe1df91c2f948156e9dee976e01a19ab9
+  firebase_core: bf59c32d2e53814f558efa20840c1902fa2fe461
+  firebase_database: 64eb24851aa709a26fb33fccd1b422658e307c76
+  firebase_messaging: ee597229fc260f8fa491fa8f2d4a32dfbfa406fa
+  firebase_storage: 8b85bf19de50a1886f9387924fbddf066a718965
+  FirebaseAppCheckInterop: ef074633831a90cf6c10e8f2c1e1f8b7842a446a
+  FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
+  FirebaseAuthInterop: fef284922da3c350f846ff85cc0dfd5186448e49
+  FirebaseCore: 988754646ab3bd4bdcb740f1bfe26b9f6c0d5f2a
+  FirebaseCoreExtension: d209ada6f48bac53d149e996cf1b2dafa632a615
+  FirebaseCoreInternal: e301297f4c15a17489e48ed722d733b1578e0c02
+  FirebaseDatabase: d0732ba8aece0eccfa0cfb3ef540e7ba6fa1c6a6
+  FirebaseInstallations: 36b38c733fd37e50857e5e8d74138648f466f18c
+  FirebaseMessaging: e345b219fd15d325f0cf2fef28cb8ce00d851b3f
+  FirebaseStorage: 0efbff0ac978981866d89804191688ae50d64033
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_geofire: 18797208c9042b71a59cb031c42d5670b97aefd1
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_mapbox_navigation: b2d023f58478f5f80242db9b70cc75ee37f42e20
-  fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
+  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GeoFire: c34927b5c81ab614f611c79aa8d074cfa9780f07
+  GeoFire: f113536c90f581f89107c31ec1efde1a1cae3115
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
-  google_maps_flutter: c59fc576c0d0c7f4dc4bd63832c862d22d5a7c6d
-  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  google_maps_flutter_ios: 66201f392bf62d500f07670a30488a247b9bb5b9
+  GoogleDataTransport: ea169759df570f4e37bdee1623ec32a7e64e67c4
   GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
-  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
-  GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
-  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
+  GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
+  GTMSessionFetcher: c9e714f7eec91a55641e2bab9f45fd83a219b882
+  image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Mapbox-iOS-SDK: f870f83cbdc7aa4a74afcee143aafb0dae390c82
   MapboxAccounts: e40ef575df5d8b7ef33d0504ff2d393f4fde0455
@@ -325,10 +342,10 @@ SPEC CHECKSUMS:
   MapboxNavigation: b596028515707e1b4b94d22f298a7c7000712e6d
   MapboxNavigationNative: e811b9beed18c01e4693e29f843d36b4a760fa61
   MapboxSpeech: 4b3aea42e35d056fae1d7ad847a9fc0f412d911e
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  Polyline: fce41d72e1146c41c6d081f7656827226f643dff
+  Polyline: 2a1f29f87f8d9b7de868940f4f76deb8c678a5b1
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Solar: 2dc6e7cc39186cb0c8228fa08df76fb50c7d8f24
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
@@ -338,6 +355,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: 838ddaa164d743de79bf60efbbfcb0ef91781e83
+PODFILE CHECKSUM: e0a9c7fd704055802628cabbb88b69dd82d8026d
 
 COCOAPODS: 1.11.3

@@ -1,5 +1,6 @@
 import 'package:awesome_card/credit_card.dart';
 import 'package:awesome_card/style/card_background.dart';
+import 'package:driver/tools/tools.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/card_payment.dart';
@@ -87,9 +88,11 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       maxLength: 16,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        setState(() {
-                          cardNumber = value;
-                        });
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            cardNumber = value;
+                          });
+                        }
                       },
                     ),
                   ),
@@ -103,9 +106,11 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       focusNode: _focusNode,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        setState(() {
-                          cvv = value;
-                        });
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            cvv = value;
+                          });
+                        }
                       },
                     ),
                   ),
@@ -119,9 +124,11 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       maxLength: 2,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        setState(() {
-                          expiryDateMouthe = value;
-                        });
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            expiryDateMouthe = value;
+                          });
+                        }
                       },
                     ),
                   ),
@@ -135,9 +142,11 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       maxLength: 4,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        setState(() {
-                          expiryDateYear = value;
-                        });
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            expiryDateYear = value;
+                          });
+                        }
                       },
                     ),
                   ),
@@ -151,9 +160,11 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                       maxLength: 20,
                       keyboardType: TextInputType.text,
                       onChanged: (value) {
-                        setState(() {
-                          cardHolderName = value;
-                        });
+                        if (value.isNotEmpty) {
+                          setState(() {
+                            cardHolderName = value;
+                          });
+                        }
                       },
                     ),
                   ),
@@ -174,29 +185,7 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
                                     fontSize: 14, color: Colors.white),
                               )),
                           onPressed: () async {
-                            Provider.of<PaymentIndector>(context, listen: false)
-                                .updateState(true);
-                            CardPayment card = CardPayment(
-                                cvv: cvv,
-                                expiryDateYear: expiryDateYear,
-                                expiryDateMouthe: expiryDateMouthe,
-                                cardNumber: cardNumber,
-                                holderName: cardHolderName);
-                            showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (_) {
-                                  return paymentProcess(context,
-                                      voidCallback: () {
-                                    ParamPayment().paramToken(
-                                        card,
-                                        widget.amount,
-                                        widget.planDay,
-                                        widget.currencyType,
-                                        context,
-                                        widget.oldExplan);
-                                  });
-                                });
+                             await checkBefore();
                           }),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -234,5 +223,54 @@ class _CardPaymentScreenState extends State<CardPaymentScreen> {
       cardHolderName = "";
       cvv = "";
     });
+  }
+
+ Future <void> checkBefore() async{
+    if(cardNumber == ""){
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.anotherCard,
+          Colors.red);
+    }
+   else if(cvv == ""){
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.anotherCard,
+          Colors.red);
+    }
+   else if(expiryDateMouthe == ""){
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.anotherCard,
+          Colors.red);
+    }
+   else if(expiryDateYear == ""){
+      Tools().toastMsg(
+          AppLocalizations.of(context)!.anotherCard,
+          Colors.red);
+    }
+   else {
+      Provider.of<PaymentIndector>(context,
+          listen: false)
+          .updateState(true);
+      CardPayment card = CardPayment(
+          cvv: cvv,
+          expiryDateYear: expiryDateYear,
+          expiryDateMouthe: expiryDateMouthe,
+          cardNumber: cardNumber,
+          holderName: cardHolderName);
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return paymentProcess(context,
+                voidCallback: () {
+                  ParamPayment().paramToken(
+                      card,
+                      widget.amount,
+                      widget.planDay,
+                      widget.currencyType,
+                      context,
+                      widget.oldExplan);
+                });
+          });
+    }
   }
 }

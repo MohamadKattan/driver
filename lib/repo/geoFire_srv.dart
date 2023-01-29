@@ -27,14 +27,13 @@ class GeoFireSrv {
           foregroundNotificationConfig: ForegroundNotificationConfig(
             notificationText: AppLocalizations.of(context)!.locationBackground,
             notificationTitle: "Garanti taxi",
-            enableWakeLock: true,
           ));
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
         activityType: ActivityType.automotiveNavigation,
         distanceFilter: 2,
-        pauseLocationUpdatesAutomatically: false,
+        pauseLocationUpdatesAutomatically: true,
         showBackgroundLocationIndicator: true,
       );
     } else {
@@ -50,7 +49,10 @@ class GeoFireSrv {
           currentUseId!.uid, position.latitude, position.longitude);
       LatLng latLng = LatLng(position.latitude, position.longitude);
       CameraPosition cameraPosition = CameraPosition(
-          target: latLng, zoom: 13.50, tilt: 80.0, bearing: 35.0);
+          target: latLng,
+          zoom: 15.50,
+          tilt: 80.0,
+          bearing: position.heading);
       newGoogleMapController
           ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
       // newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));

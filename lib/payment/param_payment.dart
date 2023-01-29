@@ -166,9 +166,9 @@ class ParamPayment {
       final _url3d = document.findAllElements('UCD_URL').single.text;
       dekontId = document.findAllElements('Islem_ID').single.text;
       if (_paramResult == "1") {
-        String url = _url3d;
-        await canLaunch(url)
-            ? launch(url).whenComplete(() async {
+        var url = Uri.parse(_url3d);
+        await canLaunchUrl(url)
+            ? launchUrl(url,mode: LaunchMode.externalApplication).whenComplete(() async {
                 await paidRef.child(userId).set({
                   "userid": userId,
                   "plan": planDay,

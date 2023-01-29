@@ -15,8 +15,8 @@ import '../my_provider/ride_request_info.dart';
 import '../tools/tools.dart';
 import '../widget/notification_dialog.dart';
 
+FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
-final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 final userId = AuthSev().auth.currentUser!.uid;
 DatabaseReference driverRef = FirebaseDatabase.instance.ref().child("driver");
 Future<String?> getToken() async {
@@ -30,37 +30,21 @@ Future<String?> getToken() async {
   firebaseMessaging.subscribeToTopic("allUsers");
   return token;
 }
+void iosPermission() async {
+  NotificationSettings settings = await firebaseMessaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+}
 
-// Future<void> onBackgroundMessage(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   // await driverRef.child(userId).child("service").once().then((value) async {
-//   //   if (value.snapshot.value != null) {
-//   //     final snap = value.snapshot.value;
-//   //     String serviceWork = snap.toString();
-//   //     if (serviceWork == "not") {
-//   //     }
-//   //   } else {
-//   //   }
-//   // });
-// }
 
 class PushNotificationsSrv {
-  // THIS method for ios permission
-  ///for ios code
-  // Future<AppleNotificationSetting> iosPermission() async {
-  //   NotificationSettings settings;
-  //
-  //   settings = await firebaseMessaging.requestPermission(
-  //     alert: true,
-  //     announcement: false,
-  //     badge: true,
-  //     carPlay: false,
-  //     criticalAlert: false,
-  //     provisional: false,
-  //     sound: true,
-  //   );
-  //   return settings.alert;
-  // }
+
   // this method for push notification if app foreground
   ///Stoped for now
   // setForegroundNotifications(BuildContext context) {
@@ -77,12 +61,12 @@ class PushNotificationsSrv {
   ///Stoped for now
   // setBackgroundNotifications(BuildContext context) {
   //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-  //     if (message.data.isNotEmpty && message.notification != null) {
-  //       retrieveRideRequestInfo(getRideRequestId(message), context);
-  //       openDailog();
-  //       playSound();
-  //       openDailogOld();
-  //     }
+  //     // if (message.data.isNotEmpty && message.notification != null) {
+  //     //   retrieveRideRequestInfo(getRideRequestId(message), context);
+  //     //   openDailog();
+  //     //   playSound();
+  //     //   openDailogOld();
+  //     // }
   //   });
   // }
 
@@ -103,7 +87,6 @@ class PushNotificationsSrv {
   //   }
   // }
   ///
-  // this method for permission after that start methods
   ///Stoped for now
   // void startSendNotifications(BuildContext context) async {
   //   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
@@ -140,6 +123,7 @@ class PushNotificationsSrv {
   // }
 
   //this method for retrieve rider info from Ride Request collection when rider do order
+
   Future<void> retrieveRideRequestInfo(
       String rideId, BuildContext context) async {
     late final DataSnapshot snapshot;
@@ -209,23 +193,21 @@ class PushNotificationsSrv {
         String _riderId = event.snapshot.value.toString();
         if (_riderId == "searching") {
           return;
-        }
-        else if (_riderId == "canceled") {
+        } else if (_riderId == "canceled") {
           Future.delayed(const Duration(seconds: 1)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        }
-        else if (_riderId == "timeOut") {
+        } else if (_riderId == "timeOut") {
           Future.delayed(const Duration(seconds: 1)).whenComplete(() {
             driverRef.child(userId).child("newRide").set("searching");
             driverRef.child(userId).child("offLine").set("Available");
           });
-        }
-        else if (_riderId == "accepted") {
-          return;
-        }
-        else {
+        } else if (_riderId == "accepted") {
+          Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+            driverRef.child(userId).child("newRide").set("searching");
+          });
+        } else {
           if (Platform.isAndroid) {
             openDailog();
             playSound();
@@ -233,14 +215,16 @@ class PushNotificationsSrv {
             retrieveRideRequestInfo(_riderId, context);
           } else {
             retrieveRideRequestInfo(_riderId, context);
+
             /// stop locale notification on ios
             // if (runLocale) {
             //   showNotificationNewOrder(context);
             // }
           }
         }
+      } else {
+        driverRef.child(userId).child("newRide").set("searching");
       }
-      else{ driverRef.child(userId).child("newRide").set("searching");}
     });
   }
 }

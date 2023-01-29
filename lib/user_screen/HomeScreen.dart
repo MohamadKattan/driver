@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     await Geofire.initialize("availableDrivers");
     await LogicGoogleMap().locationPosition(context).whenComplete(() async {
       await GeoFireSrv().getLocationLiveUpdates(context);
-      // getCountryName();
       PushNotificationsSrv().gotNotificationInBackground(context);
       await DataBaseReal().getDriverInfoFromDataBase(context);
       await checkToken();
@@ -96,6 +95,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     GeoFireSrv().cancelStreamLocation();
+    didReceiveLocalNotificationStream.close();
+    selectNotificationStream.close();
     super.dispose();
   }
 
@@ -294,6 +295,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         Provider.of<DriverInfoModelProvider>(context, listen: false).driverInfo;
     if (_user?.email != "test036@gmail.com") {
       requestPermissionsLocalNotifications();
+      iosPermission();
       if (userId.isNotEmpty) {
         if (driverInfo.imei == "") {
           await DataBaseReal().setImeiDevice();
@@ -306,6 +308,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           Navigator.push(context,
               MaterialPageRoute(builder: (_) => const ActiveAccount()));
         }
+      }
+      if(Platform.isAndroid){
+        showNewOrderNotification();
       }
     }
   }
