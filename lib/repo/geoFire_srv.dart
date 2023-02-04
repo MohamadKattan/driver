@@ -1,9 +1,7 @@
-// this class for update live current location driver to retrieve rider request if driver close to rider
-
 import 'dart:async';
 import 'package:driver/config.dart';
+import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/repo/auth_srv.dart';
-import 'package:driver/tools/tools.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
@@ -21,25 +19,25 @@ class GeoFireSrv {
     if (defaultTargetPlatform == TargetPlatform.android) {
       locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
-          distanceFilter: 10,
-          forceLocationManager: false,
-          // intervalDuration: const Duration(seconds: 10),
+          distanceFilter: 100,
+          intervalDuration: const Duration(seconds: 10),
           foregroundNotificationConfig: ForegroundNotificationConfig(
-            notificationText: AppLocalizations.of(context)!.locationBackground,
-            notificationTitle: "Garanti taxi",
-          ));
+              notificationText:
+                  AppLocalizations.of(context)!.locationBackground,
+              notificationTitle: "Garanti taxi",
+              enableWakeLock: true));
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.high,
+        distanceFilter: 100,
         activityType: ActivityType.automotiveNavigation,
-        distanceFilter: 2,
-        pauseLocationUpdatesAutomatically: true,
+        pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
       );
     } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 2,
+        distanceFilter: 100,
       );
     }
     homeScreenStreamSubscription =
@@ -49,44 +47,39 @@ class GeoFireSrv {
           currentUseId!.uid, position.latitude, position.longitude);
       LatLng latLng = LatLng(position.latitude, position.longitude);
       CameraPosition cameraPosition = CameraPosition(
-          target: latLng,
-          zoom: 15.50,
-          tilt: 80.0,
-          bearing: position.heading);
+          target: latLng, zoom: 16.50, tilt: 10.0, bearing: position.heading);
       newGoogleMapController
           ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+      driverRef.child(currentUseId!.uid).child("heading").set(position.heading);
       // newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latLng));
     });
-    Tools().toastMsg(AppLocalizations.of(context)!.locationUpdate,
-        Colors.greenAccent.shade700);
-    // DatabaseReference rideRequestRef = FirebaseDatabase.instance
-    //     .ref()
-    //     .child("driver")
-    //     .child(currentUseId!.uid)
-    //     .child("newRide");
-    // rideRequestRef.set("searching");
   }
 
 /*this method it will work just in backGround because stream in backGround
  it will disconnect after 30 min on ios 4 hour on android*/
-  Future<void> updateLocationIfGpsSleepy(BuildContext context) async {
-    Timer.periodic(const Duration(minutes: 5), (timer) async {
-      if (runLocale) {
-        if (showGpsDailog) {
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.medium);
-          await Geofire.setLocation(
-              currentUseId!.uid, position.latitude, position.longitude);
-        }
-      } else {
-        timer.cancel();
-      }
-    });
-  }
+  // Future<void> updateLocationIfGpsSleepy(BuildContext context) async {
+  //   Timer.periodic(const Duration(seconds: 50), (timer) async {
+  //     if (runLocale) {
+  //       if (showGpsDailog) {
+  //         Position position = await Geolocator.getCurrentPosition(
+  //             desiredAccuracy: LocationAccuracy.high);
+  //         await Geofire.setLocation(
+  //             currentUseId!.uid, position.latitude, position.longitude);
+  //         driverRef
+  //             .child(currentUseId!.uid)
+  //             .child("heading")
+  //             .set(position.heading);
+  //       }
+  //     } else {
+  //       timer.cancel();
+  //     }
+  //   });
+  // }
 
   // this method for delete driver from live location if switch offLine bottom
+
   Future<void> makeDriverOffLine() async {
-    cancelStreamLocation();
+    homeScreenStreamSubscription.cancel();
     DatabaseReference? rideRequestRef = FirebaseDatabase.instance
         .ref()
         .child("driver")
@@ -95,13 +88,5 @@ class GeoFireSrv {
     await rideRequestRef.child("newRide").remove();
     Geofire.stopListener();
     await Geofire.removeLocation(currentUseId!.uid);
-  }
-
-  // this method for cancel stream on location if error or disabled
-  void cancelStreamLocation() {
-    if (homeScreenStreamSubscription != null) {
-      homeScreenStreamSubscription?.cancel();
-      homeScreenStreamSubscription = null;
-    }
   }
 }

@@ -6,7 +6,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:driver/model/driverInfo.dart';
 import 'package:driver/notificatons/push_notifications_srv.dart';
 import 'package:driver/repo/auth_srv.dart';
-import 'package:driver/repo/geoFire_srv.dart';
 import 'package:driver/tools/tools.dart';
 import 'package:driver/user_screen/auth_screen.dart';
 import 'package:driver/user_screen/splash_screen.dart';
@@ -168,7 +167,7 @@ class DataBaseReal {
           if (_snap == 'payTime') {
             listingForChangeStatusPay.cancel();
             subscriptionNot1.cancel();
-            GeoFireSrv().cancelStreamLocation();
+           homeScreenStreamSubscription.cancel();
             if (kDebugMode) {
               print("listingForChangeInStatusPay canceled");
             }

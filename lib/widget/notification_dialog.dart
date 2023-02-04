@@ -13,7 +13,6 @@ import '../config.dart';
 import '../model/rideDetails.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/ride_request_info.dart';
-import '../repo/geoFire_srv.dart';
 import '../tools/tools.dart';
 import '../user_screen/new_ride_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,6 +31,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
   // String path = "new_order.mp3";
   String path = "notify.wav";
   bool isHideButton = false;
+
 
   @override
   void initState() {
@@ -64,7 +64,6 @@ class _NotificationDialogState extends State<NotificationDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       backgroundColor: Colors.transparent,
       child: Container(
-        height: 400,
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.0),
@@ -72,22 +71,27 @@ class _NotificationDialogState extends State<NotificationDialog> {
             color: const Color(0xFF00A3E0)),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Center(
                   child: Lottie.asset('images/lf30_editor_mtfshyfg.json',
-                      height: 120, width: 120)),
-              Text(
-                AppLocalizations.of(context)!.rideRequest,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold),
+                      height: 60, width: 60)),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0,right: 4.0),
+                  child: Text(
+                    AppLocalizations.of(context)!.rideRequest,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,25 +104,26 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       child: Center(
                           child: Lottie.asset(
                               'images/lf30_editor_bkpvlwi9.json',
-                              height: 20,
-                              width: 20)),
+                              height: 35,
+                              width: 35)),
                     ),
                     Text(AppLocalizations.of(context)!.from + " ",
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: Colors.white,
+                        style:  TextStyle(
+                            color: Colors.greenAccent.shade400,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14)),
+                            fontSize: 30)),
                     Expanded(
                         flex: 1,
                         child: Text(rideInfoProvider.pickupAddress,
+                            textAlign: TextAlign.start,
                             style: const TextStyle(
                                 color: Colors.white70,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                                overflow: TextOverflow.ellipsis)))
+                                fontSize: 16.0,
+                               )))
                   ]),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,43 +133,44 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       child: Center(
                           child: Lottie.asset(
                               'images/lf30_editor_bkpvlwi9.json',
-                              height: 20,
-                              width: 20)),
+                              height: 35,
+                              width: 35)),
                     ),
                     Text(AppLocalizations.of(context)!.too + " ",
-                        style: const TextStyle(
-                            color: Colors.white,
+                        style:  TextStyle(
+                            color: Colors.greenAccent.shade400,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14)),
+                            fontSize: 35)),
                     Expanded(
                       child: Text(rideInfoProvider.dropoffAddress,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               color: Colors.white70,
-                              fontSize: 18.0,
+                              fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis)),
+                             )),
                     )
                   ]),
-              const SizedBox(height: 15.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("Km : ${rideInfoProvider.km}",
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0)),
-                  Text(
-                      AppLocalizations.of(context)!.fare +
-                          rideInfoProvider.amount +
-                          currencyTypeCheck(context),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0))
-                ],
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("K.m :${rideInfoProvider.km}",
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35.0)),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    AppLocalizations.of(context)!.fare +
+                        rideInfoProvider.amount +
+                        currencyTypeCheck(context),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35.0)),
               ),
               rideInfoProvider.tourismCityName != ""
                   ? Padding(
@@ -172,33 +178,35 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       child: Text(
                         AppLocalizations.of(context)!.fullDay,
                         textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
+                        // overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 12.0,
+                            fontSize: 24.0,
                             fontWeight: FontWeight.bold),
                       ),
                     )
                   : const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(""),
+                      child: SizedBox(),
                     ),
               rideInfoProvider.tourismCityName != ""
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          AppLocalizations.of(context)!.ini +
-                              " : ${rideInfoProvider.tourismCityName}",
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
+                      child: Center(
+                        child: Text(
+                            AppLocalizations.of(context)!.ini +
+                                " : ${rideInfoProvider.tourismCityName}",
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: Colors.greenAccent,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
                     )
                   : const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(""),
+                      child: SizedBox(),
                     ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -272,6 +280,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                           )))
                 ],
               ),
+              const SizedBox(height: 24,)
             ],
           ),
         ),
@@ -306,7 +315,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
       }
       //id in newRide value = rider id from Ride Request collection
       if (newRideState == rideInfoProvider.userId) {
-        GeoFireSrv().cancelStreamLocation();
+        homeScreenStreamSubscription.cancel();
         subscriptionNot1.pause();
         Geofire.stopListener();
         await Geofire.removeLocation(currentUseId);

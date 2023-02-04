@@ -1,13 +1,12 @@
 import 'dart:io';
+import 'package:driver/repo/geoFire_srv.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
-import '../logic_google_map.dart';
 import '../my_provider/new_ride_indector.dart';
 import '../my_provider/ride_request_info.dart';
 import '../notificatons/push_notifications_srv.dart';
-import '../repo/geoFire_srv.dart';
 import '../tools/background_serv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -104,12 +103,10 @@ void driverCanceldTrip(BuildContext context) async {
   subscriptionNot1.resume();
   driverRef.child(userId).child("newRide").set("searching");
   showGpsDailog = true;
-  Navigator.pop(context);
-  await LogicGoogleMap().locationPosition(context).whenComplete(() {
-    GeoFireSrv().getLocationLiveUpdates(context);
-  });
+  await GeoFireSrv().getLocationLiveUpdates(context);
   if (Platform.isAndroid) clearCash();
   Provider.of<NewRideScreenIndector>(context, listen: false).updateState(false);
+  Navigator.pop(context);
   Navigator.pop(context);
   Navigator.pop(context);
 }

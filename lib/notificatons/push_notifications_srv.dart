@@ -30,6 +30,7 @@ Future<String?> getToken() async {
   firebaseMessaging.subscribeToTopic("allUsers");
   return token;
 }
+
 void iosPermission() async {
   NotificationSettings settings = await firebaseMessaging.requestPermission(
     alert: true,
@@ -42,9 +43,7 @@ void iosPermission() async {
   );
 }
 
-
 class PushNotificationsSrv {
-
   // this method for push notification if app foreground
   ///Stoped for now
   // setForegroundNotifications(BuildContext context) {

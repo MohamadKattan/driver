@@ -23,7 +23,6 @@ import '../repo/dataBaseReal_sev.dart';
 import '../widget/custom_container_ofLine.dart';
 import '../widget/custom_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../widget/location_stoped.dart';
 import 'active_account.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -70,21 +69,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         break;
       case AppLifecycleState.paused:
-        runLocale = true;
-        if (runLocale) {
-          GeoFireSrv().updateLocationIfGpsSleepy(context);
-          await Future.delayed(const Duration(minutes: 59));
-          if (showGpsDailog) {
-            showNotificationNoLocation(context);
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => locationStoped(context));
-          }
-        }
+        // runLocale = true;
+        // if (runLocale) {
+        //   await Future.delayed(const Duration(minutes: 59)).whenComplete(() {
+        //     if (showGpsDailog) {
+        //       showNotificationNoLocation(context);
+        //       showDialog(
+        //           context: context,
+        //           barrierDismissible: false,
+        //           builder: (_) => locationStoped(context));
+        //     }
+        //   });
+        // }
         break;
       case AppLifecycleState.resumed:
-        runLocale = false;
+        // runLocale = false;
         break;
       case AppLifecycleState.inactive:
         break;
@@ -94,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    GeoFireSrv().cancelStreamLocation();
     didReceiveLocalNotificationStream.close();
     selectNotificationStream.close();
     super.dispose();
@@ -215,11 +213,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             child: FloatingActionButton(
               backgroundColor: const Color(0xFF00A3E0),
               onPressed: () async {
-                await LogicGoogleMap()
-                    .locationPosition(context)
-                    .whenComplete(() async {
-                  await GeoFireSrv().getLocationLiveUpdates(context);
-                });
+                tostDriverAvailable();
               },
               child: const Icon(
                 Icons.my_location,
@@ -254,12 +248,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 });
                 if (valueSwitchBottom == true) {
                   subscriptionNot1.resume();
-                  await LogicGoogleMap()
-                      .locationPosition(context)
-                      .whenComplete(() async {
-                    await GeoFireSrv().getLocationLiveUpdates(context);
-                    tostDriverAvailable();
-                  });
+                 GeoFireSrv().getLocationLiveUpdates(context);
+                  tostDriverAvailable();
                 } else if (valueSwitchBottom == false) {
                   subscriptionNot1.pause();
                   GeoFireSrv().makeDriverOffLine();
@@ -309,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               MaterialPageRoute(builder: (_) => const ActiveAccount()));
         }
       }
-      if(Platform.isAndroid){
+      if (Platform.isAndroid) {
         showNewOrderNotification();
       }
     }

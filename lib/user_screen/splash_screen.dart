@@ -39,8 +39,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _asyncMethod() async {
-   await  checkInternet();
-   await DataBaseReal().setImeiDevice();
+    await checkInternet();
+    await DataBaseReal().setImeiDevice();
   }
 
   @override
@@ -79,19 +79,18 @@ class _SplashScreenState extends State<SplashScreen>
               barrierDismissible: false,
               builder: (_) => showDialogPolicy(context));
         } else {
-          LogicGoogleMap().locationPosition(context);
-          // TurnOnGBS().turnOnGBSifNot();
+          LogicGoogleMap().requestLocationPermission(context);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const MyPageView()));
         }
       } else {
         if (AuthSev().auth.currentUser?.uid != null) {
+          LogicGoogleMap().requestLocationPermission(context);
           await DataBaseReal()
               .getDriverInfoFromDataBase(context)
               .whenComplete(() async {
             await Future.delayed(const Duration(seconds: 1));
             await DataBaseReal().checkStatusUser(context);
-            LogicGoogleMap().locationPosition(context);
           });
         }
       }
@@ -187,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       GestureDetector(
                         onTap: () {
-                       LogicGoogleMap().locationPosition(context);
+                          LogicGoogleMap().requestLocationPermission(context);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

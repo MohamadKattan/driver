@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
-import '../logic_google_map.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../repo/geoFire_srv.dart';
 import '../tools/background_serv.dart';
@@ -65,9 +64,8 @@ Widget collectMoney(
                 showGpsDailog = true;
                 restNewRide(context);
                 subscriptionNot1.resume();
-                await LogicGoogleMap().locationPosition(context).whenComplete((){
-                  GeoFireSrv().getLocationLiveUpdates(context);
-                });
+                // homeScreenStreamSubscription.resume();
+                await GeoFireSrv().getLocationLiveUpdates(context);
                 if (Platform.isAndroid) clearCash();
                 Navigator.pop(context);
                 Navigator.pop(context);

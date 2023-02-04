@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../logic_google_map.dart';
-import '../repo/geoFire_srv.dart';
 
 Widget locationStoped(BuildContext context) {
   return Dialog(
@@ -30,9 +28,6 @@ Widget locationStoped(BuildContext context) {
               const SizedBox(height: 25),
               GestureDetector(
                 onTap: () async {
-                  await LogicGoogleMap().locationPosition(context).whenComplete((){
-                    GeoFireSrv().getLocationLiveUpdates(context);
-                  });
                   Navigator.pop(context);
                 },
                 child: Container(

@@ -76,7 +76,7 @@ class LogicGoogleMap {
         .updateSate(position);
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);
     CameraPosition cameraPosition = CameraPosition(
-        target: latLngPosition, zoom: 16.50, tilt: 80.0, bearing: 35.0);
+        target: latLngPosition, zoom: 12.50, tilt: 20.0, bearing: 35.0);
     newGoogleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     return position;

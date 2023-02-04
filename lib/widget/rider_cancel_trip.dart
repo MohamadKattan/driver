@@ -1,12 +1,11 @@
 import 'dart:io';
+import 'package:driver/repo/geoFire_srv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../config.dart';
-import '../logic_google_map.dart';
 import '../my_provider/new_ride_indector.dart';
 import '../notificatons/push_notifications_srv.dart';
-import '../repo/geoFire_srv.dart';
 import '../tools/background_serv.dart';
 
 Widget riderCancelTrip(BuildContext context) {
@@ -41,8 +40,8 @@ Widget riderCancelTrip(BuildContext context) {
                 onTap: () {
                   if (isClicked) {
                     riderOffAfterCancel(context);
+                    isClicked = false;
                   }
-                  isClicked = false;
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -70,14 +69,12 @@ riderOffAfterCancel(BuildContext context) async {
   Provider.of<NewRideScreenIndector>(context, listen: false).updateState(true);
   newRideScreenStreamSubscription?.cancel();
   showGpsDailog = true;
-  Navigator.pop(context);
-  await LogicGoogleMap().locationPosition(context).whenComplete(() {
-    GeoFireSrv().getLocationLiveUpdates(context);
-  });
   driverRef.child(userId).child("newRide").set("searching");
   subscriptionNot1.resume();
+  GeoFireSrv().getLocationLiveUpdates(context);
   if (Platform.isAndroid) clearCash();
   Provider.of<NewRideScreenIndector>(context, listen: false).updateState(false);
+  Navigator.pop(context);
   Navigator.pop(context);
   Navigator.pop(context);
 }
