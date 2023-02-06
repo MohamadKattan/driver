@@ -20,7 +20,6 @@ class GeoFireSrv {
       locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.high,
           distanceFilter: 100,
-          intervalDuration: const Duration(seconds: 10),
           foregroundNotificationConfig: ForegroundNotificationConfig(
               notificationText:
                   AppLocalizations.of(context)!.locationBackground,
