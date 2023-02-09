@@ -20,50 +20,48 @@ class ApiSrvGeolocater {
     // final position = Provider.of<DriverCurrentPosition>(context, listen: false)
     //     .currentPosition;
     // String placeAddress0, placeAddress1, placeAddress2, type1, type2;
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     String? city, country, type1, type2, type3, type4;
     var url = Uri.parse(
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey");
     final response = await _getUrl.getUrlMethod(url);
     if (response != "failed") {
-      if (response["results"][1]["address_components"][3]["types"][0] != null) {
-        type1 = response["results"][1]["address_components"][3]["types"][0];
-        if (type1 == 'administrative_area_level_1') {
-          city = response["results"][1]["address_components"][3]["long_name"];
-          country =
-              response["results"][1]["address_components"][4]["long_name"];
-        } else if (response["results"][1]["address_components"][4]["types"]
-                [0] !=
-            null) {
-          type2 = response["results"][1]["address_components"][4]["types"][0];
-          if (type2 == 'administrative_area_level_1') {
-            city = response["results"][1]["address_components"][4]["long_name"];
-            country =
-                response["results"][1]["address_components"][5]["long_name"];
-          } else if (response["results"][1]["address_components"][5]["types"]
-                  [0] !=
-              null) {
-            type3 = response["results"][1]["address_components"][5]["types"][0];
-            if (type3 == 'administrative_area_level_1') {
-              city =
-                  response["results"][1]["address_components"][5]["long_name"];
-              country =
-                  response["results"][1]["address_components"][6]["long_name"];
-            } else if (response["results"][1]["address_components"][6]["types"]
-                    [0] !=
-                null) {
-              type4 =
-                  response["results"][1]["address_components"][6]["types"][0];
-              if (type4 == 'administrative_area_level_1') {
-                city = response["results"][1]["address_components"][6]
-                    ["long_name"];
-                country = response["results"][1]["address_components"][7]
-                    ["long_name"];
-              }
-            }
-          }
-        }
+      type1 = response["results"][1]["address_components"][3]["types"][0] ??
+          "globule";
+      type2 = response["results"][1]["address_components"][4]["types"][0] ??
+          "globule";
+      type3 = response["results"][1]["address_components"][5]["types"][0] ??
+          "globule";
+      type4 = response["results"][1]["address_components"][6]["types"][0] ??
+          "globule";
+      if (type1 == 'administrative_area_level_1') {
+        city = response["results"][1]["address_components"][3]["long_name"] ??
+            "globule";
+        country = response["results"][1]["address_components"][4]
+                ["long_name"] ??
+            "globule";
+      } else if (type2 == 'administrative_area_level_1') {
+        city = response["results"][1]["address_components"][4]["long_name"] ??
+            "globule";
+        country = response["results"][1]["address_components"][5]
+                ["long_name"] ??
+            "globule";
+      } else if (type3 == 'administrative_area_level_1') {
+        city = response["results"][1]["address_components"][5]["long_name"] ??
+            "globule";
+        country = response["results"][1]["address_components"][6]
+                ["long_name"] ??
+            "globule";
+      } else if (type4 == 'administrative_area_level_1') {
+        city = response["results"][1]["address_components"][6]["long_name"] ??
+            "globule";
+        country = response["results"][1]["address_components"][7]
+                ["long_name"] ??
+            "globule";
+      } else {
+        city = "globule";
+        country = "globule";
       }
       driverRef.child(userId).update({
         "city": city ?? "globule",
