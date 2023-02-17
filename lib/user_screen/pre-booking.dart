@@ -105,24 +105,19 @@ class _PreBookingState extends State<PreBooking>
                           context,
                           listen: false)
                       .updateState(0.0),
-                  child: Center(
-                    child: Container(
-                      height: 60,
-                      width: 180,
-                      margin: const EdgeInsets.only(top: 24),
-                      decoration: BoxDecoration(
-                          color: const Color(0xFFFBC408),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of(context)!.uploadImage,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                  child: Container(
+                    padding: const EdgeInsets.all(15.0),
+                    margin: const EdgeInsets.all(40.0),
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFFBC408),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Text(
+                      AppLocalizations.of(context)!.uploadImage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 )

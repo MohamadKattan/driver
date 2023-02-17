@@ -67,7 +67,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
   late MapBoxNavigation directions;
   bool isInductor = false;
   bool isRequestDirection = false;
-  bool buttomPostion = false;
+  bool buttonPostion = false;
   bool isDriverCollectMoney = false;
   late final MapBoxNavigationViewController _controller;
   bool arrivedMapBox = false;
@@ -142,69 +142,15 @@ class _NewRideScreenState extends State<NewRideScreen> {
                           timer1(context);
                           LogicGoogleMap()
                               .darkOrWhite(newRideControllerGoogleMap);
+                          Tools().toastMsg(
+                              AppLocalizations.of(context)!.goToRider,
+                              Colors.greenAccent.shade700);
+                          Tools().toastMsg(
+                              AppLocalizations.of(context)!.goToRider,
+                              Colors.greenAccent.shade700);
                         },
                       ),
                     ),
-                    // buttomPostion == false
-                    //     ? Positioned(
-                    //   top: 0.0,
-                    //   left: 70.0,
-                    //   right: 70.0,
-                    //   child: Container(
-                    //     width:
-                    //     MediaQuery.of(context).size.width *
-                    //         55 /
-                    //         100,
-                    //     height: 60,
-                    //     decoration: const BoxDecoration(
-                    //         color: Colors.black26,
-                    //         borderRadius: BorderRadius.only(
-                    //             bottomLeft: Radius.circular(12),
-                    //             bottomRight:
-                    //             Radius.circular(12))),
-                    //     child: GestureDetector(
-                    //       onTap: () {
-                    //         buttomPostion = true;
-                    //         changeColorArrivedAndTileButton(
-                    //             context, rideInfoProvider);
-                    //       },
-                    //       child: Center(
-                    //           child: Container(
-                    //             padding: const EdgeInsets.only(
-                    //                 left: 12.0,
-                    //                 right: 12,
-                    //                 top: 8.0,
-                    //                 bottom: 8.0),
-                    //             decoration: BoxDecoration(
-                    //                 borderRadius:
-                    //                 BorderRadius.circular(3.0),
-                    //                 color: Colors
-                    //                     .greenAccent.shade700),
-                    //             child: Consumer<TitleArrived>(
-                    //               builder: (BuildContext context,
-                    //                   value, Widget? child) {
-                    //                 final buttonColor = Provider.of<
-                    //                     ColorButtonArrived>(
-                    //                     context,
-                    //                     listen: false)
-                    //                     .colorButton;
-                    //                 return Text(
-                    //                   value.titleButton,
-                    //                   maxLines: 2,
-                    //                   textAlign: TextAlign.center,
-                    //                   style: TextStyle(
-                    //                       color: buttonColor,
-                    //                       fontSize: 16,
-                    //                       fontWeight:
-                    //                       FontWeight.bold),
-                    //                 );
-                    //               },
-                    //             ),
-                    //           )),
-                    //     ),
-                    //   ),
-                    // )
-                    //     : const SizedBox(),
                     Positioned(
                         top: 50.0,
                         left: 0.0,

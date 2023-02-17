@@ -8,8 +8,11 @@ import '../model/driverInfo.dart';
 import '../my_provider/driver_model_provider.dart';
 import '../my_provider/indctor_profile_screen.dart';
 import '../repo/auth_srv.dart';
+import '../tools/tools.dart';
 import '../widget/custom_circuler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'contact_us.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -205,6 +208,39 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 30.0),
+                  Text(AppLocalizations.of(context)!.callToEdit,
+                      textAlign: TextAlign.center),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          Tools().createRoute(context, const ContactUs()));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                            width: 2.0, color: const Color(0xFF00A3E0)),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      height: 50,
+                      width: 160,
+                      child: Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.uss,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Color(0xFF00A3E0),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -265,6 +301,8 @@ class ProfileScreen extends StatelessWidget {
     }).whenComplete(() {
       Provider.of<InductorProfileProvider>(context, listen: false)
           .updateState(false);
+      Tools().toastMsg(AppLocalizations.of(context)!.preBookOkay,
+          Colors.greenAccent.shade700);
     });
   }
 

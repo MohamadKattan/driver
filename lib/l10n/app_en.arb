@@ -772,5 +772,13 @@
   "paymentProcess":"This process is encrypted with 3D technology in order to complete the process successfully. Do not close the process until the message of the end of the process appears",
   "@paymentProcess": {
     "description": "payment Process"
+  },
+  "goToRider":"Follow line on map for arrived to rider",
+  "@goToRider": {
+    "description": "goToRider"
+  },
+  "callToEdit":"You can contact us to update vehicle information.",
+  "@callToEdit": {
+    "description": "callToEdit"
   }
 }

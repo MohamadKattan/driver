@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../my_provider/change_color_bottom.dart';
 import '../my_provider/drawer_value_provider.dart';
-import '../tools/url_lunched.dart';
-import 'custom_divider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget preBookOkay(BuildContext context) {
@@ -14,7 +12,7 @@ Widget preBookOkay(BuildContext context) {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
     backgroundColor: Colors.transparent,
     child: Container(
-      height: 150,
+      padding: const EdgeInsets.all(15.0),
       width: double.infinity,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
@@ -26,15 +24,13 @@ Widget preBookOkay(BuildContext context) {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(
-                child: Text(
-                  AppLocalizations.of(context)!.preBookOkay,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold),
-                ),
+              Text(
+                AppLocalizations.of(context)!.preBookOkay,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               GestureDetector(
@@ -47,21 +43,19 @@ Widget preBookOkay(BuildContext context) {
                   Navigator.pop(context);
                 },
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 8 / 100,
-                  width: MediaQuery.of(context).size.width * 60 / 100,
+                  padding: const EdgeInsets.only(left: 24.0,right: 24.0,top: 8.0,bottom: 8.0),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFBC408),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  child: Center(
-                      child: Text(
+                  child: Text(
                     AppLocalizations.of(context)!.ok,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  )),
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

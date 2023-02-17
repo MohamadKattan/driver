@@ -189,5 +189,7 @@
   "locationPrevNotAlwayes":"Konum izinleri kalıcı olarak reddedildi, izin isteyemiyoruz.",
   "reOpen":"Mobil cihazınızdaki GPS Konum, uygulama arka planda 30 dakika çalışırken uyku moduna girer, etkinleştirmek için Tamam'a basın veya uygulamayı kapatıp tekrar açın.",
   "locationUpdate":"Konum güncellemesi başladı",
-  "paymentProcess":"Bu işlemin başarılı bir şekilde tamamlanabilmesi için bu işlem 3D teknolojisi ile şifrelenmektedir.İşlemin bittiği mesajı gelene kadar işlemi kapatmayın."
+  "paymentProcess":"Bu işlemin başarılı bir şekilde tamamlanabilmesi için bu işlem 3D teknolojisi ile şifrelenmektedir.İşlemin bittiği mesajı gelene kadar işlemi kapatmayın.",
+  "goToRider":"Yolcuyu Almaya Git",
+  "callToEdit":"Araç bilgilerini güncellemek için bizimle iletişime geçebilirsiniz"
 }
